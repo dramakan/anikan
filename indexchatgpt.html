@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -677,4 +678,685 @@
   </script>
 
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Anikan — Watch Anime Free</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <style>
+  /* =========================
+     THEME + RESET
+     ========================= */
+  :root{
+    --bg:#05060a;
+    --panel:#0f1116;
+    --card:#14161b;
+    --muted:#9aa0b0;
+    --text:#E8EEF8;
+    --primary:#7c3aed; /* violet */
+    --accent:#ff385c;
+    --glass: rgba(255,255,255,0.03);
+    --radius:14px;
+    --shadow: 0 14px 40px rgba(2,6,23,0.6);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:"Poppins",system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,0.06), transparent 8%),
+                radial-gradient(1000px 500px at 90% 90%, rgba(255,56,92,0.03), transparent 6%),
+                var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.35;
+  }
+  a{color:inherit; text-decoration: none;}
+  img{max-width:100%;display:block}
+
+  .container{max-width:1180px;margin:0 auto;padding:0 18px}
+
+  /* tiny utility */
+  .flex{display:flex;align-items:center;gap:12px}
+  .space-between{display:flex;justify-content:space-between;align-items:center}
+  .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+  /* =========================
+     TOP MARQUEE
+     ========================= */
+  .marquee-wrap{
+    width:100%;
+    background:linear-gradient(90deg, rgba(124,58,237,0.12), rgba(255,56,92,0.06));
+    border-bottom:1px solid rgba(255,255,255,0.03);
+    overflow:hidden;
+  }
+  .marquee{
+    display:flex;gap:40px;padding:8px 0;
+    animation:marq 28s linear infinite;
+    white-space:nowrap;font-weight:600;color:var(--text);
+    font-size:0.92rem;
+  }
+  @keyframes marq{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+  /* =========================
+     HEADER (fixed-like, aligned)
+     ========================= */
+  header{
+    position:sticky;top:0;z-index:1200;
+    background:linear-gradient(180deg,rgba(7,8,11,0.7), rgba(7,8,11,0.45));
+    border-bottom:1px solid rgba(255,255,255,0.03);
+    backdrop-filter: blur(6px);
+  }
+  .header-inner{display:flex;align-items:center;gap:18px;justify-content:space-between;padding:12px 18px;max-width:1180px;margin:0 auto}
+  
+  /* IMPROVED LOGO */
+  .logo{display:flex;align-items:center;gap:12px;}
+  .logo .mark{
+    width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--primary),#5c28c9);
+    box-shadow:0 10px 30px rgba(124,58,237,0.18);
+    font-size:1.1rem;font-weight:800;
+  }
+  .logo-text-wrap { line-height: 1.1; }
+  .logo-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, var(--text), var(--muted));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+  }
+  .logo-subtitle {
+      font-size: .7rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 2px;
+  }
+
+  nav.primary-nav{
+    display:flex;gap:10px;margin-left:6px;
+  }
+  nav.primary-nav a{
+    color:var(--muted);padding:8px 12px;border-radius:10px;font-weight:600;font-size:.95rem;transition:all .18s;
+  }
+  nav.primary-nav a:hover, nav.primary-nav a.active{
+    color:var(--text); background:var(--glass); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+  }
+
+  /* SEARCH - centered and focus expand */
+  .header-center{flex:1;display:flex;justify-content:center;align-items:center;padding:0 12px}
+  .search {
+    width:56%;
+    max-width:660px;
+    min-width:240px;
+    position:relative;
+    transition:all .25s;
+  }
+  .search input{
+    width:100%;
+    padding:12px 16px 12px 48px;border-radius:999px;border:1px solid rgba(255,255,255,0.04);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    color:var(--text);
+    outline:none;font-size:0.96rem;
+    transition:box-shadow .2s,transform .2s;
+  }
+  .search:focus-within{transform:translateY(-2px)}
+  .search .icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:1.05rem}
+  .search .results{
+    position:absolute;left:0;right:0;top:110%;background:linear-gradient(180deg,var(--panel), rgba(255,255,255,0.02));
+    border-radius:12px;margin-top:8px;padding:8px;border:1px solid rgba(255,255,255,0.03);
+    box-shadow:var(--shadow);max-height:360px;overflow:auto;display:none;z-index:1400;
+  }
+  .result-item{
+    display:flex;gap:12px;padding:8px;border-radius:8px;align-items:center;color:var(--text);transition:background .12s; text-decoration:none
+  }
+  .result-item:hover{background:linear-gradient(90deg, rgba(124,58,237,0.06), rgba(255,56,92,0.03))}
+  .result-item img{width:64px;height:88px;object-fit:cover;border-radius:6px;flex-shrink:0}
+
+  /* header actions */
+  .header-actions{display:flex;align-items:center;gap:10px}
+  .btn{
+    background:transparent;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);font-weight:700;color:var(--text);cursor:pointer
+  }
+  .btn-primary{background:linear-gradient(90deg,var(--primary),#5a2fc7);border:0;color:#fff;box-shadow:0 8px 30px rgba(124,58,237,0.18)}
+  .icon-btn{padding:10px;border-radius:10px;border:1px solid transparent;color:var(--muted);background:transparent}
+
+  /* =========================
+     HERO (immersive)
+     ========================= */
+  .hero-wrap{max-width:1180px;margin:18px auto;padding:0 18px}
+  .hero{
+    position:relative;height:520px;border-radius:18px;overflow:hidden;background:linear-gradient(180deg, rgba(3,4,6,0.2), rgba(3,4,6,0.2));
+    box-shadow:var(--shadow);
+    display:flex;align-items:center;
+  }
+
+  /* Parallax background layers - IMPROVED for cross-fade */
+  .hero .bg{
+    position:absolute;inset:0;background-size:cover;background-position:center center;
+    transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    filter:contrast(1.03) saturate(1.02) brightness(.92);
+  }
+  .hero .gradient{
+    position:absolute;inset:0;background:linear-gradient(90deg, rgba(7,8,11,0.7) 0%, rgba(7,8,11,0.25) 40%, rgba(7,8,11,0) 100%);
+    pointer-events:none;
+  }
+
+  /* Particle lights for depth */
+  .particles{position:absolute;inset:0;pointer-events:none}
+  .particle{
+    position:absolute;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle,#fff, rgba(255,255,255,0.1));opacity:.09;filter:blur(6px);
+    animation:float 8s ease-in-out infinite;
+  }
+  @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-18px)}100%{transform:translateY(0)}}
+
+  /* Hero content (left) */
+  .hero-content{
+    position:relative;z-index:4;padding:36px;max-width:56%;
+    transform:translateY(0);opacity:1;transition:all .6s cubic-bezier(.2,.9,.2,1);
+  }
+  .hero h1{font-size:2.4rem;margin:0 0 8px;line-height:1.03;letter-spacing:-0.6px}
+  .hero p{color:var(--muted);margin-bottom:14px}
+  .hero .meta .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.03);margin-right:8px;font-weight:700}
+
+  .hero-cta{display:flex;gap:12px;margin-top:14px}
+  .hero-cta .btn{padding:10px 16px}
+
+  /* Right-side visual poster */
+  .hero-poster{
+    position:absolute;right:36px;bottom:18px;width:360px;height:480px;border-radius:14px;overflow:hidden;z-index:5;
+    box-shadow: 0 40px 80px rgba(2,6,23,0.6);
+    transform-origin:center;
+    transition:transform .6s cubic-bezier(.2,.9,.2,1);
+    background-size:cover;background-position:center;
+  }
+
+  /* progress bar faint */
+  .hero-progress{position:absolute;left:0;bottom:0;height:6px;background:linear-gradient(90deg,var(--primary),#5a2fc7);width:0%;}
+
+  /* =========================
+     SECTIONS & CARDS
+     ========================= */
+  main{padding:18px 0}
+  section {padding:36px 0}
+  .section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:14px}
+  .section-title{font-size:1.25rem;font-weight:800}
+  .section-sub{color:var(--muted);font-size:.94rem}
+
+  /* IMPROVED CARD SIZE */
+  .cards{
+    display:grid;
+    grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+    gap:18px;
+  }
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+    border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.02);
+    transition:transform .22s,box-shadow .22s;
+    cursor:pointer;display:flex;flex-direction:column;
+  }
+  .card:hover{transform:translateY(-8px);box-shadow:0 30px 60px rgba(2,6,23,0.6)}
+  .card .thumb{
+    height:280px; /* Increased from 250px */
+    background-size:cover;
+    background-position:center;
+  }
+  .card .meta{padding:10px}
+  .card .title{font-weight:700;font-size:0.98rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .card .sub{color:var(--muted);font-size:.86rem;margin-top:6px}
+
+  /* Schedule tabs */
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .tabs button{padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:var(--muted);font-weight:700;cursor:pointer}
+  .tabs button.active{background:linear-gradient(90deg,var(--primary),#5a2fc7);color:#fff;border:0;box-shadow:0 12px 30px rgba(124,58,237,0.12)}
+
+  /* Schedule list style */
+  .schedule-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+
+  /* footer */
+  footer{padding:28px 18px;border-top:1px solid rgba(255,255,255,0.02);color:var(--muted);}
+  .footer-inner{max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+
+  /* =========================
+     RESPONISVE
+     ========================= */
+  @media (max-width:1100px){
+    .search{width:66%}
+    .hero{height:460px}
+    .hero-content{max-width:60%}
+    .hero-poster{width:300px;height:420px;right:22px}
+  }
+  @media (max-width:860px){
+    .header-inner{padding:10px 14px}
+    .search{width:70%}
+    .hero{height:420px}
+    .hero-left{padding-left:18px}
+    nav.primary-nav{display:none} /* hide nav for smaller screens to avoid crowding */
+    .logo{gap:8px}
+    .hero-poster{display:none}
+  }
+  @media (max-width:600px){
+    .search{width:100%;min-width:unset}
+    .header-center{order:3;width:100%;padding-top:10px}
+    .header-inner{align-items:flex-start;flex-direction:column;gap:10px}
+    .hero{height:360px}
+    .hero-content{max-width:100%;padding:18px}
+    .hero h1{font-size:1.45rem}
+    .cards{grid-template-columns:repeat(2,1fr)}
+    .card .thumb{height:220px}
+  }
+  </style>
+</head>
+<body>
+
+  <div class="marquee-wrap">
+    <div class="container">
+      <div class="marquee" aria-hidden="true">
+        <div>ANIKAN • Latest 2025: GACHIᗩKUTA · Demon Slayer - Infinity Castle · Lord of the Mysteries</div>
+        <div>Informational site — All copyrights belong to respective owners.</div>
+        <div>ANIKAN • Latest 2025: GACHIᗩKUTA · Demon Slayer - Infinity Castle · Lord of the Mysteries</div>
+        <div>Informational site — All copyrights belong to respective owners.</div>
+      </div>
+    </div>
+  </div>
+
+  <header aria-label="Main header">
+    <div class="header-inner container">
+
+      <div style="display:flex;align-items:center;gap:14px;">
+        <a class="logo" href="#" aria-label="Anikan home">
+          <div class="mark" aria-hidden="true">A</div>
+          <div class="logo-text-wrap">
+            <div class="logo-title">Anikan</div>
+            <div class="logo-subtitle">Watch Anime — Free</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="header-center" role="search">
+        <div class="search" id="searchWrap">
+          <span class="icon"><i class="fas fa-search"></i></span>
+          <input id="searchInput" placeholder="Search anime, characters, movies..." aria-label="Search anime">
+          <div class="results" id="searchResults" role="listbox" aria-label="Search suggestions"></div>
+        </div>
+      </div>
+
+      <div class="header-actions" aria-hidden="false">
+        <button class="icon-btn" title="Dark mode toggle" id="themeToggle"><i class="fas fa-circle-half-stroke"></i></button>
+        <button class="btn">Explore</button>
+        <button class="btn btn-primary">Sign in</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="hero-wrap">
+    <div class="hero" id="hero">
+      <div class="bg" id="heroBg1" style="opacity: 1; background-image:url('https://m.media-amazon.com/images/M/MV5BOGQ3YWUzYjEtMTJiYy00ZjQ0LWI0YjktYjhiNGVhNGExYTM3XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg"></div>
+      <div class="bg" id="heroBg2" style="opacity: 0;"></div>
+      <div class="gradient" aria-hidden="true"></div>
+
+      <div class="particles" id="particles"></div>
+
+      <div class="hero-content">
+        <div class="meta">
+          <span class="pill">Movie · 2025</span><span class="pill">Action · Fantasy</span>
+        </div>
+        <h1 id="heroTitle">Demon Slayer: Infinity Castle</h1>
+        <p id="heroDesc">The final battle against Muzan Kibutsuji begins. The Demon Slayer Corps launches a full-scale assault on the Infinity Castle, facing off against the remaining Upper Rank demons in a desperate struggle for humanity's survival.</p>
+
+        <div class="hero-cta">
+          <button class="btn btn-primary" id="watchBtn"><i class="fas fa-play" style="margin-right:8px"></i> Watch Now</button>
+          <button class="btn" id="moreInfoBtn"><i class="fas fa-info-circle" style="margin-right:8px"></i> Details</button>
+        </div>
+      </div>
+
+      <div class="hero-poster" id="heroPoster" style="background-image:url('https://m.media-amazon.com/images/M/MV5BOGQ3YWUzYjEtMTJiYy00ZjQ0LWI0YjktYjhiNGVhNGExYTM3XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" aria-hidden="true"></div>
+
+      <div class="hero-progress" id="heroProgress" style="width:0%"></div>
+    </div>
+  </div>
+
+  <main class="container" id="main">
+    <section aria-labelledby="trendingTitle">
+      <div class="section-head">
+        <div>
+          <h2 id="trendingTitle" class="section-title">Trending Now</h2>
+          <div class="section-sub">Hot picks across Anikan</div>
+        </div>
+        <div class="flex">
+          <button class="btn" id="seeAllTrending">See all</button>
+        </div>
+      </div>
+
+      <div class="cards" id="trendingCards" aria-live="polite"></div>
+    </section>
+
+    <section aria-labelledby="airingTitle">
+      <div class="section-head">
+        <div>
+          <h2 id="airingTitle" class="section-title">Top Airing</h2>
+          <div class="section-sub">Current season favourites</div>
+        </div>
+      </div>
+
+      <div class="cards" id="airingCards"></div>
+    </section>
+
+    <section aria-labelledby="scheduleTitle">
+      <div class="section-head">
+        <div>
+          <h2 id="scheduleTitle" class="section-title">Weekly Schedule</h2>
+          <div class="section-sub">New episodes released each day</div>
+        </div>
+      </div>
+
+      <div class="tabs" id="dayTabs" role="tablist" aria-label="Weekly schedule">
+        <button class="active" data-day="mon" role="tab">Mon</button>
+        <button data-day="tue" role="tab">Tue</button>
+        <button data-day="wed" role="tab">Wed</button>
+        <button data-day="thu" role="tab">Thu</button>
+        <button data-day="fri" role="tab">Fri</button>
+        <button data-day="sat" role="tab">Sat</button>
+        <button data-day="sun" role="tab">Sun</button>
+      </div>
+
+      <div class="schedule-grid" id="scheduleGrid" aria-live="polite"></div>
+    </section>
+
+    <section aria-labelledby="moviesTitle">
+      <div class="section-head">
+        <div>
+          <h2 id="moviesTitle" class="section-title">Top Movies</h2>
+          <div class="section-sub">Feature-length favorites</div>
+        </div>
+      </div>
+
+      <div class="cards" id="movieCards"></div>
+    </section>
+
+    <section aria-labelledby="latestTitle">
+      <div class="section-head">
+        <div>
+          <h2 id="latestTitle" class="section-title">Latest — 2025 Highlights</h2>
+          <div class="section-sub">New releases this year</div>
+        </div>
+      </div>
+
+      <div class="cards" id="latestCards"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="flex">
+        <div class="mark" style="width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--primary),#5a2fc7);display:flex;align-items:center;justify-content:center;font-weight:800">A</div>
+        <div>
+          <div style="font-weight:800">Anikan</div>
+          <div style="font-size:.86rem;color:var(--muted)">Informational anime guide • All rights belong to content owners</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:center">
+        <div style="color:var(--muted)">© 2025 Anikan</div>
+        <div style="width:1px;height:24px;background:rgba(255,255,255,0.03);margin:0 10px"></div>
+        <a class="icon-btn" href="#" title="Discord"><i class="fab fa-discord"></i></a>
+        <a class="icon-btn" href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    /* -------------------------------
+       Catalog data with updated images
+       ------------------------------- */
+    const catalog = [
+      {id:1, title:'Demon Slayer: Infinity Castle', type:'Movie', year:2025, img:'https://m.media-amazon.com/images/M/MV5BOGQ3YWUzYjEtMTJiYy00ZjQ0LWI0YjktYjhiNGVhNGExYTM3XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg'},
+      {id:2, title:'Gachiakuta', type:'TV', year:2025, img:'https://m.media-amazon.com/images/M/MV5BZDU5ZmEzODYtMDU2OS00NTZiLTk4MWYtYWUyZWUzNGU2ODdjXkEyXkFqcGc@._V1_.jpg'},
+      {id:3, title:'Lord of the Mysteries', type:'TV', year:2025, img:'https://m.media-amazon.com/images/M/MV5BMWE1ZWYwZGUtZjRmOS00NzUzLTlkZmUtMTEwMjNhNTVmNDIwXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg'},
+      {id:4, title:'Chainsaw Man: Reze Arc', type:'Movie', year:2025, img:'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx172322-N2cVO2SRqeyu.jpg'},
+      {id:5, title:'Jujutsu Kaisen Season 3', type:'TV', year:2025, img:'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113415-bbBWj4pEFnUe.jpg'},
+      {id:6, title:'Dandadan', type:'TV', year:2024, img:'https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fea9c4d4e-a600-44a4-ba62-ee22643b01cf_3561x5035.jpeg'},
+      {id:7, title:'Frieren: Beyond Journey\'s End', type:'TV', year:2024, img:'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-n1B5KnnpJ54j.jpg'},
+      {id:8, title:'Solo Leveling', type:'TV', year:2024, img:'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx151807-m1gX3iwfIs39.jpg'},
+      {id:9, title:'One Piece', type:'TV', year:1999, img:'https://images.unsplash.com/photo-1505685296765-3a2736de412f?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d'}
+    ];
+    
+    // utility to create element safely
+    function el(tag, cls){const e=document.createElement(tag); if(cls) e.className=cls; return e;}
+
+    /* ===== Populate cards: trending, airing, latest, movies ===== */
+    const trendingRoot = document.getElementById('trendingCards');
+    const airingRoot = document.getElementById('airingCards');
+    const latestRoot = document.getElementById('latestCards');
+    const movieRoot = document.getElementById('movieCards');
+
+    // helper card creation (consistent alignment)
+    function createCard(item){
+      const a = el('a','card');
+      a.href='#'; a.setAttribute('data-id', item.id);
+      a.innerHTML = `<div class="thumb" style="background-image:url('${item.img}');"></div>
+                     <div class="meta"><div class="title">${item.title}</div><div class="sub">${item.type} · ${item.year}</div></div>`;
+      a.setAttribute('role','link');
+      a.addEventListener('click', (e)=>{ e.preventDefault(); openDetail(item) });
+      return a;
+    }
+
+    // simple ordering logic
+    catalog.slice(0,8).forEach(x => trendingRoot.appendChild(createCard(x)));
+    catalog.filter(x => x.type==='TV').slice(0,6).forEach(x => airingRoot.appendChild(createCard(x)));
+    catalog.filter(x => x.year>=2025).forEach(x => latestRoot.appendChild(createCard(x)));
+    catalog.filter(x => x.type==='Movie').slice(0,6).forEach(x => movieRoot.appendChild(createCard(x)));
+
+    // reveal animation: stagger
+    function staggerReveal(container){
+      const cards = container.querySelectorAll('.card');
+      cards.forEach((c, i) => {
+        c.style.opacity=0;
+        c.style.transform='translateY(14px)';
+        setTimeout(()=>{ c.style.transition='transform .5s cubic-bezier(.2,.9,.2,1),opacity .5s'; c.style.opacity=1; c.style.transform='translateY(0)' }, i*80);
+      });
+    }
+    [trendingRoot,airingRoot,latestRoot,movieRoot].forEach(staggerReveal);
+
+    /* ===== Schedule rendering + tabs alignment fix ===== */
+    const scheduleMap = {
+      mon:[catalog.find(c => c.id === 2)], // Gachiakuta
+      tue:[], 
+      wed:[catalog.find(c => c.id === 6)], // Dandadan
+      thu:[catalog.find(c => c.id === 5)], // JJK S3
+      fri:[catalog.find(c => c.id === 1), catalog.find(c => c.id === 3)], // Demon Slayer, LOTM
+      sat:[catalog.find(c => c.id === 4), catalog.find(c => c.id === 7), catalog.find(c => c.id === 8)], // CSM, Frieren, Solo Leveling
+      sun:[]
+    };
+    const scheduleGrid = document.getElementById('scheduleGrid');
+    const tabs = document.querySelectorAll('#dayTabs button');
+
+    function renderSchedule(day){
+      scheduleGrid.innerHTML='';
+      (scheduleMap[day] || []).forEach(it => {
+        const card = el('a','card');
+        card.href='#';
+        card.innerHTML = `<div class="thumb" style="height:140px;background-image:url('${it.img}')"></div>
+                          <div class="meta"><div class="title">${it.title}</div><div class="sub">New ep • ${it.type}</div></div>`;
+        scheduleGrid.appendChild(card);
+      });
+      if((scheduleMap[day]||[]).length===0){
+        const msg = el('div'); msg.style.color='var(--muted)'; msg.textContent='No scheduled releases for this day.';
+        scheduleGrid.appendChild(msg);
+      }
+    }
+
+    tabs.forEach(btn => btn.addEventListener('click', ()=>{
+      tabs.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderSchedule(btn.dataset.day);
+    }));
+    const now = new Date();
+    const weekday = ['sun','mon','tue','wed','thu','fri','sat'][now.getDay()] || 'mon';
+    const startBtn = Array.from(tabs).find(b => b.dataset.day===weekday) || tabs[0];
+    if(startBtn){ startBtn.click(); }
+
+    /* ===== HERO interactive and alignment fixes ===== */
+    const heroBg1 = document.getElementById('heroBg1');
+    const heroBg2 = document.getElementById('heroBg2');
+    const heroBgs = [heroBg1, heroBg2];
+    let activeBg = 0;
+    
+    const heroPoster = document.getElementById('heroPoster');
+    const heroTitle = document.getElementById('heroTitle');
+    const heroDesc = document.getElementById('heroDesc');
+    const heroProgress = document.getElementById('heroProgress');
+
+    const heroItems = [
+      {title:'Demon Slayer: Infinity Castle', desc:'The final battle against Muzan Kibutsuji begins. The Demon Slayer Corps launches a full-scale assault on the Infinity Castle, facing off against the remaining Upper Rank demons in a desperate struggle for humanity\'s survival.', img:'https://static0.cbrimages.com/wordpress/wp-content/uploads/2025/05/demon-slayer-sets-unfortunate-gen-z-record-ahead-of-infinity-castle-anime-release.jpg', poster: 'https://resizing.flixster.com/kt4vnegLj0xSCAF1Ij6kpMotvlM=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzdlZjVlYWNjLTdiOGEtNGVlNS1hZTg0LTQ5OGUwMDg5NTQ1Zi5qcGc=', type:'Movie', year:2025},
+      {title:'Gachiakuta', desc:'In a society where the wealthy discard their trash into a deep abyss, a young boy from the slums is falsely accused of murder and cast into the depths. There, he discovers a world of living garbage and the power to bring tools to life.', img:'https://4kwallpapers.com/images/wallpapers/gachiakuta-anime-2880x1800-22722.jpg', poster:'https://m.media-amazon.com/images/M/MV5BZDU5ZmEzODYtMDU2OS00NTZiLTk4MWYtYWUyZWUzNGU2ODdjXkEyXkFqcGc@._V1_.jpg', type:'TV', year:2025},
+      {title:'Lord of the Mysteries', desc:'After transmigrating into a Victorian-era world, Klein Moretti finds himself entangled with a secret organization and the mysterious powers of the Beyonders. He must navigate this dangerous world of tarot cards, sealed artifacts, and eldritch horrors.', img:'https://images.everyeye.it/img-notizie/lord-of-mysteries-anime-rivelazione-dell-estate-storia-animazioni-brividi-v3-817858-1280x720.webp', poster:'https://m.media-amazon.com/images/M/MV5BMWE1ZWYwZGUtZjRmOS00NzUzLTlkZmUtMTEwMjNhNTVmNDIwXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg', type:'TV', year:2025}
+    ];
+
+    let hIndex = 0;
+    function updateHero(i){
+      hIndex = (i + heroItems.length) % heroItems.length;
+      const item = heroItems[hIndex];
+      
+      const inactiveBg = 1 - activeBg;
+      heroBgs[inactiveBg].style.backgroundImage = `url('${item.img}')`;
+      heroBgs[inactiveBg].style.opacity = '1';
+      heroBgs[activeBg].style.opacity = '0';
+      activeBg = inactiveBg;
+
+      heroTitle.textContent = item.title;
+      heroDesc.textContent = item.desc;
+      heroPoster.style.backgroundImage = `url('${item.poster}')`;
+      
+      heroProgress.style.transition = 'none';
+      heroProgress.style.width = '0%';
+      setTimeout(()=> { 
+        heroProgress.style.transition = 'width 8s linear';
+        heroProgress.style.width='100%';
+      }, 50);
+
+      // Suttle parallax
+      heroPoster.style.transform = 'translateY(-4px) rotate(-0.5deg)';
+      setTimeout(()=>heroPoster.style.transform='translateY(0) rotate(0deg)', 800);
+    }
+    
+    // Longer interval for slideshow
+    let heroTimer = setInterval(()=> updateHero(hIndex+1), 8000);
+    updateHero(0);
+
+    const heroEl = document.getElementById('hero');
+    heroEl.addEventListener('mouseenter', ()=> { clearInterval(heroTimer); heroPoster.style.transform='translateY(-6px) scale(1.02)'; });
+    heroEl.addEventListener('mouseleave', ()=> { heroTimer = setInterval(()=> updateHero(hIndex+1), 8000); heroPoster.style.transform='translateY(0) scale(1)'; });
+
+    /* ===== particles (immersive depth) ===== */
+    const particlesRoot = document.getElementById('particles');
+    for(let i=0;i<10;i++){
+      const p = document.createElement('div');
+      p.className='particle';
+      p.style.left = (10 + Math.random()*80) + '%';
+      p.style.top = (10 + Math.random()*70) + '%';
+      p.style.opacity = (0.04 + Math.random()*0.12).toFixed(2);
+      p.style.width = (6 + Math.random()*18) + 'px';
+      p.style.height = p.style.width;
+      p.style.animationDuration = (6 + Math.random()*6) + 's';
+      p.style.animationDelay = (Math.random()*3)+'s';
+      particlesRoot.appendChild(p);
+    }
+
+    /* ===== SEARCH: alignment fixes, keyboard navigation, clear presentation ===== */
+    const searchInput = document.getElementById('searchInput');
+    const resultsBox = document.getElementById('searchResults');
+    let focusedResult = -1;
+
+    function buildResultItem(it){
+      const a = document.createElement('a');
+      a.className='result-item';
+      a.href='#';
+      a.innerHTML = `<img src="${it.img}" alt="${it.title}"><div><div style="font-weight:700">${it.title}</div><div style="color:var(--muted);margin-top:6px;font-weight:600">${it.type} · ${it.year}</div></div>`;
+      a.addEventListener('click', (e) => { e.preventDefault(); openDetail(it); hideResults(); });
+      return a;
+    }
+
+    function showResults(list){
+      resultsBox.innerHTML='';
+      if(!list.length){
+        const d = document.createElement('div'); d.style.padding='12px'; d.style.color='var(--muted)'; d.textContent='No results';
+        resultsBox.appendChild(d); resultsBox.style.display='block'; return;
+      }
+      list.slice(0,12).forEach(it => resultsBox.appendChild(buildResultItem(it)));
+      resultsBox.style.display='block';
+    }
+    function hideResults(){ resultsBox.style.display='none'; focusedResult=-1; }
+
+    searchInput.addEventListener('input', (e)=>{
+      const q = e.target.value.trim().toLowerCase();
+      if(!q){ hideResults(); return; }
+      const matches = catalog.filter(x => x.title.toLowerCase().includes(q) || x.type.toLowerCase().includes(q));
+      showResults(matches);
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+      const items = Array.from(resultsBox.querySelectorAll('.result-item'));
+      if(!items.length) return;
+      if(e.key === 'ArrowDown'){ focusedResult = Math.min(focusedResult+1, items.length-1); items[focusedResult].focus(); e.preventDefault(); }
+      if(e.key === 'ArrowUp'){ focusedResult = Math.max(focusedResult-1, 0); items[focusedResult].focus(); e.preventDefault(); }
+      if(e.key === 'Escape'){ hideResults(); searchInput.blur(); }
+      if(e.key === 'Enter' && focusedResult >= 0){ items[focusedResult].click(); e.preventDefault(); }
+    });
+
+    document.addEventListener('click', (ev)=>{
+      if(!ev.target.closest('.search')) hideResults();
+    });
+
+    /* ===== small UI helpers ===== */
+    function openDetail(item){
+      const modal = document.createElement('div');
+      modal.style.position='fixed';
+      modal.style.inset='0';
+      modal.style.display='flex';
+      modal.style.alignItems='center';
+      modal.style.justifyContent='center';
+      modal.style.background='rgba(0,0,0,0.6)';
+      modal.style.zIndex='2000';
+      modal.innerHTML = `<div style="width:min(900px,94%);background:var(--panel);border-radius:12px;padding:18px;display:flex;gap:16px;align-items:flex-start">
+        <div style="width:180px;height:260px;border-radius:8px;background-image:url('${item.img}');background-size:cover;background-position:center;flex-shrink:0"></div>
+        <div style="flex:1">
+          <h3 style="margin:0 0 8px">${item.title}</h3>
+          <div style="color:var(--muted);margin-bottom:12px">${item.type} · ${item.year}</div>
+          <p style="color:var(--muted);margin-bottom:14px">This is a demo details panel. Replace with full synopsis, episodes, cast and streaming info.</p>
+          <div style="display:flex;gap:8px"><button class="btn btn-primary">Play</button><button class="btn">Add to list</button></div>
+        </div>
+        <button id="closeModal" style="background:transparent;border:0;color:var(--muted);font-size:18px;margin-left:8px"><i class="fas fa-times"></i></button>
+      </div>`;
+      document.body.appendChild(modal);
+      modal.querySelector('#closeModal').addEventListener('click', ()=> modal.remove());
+      modal.addEventListener('click', (e) => { if(e.target===modal) modal.remove(); });
+    }
+
+    /* ===== theme toggle (simple) ===== */
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', ()=>{
+      document.documentElement.style.setProperty('--primary', document.documentElement.style.getPropertyValue('--primary') === '#7c3aed' ? '#00bcd4' : '#7c3aed');
+      document.documentElement.style.setProperty('--accent', document.documentElement.style.getPropertyValue('--accent') === '#ff385c' ? '#ffd166' : '#ff385c');
+    });
+
+    /* ===== accessibility ===== */
+    document.addEventListener('keyup', (e) => {
+      if(e.key === 'Tab') document.documentElement.style.setProperty('--showFocus','1');
+    });
+
+  })();
+  </script>
+
+</body>
+>>>>>>> b21ebd1 (First)
 </html>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -201,4 +202,209 @@
     });
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies - Anikan</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* --- 1. Global Styles & Theme (from home.html) --- */
+        :root {
+            --color-background: #100f14;
+            --color-card: #1c1b22;
+            --color-text: #e0e0e0;
+            --color-text-muted: #a0a0a0;
+            --color-primary: #9D4EDD; /* Vibrant Purple Accent */
+            --color-primary-light: #c77dff;
+            --border-color: #2c2c34;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--color-background); color: var(--color-text); font-family: var(--font-family); overflow-x: hidden; }
+        a { color: var(--color-text); text-decoration: none; transition: color 0.3s ease; }
+        img { max-width: 100%; display: block; }
+        
+        /* --- 2. Header & Navigation (from home.html) --- */
+        .main-header { position: sticky; top: 0; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5%; z-index: 1000; background-color: var(--color-background); border-bottom: 1px solid var(--border-color);}
+        .main-header .logo { font-size: 1.8rem; font-weight: 700; color: #fff; letter-spacing: 1px; flex-shrink: 0; }
+        .main-header .logo span { color: var(--color-primary); }
+        .main-nav { display: flex; gap: 2rem; }
+        .main-nav a { font-weight: 500; position: relative; }
+        .main-nav a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background-color: var(--color-primary); transition: width 0.3s ease; }
+        .main-nav a:hover::after, .main-nav a.active::after { width: 100%; }
+        .main-nav a:hover, .main-nav a.active { color: var(--color-primary-light); }
+        .header-actions { display: flex; align-items: center; gap: 1.5rem; }
+        .search-bar { position: relative; }
+        .search-bar input { background: var(--color-card); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 0.5rem 1rem 0.5rem 2.5rem; color: var(--color-text); width: 250px; transition: all 0.3s ease; }
+        .search-bar input::placeholder { color: var(--color-text-muted); }
+        .search-bar input:focus { width: 300px; outline: none; border-color: var(--color-primary); box-shadow: 0 0 10px rgba(157, 78, 221, 0.5); }
+        .search-bar i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); }
+        .cta-button { background: var(--color-primary); color: #fff; padding: 0.6rem 1.2rem; border-radius: 20px; font-weight: 600; transition: all 0.3s ease; flex-shrink: 0; }
+        .cta-button:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(157, 78, 221, 0.5); background-color: var(--color-primary-light); }
+        
+        /* --- 3. Main Content: Movies Page --- */
+        main {
+            padding: 2rem 5%;
+        }
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #fff;
+            border-bottom: 2px solid var(--color-primary);
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        /* --- Anime Card Styles (from home.html) --- */
+        .anime-card { background: var(--color-card); border-radius: 10px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; }
+        .anime-card:hover { transform: translateY(-10px); box-shadow: 0 10px 20px rgba(0,0,0,0.4), 0 0 20px rgba(157, 78, 221, 0.3); }
+        .anime-card-img { width: 100%; height: 280px; object-fit: cover; }
+        .anime-card-content { padding: 1rem; }
+        .anime-card-title { font-size: 1rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--color-text); }
+        .anime-card-meta { font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem; }
+        .play-icon-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 280px; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; font-size: 3rem; color: #fff; opacity: 0; transition: opacity 0.3s ease; }
+        .anime-card:hover .play-icon-overlay { opacity: 1; }
+
+        .no-results {
+            color: var(--color-text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* --- 4. Footer (from home.html) --- */
+        .main-footer { background-color: var(--color-card); padding: 3rem 5%; margin-top: 2rem; border-top: 2px solid var(--color-primary); }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; align-items: top; }
+        .footer-about .logo { margin-bottom: 1rem; font-size: 1.8rem; font-weight: 700; color: #fff; letter-spacing: 1px; }
+        .footer-about .logo span { color: var(--color-primary); }
+        .footer-about p { color: var(--color-text-muted); line-height: 1.6; }
+        .footer-heading { font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: #fff; }
+        .footer-links ul { list-style: none; }
+        .footer-links ul li { margin-bottom: 0.75rem; }
+        .footer-links ul a:hover { color: var(--color-primary-light); padding-left: 5px; }
+        .social-links { display: flex; gap: 1rem; margin-top: 1rem; }
+        .social-links a { font-size: 1.5rem; transition: transform 0.3s ease, color 0.3s ease; }
+        .social-links a:hover { color: var(--color-primary-light); transform: scale(1.2); }
+        .footer-bottom { text-align: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); color: var(--color-text-muted); font-size: 0.9rem; }
+
+        /* --- 5. Responsive Design --- */
+        @media (max-width: 992px) {
+            .main-nav { display: none; }
+        }
+        @media (max-width: 768px) {
+            main { padding: 2rem 3%; }
+            .page-title { font-size: 2rem; }
+            .movies-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+            .anime-card-img, .play-icon-overlay { height: 220px; }
+        }
+         @media (max-width: 480px) {
+            .movies-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+            .anime-card-img, .play-icon-overlay { height: 180px; }
+            .anime-card-title { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="#" class="logo">Ani<span>kan</span></a>
+        <nav class="main-nav"><a href="home.html">Home</a><a href="categories.html">Browse</a><a href="#">Trending</a><a href="#" class="active">Movies</a></nav>
+        <div class="header-actions">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input id="searchInput" type="text" placeholder="Search...">
+            </div>
+            <a href="#" class="cta-button">Sign In</a>
+        </div>
+    </header>
+
+    <main>
+        <h1 class="page-title">Anime Movies</h1>
+        <div class="movies-grid" id="movies-grid-container">
+            </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-about">
+                <div class="logo">Ani<span>kan</span></div>
+                <p>Anikan is a free anime streaming website where you can watch your favorite anime online in high quality.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h3 class="footer-heading">Quick Links</h3>
+                <ul><li><a href="home.html">Home</a></li><li><a href="categories.html">Browse</a></li><li><a href="#">Trending</a></li><li><a href="contact.html">Contact Us</a></li></ul>
+            </div>
+            <div class="footer-links">
+                <h3 class="footer-heading">Legal</h3>
+                <ul><li><a href="terms.html">Terms of Service</a></li><li><a href="privacy-policy.html">Privacy Policy</a></li><li><a href="disclaimer.html">Disclaimer</a></li></ul>
+            </div>
+        </div>
+        <div class="footer-bottom">&copy; 2025 Anikan. All rights reserved. This site does not store any files on its server.</div>
+    </footer>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const animeData = [
+            { id: 1, title: 'Gachiakuta', pageUrl: 'gachiakuta.html', type: 'TV Series', rating: 8.9, episodes: 24, genres: ['Action', 'Fantasy', 'Supernatural'], description: 'In a society where the wealthy discard their trash into a deep abyss...', coverImage: 'https://m.media-amazon.com/images/M/MV5BZDU5ZmEzODYtMDU2OS00NTZiLTk4MWYtYWUyZWUzNGU2ODdjXkEyXkFqcGc@._V1_.jpg', bgImage: 'https://4kwallpapers.com/images/wallpapers/gachiakuta-anime-2880x1800-22722.jpg', status: 'Upcoming', releaseYear: 2025, schedule: 'sun' },
+            { id: 2, title: 'Lord of the Mysteries ( LOTM )', pageUrl: 'LordofMysteries.html', type: 'Donghua', rating: 9.2, episodes: 12, genres: ['Steampunk', 'Mystery', 'Supernatural'], description: 'After transmigrating into a Victorian-era world, Klein Moretti finds himself entangled with a secret organization...', coverImage: 'https://m.media-amazon.com/images/M/MV5BMWE1ZWYwZGUtZjRmOS00NzUzLTlkZmUtMTEwMjNhNTVmNDIwXkEyXkFqcGc@._V1_.jpg', bgImage: 'https://images.everyeye.it/img-notizie/lord-of-mysteries-anime-rivelazione-dell-estate-storia-animazioni-brividi-v3-817858-1280x720.webp', status: 'Upcoming', releaseYear: 2025, schedule: 'fri' },
+            { id: 3, title: 'Demon Slayer: Infinity Castle Arc', pageUrl: 'Dicam.html', type: 'Movie', rating: 9.5, episodes: 1, genres: ['Action', 'Demons', 'Historical'], description: 'The final battle against Muzan Kibutsuji begins...', coverImage: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/Kimetsu_No_Yaiba_Mugen_Jyo-hen_theatrical_poster.jpg/250px-Kimetsu_No_Yaiba_Mugen_Jyo-hen_theatrical_poster.jpg', bgImage: 'https://static0.cbrimages.com/wordpress/wp-content/uploads/2025/05/demon-slayer-sets-unfortunate-gen-z-record-ahead-of-infinity-castle-anime-release.jpg', status: 'Upcoming Movie', releaseYear: 2025, isMovie: true },
+            { id: 4, title: 'Dandadan S2', pageUrl: 'Dandadan.html', type: 'TV Series', rating: 8.8, episodes: 12, genres: ['Action', 'Comedy', 'Sci-Fi'], description: 'A high school girl who believes in ghosts and a boy who believes in aliens get dragged into a bizarre world...', coverImage: 'https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fea9c4d4e-a600-44a4-ba62-ee22643b01cf_3561x5035.jpeg', bgImage: 'https://static0.cbrimages.com/wordpress/wp-content/uploads/2025/06/c4ee60d3-5d74-4dc0-a663-1e56ad42e02f.jpeg', status: 'Airing', releaseYear: 2024, schedule: 'wed' },
+            { id: 5, title: 'Chainsaw Man Movie: Reze Arc', pageUrl: 'ChainsawManMovie1.html', type: 'Movie', rating: 9.1, episodes: 1, genres: ['Action', 'Supernatural', 'Gore'], description: 'Denji falls for a seemingly perfect girl named Reze, who shares a mysterious connection with him...', coverImage: 'https://imgs.search.brave.com/PehZkdT-CmwQBU-tjhsmIVgjT_TdSOuDYtcNpxTFbCw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9wb3N0/ZXIuZ3NjLmNvbS5t/eS8yMDI1LzI1MDQw/MV9DaGFpbnNhd01h/bi1UaGVNb3ZpZVJl/emVBcmNfYmlnLmpw/Zw', bgImage: 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2023/12/chainsaw-man-movie-reze-arc-featured.jpg', status: 'Upcoming Movie', releaseYear: 2025, isMovie: true },
+            { id: 6, title: 'Jujutsu Kaisen Season 3', pageUrl: 'Jujutsu-Kaisen-Season-3.html', type: 'TV Series', rating: 9.3, episodes: 24, genres: ['Action', 'Supernatural', 'School'], description: 'The Culling Game arc begins. Yuji Itadori and his allies must participate in a deadly ritual...', coverImage: 'https://cdn.shopify.com/s/files/1/0689/6061/6685/files/20250901_jjkS3_poster.jpg?v=1756708446', bgImage: 'https://www.comingsoon.net/wp-content/uploads/sites/3/2023/12/Jujutsu-Kaisen-Culling-Game-Arc-Header.png', status: 'Airing', releaseYear: 2025, schedule: 'thu' },
+            { id: 7, title: 'Frieren: Beyond Journey\'s End', pageUrl: 'Frieren-Beyond-Journeys-End.html', type: 'TV Series', rating: 9.4, episodes: 28, genres: ['Adventure', 'Fantasy', 'Slice of Life'], description: 'After defeating the Demon King, the elven mage Frieren outlives her heroic companions...', coverImage: 'https://m.media-amazon.com/images/M/MV5BZTI4ZGMxN2UtODlkYS00MTBjLWE1YzctYzc3NDViMGI0ZmJmXkEyXkFqcGc@._V1_.jpg', bgImage: 'https://images.alphacoders.com/133/1332981.jpeg', status: 'Finished', releaseYear: 2024, schedule: 'sat' },
+            { id: 8, title: 'Solo Leveling', pageUrl: 'Solo-Leveling.html', type: 'TV Series', rating: 8.7, episodes: 12, genres: ['Action', 'Fantasy', 'Adventure'], description: 'In a world where hunters with magical abilities fight deadly monsters, Sung Jinwoo, the weakest hunter...', coverImage: 'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx151807-m1gX3iwfIs39.jpg', bgImage: 'https://images.ctfassets.net/4cd45et68cgf/5wO1320i25V50k2YJahKSc/d3d1354366d3a54a2435520a06806584/SoloLeveling_KeyArt1_CR.jpg', status: 'Airing', releaseYear: 2024, schedule: 'sat' },
+            { id: 9, title: 'Solo Leveling', pageUrl: 'Solo-Leveling.html', type: 'TV Series', rating: 8.7, episodes: 12, genres: ['Action', 'Fantasy', 'Adventure'], description: 'In a world where hunters with magical abilities fight deadly monsters, Sung Jinwoo...', coverImage: 'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx151807-m1gX3iwfIs39.jpg', bgImage: 'https://images.ctfassets.net/4cd45et68cgf/5wO1320i25V50k2YJahKSc/d3d1354366d3a54a2435520a06806584/SoloLeveling_KeyArt1_CR.jpg', status: 'Airing', releaseYear: 2024, schedule: 'sat' },
+            { id: 10, title: 'Solo Leveling', pageUrl: 'Solo-Leveling.html', type: 'TV Series', rating: 8.7, episodes: 12, genres: ['Action', 'Fantasy', 'Adventure'], description: 'In a world where hunters with magical abilities fight deadly monsters, Sung Jinwoo...', coverImage: 'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx151807-m1gX3iwfIs39.jpg', bgImage: 'https://images.ctfassets.net/4cd45et68cgf/5wO1320i25V50k2YJahKSc/d3d1354366d3a54a2435520a06806584/SoloLeveling_KeyArt1_CR.jpg', status: 'Airing', releaseYear: 2024, schedule: 'sat' },
+            { id: 11, title: 'Solo Leveling', pageUrl: 'Solo-Leveling.html', type: 'TV Series', rating: 8.7, episodes: 12, genres: ['Action', 'Fantasy', 'Adventure'], description: 'In a world where hunters with magical abilities fight deadly monsters, Sung Jinwoo...', coverImage: 'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx151807-m1gX3iwfIs39.jpg', bgImage: 'https://images.ctfassets.net/4cd45et68cgf/5wO1320i25V50k2YJahKSc/d3d1354366d3a54a2435520a06806584/SoloLeveling_KeyArt1_CR.jpg', status: 'Airing', releaseYear: 2024, schedule: 'sat' },
+            { id: 12, title: 'Solo Leveling', pageUrl: 'Solo-Leveling.html', type: 'TV Series', rating: 8.7, episodes: 12, genres: ['Action', 'Fantasy', 'Adventure'], description: 'In a world where hunters with magical abilities fight deadly monsters, Sung Jinwoo...', coverImage: 'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx151807-m1gX3iwfIs39.jpg', bgImage: 'https://images.ctfassets.net/4cd45et68cgf/5wO1320i25V50k2YJahKSc/d3d1354366d3a54a2435520a06806584/SoloLeveling_KeyArt1_CR.jpg', status: 'Airing', releaseYear: 2024, schedule: 'sat' },
+            { id: 13, title: 'Solo Leveling', pageUrl: 'Solo-Leveling.html', type: 'TV Series', rating: 8.7, episodes: 12, genres: ['Action', 'Fantasy', 'Adventure'], description: 'In a world where hunters with magical abilities fight deadly monsters, Sung Jinwoo...', coverImage: 'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx151807-m1gX3iwfIs39.jpg', bgImage: 'https://images.ctfassets.net/4cd45et68cgf/5wO1320i25V50k2YJahKSc/d3d1354366d3a54a2435520a06806584/SoloLeveling_KeyArt1_CR.jpg', status: 'Airing', releaseYear: 2024, schedule: 'sat' },
+            { id: 14, title: 'Solo Leveling', pageUrl: 'Solo-Leveling.html', type: 'TV Series', rating: 8.7, episodes: 12, genres: ['Action', 'Fantasy', 'Adventure'], description: 'In a world where hunters with magical abilities fight deadly monsters, Sung Jinwoo...', coverImage: 'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx151807-m1gX3iwfIs39.jpg', bgImage: 'https://images.ctfassets.net/4cd45et68cgf/5wO1320i25V50k2YJahKSc/d3d1354366d3a54a2435520a06806584/SoloLeveling_KeyArt1_CR.jpg', status: 'Airing', releaseYear: 2024, schedule: 'sat' },
+          ];
+        
+        const moviesGridContainer = document.getElementById('movies-grid-container');
+
+        // 1. Filter the main data to get only movies
+        const movies = animeData.filter(anime => anime.type === 'Movie' || anime.isMovie === true); //
+
+        // 2. A reusable function to create the HTML for a single anime card
+        function createAnimeCard(anime) {
+             return `<a href="${anime.pageUrl}" class="anime-card">
+                <img src="${anime.coverImage}" alt="${anime.title}" pageurl="${anime.pageUrl}" class="anime-card-img">
+                <div class="play-icon-overlay"><i class="fas fa-play"></i></div>
+                <div class="anime-card-content">
+                    <h3 class="anime-card-title">${anime.title}</h3>
+                    <p class="anime-card-meta">${anime.type} &bull; ${anime.episodes} Episodes</p>
+                </div>
+            </a>`; //
+        }
+
+        // 3. Generate the HTML and inject it into the grid container
+        if (movies.length > 0) {
+            moviesGridContainer.innerHTML = movies.map(createAnimeCard).join('');
+        } else {
+            moviesGridContainer.innerHTML = '<p class="no-results">No movies found at this time.</p>';
+        }
+    });
+    </script>
+</body>
+>>>>>>> b21ebd1 (First)
 </html>
