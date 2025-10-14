@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Review & Watch Dandadan - Anikan</title>
+    <title>Review & Watch DanDaDan - Anikan</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
+        /* --- DanDaDan Watch Page Styles --- */
         :root {
             --color-background: #100f14;
             --color-card: #1c1b22;
@@ -21,12 +22,29 @@
             --font-family: 'Poppins', sans-serif;
             --rating-color: #57D64B; /* Green for rating */
             --border-color: #2c2c34;
+            /* Added for Watch Section */
+            --primary-color: #9D4EDD;
+            --primary-color-rgb: 157, 78, 221;
+            --surface-color-darker: #1A1A1D;
+            --surface-color-lighter: #2a2a2d;
+            --background-color-watch: #0B0C10; 
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body { background-color: var(--color-background); color: var(--color-text); font-family: var(--font-family); }
         a { color: var(--color-text); text-decoration: none; }
         img { max-width: 100%; display: block; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .widget {
+            background: linear-gradient(180deg, var(--surface-color-lighter), var(--surface-color-darker));
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-radius: 8px; margin-bottom: 20px; padding: 20px;
+        }
+        .widget-title {
+            font-size: 1.2rem; font-weight: 600; margin-bottom: 15px;
+            padding-bottom: 10px; border-bottom: 1px solid var(--border-color);
+        }
 
         .main-header {
             position: sticky;
@@ -44,29 +62,15 @@
         .main-header .logo span { color: var(--color-primary); }
         .main-header .nav-links a { margin-left: 2rem; color: var(--color-text-muted); font-weight: 500; transition: color 0.3s ease; }
         .main-header .nav-links a:hover { color: var(--color-primary); }
-        .main-header .search-bar { position: relative; }
-        .main-header .search-bar input {
-            background-color: var(--color-card);
-            border: none;
-            border-radius: 20px;
-            padding: 0.5rem 1rem 0.5rem 2.5rem;
-            color: var(--color-text);
-            font-family: var(--font-family);
-            font-size: 0.9rem;
-            width: 200px;
-            transition: width 0.3s ease;
-        }
-        .main-header .search-bar input:focus { width: 250px; outline: none; }
-        .main-header .search-bar .fa-search { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); }
-        .main-header .user-profile { margin-left: 1.5rem; }
-        .main-header .user-profile img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; cursor: pointer; }
+        .main-header .search-bar { position: relative; display: none; } /* Hidden for simplicity */
+        .main-header .user-profile { margin-left: 1.5rem; display: none; } /* Hidden for simplicity */
 
 
         /* --- Review Page Layout --- */
         .review-wrapper { transition: opacity 0.4s ease, visibility 0.4s ease; }
-        .watch-section { display: none; opacity: 0; transition: opacity 0.4s ease; }
+        .watch-section { display: none; opacity: 0; transition: opacity 0.4s ease; background-color: var(--background-color-watch);}
         body.watching-active .review-wrapper { display: none; opacity: 0; visibility: hidden; }
-        body.watching-active .watch-section { display: block; opacity: 1; padding-top: 2rem; }
+        body.watching-active .watch-section { display: block; opacity: 1; padding: 2rem 5%; }
 
         .hero-banner {
             position: relative;
@@ -315,49 +319,123 @@
         .character-card h4 { font-size: 1rem; margin-bottom: 0.2rem; }
         .character-card p { font-size: 0.85rem; color: var(--color-text-muted); }
         
-        /* --- Watch Section --- */
-        .watch-section { padding: 2rem 5%; }
-        .current-episode-title { font-size: 1.8rem; font-weight: 600; margin-bottom: 1.5rem; }
-        .watch-player-container { position: relative; padding-bottom: 56.25%; height: 0; background-color: #000; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); margin-bottom: 2rem; }
-        .watch-player-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-        .stream-controls { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2rem; }
-        .panel { background-color: var(--color-card); border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); flex: 1 1 300px; }
-        .button-group { display: flex; flex-wrap: wrap; gap: 0.8rem; }
-        .button-group button, .button-group a { background-color: var(--color-background); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.6rem 1rem; color: var(--color-text-muted); font-family: var(--font-family); font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; text-align: center; }
-        .button-group button:hover, .button-group a:hover { background-color: #2a2933; color: #fff; border-color: var(--color-primary); }
-        .button-group button.active { background-color: var(--color-primary); color: #fff; font-weight: 600; border-color: var(--color-primary); }
-        
-        .episodes-panel { background-color: var(--color-card); border-radius: 10px; padding: 1.5rem; }
-        .episodes-panel .season-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); }
-        .episode-list { max-height: 500px; overflow-y: auto; padding-right: 0.5rem; list-style: none; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 2rem; /* Space between seasons */ }
-        .episode-item a { display: flex; align-items: center; gap: 1rem; padding: 0.5rem; background-color: var(--color-background); border-radius: 8px; }
-        .episode-thumbnail { width: 120px; height: 70px; object-fit: cover; border-radius: 5px; }
-        .episode-number { font-size: 1.2rem; font-weight: 700; width: 40px; text-align: center;}
-        .episode-item a.active { background-color: var(--color-primary); color: #fff; }
-
-        @media (max-width: 992px) {
-            .main-header .nav-links, .main-header .search-bar { display: none; }
-            .hero-content h1 { font-size: 3rem; }
-            .review-main-content { grid-template-columns: 1fr; }
-            .left-sidebar { align-items: center; text-align: center; }
-            .movie-poster { max-width: 300px; }
-            .info-panel { grid-template-columns: 1fr; }
-            .info-details li { justify-content: center; }
-            .watchlist-section button { max-width: 300px; }
+        /* --- Watch Section (Hoteldelluna/Gachiakuta Style) --- */
+        .watch-layout { 
+            display: grid; 
+            grid-template-columns: 2fr 1fr; 
+            gap: 20px; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 2rem 0; /* Adjusted padding within the section */
         }
-        @media (max-width: 576px) {
-            .hero-banner { display: none; } /* HIDE BANNER ON MOBILE */
-            .mobile-hero-buttons { /* SHOW MOBILE BUTTONS */
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-                width: 100%;
-                max-width: 300px; /* Match poster width */
-                margin-top: 1rem; /* Space from poster */
-            }
-            .mobile-hero-buttons .btn { width: 100%; }
-            .photos-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
-            .characters-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+        .main-content-col { min-width: 0; }
+        .video-player-container {
+            position: relative;
+            width: 100%;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            border: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        
+        #video-player-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .episode-meta { padding: 0 0 15px 0; }
+        .episode-title-watch { font-size: 1.5rem; font-weight: 600; margin-bottom: 15px; }
+        .episode-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+
+        .action-btn, .download-btn {
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .action-btn:hover:not(:disabled), .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+        .action-btn:disabled {
+            background-color: #222;
+            color: #555;
+            cursor: not-allowed;
+        }
+        .action-btn {
+            background: linear-gradient(180deg, #4a4a52, #313136);
+            color: var(--color-text);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .action-btn:hover:not(:disabled) {
+            background: linear-gradient(180deg, #5a5a62, #414146);
+        }
+
+        #next-ep-btn {
+            background: linear-gradient(180deg, #ffffff, #e0e0e0);
+            color: #0B0C10;
+            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+        }
+        .download-btn {
+            background: linear-gradient(180deg, hsl(270, 77%, 60%), hsl(270, 77%, 50%)); /* Adjusted to primary color */
+            color: white;
+            box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.25);
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+        .download-btn:hover {
+             background: linear-gradient(180deg, hsl(270, 77%, 65%), hsl(270, 77%, 55%));
+        }
+
+        /* --- Episode List / Downloads --- */
+        .episodes-list-widget .episodes-list { max-height: 400px; overflow-y: auto; padding-right: 10px; list-style: none; }
+        .episode-item { display: flex; align-items: center; gap: 15px; padding: 10px; border-radius: 5px; margin-bottom: 5px; cursor: pointer; border: 1px solid transparent; transition: all 0.2s ease; }
+        .episode-item:hover { background-color: var(--surface-color-lighter); border-color: var(--border-color); }
+        .episode-item.current { background: rgba(var(--primary-color-rgb), 0.1); border-color: var(--primary-color); }
+        .episode-item .ep-number { font-weight: 600; font-size: 1.1rem; }
+        .episode-item .ep-desc { font-size: 0.9rem; color: var(--color-text-muted); }
+        .episode-thumbnail-small { width: 70px; height: 40px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
+
+        .download-list table { width: 100%; border-collapse: collapse; }
+        .download-list th, .download-list td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .download-list th { color: var(--color-text-muted); font-weight: 500; }
+        
+        /* Sidebar Placeholder */
+        .drama-info-widget { padding: 20px; }
+        .info-title-sidebar { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; }
+        .info-details p { font-size: 0.9rem; padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+        .info-details p:last-child { border-bottom: none; }
+        .info-details span { color: var(--color-text-muted); display: inline-block; width: 110px; }
+        .info-poster img { border-radius: 8px; margin-bottom: 15px; }
+
+        /* Responsive Styles (Adapted) */
+        @media (max-width: 992px) { 
+            .watch-layout { grid-template-columns: 1fr; } 
+            .episode-title-watch { font-size: 1.4rem; } 
+            .watch-section { padding: 15px; }
+        }
+        @media (max-width: 576px) { 
+            .watch-section { padding: 10px; }
+            .episode-title-watch { font-size: 1.2rem; }
+            .download-list thead { display: none; } 
+            .download-list tr { display: block; border-bottom: 2px solid var(--primary-color); margin-bottom: 15px; padding-bottom: 15px; } 
+            .download-list tr:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; } 
+            .download-list td { display: block; text-align: right; font-size: 0.9rem; border-bottom: none; padding: 5px 8px; position: relative; } 
+            .download-list td::before { content: attr(data-label); position: absolute; left: 8px; font-weight: bold; color: var(--color-text-muted); text-align: left; } 
+            .action-btn { padding: 6px 12px; font-size: 0.9rem; } 
         }
     </style>
 </head>
@@ -458,35 +536,76 @@
         </div>
         
         <section class="watch-section" id="watch-section">
-            <h2 class="current-episode-title" id="current-episode-title"></h2>
-            <div class="watch-player-container">
-                <iframe id="video-player" src="" allow="autoplay; fullscreen" allowfullscreen></iframe>
-            </div>
-            <div class="stream-controls">
-                <div class="panel">
-                    <h3 class="panel-title">Servers</h3>
-                    <div class="button-group" id="server-list"></div>
+            <div class="watch-layout" id="watch-layout">
+                <div class="main-content-col">
+                    <div class="video-player-container">
+                        <iframe 
+                            id="video-player-iframe"
+                            src="" 
+                            title="Video Player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <div class="episode-meta">
+                        <h1 class="episode-title-watch" id="current-episode-title"></h1>
+                        <div class="episode-actions">
+                            <button class="action-btn" id="prev-ep-btn"><i class="fas fa-arrow-left"></i>Prev</button>
+                            <button class="action-btn" id="next-ep-btn">Next<i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="widget episodes-list-widget">
+                        <h2 class="widget-title">Episodes</h2>
+                        <div class="episodes-list" id="episodes-list-container">
+                            </div>
+                    </div>
+                    
+                    <div class="widget download-widget">
+                        <h2 class="widget-title">Download (Placeholder Links)</h2>
+                        <div class="download-list">
+                            <table>
+                                <thead>
+                                    <tr><th>Episode</th><th>Quality</th><th>Video</th><th>Subtitles</th></tr>
+                                </thead>
+                                <tbody id="download-links-tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="panel">
-                    <h3 class="panel-title">Download Episode</h3>
-                    <div class="button-group" id="download-links"></div>
+
+                <div class="sidebar-col">
+                    <div class="widget drama-info-widget">
+                        <div class="info-poster"><img id="sidebar-poster" src="" alt="Anime Poster"></div>
+                        <h2 class="info-title-sidebar" id="sidebar-title"></h2>
+                        <div class="info-details">
+                            <p><span>Type:</span> <span id="sidebar-type"></span></p>
+                            <p><span>Episodes:</span> <span id="sidebar-episodes"></span></p>
+                            <p><span>Duration:</span> <span id="sidebar-duration"></span></p>
+                            <p><span>Studio:</span> <span id="sidebar-studio"></span></p>
+                            <p><span>Score:</span> <span id="sidebar-score"></span></p>
+                            <p><span>Genres:</span> <span id="sidebar-genres"></span></p>
+                        </div>
+                    </div>
+                    <div class="widget recommendations-widget">
+                        <h2 class="widget-title">You Might Also Like</h2>
+                        <div class="recommendations-list">
+                           <p style="color: var(--color-text-muted); font-size: 0.9rem;">Recommendation list placeholder.</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="episodes-panel" id="episodes-panel-container">
-                </div>
-             <div class="panel" style="margin-top: 2rem;">
-                <h3 class="panel-title">Download Subtitles</h3>
-                <div class="button-group" id="subtitle-links"></div>
             </div>
         </section>
-
-    </main>
+        </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- Data: Dandadan for the review page ---
+            // --- Data: DanDaDan for the review page (Base) ---
             const selectedAnime = {
-                id: 4, title: 'Dandadan', title_japanese: 'ダンダダン',
+                id: 4, title: 'DanDaDan', title_japanese: 'ダンダダン',
                 cast: ['Momo Ayase (Shion Wakayama)', 'Ken "Okarun" Takakura (Natsuki Hanae)', 'Turbo Granny (Mayumi Tanaka)', 'Serpoian (Kazuya Nakai)'],
                 characters: [
                     { name: 'Momo Ayase', image: 'https://static.wikia.nocookie.net/dandadan/images/c/ce/Momo_Ayase_Anime_Infobox_2.png/revision/latest?cb=20241116233954' },
@@ -497,9 +616,9 @@
                 genres: ['Action', 'Sci-Fi', 'Comedy', 'Supernatural'],
                 duration: '24 min', rating: 8.9,
                 description: 'Momo Ayase is a high schooler who believes in ghosts but denies the existence of aliens, while her classmate, Okarun, believes in aliens but denies ghosts. To settle the matter, they dare each other to visit places linked to their opposing beliefs. But when they both turn out to be right, they get caught in the crossfire of the supernatural and extraterrestrial. Cursed and gifted with strange new powers, they must team up to fight off a bizarre onslaught of aliens, ghosts, and cryptids, all while navigating a budding, chaotic romance.',
-                audience: 'Fans of hyperactive action-comedy with a unique blend of sci-fi and the occult will love Dandadan. If you enjoy the wild energy and heartfelt character dynamics of shows like "Chainsaw Man" or "Mob Psycho 100," this series is a must-watch for its incredible animation, off-the-wall humor, and non-stop paranormal battles.',
+                audience: 'Fans of hyperactive action-comedy with a unique blend of sci-fi and the occult will love DanDaDan. If you enjoy the wild energy and heartfelt character dynamics of shows like "Chainsaw Man" or "Mob Psycho 100," this series is a must-watch for its incredible animation, off-the-wall humor, and non-stop paranormal battles.',
                 coverImage: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg',
-                bgImage: 'https://www.thathashtagshow.com/wp-content/uploads/2025/07/DANDADAN_S2_16x9_3840x2160-1024x576.png',
+                bgImage: 'https://static0.cbrimages.com/wordpress/wp-content/uploads/2025/06/c4ee60d3-5d74-4dc0-a663-1e56ad42e02f.jpeg',
                 releaseYear: 2024,
                 trailer_url: 'https://youtu.be/uXr9Ha9qRHE?si=EDb1B8fYMZxbhxQx',
                 official_streams: [
@@ -507,35 +626,18 @@
                     { platform: 'Netflix', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1200px-Netflix_2015_logo.svg.png' },
                     { platform: 'Amazon Prime Video', logo: 'https://m.media-amazon.com/images/G/03/digital/video/acquisition/logo/pv_logo_white._CB548648733_.png' }
                 ],
-                seasonList: [
-                    {
-                        seasonTitle: 'Season 1',
-                        episodes: Array.from({ length: 12 }, (_, i) => ({
-                            ep_num: i + 1, title: `Episode ${i + 1}`, thumbnail: 'https://images.ctfassets.net/4cd45et68cgf/5ZgmpkS7Mgo1z2PlXQ2vF6/808ed62886fbf8c52345e61f9d453629/DAN_DANDAN_key_visual_1.jpg',
-                            servers: { 'VidStream': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', 'MegaCloud': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', 'StreamTape': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1' },
-                            downloads: { '1080p': '#', '720p': '#', '480p': '#' }
-                        }))
-                    },
-                    {
-                        seasonTitle: 'Season 2',
-                        episodes: Array.from({ length: 12 }, (_, i) => ({
-                            ep_num: i + 13, title: `Episode ${i + 13}`, thumbnail: 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2024/06/dandadan-kv-2.jpg',
-                            servers: { 'VidStream': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', 'MegaCloud': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', 'StreamTape': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1' },
-                            downloads: { '1080p': '#', '720p': '#', '480p': '#' }
-                        }))
-                    }
-                ],
-                subtitles: [ { lang: 'English', url: '#' }, { lang: 'Japanese', url: '#' } ],
                 gallery: [
                     'https://staticg.sportskeeda.com/editor/2025/08/3eeb1-17552362751704-1920.jpg?w=640',
-                    'https://comicbook.com/wp-content/uploads/sites/4/2025/04/Dandadan-Season-2-Okarun.jpeg',
+                    'https://comicbook.com/wp-content/uploads/sites/4/2025/04/dandadan-Season-2-Okarun.jpeg',
                     'https://media.butwhytho.net/wp-content/uploads/2025/09/DanDaDan-Season-2-But-Why-Tho-1.jpg',
                     'https://static.beebom.com/wp-content/uploads/2024/12/Jiji-Momo-and-Okarun.jpg?w=1168&quality=75',
                     'https://media.butwhytho.net/wp-content/uploads/2025/09/DanDaDan-Season-2-Episode-12-But-Why-Tho.jpg',
                     'https://cdn.oneesports.gg/cdn-data/2024/12/Anime_Dandadan_EvilVillages_Episode12_Season1-1024x576.jpg'
-                ]
+                ],
+                episodes: 24 // Total episodes
             };
-            
+
+            // Helper function for YouTube Embeds
             function getYouTubeEmbedUrl(url) {
                 let videoId = null;
                 const patterns = [
@@ -553,8 +655,56 @@
                 }
                 return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
             }
+            
+            // --- SEPARATE EPISODE DATA CONSTANT (As requested, flat structure) ---
+            const episodeData = [
+                // Season 1 (1-12)
+                { number: 1, title: 'Episode 1: Believe in Ghosts, Disbelieve in Aliens', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=1&e=1', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, 
+                { number: 2, title: 'Episode 2: The Curse of the Turbo Granny', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=1&e=2', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, 
+                { number: 3, title: 'Episode 3: The Jomon Alien', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=1&e=3', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 4, title: 'Episode 4: Battle for the Golden Balls', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=1&e=4', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 5, title: 'Episode 5: The Serpoian Rescue', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=1&e=5', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 6, title: 'Episode 6: Meeting the Evil Eye', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=1&e=6', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, 
+                { number: 7, title: 'Episode 7: The Cursed Tunnel', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=1&e=7', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 8, title: 'Episode 8: Momo’s Power Awakens', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=1&e=8', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 9, title: 'Episode 9: Okarun’s True Form', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=1&e=9', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 10, title: 'Episode 10: The Dinosaur Man', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=1&e=10', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 11, title: 'Episode 11: Teamwork vs. Cryptid', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=1&e=11', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 12, title: 'Episode 12: Farewell, Turbo Granny (S1 Finale)', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=1&e=12', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 13, title: 'Episode 13: Back to Battle', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=2&e=1', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 14, title: 'Episode 14: The Venusian', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=2&e=2', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 15, title: 'Episode 15: The Doppelgänger Threat', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=2&e=3', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 16, title: 'Episode 16: New Powers, New Enemies', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=2&e=4', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 17, title: 'Episode 17: The Alien Invasion Plan', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=2&e=5', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 18, title: 'Episode 18: Grandma\'s Return', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=2&e=6', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 19, title: 'Episode 19: The Secret of the Curse', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=2&e=7', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 20, title: 'Episode 20: Love Triangle of the Damned', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=2&e=8', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 21, title: 'Episode 21: Cosmic Horror Show', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=2&e=9', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 22, title: 'Episode 22: Unraveling the Mystery', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=2&e=10', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 23, title: 'Episode 23: Final Confrontation', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=2&e=11', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 24, title: 'Episode 24: New Adventures (Series Finale)', videoUrl: 'https://multiembed.mov/?video_id=tt30217403&s=2&e=12', thumbnail: 'https://images.justwatch.com/poster/330265270/s718/season-2.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }
+            ];
+            
+            // --- Page Elements ---
+            const videoPlayer = document.getElementById('video-player-iframe'); // ID change for new structure
+            const episodesListContainer = document.getElementById('episodes-list-container'); // Container for list items
+            const downloadLinksTbody = document.getElementById('download-links-tbody');
+            const currentEpisodeTitle = document.getElementById('current-episode-title');
+            const prevBtn = document.getElementById('prev-ep-btn');
+            const nextBtn = document.getElementById('next-ep-btn');
+
+            // --- Button Elements (from review page) ---
+            const playButton = document.getElementById('play-button');
+            const mobilePlayButton = document.getElementById('mobile-play-button');
+            const trailerButton = document.getElementById('trailer-button');
+            const mobileTrailerButton = document.getElementById('mobile-trailer-button');
+            const addToWatchlistBtn = document.getElementById('add-to-watchlist-btn');
+
+            let currentEpisodeIndex = 0; // Index starting at 0
+            const totalEpisodes = episodeData.length;
 
             function populateReviewSection() {
+                // Initial Population of Review Page UI
                 document.title = `Review & Watch ${selectedAnime.title} - Anikan`;
                 document.getElementById('hero-banner-section').style.backgroundImage = `url('${selectedAnime.bgImage}')`;
                 document.getElementById('anime-title-main').textContent = selectedAnime.title;
@@ -580,121 +730,108 @@
                 officialStreamsContainer.innerHTML = selectedAnime.official_streams.map(stream =>
                     `<a href="#" class="stream-logo"><img src="${stream.logo}" alt="${stream.platform}"></a>`
                 ).join('');
+                
+                // Populate Sidebar Info
+                document.getElementById('sidebar-poster').src = selectedAnime.coverImage;
+                document.getElementById('sidebar-title').textContent = selectedAnime.title;
+                document.getElementById('sidebar-type').textContent = selectedAnime.type;
+                document.getElementById('sidebar-episodes').textContent = selectedAnime.episodes;
+                document.getElementById('sidebar-duration').textContent = selectedAnime.duration;
+                document.getElementById('sidebar-studio').textContent = selectedAnime.studio;
+                document.getElementById('sidebar-score').textContent = selectedAnime.rating + '/10';
+                document.getElementById('sidebar-genres').textContent = selectedAnime.genres.join(', ');
             }
+            
+            // --- WATCH UI LOGIC ---
 
-            // --- Page Elements ---
-            const videoPlayer = document.getElementById('video-player');
-            const episodesPanelContainer = document.getElementById('episodes-panel-container');
-            const serverListContainer = document.getElementById('server-list');
-            const downloadLinksContainer = document.getElementById('download-links');
-            const subtitleLinksContainer = document.getElementById('subtitle-links');
-            const currentEpisodeTitle = document.getElementById('current-episode-title');
+            function updateUI(episodeIndex) {
+                currentEpisodeIndex = parseInt(episodeIndex, 10);
+                const episode = episodeData[currentEpisodeIndex];
+                
+                if (!episode) return;
+                
+                const episodeNumber = episode.number;
+                const displayTitle = episode.title.match(/(?::\s?)(.*)/)?.[1] || episode.title; // Clean up title for display
 
-            // --- Button Elements ---
-            const playButton = document.getElementById('play-button');
-            const mobilePlayButton = document.getElementById('mobile-play-button');
-            const trailerButton = document.getElementById('trailer-button');
-            const mobileTrailerButton = document.getElementById('mobile-trailer-button');
-            const addToWatchlistBtn = document.getElementById('add-to-watchlist-btn');
+                currentEpisodeTitle.textContent = `You are watching Episode ${episodeNumber} - ${displayTitle}`;
+                
+                // 1. Update Video Player
+                videoPlayer.src = episode.videoUrl;
 
-            function activateEpisode(flatIndex) {
-                // Find the correct season and episode from the flat index
-                let episode;
-                let episodeCount = 0;
-                let found = false;
-                for (const season of selectedAnime.seasonList) {
-                    if (flatIndex < episodeCount + season.episodes.length) {
-                        episode = season.episodes[flatIndex - episodeCount];
-                        found = true;
-                        break;
-                    }
-                    episodeCount += season.episodes.length;
+                // 2. Update Download Links
+                downloadLinksTbody.innerHTML = '';
+                const downloadQualities = Object.keys(episode.downloads);
+                const subtitleUrl = episode.subtitleUrl || '#';
+                
+                if (downloadQualities.length > 0) {
+                     downloadQualities.forEach(quality => {
+                        const downloadUrl = episode.downloads[quality];
+                        downloadLinksTbody.innerHTML += `
+                            <tr>
+                                <td data-label="Episode">Episode ${episodeNumber}</td>
+                                <td data-label="Quality">${quality}</td>
+                                <td data-label="Video"><a href="${downloadUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-download"></i> Download</a></td>
+                                <td data-label="Subtitles"><a href="${subtitleUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-closed-captioning"></i> Download</a></td>
+                            </tr>`;
+                    });
+                } else {
+                    downloadLinksTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-text-muted);">Download links not available for this episode.</td></tr>`;
                 }
-                if (!found) return; // Index out of bounds
-
-                currentEpisodeTitle.textContent = `Currently Watching: Episode ${episode.ep_num}`;
                 
-                serverListContainer.innerHTML = '';
-                Object.keys(episode.servers).forEach(serverName => {
-                    const button = document.createElement('button');
-                    button.textContent = serverName;
-                    button.dataset.url = episode.servers[serverName];
-                    button.addEventListener('click', () => {
-                        videoPlayer.src = button.dataset.url;
-                        serverListContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-                        button.classList.add('active');
-                    });
-                    serverListContainer.appendChild(button);
-                });
+                // 3. Update Episode List Active State and scroll
+                episodesListContainer.querySelectorAll('.episode-item').forEach(link => link.classList.remove('current'));
+                const activeEpisodeLink = episodesListContainer.querySelector(`.episode-item[data-episode='${episodeNumber}']`);
+                if (activeEpisodeLink) {
+                    activeEpisodeLink.classList.add('current');
+                    activeEpisodeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
 
-                downloadLinksContainer.innerHTML = '';
-                Object.keys(episode.downloads).forEach(quality => {
-                    const a = document.createElement('a'); a.href = episode.downloads[quality]; a.textContent = quality;
-                    downloadLinksContainer.appendChild(a);
-                });
-
-                episodesPanelContainer.querySelectorAll('a').forEach(link => link.classList.remove('active'));
-                const activeEpisodeLink = episodesPanelContainer.querySelector(`a[data-flat-index='${flatIndex}']`);
-                if (activeEpisodeLink) activeEpisodeLink.classList.add('active');
-                
-                if (serverListContainer.firstChild) serverListContainer.firstChild.click();
+                // 4. Update Navigation Buttons
+                prevBtn.disabled = episodeNumber === 1;
+                nextBtn.disabled = episodeNumber === totalEpisodes;
             }
 
-            function populateEpisodeList() {
-                episodesPanelContainer.innerHTML = '';
-                let flatIndex = 0;
-
-                selectedAnime.seasonList.forEach(season => {
-                    const seasonTitleEl = document.createElement('h2');
-                    seasonTitleEl.className = 'season-title';
-                    seasonTitleEl.textContent = season.seasonTitle;
-                    episodesPanelContainer.appendChild(seasonTitleEl);
-
-                    const ul = document.createElement('ul');
-                    ul.className = 'episode-list';
+            function generateEpisodeList() {
+                episodesListContainer.innerHTML = '';
+                episodeData.forEach((ep, index) => {
+                    const episodeNumber = ep.number;
+                    const episodeTitle = ep.title.match(/(?::\s?)(.*)/)?.[1] || ep.title; // Clean up title for display
                     
-                    season.episodes.forEach(ep => {
-                        const li = document.createElement('li');
-                        li.className = 'episode-item';
-                        const a = document.createElement('a');
-                        a.href = '#';
-                        a.dataset.flatIndex = flatIndex; // Use a continuous index
-                        a.innerHTML = `<img src="${ep.thumbnail}" alt="Ep ${ep.ep_num}" class="episode-thumbnail"><span class="episode-number">${ep.ep_num}</span><span class="episode-title">Episode ${ep.ep_num}</span>`;
-                        
-                        a.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            activateEpisode(parseInt(e.currentTarget.dataset.flatIndex));
-                        });
-                        
-                        li.appendChild(a);
-                        ul.appendChild(li);
-                        flatIndex++;
+                    const itemHTML = `
+                        <a class="episode-item" data-episode="${episodeNumber}" data-episode-index="${index}">
+                            <img src="${ep.thumbnail}" alt="Ep ${episodeNumber}" class="episode-thumbnail-small">
+                            <div class="ep-info">
+                                <p class="ep-number">E${episodeNumber}</p>
+                                <p class="ep-desc">${episodeTitle}</p>
+                            </div>
+                        </a>
+                    `;
+                    episodesListContainer.innerHTML += itemHTML;
+                });
+                
+                // Attach click listeners to the generated list items
+                episodesListContainer.querySelectorAll('.episode-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        updateUI(item.dataset.episodeIndex);
                     });
-
-                    episodesPanelContainer.appendChild(ul);
                 });
             }
 
-            function populateSubtitleLinks() {
-                subtitleLinksContainer.innerHTML = '';
-                selectedAnime.subtitles.forEach(sub => {
-                    const a = document.createElement('a'); a.href = sub.url; a.textContent = sub.lang;
-                    subtitleLinksContainer.appendChild(a);
-                });
-            }
 
             // --- Event Handlers ---
             const handlePlayClick = () => {
                 document.body.classList.add('watching-active');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                populateEpisodeList();
-                populateSubtitleLinks();
-                // Activate the very first episode (index 0)
-                if (selectedAnime.seasonList.length > 0 && selectedAnime.seasonList[0].episodes.length > 0) {
-                    activateEpisode(0);
+                
+                generateEpisodeList(); // Generate list and attach click handlers
+                
+                // Initialize the player with the first episode
+                if (episodeData.length > 0) {
+                    updateUI(0);
                 }
             };
-
+            
             const handleTrailerClick = () => {
                 const trailerElement = document.getElementById('trailer-player');
                 if (trailerElement) {
@@ -711,7 +848,15 @@
                 }
             };
 
-            // --- Event Listeners ---
+            // --- Navigation Event Listeners ---
+            prevBtn.addEventListener('click', () => { 
+                if (currentEpisodeIndex > 0) updateUI(currentEpisodeIndex - 1); 
+            });
+            nextBtn.addEventListener('click', () => { 
+                if (currentEpisodeIndex < totalEpisodes - 1) updateUI(currentEpisodeIndex + 1); 
+            });
+
+            // --- Other Event Listeners ---
             playButton.addEventListener('click', handlePlayClick);
             mobilePlayButton.addEventListener('click', handlePlayClick);
             trailerButton.addEventListener('click', handleTrailerClick);
