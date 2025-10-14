@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review & Watch Chainsaw Man Movie: Reze Arc - Anikan</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --color-background: #100f14;
+            --color-card: #1c1b22;
+            --color-text: #e0e0e0;
+            --color-text-muted: #a0a0a0;
+            --color-primary: #9D4EDD;
+            --color-primary-light: #c77dff;
+            --font-family: 'Poppins', sans-serif;
+            --rating-color: #57D64B; /* Green for rating */
+            --border-color: #2c2c34;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--color-background); color: var(--color-text); font-family: var(--font-family); }
+        a { color: var(--color-text); text-decoration: none; }
+        img { max-width: 100%; display: block; }
+
+        .main-header {
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            z-index: 1000;
+            background-color: rgba(16,15,20,0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .main-header .logo { font-size: 1.8rem; font-weight: 700; color: #fff; }
+        .main-header .logo span { color: var(--color-primary); }
+        .main-header .nav-links a { margin-left: 2rem; color: var(--color-text-muted); font-weight: 500; transition: color 0.3s ease; }
+        .main-header .nav-links a:hover { color: var(--color-primary); }
+        .main-header .search-bar { position: relative; }
+        .main-header .search-bar input {
+            background-color: var(--color-card);
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            color: var(--color-text);
+            font-family: var(--font-family);
+            font-size: 0.9rem;
+            width: 200px;
+            transition: width 0.3s ease;
+        }
+        .main-header .search-bar input:focus { width: 250px; outline: none; }
+        .main-header .search-bar .fa-search { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); }
+        .main-header .user-profile { margin-left: 1.5rem; }
+        .main-header .user-profile img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; cursor: pointer; }
+
+
+        /* --- Review Page Layout --- */
+        .review-wrapper { transition: opacity 0.4s ease, visibility 0.4s ease; }
+        .watch-section { display: none; opacity: 0; transition: opacity 0.4s ease; }
+        body.watching-active .review-wrapper { display: none; opacity: 0; visibility: hidden; }
+        body.watching-active .watch-section { display: block; opacity: 1; padding-top: 2rem; }
+
+        .hero-banner {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            height: 90vh;
+            display: flex;
+            align-items: flex-end;
+            padding: 0 5% 3rem;
+        }
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top, var(--color-background) 0%, transparent 50%);
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            max-width: 800px;
+        }
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 1rem;
+            color: var(--color-text-muted);
+            margin-bottom: 1.5rem;
+        }
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn:hover { transform: translateY(-3px); }
+        .btn-primary { background-color: var(--color-primary); color: #fff; }
+        .btn-secondary { background-color: rgba(255,255,255,0.15); color: #fff; }
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .mobile-hero-buttons {
+            display: none; /* Hidden by default */
+        }
+
+        .review-main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: flex-start;
+        }
+
+        .left-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .movie-poster {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .watchlist-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            align-items: center;
+        }
+        .watchlist-section button {
+            background-color: rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .watchlist-section button:hover { background-color: rgba(255,255,255,0.2); }
+        .watchlist-section button.added, .btn.added {
+            background-color: var(--rating-color);
+            border-color: var(--rating-color);
+            cursor: not-allowed;
+            color: #fff;
+        }
+        .user-rating-stars {
+            font-size: 1.8rem;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .user-rating-stars .fas { color: gold; }
+
+
+        .info-panel {
+            background-color: var(--color-card);
+            border-radius: 12px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .info-details ul { list-style: none; padding: 0;}
+        .info-details li { margin-bottom: 0.8rem; color: var(--color-text-muted); display: flex;}
+        .info-details li strong { color: var(--color-text); display: inline-block; min-width: 80px; margin-right: 10px;}
+        .info-details li span { flex: 1; }
+
+        .info-rating-circle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .rating-circle-bg {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: conic-gradient(var(--rating-color) calc(var(--rating-percent, 0) * 1%), var(--border-color) 0);
+            margin-bottom: 0.5rem;
+        }
+        .rating-circle-inner {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--color-card);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .rating-score { font-size: 2.5rem; font-weight: 700; }
+        .rating-max { font-size: 0.9rem; color: var(--color-text-muted); }
+        .personal-rating-note { font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem; }
+
+
+        .section-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; color: #fff; }
+
+        .synopsis-panel {
+            margin-bottom: 2rem;
+            background-color: var(--color-card);
+            padding: 2rem;
+            border-radius: 12px;
+        }
+        .synopsis-panel p { line-height: 1.8; color: var(--color-text-muted); }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .photos-grid img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.2s ease;
+        }
+        .photos-grid img:hover { transform: scale(1.03); }
+
+        .trailer-panel .player-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            background-color: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        .trailer-panel .player-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .official-stream-grid {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            background-color: var(--color-card);
+            padding: 2rem;
+            border-radius: 12px;
+        }
+        .official-stream-grid .stream-logo img {
+            height: 35px;
+            width: auto;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        .official-stream-grid .stream-logo:hover img {
+            opacity: 1;
+        }
+
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .character-card {
+            background-color: var(--color-background);
+            border-radius: 8px;
+            overflow: hidden;
+            text-align: center;
+            padding-bottom: 1rem;
+        }
+        .character-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            object-position: top;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 0.8rem;
+        }
+        .character-card h4 { font-size: 1rem; margin-bottom: 0.2rem; }
+        .character-card p { font-size: 0.85rem; color: var(--color-text-muted); }
+        
+        /* --- Watch Section --- */
+        .watch-section { padding: 2rem 5%; }
+        .current-episode-title { font-size: 1.8rem; font-weight: 600; margin-bottom: 1.5rem; }
+        .watch-player-container { position: relative; padding-bottom: 56.25%; height: 0; background-color: #000; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); margin-bottom: 2rem; }
+        .watch-player-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .stream-controls { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2rem; }
+        .panel { background-color: var(--color-card); border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); flex: 1 1 300px; }
+        .button-group { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+        .button-group button, .button-group a { background-color: var(--color-background); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.6rem 1rem; color: var(--color-text-muted); font-family: var(--font-family); font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; text-align: center; }
+        .button-group button:hover, .button-group a:hover { background-color: #2a2933; color: #fff; border-color: var(--color-primary); }
+        .button-group button.active { background-color: var(--color-primary); color: #fff; font-weight: 600; border-color: var(--color-primary); }
+        .episodes-panel { background-color: var(--color-card); border-radius: 10px; padding: 1.5rem; }
+        .episode-list { max-height: 500px; overflow-y: auto; padding-right: 0.5rem; list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
+        .episode-item a { display: flex; align-items: center; gap: 1rem; padding: 0.5rem; background-color: var(--color-background); border-radius: 8px; }
+        .episode-thumbnail { width: 120px; height: 70px; object-fit: cover; border-radius: 5px; }
+        .episode-number { font-size: 1.2rem; font-weight: 700; width: 40px; text-align: center;}
+        .episode-item a.active { background-color: var(--color-primary); color: #fff; }
+
+        @media (max-width: 992px) {
+            .main-header .nav-links, .main-header .search-bar { display: none; }
+            .hero-content h1 { font-size: 3rem; }
+            .review-main-content { grid-template-columns: 1fr; }
+            .left-sidebar { align-items: center; text-align: center; }
+            .movie-poster { max-width: 300px; }
+            .info-panel { grid-template-columns: 1fr; }
+            .info-details li { justify-content: center; }
+            .watchlist-section button { max-width: 300px; }
+        }
+        @media (max-width: 576px) {
+            .hero-banner { display: none; } /* HIDE BANNER ON MOBILE */
+            .mobile-hero-buttons { /* SHOW MOBILE BUTTONS */
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+                max-width: 300px; /* Match poster width */
+                margin-top: 1rem; /* Space from poster */
+            }
+            .mobile-hero-buttons .btn { width: 100%; }
+            .photos-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+            .characters-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="home.html" class="logo">Ani<span>kan</span></a>
+        <nav class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="movies.html">Movies</a>
+            <a href="categories.html">Genre</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="review-wrapper" id="review-wrapper">
+            <section class="hero-banner" id="hero-banner-section">
+                <div class="hero-content">
+                    <h1 id="anime-title-main"></h1>
+                    <div class="hero-meta">
+                        <span id="hero-meta-year"></span>
+                        <span>&bull;</span>
+                        <span id="hero-meta-type"></span>
+                        <span>&bull;</span>
+                        <span id="hero-meta-duration"></span>
+                    </div>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" id="play-button"><i class="fas fa-play"></i>Watch</button>
+                        <button class="btn btn-secondary" id="trailer-button"><i class="fas fa-film"></i> Trailer</button>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="review-main-content">
+                <div class="left-sidebar">
+                    <img id="anime-poster" class="movie-poster" src="" alt="Anime Poster">
+                    
+                    <div class="mobile-hero-buttons">
+                        <button class="btn btn-primary" id="mobile-play-button"><i class="fas fa-play"></i>Watch</button>
+                        <button class="btn btn-secondary" id="mobile-trailer-button"><i class="fas fa-film"></i> Trailer</button>
+                    </div>
+                    
+                    <div class="watchlist-section">
+                        <button id="add-to-watchlist-btn"><i class="fas fa-plus"></i> Add to Watchlist</button>
+                        <div class="user-rating-stars" id="user-rating-stars">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="info-panel">
+                        <div class="info-details">
+                            <ul>
+                                <li><strong>Title:</strong> <span id="info-title"></span></li>
+                                <li><strong>Cast:</strong> <span id="info-cast"></span></li>
+                                <li><strong>Creator:</strong> <span id="info-creator"></span></li>
+                                <li><strong>Genre:</strong> <span id="info-genre"></span></li>
+                            </ul>
+                        </div>
+                        <div class="info-rating-circle">
+                            <div class="rating-circle-bg" id="rating-circle">
+                                <div class="rating-circle-inner">
+                                    <span class="rating-score" id="rating-score"></span>
+                                    <span class="rating-max">out of 10</span>
+                                </div>
+                            </div>
+                            <p class="personal-rating-note">note: personal rating only</p>
+                        </div>
+                    </div>
+
+                    <div class="synopsis-panel">
+                        <h2 class="section-title">Synopsis</h2>
+                        <p id="synopsis-text"></p>
+                    
+                    </div>
+
+                    <h2 class="section-title">Photos</h2>
+                    <div class="photos-grid" id="photos-grid"></div>
+
+                    <h2 class="section-title">Official Trailer</h2>
+                    <div class="trailer-panel">
+                        <div class="player-container">
+                            <iframe id="trailer-player" src="" title="Official Trailer Player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+                         </div>
+                    </div>
+
+                    <h2 class="section-title">Main Characters</h2>
+                    <div class="characters-grid" id="character-list"></div>
+
+                    <h2 class="section-title">Who is this Anime for?</h2>
+                    <div class="synopsis-panel">
+                        <p id="anime-audience"></p>
+                    </div>
+
+                    <h2 class="section-title">Where to Watch Officially</h2>
+                    <div class="official-stream-grid" id="official-streams"></div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="watch-section" id="watch-section">
+            <h2 class="current-episode-title" id="current-episode-title"></h2>
+            <div class="watch-player-container">
+                <iframe id="video-player" src="" allow="autoplay; fullscreen" allowfullscreen></iframe>
+            </div>
+            <div class="stream-controls">
+                <div class="panel">
+                    <h3 class="panel-title">Servers</h3>
+                    <div class="button-group" id="server-list"></div>
+                </div>
+                <div class="panel">
+                    <h3 class="panel-title">Download Movie</h3>
+                    <div class="button-group" id="download-links"></div>
+                </div>
+            </div>
+            <div class="episodes-panel">
+                <h2 class="panel-title">Movie</h2>
+                <ul class="episode-list" id="episode-list"></ul>
+            </div>
+             <div class="panel" style="margin-top: 2rem;">
+                <h3 class="panel-title">Download Subtitles</h3>
+                <div class="button-group" id="subtitle-links"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Data for Chainsaw Man Movie: Reze Arc ---
+            const selectedAnime = {
+                id: 5, title: 'Chainsaw Man Movie: Reze Arc', title_japanese: 'チェンソーマン レゼ篇',
+                cast: ['Denji (Kikunosuke Toya)', 'Reze (Reina Ueda)', 'Aki Hayakawa (Shogo Sakata)'],
+                characters: [
+                    { name: 'Denji', image: 'https://static.wikia.nocookie.net/chainsaw-man/images/b/b0/Denji_Reze_Arc_anime_design.png/revision/latest?cb=20250324010006' },
+                    { name: 'Reze', image: 'https://static.wikia.nocookie.net/chainsaw-man/images/8/8a/Reze_Reze_Arc_anime_design.png/revision/latest?cb=20250323073718' },
+                    { name: 'Aki Hayakawa', image: 'https://static.wikia.nocookie.net/chainsaw-man/images/c/cb/Aki_Reze_Arc_anime_design.png/revision/latest?cb=20250323073818' }
+                ],
+                creator: 'Tatsuki Fujimoto (Manga)', studio: 'MAPPA', type: 'Movie', episodes: 1,
+                genres: ['Action', 'Supernatural', 'Gore', 'Romance'],
+                duration: '90 min', rating: 9.1,
+                description: 'Denji falls for a seemingly perfect girl named Reze, who shares a mysterious connection with him. Their sweet summer romance takes an explosive turn when her true identity as the Bomb Devil is revealed, leading to a devastating and emotional conflict that blurs the line between love and destruction.',
+                audience: 'Fans of the Chainsaw Man series will love this adaptation of one of the manga\'s most beloved arcs. It perfectly blends the series\' signature chaotic action, dark humor, and surprisingly heartfelt emotional beats. If you enjoy character-driven stories with complex relationships, intense supernatural battles, and a touch of tragedy, the Reze Arc movie is a must-see.',
+                coverImage: 'https://upload.wikimedia.org/wikipedia/en/9/95/Chainsaw_Man_Reze_Arc_movie_poster.jpg',
+                bgImage: 'https://imgs.search.brave.com/Goqxr7fi2jmMIc7reuu_HfqqophOM7Jk4dmRRw-Zl5o/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMwLnNyY2RuLmNv/bS93b3JkcHJlc3Mv/d3AtY29udGVudC91/cGxvYWRzLzIwMjUv/MDcvY2hhaW5zYXct/bWFuLXRoZS1tb3Zp/ZS1yZXplLWFyYy1r/ZXktdmlzdWFsLmpw/ZWc_cT00OSZmaXQ9/Y3JvcCZ3PTgyNSZk/cHI9Mg',
+                releaseYear: 2025,
+                // --- TRAILER EDIT ---
+                // Paste any standard YouTube video link (share link, browser URL, etc.) here.
+                trailer_source_url: 'https://youtu.be/VfoZp7CmOkE?si=5RLK9lhilkbDyzXh',
+                official_streams: [
+                    { platform: 'Netflix', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1200px-Netflix_2015_logo.svg.png' }
+                ],
+                episodeList: [
+                    {
+                    ep_num: 1, title: 'Full Movie: The Bomb Girl', thumbnail: 'https://i.ytimg.com/vi/aPyXOmj_0u8/sddefault.jpg',
+                    servers: { 'VidStream': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', 'MegaCloud': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', 'StreamTape': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1' },
+                    downloads: { '1080p': '#', '720p': '#', '480p': '#' }
+                    }
+                ],
+                subtitles: [ { lang: 'English', url: '#' }, { lang: 'Spanish', url: '#' } ],
+                gallery: [
+                    'https://i.redd.it/h8ei68h6d2y51.png',
+                    'https://images.squarespace-cdn.com/content/v1/5fe4caeadae61a2f19719512/615d7b0a-8f37-4894-b0ee-33039ecf6abb/Devil+Hunter+Power',
+                    'https://images4.alphacoders.com/131/1319295.jpeg',
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZ7QHn29ilLXLMtjOCuiJTm5WmX9-d4Ueg5Q&s',
+                    'https://imgs.search.brave.com/0lFvl-wv2n9MJUKwTmY-cZy3dFnuhhyfSSNo_09hxD4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMuYmVlYm9tLmNv/bS93cC1jb250ZW50/L3VwbG9hZHMvMjAy/NS8wOS9DaGFpbnNh/dy1NYW4uanBnP3c9/MTIwMA',
+                    'https://imgs.search.brave.com/4UHuUKf3yenNnm2ElL-N2MWsMGBCww8SN-hvScLlENw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMwLnBvbHlnb25p/bWFnZXMuY29tL3dv/cmRwcmVzcy93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyNS8wOS9j/aGFpbnNhdy1tYW4t/cmV6ZS1hcmMtbW92/aWUtaW1hZ2UuanBn/P3E9NzAmZml0PWNy/b3Amdz04MjUmZHBy/PTE'
+                ]
+            };
+            
+            /**
+             * Converts any standard YouTube URL into a valid embed URL.
+             * @param {string} url The YouTube URL.
+             * @returns {string} The embeddable URL.
+             */
+            function getYouTubeEmbedUrl(url) {
+                let videoId = null;
+                // These patterns match youtube.com/watch?v=, youtu.be/, and youtube.com/embed/ links
+                const patterns = [
+                    /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/,
+                    /(?:https?:\/\/)?(?:www\.)?youtu\.be\/([a-zA-Z0-9_-]{11})/,
+                    /(?:https?:\/\/)?(?:www\.)?youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/
+                ];
+
+                for (const pattern of patterns) {
+                    const match = url.match(pattern);
+                    if (match && match[1]) {
+                        videoId = match[1];
+                        break; // Exit the loop once a match is found
+                    }
+                }
+                
+                // If a video ID was found, construct the embed URL. Otherwise, return the original URL as a fallback.
+                return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+            }
+
+            function populateReviewSection() {
+                document.title = `Review & Watch ${selectedAnime.title} - Anikan`;
+                document.getElementById('hero-banner-section').style.backgroundImage = `url('${selectedAnime.bgImage}')`;
+                document.getElementById('anime-title-main').textContent = selectedAnime.title;
+                document.getElementById('hero-meta-year').textContent = selectedAnime.releaseYear;
+                document.getElementById('hero-meta-type').textContent = selectedAnime.type;
+                document.getElementById('hero-meta-duration').textContent = `${selectedAnime.duration}`;
+                document.getElementById('anime-poster').src = selectedAnime.coverImage;
+                document.getElementById('info-title').textContent = selectedAnime.title;
+                document.getElementById('info-cast').textContent = selectedAnime.cast.join(', ');
+                document.getElementById('info-creator').textContent = selectedAnime.creator;
+                document.getElementById('info-genre').textContent = selectedAnime.genres.join(', ');
+                const ratingCircle = document.getElementById('rating-circle');
+                document.getElementById('rating-score').textContent = selectedAnime.rating;
+                ratingCircle.style.setProperty('--rating-percent', selectedAnime.rating * 10);
+                document.getElementById('synopsis-text').textContent = selectedAnime.description;
+                document.getElementById('photos-grid').innerHTML = selectedAnime.gallery.map(img => `<img src="${img}" alt="Gallery image">`).join('');
+                document.getElementById('trailer-player').src = getYouTubeEmbedUrl(selectedAnime.trailer_source_url);
+                document.getElementById('character-list').innerHTML = selectedAnime.characters.map(char =>
+                    `<div class="character-card"><img src="${char.image}" alt="${char.name}"><h4>${char.name}</h4></div>`
+                ).join('');
+                document.getElementById('anime-audience').textContent = selectedAnime.audience;
+                const officialStreamsContainer = document.getElementById('official-streams');
+                officialStreamsContainer.innerHTML = selectedAnime.official_streams.map(stream =>
+                    `<a href="#" class="stream-logo"><img src="${stream.logo}" alt="${stream.platform}"></a>`
+                ).join('');
+            }
+
+            // --- Page Elements ---
+            const videoPlayer = document.getElementById('video-player');
+            const episodeListContainer = document.getElementById('episode-list');
+            const serverListContainer = document.getElementById('server-list');
+            const downloadLinksContainer = document.getElementById('download-links');
+            const subtitleLinksContainer = document.getElementById('subtitle-links');
+            const currentEpisodeTitle = document.getElementById('current-episode-title');
+
+            // --- Button Elements ---
+            const playButton = document.getElementById('play-button');
+            const mobilePlayButton = document.getElementById('mobile-play-button');
+            const trailerButton = document.getElementById('trailer-button');
+            const mobileTrailerButton = document.getElementById('mobile-trailer-button');
+            const addToWatchlistBtn = document.getElementById('add-to-watchlist-btn');
+
+            function activateEpisode(episodeIndex) {
+                const episode = selectedAnime.episodeList[episodeIndex];
+                currentEpisodeTitle.textContent = `Currently Watching: ${episode.title}`;
+                serverListContainer.innerHTML = '';
+                Object.keys(episode.servers).forEach(serverName => {
+                    const button = document.createElement('button');
+                    button.textContent = serverName;
+                    button.dataset.url = episode.servers[serverName];
+                    button.addEventListener('click', () => {
+                        videoPlayer.src = button.dataset.url;
+                        serverListContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                    });
+                    serverListContainer.appendChild(button);
+                });
+                downloadLinksContainer.innerHTML = '';
+                Object.keys(episode.downloads).forEach(quality => {
+                    const a = document.createElement('a'); a.href = episode.downloads[quality]; a.textContent = quality;
+                    downloadLinksContainer.appendChild(a);
+                });
+                episodeListContainer.querySelectorAll('a').forEach(link => link.classList.remove('active'));
+                const activeEpisodeLink = episodeListContainer.querySelector(`a[data-episode-index='${episodeIndex}']`);
+                if (activeEpisodeLink) activeEpisodeLink.classList.add('active');
+                if (serverListContainer.firstChild) serverListContainer.firstChild.click();
+            }
+
+            function populateEpisodeList() {
+                episodeListContainer.innerHTML = '';
+                selectedAnime.episodeList.forEach((ep, index) => {
+                    const li = document.createElement('li'); li.className = 'episode-item';
+                    const a = document.createElement('a'); a.href = '#'; a.dataset.episodeIndex = index;
+                    a.innerHTML = `<img src="${ep.thumbnail}" alt="Movie Poster" class="episode-thumbnail"><span class="episode-title">${ep.title}</span>`;
+                    a.addEventListener('click', (e) => { e.preventDefault(); activateEpisode(index); });
+                    li.appendChild(a);
+                    episodeListContainer.appendChild(li);
+                });
+            }
+
+            function populateSubtitleLinks() {
+                subtitleLinksContainer.innerHTML = '';
+                selectedAnime.subtitles.forEach(sub => {
+                    const a = document.createElement('a'); a.href = sub.url; a.textContent = sub.lang;
+                    subtitleLinksContainer.appendChild(a);
+                });
+            }
+
+            // --- Event Handlers ---
+            const handlePlayClick = () => {
+                document.body.classList.add('watching-active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                populateEpisodeList();
+                populateSubtitleLinks();
+                if (selectedAnime.episodeList.length > 0) activateEpisode(0);
+            };
+
+            const handleTrailerClick = () => {
+                const trailerElement = document.getElementById('trailer-player');
+                if (trailerElement) {
+                    trailerElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            };
+            
+            const handleAddToWatchlist = async () => {
+                const username = localStorage.getItem('loggedInUser');
+                if (!username) {
+                    alert('Please log in to add to your watchlist.');
+                    window.location.href = '/login.html';
+                    return;
+                }
+            };
+
+            // --- Event Listeners ---
+            playButton.addEventListener('click', handlePlayClick);
+            mobilePlayButton.addEventListener('click', handlePlayClick);
+            trailerButton.addEventListener('click', handleTrailerClick);
+            mobileTrailerButton.addEventListener('click', handleTrailerClick);
+            addToWatchlistBtn.addEventListener('click', handleAddToWatchlist);
+
+            // --- Initialize Page ---
+            populateReviewSection();
+        });
+    </script>
+</body>
+</html>

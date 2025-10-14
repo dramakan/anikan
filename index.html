@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anikan - The best site to watch anime online for Free</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* --- 1. Global Styles & Imported Purple Theme --- */
+        :root {
+            --color-background: #100f14;
+            --color-card: #1c1b22;
+            --color-text: #e0e0e0;
+            --color-text-muted: #a0a0e0;
+            --color-primary: #9D4EDD; /* Vibrant Purple Accent from home.html */
+            --color-primary-light: #c77dff;
+            --border-color: #2c2c34;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--color-background);
+            color: var(--color-text);
+            font-family: var(--font-family);
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        a {
+            color: var(--color-text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--color-primary);
+        }
+
+        /* --- 2. Header (SEPARATE) --- */
+        .main-header {
+            padding: 1rem 0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .logo span {
+            color: var(--color-primary);
+        }
+        
+        .main-nav {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .main-nav a {
+            font-weight: 500;
+            color: var(--color-text-muted);
+        }
+        
+        .main-nav a.active, .main-nav a:hover {
+            color: var(--color-text);
+        }
+
+          /* --- 3. Hero Section with VIDEO BANNER --- */
+        .hero-banner {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            padding: 3rem;
+            display: flex;
+            align-items: center;
+            min-height: 400px;
+        }
+        .hero-video-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, var(--color-card) 30%, rgba(28, 27, 34, 0.7) 60%, transparent 100%);
+            z-index: 1;
+        }
+        
+        .hero-text {
+            position: relative;
+            z-index: 2; /* Sits on top of the overlay */
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .search-form {
+            display: flex;
+            height: 50px;
+        }
+        
+        .search-form input {
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            background-color: var(--color-background);
+            padding: 0 1.5rem;
+            font-size: 1rem;
+            color: var(--color-text);
+            border-radius: 8px 0 0 8px;
+        }
+
+        .search-form button {
+            background-color: var(--color-primary);
+            border: none;
+            color: #fff;
+            padding: 0 1.5rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 0 8px 8px 0;
+            transition: background-color 0.3s;
+        }
+
+        .search-form button:hover {
+            background-color: var(--color-primary-light);
+        }
+
+        .top-searches p {
+            color: var(--color-text-muted);
+            font-weight: 500;
+        }
+
+        .top-searches .search-links {
+            margin-top: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .cta-button {
+            background-color: var(--color-primary);
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: fit-content;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(157, 78, 221, 0.5);
+            background-color: var(--color-primary-light);
+        }
+
+        /* --- 4. Main Content --- */
+        .main-content {
+            margin-top: 4rem;
+            padding-bottom: 4rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+        
+        .share-section h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .share-section p { color: var(--color-text-muted); font-size: 0.9rem; }
+        .main-article h1 { font-size: 2rem; margin-bottom: 1.5rem; }
+        .main-article h2 { font-size: 1.4rem; margin-top: 2rem; margin-bottom: 1rem; color: var(--color-primary-light); }
+        .main-article p, .main-article li { color: var(--color-text-muted); line-height: 1.8; margin-bottom: 1rem; }
+        .main-article ul { list-style-position: inside; padding-left: 1rem; }
+        .main-article strong { color: var(--color-text); font-weight: 600; }
+        .sidebar h2 { font-size: 1.5rem; margin-bottom: 1.5rem; }
+        .post-card { background-color: var(--color-card); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--border-color); }
+        .post-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 0.75rem; }
+        .post-meta .tag { color: var(--color-primary); font-weight: 600; }
+        .post-meta .comments { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; }
+        .post-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .post-title a:hover { text-decoration: underline; }
+        .post-excerpt { font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.6; margin-bottom: 1rem; }
+        .post-author { font-size: 0.8rem; font-weight: 500; color: var(--color-text-muted); }
+        .post-author span { color: #3498db; font-weight: 600; }
+
+        /* --- 5. Responsive Design --- */
+        @media (max-width: 992px) {
+            .main-nav { display: none; }
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body { font-size: 14px; }
+            .container { padding: 0 1rem; }
+            .logo { font-size: 2rem; }
+            .main-article h1 { font-size: 1.5rem; }
+            .hero-banner {
+                padding: 2rem;
+                min-height: 350px;
+                background-position: 75% center; /* Adjust image focus for mobile */
+            }
+            .hero-banner::before {
+                 background: linear-gradient(to right, 
+                    var(--color-card) 10%, 
+                    rgba(28, 27, 34, 0.8) 70%, 
+                    transparent 100%
+                );
+            }
+            .hero-text {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header container">
+        <div class="header-content">
+            <a href="#" class="logo">Ani<span>kan</span></a>
+            <nav class="main-nav">
+                <a href="home.html" class="active">Home</a>
+                <a href="movies.html">Movies</a>
+                <a href="terms.html">Terms</a>
+                <a href="privacy.html">Privacy-policy</a>
+                <a href="disclaimer.html">Disclaimer</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero-banner">
+            <video autoplay muted loop playsinline class="hero-video-bg">
+                <source src="b1.mp4" type="video/mp4">
+            </video>
+            <div class="hero-text">
+                <form class="search-form">
+                    <input type="text" placeholder="Search anime...">
+                  <button type="button"><a href="home.html"></a><i class="fas fa-search"></i></button>
+                </form>
+                <div class="top-searches">
+                    <p>Top search:</p>
+                    <div class="search-links">
+                        <a href="#">Demon Slayer: Kimetsu no ...</a>
+                        <a href="#">Chainsaw Man the Movie: R...</a>
+                        <a href="#">One Piece,</a>
+                        <a href="#">Demon Slayer: Kimetsu no ...</a>
+                        <a href="#">Kaiju No. 8 Season 2,</a>
+                        <a href="#">The Fragrant Flower Bloom...</a>
+                        <a href="#">Demon Slayer: Mt. Natagu...</a>
+                        <a href="#">Farming Life in Another Wor...</a>
+                        <a href="gachiakuta.html">Gachiakuta,</a>
+                        <a href="#">Attack on Titan, ...</a>
+                    </div>
+                </div>
+                <a href="home.html" class="cta-button">
+                    Watch anime <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </section>
+
+        <section class="main-content">
+            <div class="content-grid">
+                <article class="main-article">
+                    <div class="share-section">
+                        <h3>Share AniKan</h3>
+                        <p>to your friends</p>
+                    </div>
+                    <h1>Anikan.to - The best site to watch anime online for Free</h1>
+                    <p>
+                        Do you know that according to Google, the monthly search volume for anime related topics is up to over 1 Billion times? Anime is famous worldwide and it is no wonder we've seen a sharp rise in the number of free anime streaming sites.
+                    </p>
+                    <p>
+                        Just like free online movie streaming sites, anime watching sites are not created equally, some are better than the rest, so we've decided to build Anikan.to to be one of the best free anime streaming site for all anime fans on the world.
+                    </p>
+                    
+                    <h2>1/ What is Anikan.to?</h2>
+                    <p>Anikan.to is a free site to watch anime and you can even download subbed or dubbed anime in ultra HD quality without any registration or payment. By having only one ads in all kinds, we are trying to make it the safest site for free anime.</p>
+                    
+                    <h2>2/ Is Anikan.to safe?</h2>
+                    <p>Yes we are, we do have only one Ads to cover the server cost and we keep scanning the ads 24/7 to make sure all are clean, If you find any ads that is suspicious, please forward us the info and we will remove it.</p>
+                    
+                    <h2>3/ So what make Anikan.to the best site to watch anime free online?</h2>
+                    <p>Before building Anikan.to, we've checked many other free anime sites, and learnt from them. We only keep the good things and remove all the bad things from all the competitors, to put it in our Anikan website. Let's see how we're so confident about being the best site for anime streaming:</p>
+                    <ul>
+                        <li><strong>Safety:</strong> We try our best to not having harmful ads on Anikan.</li>
+                        <li><strong>Content library:</strong> Our main focus is anime. You can find here popular, classic, as well as current titles from all genres such as action, drama, kids, fantasy, horror, mystery, police, romance, school, comedy, music, game and many more. All these titles come with English subtitles or are dubbed in many languages.</li>
+                        <li><strong>Quality/Resolution:</strong> All titles are in excellent resolution, the best quality possible. Anikan.to also has a quality setting function to make sure our users can enjoy streaming no matter how fast your Internet speed is. You can stream the anime at 360p if your Internet is being ridiculous, Or if it is good, you can go with 720p or even 1080p anime.</li>
+                        <li><strong>Streaming experience:</strong> Compared to other anime streaming sites, the loading speed at Anikan.to is faster. Downloading is just as easy as streaming, you won't have any problem saving the videos to watch offline later.</li>
+                        <li><strong>Updates:</strong> We updates new titles as well as fulfill the requests on a daily basis so be warned, you will never run out of what to watch on Anikan.</li>
+                        <li><strong>User interface:</strong> Our UI and UX makes it easy for anyone, no matter how old you are, how long have you been on the Internet. Literally, you can figure out how to navigate our site after a quick look. If you want to watch a specific title, search for it via the search box. If you want to look for suggestions, you can use the site's categories or simply scroll down for new releases.</li>
+                        <li><strong>Device compatibility:</strong> Anikan works alright on both your mobile and desktop. However, we'd recommend you use your desktop for a smoother streaming experience.</li>
+                        <li><strong>Customer care:</strong> We are in active mode 24/7. You can always contact us for any help, query, or business-related inquiry. On our previous projects, we were known for our great customer service as we were quick to fix broken links or upload requested content.</li>
+                    </ul>
+                    <p>So if you're looking for a trustworthy and safe site for your Anime streaming, let's give Anikan.to a try. And if you like us, please help us to spread the words and do not forget to bookmark our site.</p>
+                    <p>Thank you!</p>
+                </article>
+
+                <aside class="sidebar">
+                    <h2>Trending Posts</h2>
+                    
+                    <div class="post-card">
+                        <div class="post-meta">
+                            <span class="tag">#General</span>
+                            <span class="time">16 hours ago</span>
+                            <span class="comments"><i class="fas fa-comment-alt"></i> 538</span>
+                        </div>
+                        <h3 class="post-title"><a href="#">🎊THE SURPRISE EVENT🎊</a></h3>
+                        <p class="post-excerpt">So after the great success of the previous event in the past month, an another event is soon going to happen, so get get ready for it, because this time we are cooking something massive...</p>
+                        <p class="post-author">A GUY WHO DOESN'T TOUCH GRASS <span>Dolphin</span></p>
+                    </div>
+
+                    <div class="post-card">
+                        <div class="post-meta">
+                            <span class="tag">#Question</span>
+                            <span class="time">14 hours ago</span>
+                            <span class="comments"><i class="fas fa-comment-alt"></i> 283</span>
+                        </div>
+                        <h3 class="post-title"><a href="#">🔥Ur signature Emoji🔥</a></h3>
+                        <p class="post-excerpt">So guys what's ur signature emoji: AS U GUYS CAN SEE MINE IS 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥 THIS ONE</p>
+                        <p class="post-author">🔥Hange San🔥 <span>Dolphin</span></p>
+                    </div>
+
+                    <div class="post-card">
+                        <div class="post-meta">
+                            <span class="tag">#General</span>
+                            <span class="time">15 hours ago</span>
+                            <span class="comments"><i class="fas fa-comment-alt"></i> 243</span>
+                        </div>
+                        <h3 class="post-title"><a href="#">Highest likes, dislikes and comments you got for a post?🤔</a></h3>
+                        <p class="post-excerpt">What are the highest likes, dislikes and comments you got for a post? For me highest likes are= 31 Highest dislikes= 6 Highest comments=556...</p>
+                        <p class="post-author">👻 FACTS <span>Angelfish</span></p>
+                    </div>
+                    
+                    <div class="post-card">
+                        <div class="post-meta">
+                            <span class="tag">#General</span>
+                            <span class="time">13 hours ago</span>
+                            <span class="comments"><i class="fas fa-comment-alt"></i> 189</span>
+                        </div>
+                        <h3 class="post-title"><a href="#">imma say it again, i would molestt anybody who goons to waguri 😤😠</a></h3>
+                        <p class="post-excerpt">finally S1 is over and i have some spare time today yeah lol 🥀. mute me again you waguri gooning garlic ahhh 😛...</p>
+                        <p class="post-author">not_a_bad_slime ˢᵃᵇᵉʳ <span>Dolphin</span></p>
+                    </div>
+
+                    <div class="post-card">
+                        <div class="post-meta">
+                            <span class="tag">#General</span>
+                            <span class="time">15 hours ago</span>
+                            <span class="comments"><i class="fas fa-comment-alt"></i> 181</span>
+                        </div>
+                        <h3 class="post-title"><a href="#">Look at the shine ✨️ in my name 😁😙</a></h3>
+                        <p class="post-excerpt">Finally I reached final stage of Unemployment 🤧 . I beat you Isekai guy 👀🌝 ..</p>
+                        <p class="post-author">VERGIL🎭ᵇᵃᵏᵃ ᶜˡᵃⁿ <span>Dolphin</span></p>
+                    </div>
+
+                    <div class="post-card">
+                        <div class="post-meta">
+                            <span class="tag">#General</span>
+                            <span class="time">13 hours ago</span>
+                            <span class="comments"><i class="fas fa-comment-alt"></i> 120</span>
+                        </div>
+                        <h3 class="post-title"><a href="#">How do you see life 🧐</a></h3>
+                        <p class="post-excerpt">Hey guys how's your outlook towards life ? I am an optimistic guy 😄 and a bit introvert what abt u ?</p>
+                        <p class="post-author">𝗘𝗿𝗲𝗻 𝗬𝗮𝗴𝗮𝗺𝗶 マニピュレータ <span>Crab</span></p>
+                    </div>
+
+                </aside>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
