@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
+        /* --- GLOBAL & REVIEW STYLES (From lotm.html) --- */
         :root {
             --color-background: #100f14;
             --color-card: #1c1b22;
@@ -21,12 +22,29 @@
             --font-family: 'Poppins', sans-serif;
             --rating-color: #57D64B; /* Green for rating */
             --border-color: #2c2c34;
+            /* Added for Watch Section */
+            --primary-color: #9D4EDD;
+            --primary-color-rgb: 157, 78, 221;
+            --surface-color-darker: #1A1A1D;
+            --surface-color-lighter: #2a2a2d;
+            --background-color-watch: #0B0C10; 
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body { background-color: var(--color-background); color: var(--color-text); font-family: var(--font-family); }
         a { color: var(--color-text); text-decoration: none; }
         img { max-width: 100%; display: block; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .widget {
+            background: linear-gradient(180deg, var(--surface-color-lighter), var(--surface-color-darker));
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-radius: 8px; margin-bottom: 20px; padding: 20px;
+        }
+        .widget-title {
+            font-size: 1.2rem; font-weight: 600; margin-bottom: 15px;
+            padding-bottom: 10px; border-bottom: 1px solid var(--border-color);
+        }
 
         .main-header {
             position: sticky;
@@ -44,29 +62,15 @@
         .main-header .logo span { color: var(--color-primary); }
         .main-header .nav-links a { margin-left: 2rem; color: var(--color-text-muted); font-weight: 500; transition: color 0.3s ease; }
         .main-header .nav-links a:hover { color: var(--color-primary); }
-        .main-header .search-bar { position: relative; }
-        .main-header .search-bar input {
-            background-color: var(--color-card);
-            border: none;
-            border-radius: 20px;
-            padding: 0.5rem 1rem 0.5rem 2.5rem;
-            color: var(--color-text);
-            font-family: var(--font-family);
-            font-size: 0.9rem;
-            width: 200px;
-            transition: width 0.3s ease;
-        }
-        .main-header .search-bar input:focus { width: 250px; outline: none; }
-        .main-header .search-bar .fa-search { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); }
-        .main-header .user-profile { margin-left: 1.5rem; }
-        .main-header .user-profile img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; cursor: pointer; }
+        .main-header .search-bar { position: relative; display: none; }
+        .main-header .user-profile { margin-left: 1.5rem; display: none; } 
 
 
         /* --- Review Page Layout --- */
         .review-wrapper { transition: opacity 0.4s ease, visibility 0.4s ease; }
-        .watch-section { display: none; opacity: 0; transition: opacity 0.4s ease; }
+        .watch-section { display: none; opacity: 0; transition: opacity 0.4s ease; background-color: var(--background-color-watch);}
         body.watching-active .review-wrapper { display: none; opacity: 0; visibility: hidden; }
-        body.watching-active .watch-section { display: block; opacity: 1; padding-top: 2rem; }
+        body.watching-active .watch-section { display: block; opacity: 1; padding: 2rem 5%; }
 
         .hero-banner {
             position: relative;
@@ -184,7 +188,6 @@
         }
         .user-rating-stars .fas { color: gold; }
 
-
         .info-panel {
             background-color: var(--color-card);
             border-radius: 12px;
@@ -228,7 +231,6 @@
         .rating-score { font-size: 2.5rem; font-weight: 700; }
         .rating-max { font-size: 0.9rem; color: var(--color-text-muted); }
         .personal-rating-note { font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem; }
-
 
         .section-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; color: #fff; }
 
@@ -315,23 +317,109 @@
         .character-card h4 { font-size: 1rem; margin-bottom: 0.2rem; }
         .character-card p { font-size: 0.85rem; color: var(--color-text-muted); }
         
-        /* --- Watch Section --- */
-        .watch-section { padding: 2rem 5%; }
-        .current-episode-title { font-size: 1.8rem; font-weight: 600; margin-bottom: 1.5rem; }
-        .watch-player-container { position: relative; padding-bottom: 56.25%; height: 0; background-color: #000; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); margin-bottom: 2rem; }
-        .watch-player-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-        .stream-controls { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2rem; }
-        .panel { background-color: var(--color-card); border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); flex: 1 1 300px; }
-        .button-group { display: flex; flex-wrap: wrap; gap: 0.8rem; }
-        .button-group button, .button-group a { background-color: var(--color-background); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.6rem 1rem; color: var(--color-text-muted); font-family: var(--font-family); font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; text-align: center; }
-        .button-group button:hover, .button-group a:hover { background-color: #2a2933; color: #fff; border-color: var(--color-primary); }
-        .button-group button.active { background-color: var(--color-primary); color: #fff; font-weight: 600; border-color: var(--color-primary); }
-        .episodes-panel { background-color: var(--color-card); border-radius: 10px; padding: 1.5rem; }
-        .episode-list { max-height: 500px; overflow-y: auto; padding-right: 0.5rem; list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
-        .episode-item a { display: flex; align-items: center; gap: 1rem; padding: 0.5rem; background-color: var(--color-background); border-radius: 8px; }
-        .episode-thumbnail { width: 120px; height: 70px; object-fit: cover; border-radius: 5px; }
-        .episode-number { font-size: 1.2rem; font-weight: 700; width: 40px; text-align: center;}
-        .episode-item a.active { background-color: var(--color-primary); color: #fff; }
+        /* --- WATCH SECTION (New Hoteldelluna Style from lotm.html) --- */
+        .watch-layout { 
+            display: grid; 
+            grid-template-columns: 2fr 1fr; 
+            gap: 20px; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 2rem 0; 
+        }
+        .main-content-col { min-width: 0; }
+        .video-player-container {
+            position: relative;
+            width: 100%;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            border: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        
+        #video-player-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .episode-meta { padding: 0 0 15px 0; }
+        .episode-title-watch { font-size: 1.5rem; font-weight: 600; margin-bottom: 15px; }
+        .episode-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+
+        .action-btn, .download-btn {
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .action-btn:hover:not(:disabled), .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+        .action-btn:disabled {
+            background-color: #222;
+            color: #555;
+            cursor: not-allowed;
+        }
+        .action-btn {
+            background: linear-gradient(180deg, #4a4a52, #313136);
+            color: var(--color-text);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .action-btn:hover:not(:disabled) {
+            background: linear-gradient(180deg, #5a5a62, #414146);
+        }
+
+        #next-ep-btn {
+            background: linear-gradient(180deg, #ffffff, #e0e0e0);
+            color: #0B0C10;
+            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+        }
+        .download-btn {
+            background: linear-gradient(180deg, hsl(270, 77%, 60%), hsl(270, 77%, 50%)); 
+            color: white;
+            box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.25);
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+        .download-btn:hover {
+             background: linear-gradient(180deg, hsl(270, 77%, 65%), hsl(270, 77%, 55%));
+        }
+
+        /* --- Episode List / Downloads --- */
+        .episodes-list-widget .episodes-list { max-height: 400px; overflow-y: auto; padding-right: 10px; list-style: none; }
+        .episode-item { display: flex; align-items: center; gap: 15px; padding: 10px; border-radius: 5px; margin-bottom: 5px; cursor: pointer; border: 1px solid transparent; transition: all 0.2s ease; }
+        .episode-item:hover { background-color: var(--surface-color-lighter); border-color: var(--primary-color); }
+        .episode-item.current { background: rgba(var(--primary-color-rgb), 0.1); border-color: var(--primary-color); }
+        .episode-item .ep-number { font-weight: 600; font-size: 1.1rem; }
+        .episode-item .ep-desc { font-size: 0.9rem; color: var(--color-text-muted); }
+        .episode-thumbnail-small { width: 70px; height: 40px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
+
+        .download-list table { width: 100%; border-collapse: collapse; }
+        .download-list th, .download-list td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .download-list th { color: var(--color-text-muted); font-weight: 500; }
+        
+        /* Sidebar Placeholder */
+        .drama-info-widget { padding: 20px; }
+        .info-title-sidebar { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; }
+        .info-details p { font-size: 0.9rem; padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+        .info-details p:last-child { border-bottom: none; }
+        .info-details span { color: var(--color-text-muted); display: inline-block; width: 110px; }
+        .info-poster img { border-radius: 8px; margin-bottom: 15px; }
+
+        /* --- RESPONSIVE STYLES (From lotm.html - fulfilling mobile view request) --- */
 
         @media (max-width: 992px) {
             .main-header .nav-links, .main-header .search-bar { display: none; }
@@ -342,20 +430,35 @@
             .info-panel { grid-template-columns: 1fr; }
             .info-details li { justify-content: center; }
             .watchlist-section button { max-width: 300px; }
+            
+            /* Watch Page collapse */
+            .watch-layout { grid-template-columns: 1fr; padding: 15px; } 
+            .episode-title-watch { font-size: 1.4rem; } 
         }
+
         @media (max-width: 576px) {
-            .hero-banner { display: none; } /* HIDE BANNER ON MOBILE */
-            .mobile-hero-buttons { /* SHOW MOBILE BUTTONS */
+            .hero-banner { display: none; } 
+            .mobile-hero-buttons { 
                 display: flex;
                 flex-direction: column;
                 gap: 1rem;
                 width: 100%;
-                max-width: 300px; /* Match poster width */
-                margin-top: 1rem; /* Space from poster */
+                max-width: 300px; 
+                margin-top: 1rem; 
             }
             .mobile-hero-buttons .btn { width: 100%; }
             .photos-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
             .characters-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+            
+            /* Watch Page mobile styling */
+            .watch-section { padding: 10px; }
+            .episode-title-watch { font-size: 1.2rem; }
+            .download-list thead { display: none; } 
+            .download-list tr { display: block; border-bottom: 2px solid var(--primary-color); margin-bottom: 15px; padding-bottom: 15px; } 
+            .download-list tr:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; } 
+            .download-list td { display: block; text-align: right; font-size: 0.9rem; border-bottom: none; padding: 5px 8px; position: relative; } 
+            .download-list td::before { content: attr(data-label); position: absolute; left: 8px; font-weight: bold; color: var(--color-text-muted); text-align: left; } 
+            .action-btn { padding: 6px 12px; font-size: 0.9rem; } 
         }
     </style>
 </head>
@@ -456,35 +559,74 @@
         </div>
         
         <section class="watch-section" id="watch-section">
-            <h2 class="current-episode-title" id="current-episode-title"></h2>
-            <div class="watch-player-container">
-                <iframe id="video-player" src="" allow="autoplay; fullscreen" allowfullscreen></iframe>
-            </div>
-            <div class="stream-controls">
-                <div class="panel">
-                    <h3 class="panel-title">Servers</h3>
-                    <div class="button-group" id="server-list"></div>
+            <div class="watch-layout" id="watch-layout">
+                <div class="main-content-col">
+                    <div class="video-player-container">
+                        <iframe 
+                            id="video-player-iframe"
+                            src="" 
+                            title="Video Player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <div class="episode-meta">
+                        <h1 class="episode-title-watch" id="current-episode-title"></h1>
+                        <div class="episode-actions">
+                            <button class="action-btn" id="prev-ep-btn"><i class="fas fa-arrow-left"></i>Prev</button>
+                            <button class="action-btn" id="next-ep-btn">Next<i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="widget episodes-list-widget">
+                        <h2 class="widget-title">Episodes</h2>
+                        <div class="episodes-list" id="episodes-list-container">
+                            </div>
+                    </div>
+                    
+                    <div class="widget download-widget">
+                        <h2 class="widget-title">Download (Placeholder Links)</h2>
+                        <div class="download-list">
+                            <table>
+                                <thead>
+                                    <tr><th>Episode</th><th>Quality</th><th>Video</th><th>Subtitles</th></tr>
+                                </thead>
+                                <tbody id="download-links-tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="panel">
-                    <h3 class="panel-title">Download Episode</h3>
-                    <div class="button-group" id="download-links"></div>
+
+                <div class="sidebar-col">
+                    <div class="widget drama-info-widget">
+                        <div class="info-poster"><img id="sidebar-poster" src="" alt="Anime Poster"></div>
+                        <h2 class="info-title-sidebar" id="sidebar-title"></h2>
+                        <div class="info-details">
+                            <p><span>Type:</span> <span id="sidebar-type"></span></p>
+                            <p><span>Episodes:</span> <span id="sidebar-episodes"></span></p>
+                            <p><span>Duration:</span> <span id="sidebar-duration"></span></p>
+                            <p><span>Studio:</span> <span id="sidebar-studio"></span></p>
+                            <p><span>Score:</span> <span id="sidebar-score"></span></p>
+                            <p><span>Genres:</span> <span id="sidebar-genres"></span></p>
+                        </div>
+                    </div>
+                    <div class="widget recommendations-widget">
+                        <h2 class="widget-title">You Might Also Like</h2>
+                        <div class="recommendations-list">
+                           <p style="color: var(--color-text-muted); font-size: 0.9rem;">Recommendation list placeholder.</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="episodes-panel">
-                <h2 class="panel-title">Episodes</h2>
-                <ul class="episode-list" id="episode-list"></ul>
-            </div>
-             <div class="panel" style="margin-top: 2rem;">
-                <h3 class="panel-title">Download Subtitles</h3>
-                <div class="button-group" id="subtitle-links"></div>
             </div>
         </section>
-
-    </main>
+        </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- Data: Lord of the Mysteries for the review page ---
+            // --- Data: Lord of the Mysteries for the review page (From lotm.html) ---
             const selectedAnime = {
                 id: 2, title: 'Lord of the Mysteries', title_japanese: '诡秘之主',
                 cast: ['Klein Moretti (VA: TBD)', 'Audrey Hall (VA: TBD)', 'Alger Wilson (VA: TBD)'],
@@ -504,23 +646,19 @@
                 trailer_url: 'https://www.youtube.com/embed/a8p-l75icsA',
                 official_streams: [
                     { platform: 'Crunchyroll', logo: 'https://cdn.worldvectorlogo.com/logos/crunchyroll-1.svg' },
-                     ],
-                episodeList: Array.from({ length: 12 }, (_, i) => ({
-                    ep_num: i + 1, title: `Episode ${i + 1}: The Crimson Moon`, thumbnail: 'https://static.wikia.nocookie.net/lord-of-the-mysteries/images/e/e3/Tingen_City.jpg',
-                    servers: { 'VidStream': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', 'MegaCloud': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', 'StreamTape': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1' },
-                    downloads: { '1080p': '#', '720p': '#', '480p': '#' }
-                })),
-                subtitles: [ { lang: 'English', url: '#' }, { lang: 'Chinese', url: '#' } ],
-                gallery: [
+                ],
+                episodes: 12, // Total episodes
+                 gallery: [
                     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThBuNTbGLUl_lZV85dUgE5llJI3prYvB5PeQ&s',
-                    'https://boomzappow.com/wp-content/uploads/2025/07/LOTM-Aurora-Order-The-Hanged-Man-1024x576.webp',
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCSRjQS_JHH0f-83jpC7k9XNzVLQTGktO-p6GxZB_FLwd5YT5HKPT7DD3-xuSXgDbDD_Q&usqp=CAU',
+                    'https://m.media-amazon.com/images/M/MV5BZjY0NzY4MjUtYWVjNS00OGFkLWIyZGMtODAzYzFmMWRkY2IzXkEyXkFqcGc@._V1_QL75_UX579_.jpg',
+                    'https://m.media-amazon.com/images/M/MV5BMDRjNWExNjItNWYxMS00MWNiLTg1MjctMjAwZTQ3MjU0ODk2XkEyXkFqcGc@._V1_QL75_UX772.5_.jpg',
                     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPOqXnogJiMzGWadzUi43sbWFIdIObPf5QCRGAvpMXDwAM_m8PvSlasRfz4fllcMB0pEw&usqp=CAU',
-                    'https://preview.redd.it/4th-epoch-events-art-and-poems-v0-sp7vb5idqg1d1.jpg?width=1080&crop=smart&auto=webp&s=8a9fbb3b691dbd0f6487933a41f6b83ec3150838',
-                    'https://boomzappow.com/wp-content/uploads/2025/07/Beyonders-LOTM-members.webp'
+                    'https://m.media-amazon.com/images/M/MV5BZjI2NzU5YjQtYjRkNi00YTE5LTg0MjMtNmFiODE5M2IxZjI1XkEyXkFqcGc@._V1_QL75_UX546_.jpg',
+                    'https://m.media-amazon.com/images/M/MV5BMzNmYjNiMWUtMWE3Yi00NTE5LTk0ZTEtYmFiMGUxNjllZTAwXkEyXkFqcGc@._V1_QL75_UX838.5_.jpg'
                 ]
             };
-            
+
+            // Helper function for YouTube Embeds
             function getYouTubeEmbedUrl(url) {
                 let videoId = null;
                 const patterns = [
@@ -538,8 +676,43 @@
                 }
                 return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
             }
+            
+            // --- SEPARATE EPISODE DATA CONSTANT (Flat structure from lotm.html) ---
+            const episodeData = [
+                { number: 1, title: 'Episode 1: The Crimson Moon', videoUrl: 'https://multiembed.mov/?video_id=tt28618556&s=1&e=1', thumbnail: 'https://static.wikia.nocookie.net/lord-of-the-mystery/images/e/e3/Tingen_City.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, 
+                { number: 2, title: 'Episode 2: The Beyonder World', videoUrl: 'https://multiembed.mov/?video_id=tt28618556&s=1&e=2', thumbnail: 'https://static.wikia.nocookie.net/lord-of-the-mystery/images/e/e3/Tingen_City.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, 
+                { number: 3, title: 'Episode 3: The Tarot Club', videoUrl: 'https://multiembed.mov/?video_id=tt28618556&s=1&e=3', thumbnail: 'https://static.wikia.nocookie.net/lord-of-the-mystery/images/e/e3/Tingen_City.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 4, title: 'Episode 4: The Fool and The Hanged Man', videoUrl: 'https://multiembed.mov/?video_id=tt28618556&s=1&e=4', thumbnail: 'https://static.wikia.nocookie.net/lord-of-the-mystery/images/e/e3/Tingen_City.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 5, title: 'Episode 5: Sequence Nine: Spectator', videoUrl: 'https://multiembed.mov/?video_id=tt28618556&s=1&e=5', thumbnail: 'https://static.wikia.nocookie.net/lord-of-the-mystery/images/e/e3/Tingen_City.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 6, title: 'Episode 6: The Mysterious Mr. A', videoUrl: 'https://multiembed.mov/?video_id=tt28618556&s=1&e=6', thumbnail: 'https://static.wikia.nocookie.net/lord-of-the-mystery/images/e/e3/Tingen_City.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, 
+                { number: 7, title: 'Episode 7: The Fate of Tingen', videoUrl: 'https://multiembed.mov/?video_id=tt28618556&s=1&e=7', thumbnail: 'https://static.wikia.nocookie.net/lord-of-the-mystery/images/e/e3/Tingen_City.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 8, title: 'Episode 8: The Price of Transmigration', videoUrl: 'https://multiembed.mov/?video_id=tt28618556&s=1&e=8', thumbnail: 'https://static.wikia.nocookie.net/lord-of-the-mystery/images/e/e3/Tingen_City.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 9, title: 'Episode 9: Sequence Eight: Clown', videoUrl: 'https://multiembed.mov/?video_id=tt28618556&s=1&e=9', thumbnail: 'https://static.wikia.nocookie.net/lord-of-the-mystery/images/e/e3/Tingen_City.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 10, title: 'Episode 10: The Secret of the Ancient God', videoUrl: 'https://multiembed.mov/?video_id=tt28618556&s=1&e=10', thumbnail: 'https://static.wikia.nocookie.net/lord-of-the-mystery/images/e/e3/Tingen_City.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 11, title: 'Episode 11: Sacrifice and Revelation', videoUrl: 'https://multiembed.mov/?video_id=tt28618556&s=1&e=11', thumbnail: 'https://static.wikia.nocookie.net/lord-of-the-mystery/images/e/e3/Tingen_City.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 12, title: 'Episode 12: End of Volume 1 (S1 Finale)', videoUrl: 'https://multiembed.mov/?video_id=tt28618556&s=1&e=12', thumbnail: 'https://static.wikia.nocookie.net/lord-of-the-mystery/images/e/e3/Tingen_City.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+            ];
+            
+            // --- Page Elements ---
+            const videoPlayer = document.getElementById('video-player-iframe');
+            const episodesListContainer = document.getElementById('episodes-list-container');
+            const downloadLinksTbody = document.getElementById('download-links-tbody');
+            const currentEpisodeTitle = document.getElementById('current-episode-title');
+            const prevBtn = document.getElementById('prev-ep-btn');
+            const nextBtn = document.getElementById('next-ep-btn');
+
+            // --- Button Elements (from review page) ---
+            const playButton = document.getElementById('play-button');
+            const mobilePlayButton = document.getElementById('mobile-play-button');
+            const trailerButton = document.getElementById('trailer-button');
+            const mobileTrailerButton = document.getElementById('mobile-trailer-button');
+            const addToWatchlistBtn = document.getElementById('add-to-watchlist-btn');
+
+            let currentEpisodeIndex = 0; // Index starting at 0
+            const totalEpisodes = episodeData.length;
 
             function populateReviewSection() {
+                // Initial Population of Review Page UI
                 document.title = `Review & Watch ${selectedAnime.title} - Anikan`;
                 document.getElementById('hero-banner-section').style.backgroundImage = `url('${selectedAnime.bgImage}')`;
                 document.getElementById('anime-title-main').textContent = selectedAnime.title;
@@ -555,7 +728,10 @@
                 document.getElementById('rating-score').textContent = selectedAnime.rating;
                 ratingCircle.style.setProperty('--rating-percent', selectedAnime.rating * 10);
                 document.getElementById('synopsis-text').textContent = selectedAnime.description;
+                
+                // Note: Using gallery from lotm.html data as lotm2.0.html's gallery was not provided.
                 document.getElementById('photos-grid').innerHTML = selectedAnime.gallery.map(img => `<img src="${img}" alt="Gallery image">`).join('');
+                
                 document.getElementById('trailer-player').src = getYouTubeEmbedUrl(selectedAnime.trailer_url);
                 document.getElementById('character-list').innerHTML = selectedAnime.characters.map(char =>
                     `<div class="character-card"><img src="${char.image}" alt="${char.name}"><h4>${char.name}</h4></div>`
@@ -565,76 +741,105 @@
                 officialStreamsContainer.innerHTML = selectedAnime.official_streams.map(stream =>
                     `<a href="#" class="stream-logo"><img src="${stream.logo}" alt="${stream.platform}"></a>`
                 ).join('');
+                
+                // Populate Sidebar Info
+                document.getElementById('sidebar-poster').src = selectedAnime.coverImage;
+                document.getElementById('sidebar-title').textContent = selectedAnime.title;
+                document.getElementById('sidebar-type').textContent = selectedAnime.type;
+                document.getElementById('sidebar-episodes').textContent = selectedAnime.episodes;
+                document.getElementById('sidebar-duration').textContent = selectedAnime.duration;
+                document.getElementById('sidebar-studio').textContent = selectedAnime.studio;
+                document.getElementById('sidebar-score').textContent = selectedAnime.rating + '/10';
+                document.getElementById('sidebar-genres').textContent = selectedAnime.genres.join(', ');
             }
+            
+            // --- WATCH UI LOGIC (from lotm.html) ---
 
-            // --- Page Elements ---
-            const videoPlayer = document.getElementById('video-player');
-            const episodeListContainer = document.getElementById('episode-list');
-            const serverListContainer = document.getElementById('server-list');
-            const downloadLinksContainer = document.getElementById('download-links');
-            const subtitleLinksContainer = document.getElementById('subtitle-links');
-            const currentEpisodeTitle = document.getElementById('current-episode-title');
+            function updateUI(episodeIndex) {
+                currentEpisodeIndex = parseInt(episodeIndex, 10);
+                const episode = episodeData[currentEpisodeIndex];
+                
+                if (!episode) return;
+                
+                const episodeNumber = episode.number;
+                const displayTitle = episode.title.match(/(?::\s?)(.*)/)?.[1] || episode.title;
 
-            // --- Button Elements ---
-            const playButton = document.getElementById('play-button');
-            const mobilePlayButton = document.getElementById('mobile-play-button');
-            const trailerButton = document.getElementById('trailer-button');
-            const mobileTrailerButton = document.getElementById('mobile-trailer-button');
-            const addToWatchlistBtn = document.getElementById('add-to-watchlist-btn');
+                currentEpisodeTitle.textContent = `You are watching Episode ${episodeNumber} - ${displayTitle}`;
+                
+                // 1. Update Video Player
+                videoPlayer.src = episode.videoUrl;
 
-            function activateEpisode(episodeIndex) {
-                const episode = selectedAnime.episodeList[episodeIndex];
-                currentEpisodeTitle.textContent = `Currently Watching: Episode ${episode.ep_num}`;
-                serverListContainer.innerHTML = '';
-                Object.keys(episode.servers).forEach(serverName => {
-                    const button = document.createElement('button');
-                    button.textContent = serverName;
-                    button.dataset.url = episode.servers[serverName];
-                    button.addEventListener('click', () => {
-                        videoPlayer.src = button.dataset.url;
-                        serverListContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-                        button.classList.add('active');
+                // 2. Update Download Links
+                downloadLinksTbody.innerHTML = '';
+                const downloadQualities = Object.keys(episode.downloads);
+                const subtitleUrl = episode.subtitleUrl || '#';
+                
+                if (downloadQualities.length > 0) {
+                     downloadQualities.forEach(quality => {
+                        const downloadUrl = episode.downloads[quality];
+                        downloadLinksTbody.innerHTML += `
+                            <tr>
+                                <td data-label="Episode">Episode ${episodeNumber}</td>
+                                <td data-label="Quality">${quality}</td>
+                                <td data-label="Video"><a href="${downloadUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-download"></i> Download</a></td>
+                                <td data-label="Subtitles"><a href="${subtitleUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-closed-captioning"></i> Download</a></td>
+                            </tr>`;
                     });
-                    serverListContainer.appendChild(button);
-                });
-                downloadLinksContainer.innerHTML = '';
-                Object.keys(episode.downloads).forEach(quality => {
-                    const a = document.createElement('a'); a.href = episode.downloads[quality]; a.textContent = quality;
-                    downloadLinksContainer.appendChild(a);
-                });
-                episodeListContainer.querySelectorAll('a').forEach(link => link.classList.remove('active'));
-                const activeEpisodeLink = episodeListContainer.querySelector(`a[data-episode-index='${episodeIndex}']`);
-                if (activeEpisodeLink) activeEpisodeLink.classList.add('active');
-                if (serverListContainer.firstChild) serverListContainer.firstChild.click();
+                } else {
+                    downloadLinksTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-text-muted);">Download links not available for this episode.</td></tr>`;
+                }
+                
+                // 3. Update Episode List Active State and scroll
+                episodesListContainer.querySelectorAll('.episode-item').forEach(link => link.classList.remove('current'));
+                const activeEpisodeLink = episodesListContainer.querySelector(`.episode-item[data-episode='${episodeNumber}']`);
+                if (activeEpisodeLink) {
+                    activeEpisodeLink.classList.add('current');
+                    activeEpisodeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+
+                // 4. Update Navigation Buttons
+                prevBtn.disabled = episodeNumber === 1;
+                nextBtn.disabled = episodeNumber === totalEpisodes;
             }
 
-            function populateEpisodeList() {
-                episodeListContainer.innerHTML = '';
-                selectedAnime.episodeList.forEach((ep, index) => {
-                    const li = document.createElement('li'); li.className = 'episode-item';
-                    const a = document.createElement('a'); a.href = '#'; a.dataset.episodeIndex = index;
-                    a.innerHTML = `<img src="${ep.thumbnail}" alt="Ep ${ep.ep_num}" class="episode-thumbnail"><span class="episode-number">${ep.ep_num}</span><span class="episode-title">${ep.title}</span>`;
-                    a.addEventListener('click', (e) => { e.preventDefault(); activateEpisode(index); });
-                    li.appendChild(a);
-                    episodeListContainer.appendChild(li);
+            function generateEpisodeList() {
+                episodesListContainer.innerHTML = '';
+                episodeData.forEach((ep, index) => {
+                    const episodeNumber = ep.number;
+                    const episodeTitle = ep.title.match(/(?::\s?)(.*)/)?.[1] || ep.title; // Clean up title for display
+                    
+                    const itemHTML = `
+                        <a class="episode-item" data-episode="${episodeNumber}" data-episode-index="${index}">
+                            <img src="${ep.thumbnail}" alt="Ep ${episodeNumber}" class="episode-thumbnail-small">
+                            <div class="ep-info">
+                                <p class="ep-number">E${episodeNumber}</p>
+                                <p class="ep-desc">${episodeTitle}</p>
+                            </div>
+                        </a>
+                    `;
+                    episodesListContainer.innerHTML += itemHTML;
+                });
+                
+                // Attach click listeners to the generated list items
+                episodesListContainer.querySelectorAll('.episode-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        updateUI(item.dataset.episodeIndex);
+                    });
                 });
             }
 
-            function populateSubtitleLinks() {
-                subtitleLinksContainer.innerHTML = '';
-                selectedAnime.subtitles.forEach(sub => {
-                    const a = document.createElement('a'); a.href = sub.url; a.textContent = sub.lang;
-                    subtitleLinksContainer.appendChild(a);
-                });
-            }
 
-            // --- Event Handlers ---
+            // --- Event Handlers (from lotm.html) ---
             const handlePlayClick = () => {
                 document.body.classList.add('watching-active');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                populateEpisodeList();
-                populateSubtitleLinks();
-                if (selectedAnime.episodeList.length > 0) activateEpisode(0);
+                
+                generateEpisodeList();
+                
+                if (episodeData.length > 0) {
+                    updateUI(0);
+                }
             };
 
             const handleTrailerClick = () => {
@@ -653,7 +858,15 @@
                 }
             };
 
-            // --- Event Listeners ---
+            // --- Navigation Event Listeners ---
+            prevBtn.addEventListener('click', () => { 
+                if (currentEpisodeIndex > 0) updateUI(currentEpisodeIndex - 1); 
+            });
+            nextBtn.addEventListener('click', () => { 
+                if (currentEpisodeIndex < totalEpisodes - 1) updateUI(currentEpisodeIndex + 1); 
+            });
+
+            // --- Other Event Listeners ---
             playButton.addEventListener('click', handlePlayClick);
             mobilePlayButton.addEventListener('click', handlePlayClick);
             trailerButton.addEventListener('click', handleTrailerClick);

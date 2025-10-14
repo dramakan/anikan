@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
+        /* --- GLOBAL & REVIEW STYLES (From kaijuno8.html) --- */
         :root {
             --color-background: #100f14;
             --color-card: #1c1b22;
@@ -21,12 +22,29 @@
             --font-family: 'Poppins', sans-serif;
             --rating-color: #57D64B; /* Green for rating */
             --border-color: #2c2c34;
+            /* Added for Watch Section (Hoteldelluna/Gachiakuta) */
+            --primary-color: #9D4EDD;
+            --primary-color-rgb: 157, 78, 221;
+            --surface-color-darker: #1A1A1D;
+            --surface-color-lighter: #2a2a2d;
+            --background-color-watch: #0B0C10; 
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body { background-color: var(--color-background); color: var(--color-text); font-family: var(--font-family); }
         a { color: var(--color-text); text-decoration: none; }
         img { max-width: 100%; display: block; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .widget {
+            background: linear-gradient(180deg, var(--surface-color-lighter), var(--surface-color-darker));
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-radius: 8px; margin-bottom: 20px; padding: 20px;
+        }
+        .widget-title {
+            font-size: 1.2rem; font-weight: 600; margin-bottom: 15px;
+            padding-bottom: 10px; border-bottom: 1px solid var(--border-color);
+        }
 
         .main-header {
             position: sticky;
@@ -44,29 +62,15 @@
         .main-header .logo span { color: var(--color-primary); }
         .main-header .nav-links a { margin-left: 2rem; color: var(--color-text-muted); font-weight: 500; transition: color 0.3s ease; }
         .main-header .nav-links a:hover { color: var(--color-primary); }
-        .main-header .search-bar { position: relative; }
-        .main-header .search-bar input {
-            background-color: var(--color-card);
-            border: none;
-            border-radius: 20px;
-            padding: 0.5rem 1rem 0.5rem 2.5rem;
-            color: var(--color-text);
-            font-family: var(--font-family);
-            font-size: 0.9rem;
-            width: 200px;
-            transition: width 0.3s ease;
-        }
-        .main-header .search-bar input:focus { width: 250px; outline: none; }
-        .main-header .search-bar .fa-search { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); }
-        .main-header .user-profile { margin-left: 1.5rem; }
-        .main-header .user-profile img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; cursor: pointer; }
+        .main-header .search-bar { position: relative; display: none; } /* Kept hidden from kaijuno8.html */
+        .main-header .user-profile { margin-left: 1.5rem; display: none; } /* Kept hidden from kaijuno8.html */
 
 
         /* --- Review Page Layout --- */
         .review-wrapper { transition: opacity 0.4s ease, visibility 0.4s ease; }
-        .watch-section { display: none; opacity: 0; transition: opacity 0.4s ease; }
+        .watch-section { display: none; opacity: 0; transition: opacity 0.4s ease; background-color: var(--background-color-watch);}
         body.watching-active .review-wrapper { display: none; opacity: 0; visibility: hidden; }
-        body.watching-active .watch-section { display: block; opacity: 1; padding-top: 2rem; }
+        body.watching-active .watch-section { display: block; opacity: 1; padding: 2rem 5%; }
 
         .hero-banner {
             position: relative;
@@ -184,7 +188,6 @@
         }
         .user-rating-stars .fas { color: gold; }
 
-
         .info-panel {
             background-color: var(--color-card);
             border-radius: 12px;
@@ -228,7 +231,6 @@
         .rating-score { font-size: 2.5rem; font-weight: 700; }
         .rating-max { font-size: 0.9rem; color: var(--color-text-muted); }
         .personal-rating-note { font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem; }
-
 
         .section-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; color: #fff; }
 
@@ -315,25 +317,109 @@
         .character-card h4 { font-size: 1rem; margin-bottom: 0.2rem; }
         .character-card p { font-size: 0.85rem; color: var(--color-text-muted); }
         
-        /* --- Watch Section --- */
-        .watch-section { padding: 2rem 5%; }
-        .current-episode-title { font-size: 1.8rem; font-weight: 600; margin-bottom: 1.5rem; }
-        .watch-player-container { position: relative; padding-bottom: 56.25%; height: 0; background-color: #000; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); margin-bottom: 2rem; }
-        .watch-player-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-        .stream-controls { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2rem; }
-        .panel { background-color: var(--color-card); border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); flex: 1 1 300px; }
-        .button-group { display: flex; flex-wrap: wrap; gap: 0.8rem; }
-        .button-group button, .button-group a { background-color: var(--color-background); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.6rem 1rem; color: var(--color-text-muted); font-family: var(--font-family); font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; text-align: center; }
-        .button-group button:hover, .button-group a:hover { background-color: #2a2933; color: #fff; border-color: var(--color-primary); }
-        .button-group button.active { background-color: var(--color-primary); color: #fff; font-weight: 600; border-color: var(--color-primary); }
+        /* --- WATCH SECTION (From kaijuno8.html) --- */
+        .watch-layout { 
+            display: grid; 
+            grid-template-columns: 2fr 1fr; 
+            gap: 20px; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 2rem 0; 
+        }
+        .main-content-col { min-width: 0; }
+        .video-player-container {
+            position: relative;
+            width: 100%;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            border: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
         
-        .episodes-panel { background-color: var(--color-card); border-radius: 10px; padding: 1.5rem; }
-        .episodes-panel .season-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); }
-        .episode-list { max-height: 500px; overflow-y: auto; padding-right: 0.5rem; list-style: none; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 2rem; /* Space between seasons */ }
-        .episode-item a { display: flex; align-items: center; gap: 1rem; padding: 0.5rem; background-color: var(--color-background); border-radius: 8px; }
-        .episode-thumbnail { width: 120px; height: 70px; object-fit: cover; border-radius: 5px; }
-        .episode-number { font-size: 1.2rem; font-weight: 700; width: 40px; text-align: center;}
-        .episode-item a.active { background-color: var(--color-primary); color: #fff; }
+        #video-player-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .episode-meta { padding: 0 0 15px 0; }
+        .episode-title-watch { font-size: 1.5rem; font-weight: 600; margin-bottom: 15px; }
+        .episode-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+
+        .action-btn, .download-btn {
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .action-btn:hover:not(:disabled), .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+        .action-btn:disabled {
+            background-color: #222;
+            color: #555;
+            cursor: not-allowed;
+        }
+        .action-btn {
+            background: linear-gradient(180deg, #4a4a52, #313136);
+            color: var(--color-text);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .action-btn:hover:not(:disabled) {
+            background: linear-gradient(180deg, #5a5a62, #414146);
+        }
+
+        #next-ep-btn {
+            background: linear-gradient(180deg, #ffffff, #e0e0e0);
+            color: #0B0C10;
+            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+        }
+        .download-btn {
+            background: linear-gradient(180deg, hsl(270, 77%, 60%), hsl(270, 77%, 50%)); 
+            color: white;
+            box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.25);
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+        .download-btn:hover {
+             background: linear-gradient(180deg, hsl(270, 77%, 65%), hsl(270, 77%, 55%));
+        }
+
+        /* --- Episode List / Downloads --- */
+        .episodes-list-widget .episodes-list { max-height: 400px; overflow-y: auto; padding-right: 10px; list-style: none; }
+        .episode-item { display: flex; align-items: center; gap: 15px; padding: 10px; border-radius: 5px; margin-bottom: 5px; cursor: pointer; border: 1px solid transparent; transition: all 0.2s ease; }
+        .episode-item:hover { background-color: var(--surface-color-lighter); border-color: var(--primary-color); }
+        .episode-item.current { background: rgba(var(--primary-color-rgb), 0.1); border-color: var(--primary-color); }
+        .episode-item .ep-number { font-weight: 600; font-size: 1.1rem; }
+        .episode-item .ep-desc { font-size: 0.9rem; color: var(--color-text-muted); }
+        .episode-thumbnail-small { width: 70px; height: 40px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
+
+        .download-list table { width: 100%; border-collapse: collapse; }
+        .download-list th, .download-list td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .download-list th { color: var(--color-text-muted); font-weight: 500; }
+        
+        /* Sidebar Placeholder */
+        .drama-info-widget { padding: 20px; }
+        .info-title-sidebar { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; }
+        .info-details p { font-size: 0.9rem; padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+        .info-details p:last-child { border-bottom: none; }
+        .info-details span { color: var(--color-text-muted); display: inline-block; width: 110px; }
+        .info-poster img { border-radius: 8px; margin-bottom: 15px; }
+
+        /* --- RESPONSIVE STYLES (Retained from kaijuno8.html to meet mobile view request) --- */
 
         @media (max-width: 992px) {
             .main-header .nav-links, .main-header .search-bar { display: none; }
@@ -344,20 +430,35 @@
             .info-panel { grid-template-columns: 1fr; }
             .info-details li { justify-content: center; }
             .watchlist-section button { max-width: 300px; }
+            
+            /* Watch Page collapse */
+            .watch-layout { grid-template-columns: 1fr; padding: 15px; } 
+            .episode-title-watch { font-size: 1.4rem; } 
         }
+
         @media (max-width: 576px) {
-            .hero-banner { display: none; } /* HIDE BANNER ON MOBILE */
-            .mobile-hero-buttons { /* SHOW MOBILE BUTTONS */
-                display: flex;
+            .hero-banner { display: none; } /* HIDE BANNER ON MOBILE (Review page mobile view from kaijuno82.0.html) */
+            .mobile-hero-buttons { 
+                display: flex; /* SHOW MOBILE BUTTONS (Review page mobile view from kaijuno82.0.0.html) */
                 flex-direction: column;
                 gap: 1rem;
                 width: 100%;
-                max-width: 300px; /* Match poster width */
-                margin-top: 1rem; /* Space from poster */
+                max-width: 300px; 
+                margin-top: 1rem; 
             }
             .mobile-hero-buttons .btn { width: 100%; }
             .photos-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
             .characters-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+            
+            /* Watch Page mobile styling (Specific request fulfillment from kaijuno8.html) */
+            .watch-section { padding: 10px; }
+            .episode-title-watch { font-size: 1.2rem; }
+            .download-list thead { display: none; } 
+            .download-list tr { display: block; border-bottom: 2px solid var(--primary-color); margin-bottom: 15px; padding-bottom: 15px; } 
+            .download-list tr:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; } 
+            .download-list td { display: block; text-align: right; font-size: 0.9rem; border-bottom: none; padding: 5px 8px; position: relative; } 
+            .download-list td::before { content: attr(data-label); position: absolute; left: 8px; font-weight: bold; color: var(--color-text-muted); text-align: left; } 
+            .action-btn { padding: 6px 12px; font-size: 0.9rem; } 
         }
     </style>
 </head>
@@ -458,33 +559,74 @@
         </div>
         
         <section class="watch-section" id="watch-section">
-            <h2 class="current-episode-title" id="current-episode-title"></h2>
-            <div class="watch-player-container">
-                <iframe id="video-player" src="" allow="autoplay; fullscreen" allowfullscreen></iframe>
-            </div>
-            <div class="stream-controls">
-                <div class="panel">
-                    <h3 class="panel-title">Servers</h3>
-                    <div class="button-group" id="server-list"></div>
+             <div class="watch-layout" id="watch-layout">
+                <div class="main-content-col">
+                    <div class="video-player-container">
+                        <iframe 
+                            id="video-player-iframe"
+                            src="" 
+                            title="Video Player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <div class="episode-meta">
+                        <h1 class="episode-title-watch" id="current-episode-title"></h1>
+                        <div class="episode-actions">
+                            <button class="action-btn" id="prev-ep-btn"><i class="fas fa-arrow-left"></i>Prev</button>
+                            <button class="action-btn" id="next-ep-btn">Next<i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="widget episodes-list-widget">
+                        <h2 class="widget-title">Episodes</h2>
+                        <div class="episodes-list" id="episodes-list-container">
+                            </div>
+                    </div>
+                    
+                    <div class="widget download-widget">
+                        <h2 class="widget-title">Download (Placeholder Links)</h2>
+                        <div class="download-list">
+                            <table>
+                                <thead>
+                                    <tr><th>Episode</th><th>Quality</th><th>Video</th><th>Subtitles</th></tr>
+                                </thead>
+                                <tbody id="download-links-tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="panel">
-                    <h3 class="panel-title">Download Episode</h3>
-                    <div class="button-group" id="download-links"></div>
+
+                <div class="sidebar-col">
+                    <div class="widget drama-info-widget">
+                        <div class="info-poster"><img id="sidebar-poster" src="" alt="Anime Poster"></div>
+                        <h2 class="info-title-sidebar" id="sidebar-title"></h2>
+                        <div class="info-details">
+                            <p><span>Type:</span> <span id="sidebar-type"></span></p>
+                            <p><span>Episodes:</span> <span id="sidebar-episodes"></span></p>
+                            <p><span>Duration:</span> <span id="sidebar-duration"></span></p>
+                            <p><span>Studio:</span> <span id="sidebar-studio"></span></p>
+                            <p><span>Score:</span> <span id="sidebar-score"></span></p>
+                            <p><span>Genres:</span> <span id="sidebar-genres"></span></p>
+                        </div>
+                    </div>
+                    <div class="widget recommendations-widget">
+                        <h2 class="widget-title">You Might Also Like</h2>
+                        <div class="recommendations-list">
+                           <p style="color: var(--color-text-muted); font-size: 0.9rem;">Recommendation list placeholder.</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="episodes-panel" id="episodes-panel-container">
-                </div>
-             <div class="panel" style="margin-top: 2rem;">
-                <h3 class="panel-title">Download Subtitles</h3>
-                <div class="button-group" id="subtitle-links"></div>
             </div>
         </section>
-
-    </main>
+        </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- Data: Kaiju No. 8 for the review page ---
+            // --- Data: Kaiju No. 8 for the review page (Base from kaijuno8.html) ---
             const selectedAnime = {
                 id: 5, title: 'Kaiju No. 8', title_japanese: '怪獣8号',
                 cast: ['Kafka Hibino (Masaya Fukunishi)', 'Mina Ashiro (Asami Seto)', 'Reno Ichikawa (Wataru Kato)', 'Kikoru Shinomiya (Fairouz Ai)'],
@@ -500,41 +642,25 @@
                 audience: 'Perfect for fans of high-octane action, giant monster battles, and military sci-fi. If you enjoy shonen series like "Attack on Titan" or "My Hero Academia," where an underdog gains incredible power and fights for a cause, Kaiju No. 8 delivers with stunning animation and thrilling combat.',
                 coverImage: 'https://preview.redd.it/new-key-visual-for-kaiju-no-8-season-2-v0-44lqbwzloa4f1.jpeg?width=1080&crop=smart&auto=webp&s=31417111b133a42be02e19f8fddc3d1d0336433e',
                 bgImage: 'https://static0.gamerantimages.com/wordpress/wp-content/uploads/2025/06/kaiju-no-8-season-2-key-visual-cropped.jpg',
-                releaseYear: 2024,
-                trailer_url: 'https://youtu.be/s2cQ4T2r3bo?si=Xks-wJh77OW8oLPd', // Updated trailer URL
+                // UPDATED TRAILER URL WITH A KNOWN WORKING ONE
+                trailer_url: 'https://imdb-video.media-imdb.com/vi1463207705/1434659607842-pgv4ql-1698851772653.mp4?Expires=1760531364&Signature=H72h6cfZIrlShTFdTQf2yGIOtjQCgZo7Pbp9uuYU3PGNs3lX1zSt~cco4f1JuhZFbFIvAIaW3hclmv61M2fIvR7S4Abebbnmd8kAXi0EWLxUclSsenf8rnIKUEOxtc-eUlZ2iezI0lxu1PXflz4EfVsubw3G2cg~RWQIzn1SrmMw0F~Eb4JikhGqBbbDyhmp8Qjm16w2fxgFLeElIa8RQYx-sNCU7aWw7L5hauvzExObeCGYnGXInXS5UyuizwZC8x4Elqamkue90gUZfuKH91uO9X~KFkANVcL-xSGL9966Nn9EH6EqLW~EZtBRxzDCK7BlTG-vFqN-jt-2Y8VT3Q__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA', // KAIJU NO.8 - Official Trailer 4
                 official_streams: [
                     { platform: 'Crunchyroll', logo: 'https://cdn.worldvectorlogo.com/logos/crunchyroll-1.svg' },
                     { platform: 'X (Twitter)', logo: 'https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_%28white%29.png' }
                 ],
-                seasonList: [
-                    {
-                        seasonTitle: 'Season 1',
-                        episodes: Array.from({ length: 12 }, (_, i) => ({
-                            ep_num: i + 1, title: `Episode ${i + 1}`, thumbnail: 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/3d9b2f67c3a0f985bd5c85de92a2a6e0.jpeg',
-                            servers: { 'VidStream': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', 'MegaCloud': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', 'StreamTape': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1' },
-                            downloads: { '1080p': '#', '720p': '#', '480p': '#' }
-                        }))
-                    },
-                    {
-                        seasonTitle: 'Season 2',
-                        episodes: Array.from({ length: 12 }, (_, i) => ({
-                            ep_num: i + 13, title: `Episode ${i + 13}`, thumbnail: 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2024/06/kaiju-no-8-sequel.jpg',
-                            servers: { 'VidStream': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', 'MegaCloud': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', 'StreamTape': 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1' },
-                            downloads: { '1080p': '#', '720p': '#', '480p': '#' }
-                        }))
-                    }
-                ],
-                subtitles: [ { lang: 'English', url: '#' }, { lang: 'Japanese', url: '#' } ],
-                gallery: [
+                // Added gallery array for consistency
+                 gallery: [
                     'https://m.media-amazon.com/images/M/MV5BY2I0MDgzM2MtYjk3MC00ZWIwLTgxNzMtYmI2NmM4OTNhOWNjXkEyXkFqcGc@._V1_.jpg',
                     'https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA1yLnQC.img?w=768&h=384&m=6',
                     'https://comicbook.com/wp-content/uploads/sites/4/2025/01/Kaiju-No.-8-scenery-artwork.jpg?resize=2000,1125',
                     'https://images.hindustantimes.com/img/2024/08/05/1600x900/Screenshot_2024-05-09_003139_1715194908798_1722876098745.png',
                     'https://m.media-amazon.com/images/M/MV5BZTVmZWIwY2UtN2QxNi00MzdlLWI2YTEtYjg0MGIxMjQ0MjU1XkEyXkFqcGc@._V1_.jpg',
                     'https://static0.cbrimages.com/wordpress/wp-content/uploads/2024/06/kafka-and-hoshina.jpg?w=1200&h=628&fit=crop'
-                ]
+                ],
+                episodes: 24 // Total episodes
             };
-            
+
+            // Helper function for YouTube Embeds (from kaijuno8.html)
             function getYouTubeEmbedUrl(url) {
                 let videoId = null;
                 const patterns = [
@@ -552,8 +678,57 @@
                 }
                 return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
             }
+            
+            // --- SEPARATE EPISODE DATA CONSTANT (Flat structure from kaijuno8.html) ---
+            const episodeData = [
+                // Season 1 (1-12)
+                { number: 1, title: 'Episode 1: The Man Who Became a Kaiju', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=1&e=1', thumbnail: 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/3d9b2f67c3a0f985bd5c85de92a2a6e0.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, 
+                { number: 2, title: 'Episode 2: The Kaiju No. 8', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=1&e=2', thumbnail: 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/3d9b2f67c3a0f985bd5c85de92a2a6e0.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, 
+                { number: 3, title: 'Episode 3: Mina Ashiro and the Defense Force', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=1&e=3', thumbnail: 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/3d9b2f67c3a0f985bd5c85de92a2a6e0.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 4, title: 'Episode 4: The Path to Becoming a Member', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=1&e=4', thumbnail: 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/3d9b2f67c3a0f985bd5c85de92a2a6e0.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 5, title: 'Episode 5: The Rookie\'s First Mission', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=1&e=5', thumbnail: 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/3d9b2f67c3a0f985bd5c85de92a2a6e0.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 6, title: 'Episode 6: Defense Force vs. Kaiju No. 9', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=1&e=6', thumbnail: 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/3d9b2f67c3a0f985bd5c85de92a2a6e0.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, 
+                { number: 7, title: 'Episode 7: The Trial of Kafka', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=1&e=7', thumbnail: 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/3d9b2f67c3a0f985bd5c85de92a2a6e0.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 8, title: 'Episode 8: The Power of Kikoru Shinomiya', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=1&e=8', thumbnail: 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/3d9b2f67c3a0f985bd5c85de92a2a6e0.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 9, title: 'Episode 9: The Base Attack', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=1&e=9', thumbnail: 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/3d9b2f67c3a0f985bd5c85de92a2a6e0.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 10, title: 'Episode 10: Full Liberation', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=1&e=10', thumbnail: 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/3d9b2f67c3a0f985bd5c85de92a2a6e0.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 11, title: 'Episode 11: The Secret of the Kaiju', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=1&e=11', thumbnail: 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/3d9b2f67c3a0f985bd5c85de92a2a6e0.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 12, title: 'Episode 12: Standing Against the Threat (S1 Finale)', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=1&e=12', thumbnail: 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/3d9b2f67c3a0f985bd5c85de92a2a6e0.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                // Season 2 (13-24)
+                { number: 13, title: 'Episode 13: New Recruits, New Challenges', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=2&e=1', thumbnail: 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2024/06/kaiju-no-8-sequel.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 14, title: 'Episode 14: The Return of Kaiju No. 9', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=2&e=2', thumbnail: 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2024/06/kaiju-no-8-sequel.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 15, title: 'Episode 15: The Unyielding Captain', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=2&e=3', thumbnail: 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2024/06/kaiju-no-8-sequel.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 16, title: 'Episode 16: Defense Force\'s New Weapon', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=2&e=4', thumbnail: 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2024/06/kaiju-no-8-sequel.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 17, title: 'Episode 17: Kafka\'s Risky Move', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=2&e=5', thumbnail: 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2024/06/kaiju-no-8-sequel.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 18, title: 'Episode 18: Beyond the Limit', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=2&e=6', thumbnail: 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2024/06/kaiju-no-8-sequel.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 19, title: 'Episode 19: The Fourth Division Battle', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=2&e=7', thumbnail: 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2024/06/kaiju-no-8-sequel.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 20, title: 'Episode 20: The Cost of Power', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=2&e=8', thumbnail: 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2024/06/kaiju-no-8-sequel.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 21, title: 'Episode 21: A Vow Between Friends', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=2&e=9', thumbnail: 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2024/06/kaiju-no-8-sequel.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 22, title: 'Episode 22: Unmasking the Threat', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=2&e=10', thumbnail: 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2024/06/kaiju-no-8-sequel.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 23, title: 'Episode 23: The Fate of Japan', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=2&e=11', thumbnail: 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2024/06/kaiju-no-8-sequel.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 24, title: 'Episode 24: To Be the Strongest (Series Finale)', videoUrl: 'https://multiembed.mov/?video_id=tt21975436&s=2&e=12', thumbnail: 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2024/06/kaiju-no-8-sequel.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }
+            ];
+            
+            // --- Page Elements ---
+            const videoPlayer = document.getElementById('video-player-iframe');
+            const episodesListContainer = document.getElementById('episodes-list-container');
+            const downloadLinksTbody = document.getElementById('download-links-tbody');
+            const currentEpisodeTitle = document.getElementById('current-episode-title');
+            const prevBtn = document.getElementById('prev-ep-btn');
+            const nextBtn = document.getElementById('next-ep-btn');
+
+            // --- Button Elements (from review page) ---
+            const playButton = document.getElementById('play-button');
+            const mobilePlayButton = document.getElementById('mobile-play-button');
+            const trailerButton = document.getElementById('trailer-button');
+            const mobileTrailerButton = document.getElementById('mobile-trailer-button');
+            const addToWatchlistBtn = document.getElementById('add-to-watchlist-btn');
+
+            let currentEpisodeIndex = 0; // Index starting at 0
+            const totalEpisodes = episodeData.length;
 
             function populateReviewSection() {
+                // Initial Population of Review Page UI
                 document.title = `Review & Watch ${selectedAnime.title} - Anikan`;
                 document.getElementById('hero-banner-section').style.backgroundImage = `url('${selectedAnime.bgImage}')`;
                 document.getElementById('anime-title-main').textContent = selectedAnime.title;
@@ -579,118 +754,104 @@
                 officialStreamsContainer.innerHTML = selectedAnime.official_streams.map(stream =>
                     `<a href="#" class="stream-logo"><img src="${stream.logo}" alt="${stream.platform}"></a>`
                 ).join('');
+                
+                // Populate Sidebar Info
+                document.getElementById('sidebar-poster').src = selectedAnime.coverImage;
+                document.getElementById('sidebar-title').textContent = selectedAnime.title;
+                document.getElementById('sidebar-type').textContent = selectedAnime.type;
+                document.getElementById('sidebar-episodes').textContent = selectedAnime.episodes;
+                document.getElementById('sidebar-duration').textContent = selectedAnime.duration;
+                document.getElementById('sidebar-studio').textContent = selectedAnime.studio;
+                document.getElementById('sidebar-score').textContent = selectedAnime.rating + '/10';
+                document.getElementById('sidebar-genres').textContent = selectedAnime.genres.join(', ');
             }
+            
+            // --- WATCH UI LOGIC (From kaijuno8.html) ---
 
-            // --- Page Elements ---
-            const videoPlayer = document.getElementById('video-player');
-            const episodesPanelContainer = document.getElementById('episodes-panel-container');
-            const serverListContainer = document.getElementById('server-list');
-            const downloadLinksContainer = document.getElementById('download-links');
-            const subtitleLinksContainer = document.getElementById('subtitle-links');
-            const currentEpisodeTitle = document.getElementById('current-episode-title');
+            function updateUI(episodeIndex) {
+                currentEpisodeIndex = parseInt(episodeIndex, 10);
+                const episode = episodeData[currentEpisodeIndex];
+                
+                if (!episode) return;
+                
+                const episodeNumber = episode.number;
+                const displayTitle = episode.title.match(/(?::\s?)(.*)/)?.[1] || episode.title;
 
-            // --- Button Elements ---
-            const playButton = document.getElementById('play-button');
-            const mobilePlayButton = document.getElementById('mobile-play-button');
-            const trailerButton = document.getElementById('trailer-button');
-            const mobileTrailerButton = document.getElementById('mobile-trailer-button');
-            const addToWatchlistBtn = document.getElementById('add-to-watchlist-btn');
+                currentEpisodeTitle.textContent = `You are watching Episode ${episodeNumber} - ${displayTitle}`;
+                
+                // 1. Update Video Player
+                videoPlayer.src = episode.videoUrl;
 
-            function activateEpisode(flatIndex) {
-                // Find the correct season and episode from the flat index
-                let episode;
-                let episodeCount = 0;
-                let found = false;
-                for (const season of selectedAnime.seasonList) {
-                    if (flatIndex < episodeCount + season.episodes.length) {
-                        episode = season.episodes[flatIndex - episodeCount];
-                        found = true;
-                        break;
-                    }
-                    episodeCount += season.episodes.length;
+                // 2. Update Download Links
+                downloadLinksTbody.innerHTML = '';
+                const downloadQualities = Object.keys(episode.downloads);
+                const subtitleUrl = episode.subtitleUrl || '#';
+                
+                if (downloadQualities.length > 0) {
+                     downloadQualities.forEach(quality => {
+                        const downloadUrl = episode.downloads[quality];
+                        downloadLinksTbody.innerHTML += `
+                            <tr>
+                                <td data-label="Episode">Episode ${episodeNumber}</td>
+                                <td data-label="Quality">${quality}</td>
+                                <td data-label="Video"><a href="${downloadUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-download"></i> Download</a></td>
+                                <td data-label="Subtitles"><a href="${subtitleUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-closed-captioning"></i> Download</a></td>
+                            </tr>`;
+                    });
+                } else {
+                    downloadLinksTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-text-muted);">Download links not available for this episode.</td></tr>`;
                 }
-                if (!found) return; // Index out of bounds
-
-                currentEpisodeTitle.textContent = `Currently Watching: Episode ${episode.ep_num}`;
                 
-                serverListContainer.innerHTML = '';
-                Object.keys(episode.servers).forEach(serverName => {
-                    const button = document.createElement('button');
-                    button.textContent = serverName;
-                    button.dataset.url = episode.servers[serverName];
-                    button.addEventListener('click', () => {
-                        videoPlayer.src = button.dataset.url;
-                        serverListContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-                        button.classList.add('active');
-                    });
-                    serverListContainer.appendChild(button);
-                });
+                // 3. Update Episode List Active State and scroll
+                episodesListContainer.querySelectorAll('.episode-item').forEach(link => link.classList.remove('current'));
+                const activeEpisodeLink = episodesListContainer.querySelector(`.episode-item[data-episode='${episodeNumber}']`);
+                if (activeEpisodeLink) {
+                    activeEpisodeLink.classList.add('current');
+                    activeEpisodeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
 
-                downloadLinksContainer.innerHTML = '';
-                Object.keys(episode.downloads).forEach(quality => {
-                    const a = document.createElement('a'); a.href = episode.downloads[quality]; a.textContent = quality;
-                    downloadLinksContainer.appendChild(a);
-                });
-
-                episodesPanelContainer.querySelectorAll('a').forEach(link => link.classList.remove('active'));
-                const activeEpisodeLink = episodesPanelContainer.querySelector(`a[data-flat-index='${flatIndex}']`);
-                if (activeEpisodeLink) activeEpisodeLink.classList.add('active');
-                
-                if (serverListContainer.firstChild) serverListContainer.firstChild.click();
+                // 4. Update Navigation Buttons
+                prevBtn.disabled = episodeNumber === 1;
+                nextBtn.disabled = episodeNumber === totalEpisodes;
             }
 
-            function populateEpisodeList() {
-                episodesPanelContainer.innerHTML = '';
-                let flatIndex = 0;
-
-                selectedAnime.seasonList.forEach(season => {
-                    const seasonTitleEl = document.createElement('h2');
-                    seasonTitleEl.className = 'season-title';
-                    seasonTitleEl.textContent = season.seasonTitle;
-                    episodesPanelContainer.appendChild(seasonTitleEl);
-
-                    const ul = document.createElement('ul');
-                    ul.className = 'episode-list';
+            function generateEpisodeList() {
+                episodesListContainer.innerHTML = '';
+                episodeData.forEach((ep, index) => {
+                    const episodeNumber = ep.number;
+                    const episodeTitle = ep.title.match(/(?::\s?)(.*)/)?.[1] || ep.title; // Clean up title for display
                     
-                    season.episodes.forEach(ep => {
-                        const li = document.createElement('li');
-                        li.className = 'episode-item';
-                        const a = document.createElement('a');
-                        a.href = '#';
-                        a.dataset.flatIndex = flatIndex; // Use a continuous index
-                        a.innerHTML = `<img src="${ep.thumbnail}" alt="Ep ${ep.ep_num}" class="episode-thumbnail"><span class="episode-number">${ep.ep_num}</span><span class="episode-title">Episode ${ep.ep_num}</span>`;
-                        
-                        a.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            activateEpisode(parseInt(e.currentTarget.dataset.flatIndex));
-                        });
-                        
-                        li.appendChild(a);
-                        ul.appendChild(li);
-                        flatIndex++;
+                    const itemHTML = `
+                        <a class="episode-item" data-episode="${episodeNumber}" data-episode-index="${index}">
+                            <img src="${ep.thumbnail}" alt="Ep ${episodeNumber}" class="episode-thumbnail-small">
+                            <div class="ep-info">
+                                <p class="ep-number">E${episodeNumber}</p>
+                                <p class="ep-desc">${episodeTitle}</p>
+                            </div>
+                        </a>
+                    `;
+                    episodesListContainer.innerHTML += itemHTML;
+                });
+                
+                // Attach click listeners to the generated list items
+                episodesListContainer.querySelectorAll('.episode-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        updateUI(item.dataset.episodeIndex);
                     });
-
-                    episodesPanelContainer.appendChild(ul);
                 });
             }
 
-            function populateSubtitleLinks() {
-                subtitleLinksContainer.innerHTML = '';
-                selectedAnime.subtitles.forEach(sub => {
-                    const a = document.createElement('a'); a.href = sub.url; a.textContent = sub.lang;
-                    subtitleLinksContainer.appendChild(a);
-                });
-            }
 
-            // --- Event Handlers ---
+            // --- Event Handlers (From kaijuno8.html) ---
             const handlePlayClick = () => {
                 document.body.classList.add('watching-active');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                populateEpisodeList();
-                populateSubtitleLinks();
-                // Activate the very first episode (index 0)
-                if (selectedAnime.seasonList.length > 0 && selectedAnime.seasonList[0].episodes.length > 0) {
-                    activateEpisode(0);
+                
+                generateEpisodeList();
+                
+                if (episodeData.length > 0) {
+                    updateUI(0);
                 }
             };
 
@@ -710,7 +871,15 @@
                 }
             };
 
-            // --- Event Listeners ---
+            // --- Navigation Event Listeners ---
+            prevBtn.addEventListener('click', () => { 
+                if (currentEpisodeIndex > 0) updateUI(currentEpisodeIndex - 1); 
+            });
+            nextBtn.addEventListener('click', () => { 
+                if (currentEpisodeIndex < totalEpisodes - 1) updateUI(currentEpisodeIndex + 1); 
+            });
+
+            // --- Other Event Listeners ---
             playButton.addEventListener('click', handlePlayClick);
             mobilePlayButton.addEventListener('click', handlePlayClick);
             trailerButton.addEventListener('click', handleTrailerClick);
