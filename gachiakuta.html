@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-        /* --- Gachiakuta Review Page Styles (Original) --- */
+        /* --- Gachiakuta Review Page Styles (Combined/Adjusted from gachiakuta.html for structure) --- */
         :root {
             --color-background: #100f14;
             --color-card: #1c1b22;
@@ -51,7 +51,7 @@
         .main-header .logo span { color: var(--color-primary); }
         .main-header .nav-links a { margin-left: 2rem; color: var(--color-text-muted); font-weight: 500; transition: color 0.3s ease; }
         .main-header .nav-links a:hover { color: var(--color-primary); }
-        .main-header .search-bar { position: relative; }
+        .main-header .search-bar { position: relative; } /* Re-enabled for desktop review layout */
         .main-header .search-bar input {
             background-color: var(--color-card);
             border: none;
@@ -66,14 +66,13 @@
         .main-header .search-bar input:focus { width: 250px; outline: none; }
         .main-header .search-bar .fa-search { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); }
         .main-header .user-profile { margin-left: 1.5rem; }
-        .main-header .user-profile img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; cursor: pointer; }
 
 
         /* --- Review Page Layout --- */
         .review-wrapper { transition: opacity 0.4s ease, visibility 0.4s ease; }
         .watch-section { display: none; opacity: 0; transition: opacity 0.4s ease; background-color: var(--background-color-watch);}
         body.watching-active .review-wrapper { display: none; opacity: 0; visibility: hidden; }
-        body.watching-active .watch-section { display: block; opacity: 1; padding: 2rem 5%; } /* Updated padding */
+        body.watching-active .watch-section { display: block; opacity: 1; padding: 2rem 5%; }
 
         .hero-banner {
             position: relative;
@@ -322,19 +321,7 @@
         .character-card h4 { font-size: 1rem; margin-bottom: 0.2rem; }
         .character-card p { font-size: 0.85rem; color: var(--color-text-muted); }
         
-        /* --- Watch Section (New, based on hoteldelluna.html) --- */
-        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-        .widget {
-            background: linear-gradient(180deg, var(--surface-color-lighter), var(--surface-color-darker));
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            border-radius: 8px; margin-bottom: 20px; padding: 20px;
-        }
-        .widget-title {
-            font-size: 1.2rem; font-weight: 600; margin-bottom: 15px;
-            padding-bottom: 10px; border-bottom: 1px solid var(--border-color);
-        }
-
+        /* --- Watch Section (From gachiakuta.html, requested mobile view structure) --- */
         .watch-layout { 
             display: grid; 
             grid-template-columns: 2fr 1fr; 
@@ -426,8 +413,7 @@
         .episode-item.current { background: rgba(var(--primary-color-rgb), 0.1); border-color: var(--primary-color); }
         .episode-item .ep-number { font-weight: 600; font-size: 1.1rem; }
         .episode-item .ep-desc { font-size: 0.9rem; color: var(--color-text-muted); }
-        .episode-thumbnail { width: 120px; height: 70px; object-fit: cover; border-radius: 5px; flex-shrink: 0; }
-        .episode-number { font-size: 1.2rem; font-weight: 700; width: 40px; text-align: center; flex-shrink: 0; }
+        .episode-thumbnail { width: 70px; height: 40px; object-fit: cover; border-radius: 5px; flex-shrink: 0; }
 
         .download-list table { width: 100%; border-collapse: collapse; }
         .download-list th, .download-list td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
@@ -435,19 +421,43 @@
         
         /* Placeholder for Sidebar content */
         .drama-info-widget { padding: 20px; }
-        .info-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; }
+        .info-title-sidebar { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; } /* Changed class name for consistency */
         .info-details p { font-size: 0.9rem; padding: 8px 0; border-bottom: 1px solid var(--border-color); }
         .info-details p:last-child { border-bottom: none; }
         .info-details span { color: var(--color-text-muted); display: inline-block; width: 110px; }
         .info-poster img { border-radius: 8px; margin-bottom: 15px; }
 
-        /* Responsive Styles (Adapted) */
-        @media (max-width: 992px) { 
-            .watch-layout { grid-template-columns: 1fr; } 
+        /* Responsive Styles (From gachiakuta.html to meet mobile view request) */
+        @media (max-width: 992px) {
+            .main-header .search-bar { display: none; } /* Hide desktop search bar on tablet/mobile */
+            .hero-content h1 { font-size: 3rem; }
+            .review-main-content { grid-template-columns: 1fr; }
+            .left-sidebar { align-items: center; text-align: center; }
+            .movie-poster { max-width: 300px; }
+            .info-panel { grid-template-columns: 1fr; }
+            .info-details li { justify-content: center; }
+            .watchlist-section button { max-width: 300px; }
+
+            /* Watch Page collapse (gachiakuta.html style) */
+            .watch-layout { grid-template-columns: 1fr; padding: 15px; } 
             .episode-title { font-size: 1.4rem; } 
             .watch-section { padding: 15px; }
         }
         @media (max-width: 576px) { 
+            .hero-banner { display: none; } 
+            .mobile-hero-buttons { 
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+                max-width: 300px; 
+                margin-top: 1rem; 
+            }
+            .mobile-hero-buttons .btn { width: 100%; }
+            .photos-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+            .characters-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+            
+            /* Watch Page mobile styling (gachiakuta.html style) */
             .watch-section { padding: 10px; }
             .episode-title { font-size: 1.2rem; }
             .download-list thead { display: none; } 
@@ -468,6 +478,13 @@
             <a href="movies.html">Movies</a>
             <a href="categories.html">Genre</a>
         </nav>
+        <div class="main-header .search-bar" style="display: none;">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="main-header .user-profile" style="display: none;">
+            <img src="profile.jpg" alt="User Profile">
+        </div>
     </header>
 
     <main>
@@ -600,7 +617,7 @@
                 <div class="sidebar-col">
                     <div class="widget drama-info-widget">
                         <div class="info-poster"><img id="sidebar-poster" src="" alt="Anime Poster"></div>
-                        <h2 class="info-title" id="sidebar-title"></h2>
+                        <h2 class="info-title-sidebar" id="sidebar-title"></h2>
                         <div class="info-details">
                             <p><span>Type:</span> <span id="sidebar-type"></span></p>
                             <p><span>Episodes:</span> <span id="sidebar-episodes"></span></p>
@@ -623,7 +640,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- Mock Data: Gachiakuta for the review page ---
+            // --- Data: Gachiakuta (Using gachiakuta.html data which is more complete with sidebar info) ---
             const selectedAnime = {
                 id: 1, title: 'Gachiakuta', title_japanese: 'ガチアクタ',
                 cast: ['Rudo (VA: TBD)', 'Zanka (VA: TBD)', 'Riyo (VA: TBD)'],
@@ -655,7 +672,7 @@
                 ]
             };
 
-            // --- SEPARATE EPISODE DATA CONSTANT (As requested) ---
+            // --- EPISODE DATA (From gachiakuta.html, keeping original episode data for functional consistency) ---
             const episodeData = [
                 { number: 1, title: 'Course Nº 1 Gochujang Butter Bibimbap', videoUrl: 'https://multiembed.mov/?video_id=tt32612521&s=1&e=1', thumbnail: 'https://a.storyblok.com/f/178900/960x540/2d397ddd7f/gachiakuta-episode-1.jpg/m/filters:quality(95)format(webp)', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, 
                 { number: 2, title: 'Course Nº 2 Sous Vide Cuisine', videoUrl: 'https://multiembed.mov/?video_id=tt32612521&s=1&e=2', thumbnail: 'https://a.storyblok.com/f/178900/960x540/2d397ddd7f/gachiakuta-episode-1.jpg/m/filters:quality(95)format(webp)', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, 
