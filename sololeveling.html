@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review & Watch Solo Leveling - Anikan</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* --- Gachiakuta Review Page Styles (Combined/Adjusted from gachiakuta.html for structure) --- */
+        :root {
+            --color-background: #100f14;
+            --color-card: #1c1b22;
+            --color-text: #e0e0e0;
+            --color-text-muted: #a0a0a0;
+            --color-primary: #9D4EDD;
+            --color-primary-light: #c77dff;
+            --font-family: 'Poppins', sans-serif;
+            --rating-color: #57D64B; /* Green for rating */
+            --border-color: #2c2c34;
+            /* Added for Watch Section */
+            --primary-color: #9D4EDD;
+            --primary-color-rgb: 157, 78, 221;
+            --surface-color-darker: #1A1A1D;
+            --surface-color-lighter: #2a2a2d;
+            --background-color-watch: #0B0C10; 
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--color-background); color: var(--color-text); font-family: var(--font-family); }
+        a { color: var(--color-text); text-decoration: none; }
+        img { max-width: 100%; display: block; }
+
+        .main-header {
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            z-index: 1000;
+            background-color: rgba(16,15,20,0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .main-header .logo { font-size: 1.8rem; font-weight: 700; color: #fff; }
+        .main-header .logo span { color: var(--color-primary); }
+        .main-header .nav-links a { margin-left: 2rem; color: var(--color-text-muted); font-weight: 500; transition: color 0.3s ease; }
+        .main-header .nav-links a:hover { color: var(--color-primary); }
+        .main-header .search-bar { position: relative; } /* Re-enabled for desktop review layout */
+        .main-header .search-bar input {
+            background-color: var(--color-card);
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            color: var(--color-text);
+            font-family: var(--font-family);
+            font-size: 0.9rem;
+            width: 200px;
+            transition: width 0.3s ease;
+        }
+        .main-header .search-bar input:focus { width: 250px; outline: none; }
+        .main-header .search-bar .fa-search { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); }
+        .main-header .user-profile { margin-left: 1.5rem; }
+
+
+        /* --- Review Page Layout --- */
+        .review-wrapper { transition: opacity 0.4s ease, visibility 0.4s ease; }
+        .watch-section { display: none; opacity: 0; transition: opacity 0.4s ease; background-color: var(--background-color-watch);}
+        body.watching-active .review-wrapper { display: none; opacity: 0; visibility: hidden; }
+        body.watching-active .watch-section { display: block; opacity: 1; padding: 2rem 5%; }
+
+        .hero-banner {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            height: 90vh;
+            display: flex;
+            align-items: flex-end;
+            padding: 0 5% 3rem;
+        }
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top, var(--color-background) 0%, transparent 50%);
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            max-width: 800px;
+        }
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 1rem;
+            color: var(--color-text-muted);
+            margin-bottom: 1.5rem;
+        }
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn:hover { transform: translateY(-3px); }
+        .btn-primary { background-color: var(--color-primary); color: #fff; }
+        .btn-secondary { background-color: rgba(255,255,255,0.15); color: #fff; }
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .mobile-hero-buttons {
+            display: none; /* Hidden by default */
+        }
+
+        .review-main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: flex-start;
+        }
+
+        .left-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .movie-poster {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .watchlist-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            align-items: center;
+        }
+        .watchlist-section button {
+            background-color: rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .watchlist-section button:hover { background-color: rgba(255,255,255,0.2); }
+        .watchlist-section button.added, .btn.added {
+            background-color: var(--rating-color);
+            border-color: var(--rating-color);
+            cursor: not-allowed;
+            color: #fff;
+        }
+        .user-rating-stars {
+            font-size: 1.8rem;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .user-rating-stars .fas { color: gold; }
+
+
+        .info-panel {
+            background-color: var(--color-card);
+            border-radius: 12px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .info-details ul { list-style: none; padding: 0;}
+        .info-details li { margin-bottom: 0.8rem; color: var(--color-text-muted); display: flex;}
+        .info-details li strong { color: var(--color-text); display: inline-block; min-width: 80px; margin-right: 10px;}
+        .info-details li span { flex: 1; }
+
+        .info-rating-circle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .rating-circle-bg {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: conic-gradient(var(--rating-color) calc(var(--rating-percent, 0) * 1%), var(--border-color) 0);
+            margin-bottom: 0.5rem;
+        }
+        .rating-circle-inner {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--color-card);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .rating-score { font-size: 2.5rem; font-weight: 700; }
+        .rating-max { font-size: 0.9rem; color: var(--color-text-muted); }
+        .personal-rating-note { font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem; }
+
+
+        .section-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; color: #fff; }
+
+        .synopsis-panel {
+            margin-bottom: 2rem;
+            background-color: var(--color-card);
+            padding: 2rem;
+            border-radius: 12px;
+        }
+        .synopsis-panel p { line-height: 1.8; color: var(--color-text-muted); }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .photos-grid img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.2s ease;
+        }
+        .photos-grid img:hover { transform: scale(1.03); }
+
+        .trailer-panel .player-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            background-color: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        .trailer-panel .player-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .official-stream-grid {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            background-color: var(--color-card);
+            padding: 2rem;
+            border-radius: 12px;
+        }
+        .official-stream-grid .stream-logo img {
+            height: 35px;
+            width: auto;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        .official-stream-grid .stream-logo:hover img {
+            opacity: 1;
+        }
+
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .character-card {
+            background-color: var(--color-background);
+            border-radius: 8px;
+            overflow: hidden;
+            text-align: center;
+            padding-bottom: 1rem;
+        }
+        .character-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 0.8rem;
+        }
+        .character-card h4 { font-size: 1rem; margin-bottom: 0.2rem; }
+        .character-card p { font-size: 0.85rem; color: var(--color-text-muted); }
+        
+        /* --- Watch Section (From gachiakuta.html, requested mobile view structure) --- */
+        .watch-layout { 
+            display: grid; 
+            grid-template-columns: 2fr 1fr; 
+            gap: 20px; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+        }
+
+        .main-content-col { min-width: 0; }
+        .video-player-container {
+            position: relative;
+            width: 100%;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            border: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        
+        #video-player-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .episode-meta { padding: 0 0 15px 0; }
+        .episode-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 15px; }
+        .episode-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+
+        .action-btn, .download-btn {
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .action-btn:hover:not(:disabled), .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+        .action-btn:disabled {
+            background-color: #222;
+            color: #555;
+            cursor: not-allowed;
+        }
+        .action-btn {
+            background: linear-gradient(180deg, #4a4a52, #313136);
+            color: var(--color-text);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .action-btn:hover:not(:disabled) {
+            background: linear-gradient(180deg, #5a5a62, #414146);
+        }
+
+        #next-ep-btn {
+            background: linear-gradient(180deg, #ffffff, #e0e0e0);
+            color: #0B0C10;
+            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+        }
+        #next-ep-btn:hover:not(:disabled) {
+            background: linear-gradient(180deg, #f0f0f0, #d0d0d0);
+        }
+
+        .download-btn {
+            background: linear-gradient(180deg, hsl(270, 77%, 60%), hsl(270, 77%, 50%)); /* Adjusted to Gachiakuta's purple */
+            color: white;
+            box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.25);
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+        .download-btn:hover {
+             background: linear-gradient(180deg, hsl(270, 77%, 65%), hsl(270, 77%, 55%));
+        }
+
+        /* --- Episode List / Downloads --- */
+        .episodes-list-widget .episodes-list { max-height: 400px; overflow-y: auto; padding-right: 10px; list-style: none; }
+        .episode-item { display: flex; align-items: center; gap: 15px; padding: 10px; border-radius: 5px; margin-bottom: 5px; cursor: pointer; border: 1px solid transparent; transition: all 0.2s ease; }
+        .episode-item:hover { background-color: var(--surface-color-lighter); border-color: var(--border-color); }
+        .episode-item.current { background: rgba(var(--primary-color-rgb), 0.1); border-color: var(--primary-color); }
+        .episode-item .ep-number { font-weight: 600; font-size: 1.1rem; }
+        .episode-item .ep-desc { font-size: 0.9rem; color: var(--color-text-muted); }
+        .episode-thumbnail { width: 70px; height: 40px; object-fit: cover; border-radius: 5px; flex-shrink: 0; }
+
+        .download-list table { width: 100%; border-collapse: collapse; }
+        .download-list th, .download-list td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .download-list th { color: var(--color-text-muted); font-weight: 500; }
+        
+        /* Placeholder for Sidebar content */
+        .drama-info-widget { padding: 20px; }
+        .info-title-sidebar { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; } /* Changed class name for consistency */
+        .info-details p { font-size: 0.9rem; padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+        .info-details p:last-child { border-bottom: none; }
+        .info-details span { color: var(--color-text-muted); display: inline-block; width: 110px; }
+        .info-poster img { border-radius: 8px; margin-bottom: 15px; }
+
+        /* Responsive Styles (From gachiakuta.html to meet mobile view request) */
+        @media (max-width: 992px) {
+            .main-header .search-bar { display: none; } /* Hide desktop search bar on tablet/mobile */
+            .hero-content h1 { font-size: 3rem; }
+            .review-main-content { grid-template-columns: 1fr; }
+            .left-sidebar { align-items: center; text-align: center; }
+            .movie-poster { max-width: 300px; }
+            .info-panel { grid-template-columns: 1fr; }
+            .info-details li { justify-content: center; }
+            .watchlist-section button { max-width: 300px; }
+
+            /* Watch Page collapse (gachiakuta.html style) */
+            .watch-layout { grid-template-columns: 1fr; padding: 15px; } 
+            .episode-title { font-size: 1.4rem; } 
+            .watch-section { padding: 15px; }
+        }
+        @media (max-width: 576px) { 
+            .hero-banner { display: none; } 
+            .mobile-hero-buttons { 
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+                max-width: 300px; 
+                margin-top: 1rem; 
+            }
+            .mobile-hero-buttons .btn { width: 100%; }
+            .photos-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+            .characters-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+            
+            /* Watch Page mobile styling (gachiakuta.html style) */
+            .watch-section { padding: 10px; }
+            .episode-title { font-size: 1.2rem; }
+            .download-list thead { display: none; } 
+            .download-list tr { display: block; border-bottom: 2px solid var(--primary-color); margin-bottom: 15px; padding-bottom: 15px; } 
+            .download-list tr:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; } 
+            .download-list td { display: block; text-align: right; font-size: 0.9rem; border-bottom: none; padding: 5px 8px; position: relative; } 
+            .download-list td::before { content: attr(data-label); position: absolute; left: 8px; font-weight: bold; color: var(--color-text-muted); text-align: left; } 
+            .action-btn { padding: 6px 12px; font-size: 0.9rem; } 
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="home.html" class="logo">Ani<span>kan</span></a>
+        <nav class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="movies.html">Movies</a>
+            <a href="categories.html">Genre</a>
+        </nav>
+        <div class="main-header .search-bar" style="display: none;">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="main-header .user-profile" style="display: none;">
+            <img src="profile.jpg" alt="User Profile">
+        </div>
+    </header>
+
+    <main>
+        <div class="review-wrapper" id="review-wrapper">
+            <section class="hero-banner" id="hero-banner-section">
+                <div class="hero-content">
+                    <h1 id="anime-title-main"></h1>
+                    <div class="hero-meta">
+                        <span id="hero-meta-year"></span>
+                        <span>&bull;</span>
+                        <span id="hero-meta-type"></span>
+                        <span>&bull;</span>
+                        <span id="hero-meta-duration"></span>
+                    </div>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" id="play-button"><i class="fas fa-play"></i>Watch</button>
+                        <button class="btn btn-secondary" id="trailer-button"><i class="fas fa-film"></i> Trailer</button>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="review-main-content">
+                <div class="left-sidebar">
+                    <img id="anime-poster" class="movie-poster" src="" alt="Anime Poster">
+                    
+                    <div class="mobile-hero-buttons">
+                        <button class="btn btn-primary" id="mobile-play-button"><i class="fas fa-play"></i>Watch</button>
+                        <button class="btn btn-secondary" id="mobile-trailer-button"><i class="fas fa-film"></i> Trailer</button>
+                    </div>
+                    
+                    <div class="watchlist-section">
+                        <button id="add-to-watchlist-btn"><i class="fas fa-plus"></i> Add to Watchlist</button>
+                        <div class="user-rating-stars" id="user-rating-stars">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="info-panel">
+                        <div class="info-details">
+                            <ul>
+                                <li><strong>Title:</strong> <span id="info-title"></span></li>
+                                <li><strong>Cast:</strong> <span id="info-cast"></span></li>
+                                <li><strong>Creator:</strong> <span id="info-creator"></span></li>
+                                <li><strong>Genre:</strong> <span id="info-genre"></span></li>
+                            </ul>
+                        </div>
+                        <div class="info-rating-circle">
+                            <div class="rating-circle-bg" id="rating-circle">
+                                <div class="rating-circle-inner">
+                                    <span class="rating-score" id="rating-score"></span>
+                                    <span class="rating-max">out of 10</span>
+                                </div>
+                            </div>
+                            <p class="personal-rating-note">note: personal rating only</p>
+                        </div>
+                    </div>
+
+                    <div class="synopsis-panel">
+                        <h2 class="section-title">Synopsis</h2>
+                        <p id="synopsis-text"></p>
+                    </div>
+
+                    <h2 class="section-title">Photos</h2>
+                    <div class="photos-grid" id="photos-grid"></div>
+
+                    <h2 class="section-title">Official Trailer</h2>
+                    <div class="trailer-panel">
+                        <div class="player-container">
+                            <iframe id="trailer-player" src="" title="Official Trailer Player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+                         </div>
+                    </div>
+
+                    <h2 class="section-title">Main Characters</h2>
+                    <div class="characters-grid" id="character-list"></div>
+
+                    <h2 class="section-title">Who is this Anime for?</h2>
+                    <div class="synopsis-panel">
+                        <p id="anime-audience"></p>
+                    </div>
+
+                    <h2 class="section-title">Where to Watch Officially</h2>
+                    <div class="official-stream-grid" id="official-streams"></div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="watch-section" id="watch-section">
+            <div class="watch-layout" id="watch-layout">
+                <div class="main-content-col">
+                    <div class="video-player-container">
+                        <iframe 
+                            id="video-player-iframe"
+                            src="" 
+                            title="Video Player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <div class="episode-meta">
+                        <h1 class="episode-title" id="current-episode-title"></h1>
+                        <div class="episode-actions">
+                            <button class="action-btn" id="prev-ep-btn"><i class="fas fa-arrow-left"></i>Prev</button>
+                            <button class="action-btn" id="next-ep-btn">Next<i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="widget episodes-list-widget">
+                        <h2 class="widget-title">Episodes</h2>
+                        <div class="episodes-list" id="episodes-list-container">
+                        </div>
+                    </div>
+                    
+                    <div class="widget download-widget">
+                        <h2 class="widget-title">Download</h2>
+                        <div class="download-list">
+                            <table>
+                                <thead>
+                                    <tr><th>Episode</th><th>Quality</th><th>Video</th><th>Subtitles</th></tr>
+                                </thead>
+                                <tbody id="download-links-tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-col">
+                    <div class="widget drama-info-widget">
+                        <div class="info-poster"><img id="sidebar-poster" src="" alt="Anime Poster"></div>
+                        <h2 class="info-title-sidebar" id="sidebar-title"></h2>
+                        <div class="info-details">
+                            <p><span>Type:</span> <span id="sidebar-type"></span></p>
+                            <p><span>Episodes:</span> <span id="sidebar-episodes"></span></p>
+                            <p><span>Duration:</span> <span id="sidebar-duration"></span></p>
+                            <p><span>Studio:</span> <span id="sidebar-studio"></span></p>
+                            <p><span>Score:</span> <span id="sidebar-score"></span></p>
+                            <p><span>Genres:</span> <span id="sidebar-genres"></span></p>
+                        </div>
+                    </div>
+                    <div class="widget recommendations-widget">
+                        <h2 class="widget-title">More from Anikan</h2>
+                        <div class="recommendations-list">
+                           <p style="color: var(--color-text-muted); font-size: 0.9rem;">Recommendation list placeholder.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- DATA: SOLO LEVELING ---
+            const selectedAnime = {
+                id: 3, 
+                title: 'Solo Leveling', 
+                title_japanese: '俺だけレベルアップな件',
+                cast: ['Sung Jinwoo (VA: Taito Ban)', 'Yoo Jinho (VA: Genta Nakamura)', 'Cha Haein (VA: Reina Ueda)', 'Lee Joohee (VA: Rina Honizumi)'], /* cite: 2.1 */
+                characters: [
+                    { name: 'Sung Jinwoo', image: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c41a78ab-dd95-400b-a920-6b6b353b1bc0/dgvblrg-1e5e7e56-42d1-44e4-91ce-8c9ee37dba6c.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9jNDFhNzhhYi1kZDk1LTQwMGItYTkyMC02YjZiMzUzYjFiYzAvZGd2YmxyZy0xZTVlN2U1Ni00MmQxLTQ0ZTQtOTFjZS04YzllZTM3ZGJhNmMucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.gLoWNAlqi8DixjYdUnZNuWS6mwtEYbMC74IBifzihmg' }, // Placeholder image
+                    { name: 'Cha Haein', image: 'https://static.wikia.nocookie.net/solo-leveling-arise/images/9/96/Cha_Hae-In_Icon.png/revision/latest/scale-to-width-down/250?cb=20250404055336' }, // Placeholder image
+                    { name: 'Yoo Jinho', image: 'https://img.gamdb.com/character/large/65e47e4c636798274fe8223a65f9ab5c-ns.png' }, // Placeholder image
+                    { name: 'Igris (Shadow)', image: 'https://static.wikia.nocookie.net/solo-leveling-arise/images/7/73/Igris_Common.png/revision/latest?cb=20241012192238' } // Placeholder image (A key character/shadow)
+                ],
+                creator: 'Chugong (Web Novel)', /* cite: 1.4, 2.4 */
+                studio: 'A-1 Pictures', /* cite: 1.4, 2.4 */
+                type: 'TV Series', 
+                episodes: 25, /* Total of Season 1 (12) and Season 2 (13) */ /* cite: 1.4, 3.4 */
+                genres: ['Action', 'Adventure', 'Fantasy', 'Isekai (Genre inspiration)'], /* cite: 5.2, 5.3 */
+                duration: '24 min', /* cite: 5.1 */
+                rating: 8.5, /* Placeholder based on general popularity */
+                description: 'A decade ago, "gates" connecting the real world to alternate dimensions appeared, giving rise to "Hunters" with supernatural abilities to fight the monsters within. Sung Jinwoo, notoriously weak and nicknamed "The Weakest Hunter of All Mankind" (E-Rank), struggles to survive in low-level dungeons to support his family. After barely surviving a deadly "Double Dungeon," a mysterious entity known as the System chooses him as its sole "Player". This grants him the unique ability to "level up" without limit and gain new powers, eventually becoming the Shadow Monarch, a powerful necromancer. He now embarks on a solo journey to level up and uncover the secrets behind the gates and his extraordinary new abilities.',
+                audience: 'This anime is perfect for fans of action fantasy, leveling systems, and stories featuring an overwhelmingly powerful protagonist (OP MC). It is known for its addictive progression system, intense battles, and dark fantasy elements. Fans of manhwa or webtoons will enjoy this high-quality adaptation of the global phenomenon.',
+                coverImage: 'https://images.justwatch.com/poster/321046122/s718/season-2.jpg', // Placeholder
+                bgImage: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', // 
+                releaseYear: 2024, /* cite: 1.4 */
+                trailer_url: 'https://www.youtube.com/embed/HkIKAnwLZCw', /* Official Trailer 4 */ /* cite: 4.4 */
+                official_streams: [
+                    { platform: 'Crunchyroll', logo: 'https://cdn.worldvectorlogo.com/logos/crunchyroll-1.svg' }, /* cite: 5.2 */
+                    { platform: 'Prime Video', logo: 'https://m.media-amazon.com/images/G/03/digital/video/acquisition/logo/pv_logo_white._CB548648733_.png' } /* cite: 5.1 */
+                ],
+                gallery: [
+                    'https://th-i.thgim.com/public/entertainment/movies/7t4bnp/article69393138.ece/alternates/FREE_1200/solo-leveling-s2-25.jpeg', // Placeholder
+                    'https://static0.cbrimages.com/wordpress/wp-content/uploads/2025/04/solo-leveling-sung-jinwoo-with-his-shadow-soldiers-behind-him.jpg?w=1600&h=900&fit=crop', // Placeholder
+                    'https://www.correiobraziliense.com.br/cbradar/wp-content/uploads/2025/02/Design-sem-nome-17.png', // Placeholder
+                    'https://cdn1.naekranie.pl/media%2Fcache%2Farticle-cover%2F2025%2F04%2Fsolo5_67ebaa4c294a1.webp', // Placeholder
+                    'https://static0.cbrimages.com/wordpress/wp-content/uploads/2024/12/solo-leveling-season-2.jpg?w=1200&h=675&fit=crop', // Placeholder
+                    'https://i.redd.it/official-solo-leveling-episode-22-season-2-episode-10-v0-ye3v62vcwome1.jpg?width=1920&format=pjpg&auto=webp&s=1df7a11ba06a42f52aa8f793d5ed77142cde2173'  // Placeholder
+                ]
+            };
+
+            // --- FULL EPISODE DATA (Season 1 & 2) ---
+            const episodeData = [
+                // Season 1 (2024): Solo Leveling (Episodes 1-12)
+                { number: 1, title: 'I\'m Used to It', videoUrl: 'https://multiembed.mov/?video_id=tt21209876&s=1&e=1', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 2, title: 'If I Had One More Chance', videoUrl: 'https://multiembed.mov/?video_id=tt21209876&s=1&e=2', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 3, title: 'It\'s Like a Game', videoUrl: 'https://multiembed.mov/?video_id=tt21209876&s=1&e=3', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 4, title: 'I\'ve Gotta Get Stronger', videoUrl: 'https://multiembed.mov/?video_id=tt21209876&s=1&e=4', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 5, title: 'A Pretty Good Deal', videoUrl: 'https://multiembed.mov/?video_id=tt21209876&s=1&e=5', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 6, title: 'The Real Hunt Begins', videoUrl: 'https://multiembed.mov/?video_id=tt21209876&s=1&e=6', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 7, title: 'Let\'s See How Far I Can Go', videoUrl: 'https://multiembed.mov/?video_id=tt21209876&s=1&e=7', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 8, title: 'This Is Frustrating', videoUrl: 'https://multiembed.mov/?video_id=tt21209876&s=1&e=8', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 9, title: 'You\'ve Been Hiding Your Skills', videoUrl: 'https://multiembed.mov/?video_id=tt21209876&s=1&e=9', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 10, title: 'What Is This, a Picnic?', videoUrl: 'https://multiembed.mov/?video_id=tt21209876&s=1&e=10', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 11, title: 'A Knight Who Defends an Empty Throne', videoUrl: 'https://multiembed.mov/?video_id=tt21209876&s=1&e=11', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 12, title: 'Arise', videoUrl: 'https://multiembed.mov/?video_id=tt21209876&s=1&e=12', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+
+                // Season 2 (2025): Arise from the Shadow (Episodes 13-25)
+                { number: 13, title: 'You Aren\'t E-Rank, Are You?', videoUrl: 'https://placeholder.video/sl/s2/e1', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 14, title: 'I Suppose You Aren\'t Aware', videoUrl: 'https://placeholder.video/sl/s2/e2', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 15, title: 'Still a Long Way to Go', videoUrl: 'https://placeholder.video/sl/s2/e3', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 16, title: 'I Need to Stop Faking', videoUrl: 'https://placeholder.video/sl/s2/e4', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 17, title: 'This Is What We\'re Trained to Do', videoUrl: 'https://placeholder.video/sl/s2/e5', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 18, title: 'Don\'t Look Down on My Guys', videoUrl: 'https://placeholder.video/sl/s2/e6', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 19, title: 'The 10th S-Rank Hunter', videoUrl: 'https://placeholder.video/sl/s2/e7', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 20, title: 'Looking Up Was Tiring Me Out', videoUrl: 'https://placeholder.video/sl/s2/e8', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 21, title: 'It Was All Worth It', videoUrl: 'https://placeholder.video/sl/s2/e9', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 22, title: 'We Need a Hero', videoUrl: 'https://placeholder.video/sl/s2/e10', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 23, title: 'It\'s Going to Get Even More Intense', videoUrl: 'https://placeholder.video/sl/s2/e11', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 24, title: 'Are You the King of Humans?', videoUrl: 'https://placeholder.video/sl/s2/e12', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, /* cite: 3.4 */
+                { number: 25, title: 'On to the Next Target', videoUrl: 'https://placeholder.video/sl/s2/e13', thumbnail: 'https://static0.colliderimages.com/wordpress/wp-content/uploads/2025/01/solo-leveling-season-2-promo-art.png', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' } /* cite: 3.4 */
+            ];
+            
+            // --- Page Elements ---
+            const videoPlayer = document.getElementById('video-player-iframe');
+            const episodesListContainer = document.getElementById('episodes-list-container');
+            const downloadLinksTbody = document.getElementById('download-links-tbody');
+            const currentEpisodeTitle = document.getElementById('current-episode-title');
+            const prevBtn = document.getElementById('prev-ep-btn');
+            const nextBtn = document.getElementById('next-ep-btn');
+
+            // --- Button Elements ---
+            const playButton = document.getElementById('play-button');
+            const mobilePlayButton = document.getElementById('mobile-play-button');
+            const trailerButton = document.getElementById('trailer-button');
+            const mobileTrailerButton = document.getElementById('mobile-trailer-button');
+            const addToWatchlistBtn = document.getElementById('add-to-watchlist-btn');
+
+            let currentEpisodeIndex = 0; // Index starting at 0
+            const totalEpisodes = episodeData.length;
+
+            function populateReviewSection() {
+                // ... (Original Review Population Logic - Kept same)
+                document.title = `Review & Watch ${selectedAnime.title} - Anikan`;
+                document.getElementById('hero-banner-section').style.backgroundImage = `url('${selectedAnime.bgImage}')`;
+                document.getElementById('anime-title-main').textContent = selectedAnime.title;
+                document.getElementById('hero-meta-year').textContent = selectedAnime.releaseYear;
+                document.getElementById('hero-meta-type').textContent = selectedAnime.type;
+                document.getElementById('hero-meta-duration').textContent = `${selectedAnime.duration}`;
+                document.getElementById('anime-poster').src = selectedAnime.coverImage;
+                document.getElementById('info-title').textContent = selectedAnime.title;
+                document.getElementById('info-cast').textContent = selectedAnime.cast.join(', ');
+                document.getElementById('info-creator').textContent = selectedAnime.creator;
+                document.getElementById('info-genre').textContent = selectedAnime.genres.join(', ');
+                const ratingCircle = document.getElementById('rating-circle');
+                document.getElementById('rating-score').textContent = selectedAnime.rating;
+                ratingCircle.style.setProperty('--rating-percent', selectedAnime.rating * 10);
+                document.getElementById('synopsis-text').textContent = selectedAnime.description;
+                document.getElementById('photos-grid').innerHTML = selectedAnime.gallery.map(img => `<img src="${img}" alt="Gallery image">`).join('');
+                document.getElementById('trailer-player').src = selectedAnime.trailer_url;
+                document.getElementById('character-list').innerHTML = selectedAnime.characters.map(char =>
+                    `<div class="character-card"><img src="${char.image}" alt="${char.name}"><h4>${char.name}</h4></div>`
+                ).join('');
+                document.getElementById('anime-audience').textContent = selectedAnime.audience;
+                const officialStreamsContainer = document.getElementById('official-streams');
+                officialStreamsContainer.innerHTML = selectedAnime.official_streams.map(stream =>
+                    `<a href="#" class="stream-logo"><img src="${stream.logo}" alt="${stream.platform}"></a>`
+                ).join('');
+                
+                // Populate Sidebar Info
+                document.getElementById('sidebar-poster').src = selectedAnime.coverImage;
+                document.getElementById('sidebar-title').textContent = selectedAnime.title;
+                document.getElementById('sidebar-type').textContent = selectedAnime.type;
+                document.getElementById('sidebar-episodes').textContent = selectedAnime.episodes;
+                document.getElementById('sidebar-duration').textContent = selectedAnime.duration;
+                document.getElementById('sidebar-studio').textContent = selectedAnime.studio;
+                document.getElementById('sidebar-score').textContent = selectedAnime.rating + '/10';
+                document.getElementById('sidebar-genres').textContent = selectedAnime.genres.join(', ');
+            }
+            
+            // --- NEW LOGIC: Using episodeData constant ---
+
+            function updateUI(episodeIndex) {
+                currentEpisodeIndex = parseInt(episodeIndex, 10);
+                const episode = episodeData[currentEpisodeIndex];
+                
+                if (!episode) return;
+                
+                const episodeNumber = episode.number;
+                // Use the full title since Solo Leveling titles are concise
+                const displayTitle = episode.title; 
+
+                currentEpisodeTitle.textContent = `You are watching Episode ${episodeNumber}: ${displayTitle}`;
+                
+                // 1. Update Video Player (Using placeholder URL)
+                videoPlayer.src = episode.videoUrl;
+
+                // 2. Update Download Links
+                downloadLinksTbody.innerHTML = '';
+                const downloadQualities = Object.keys(episode.downloads);
+                const subtitleUrl = episode.subtitleUrl || '#';
+                
+                if (downloadQualities.length > 0) {
+                     downloadQualities.forEach(quality => {
+                        const downloadUrl = episode.downloads[quality];
+                        downloadLinksTbody.innerHTML += `
+                            <tr>
+                                <td data-label="Episode">Episode ${episodeNumber}</td>
+                                <td data-label="Quality">${quality}</td>
+                                <td data-label="Video"><a href="${downloadUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-download"></i> Download</a></td>
+                                <td data-label="Subtitles"><a href="${subtitleUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-closed-captioning"></i> Download</a></td>
+                            </tr>`;
+                    });
+                } else {
+                    downloadLinksTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-text-muted);">Download links not available for this episode.</td></tr>`;
+                }
+                
+                // 3. Update Episode List Active State and scroll
+                episodesListContainer.querySelectorAll('.episode-item').forEach(link => link.classList.remove('current'));
+                const activeEpisodeLink = episodesListContainer.querySelector(`.episode-item[data-episode='${episodeNumber}']`);
+                if (activeEpisodeLink) {
+                    activeEpisodeLink.classList.add('current');
+                    activeEpisodeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+
+                // 4. Update Navigation Buttons
+                prevBtn.disabled = episodeNumber === 1;
+                nextBtn.disabled = episodeNumber === totalEpisodes;
+            }
+
+            function generateEpisodeList() {
+                episodesListContainer.innerHTML = '';
+                episodeData.forEach((ep, index) => {
+                    const episodeNumber = ep.number;
+                    const episodeTitle = ep.title;
+                    
+                    // Add Season Divider for clarity
+                    let seasonTitle = '';
+                    if (episodeNumber === 1) seasonTitle = 'Season 1 (2024)';
+                    if (episodeNumber === 13) seasonTitle = 'Season 2: Arise from the Shadow (2025)';
+
+                    if (seasonTitle) {
+                        episodesListContainer.innerHTML += `<h3 style="color:var(--color-primary); font-size:1.1rem; padding:10px 0 5px 0; margin-top: 15px; border-bottom: 1px solid var(--border-color);">${seasonTitle}</h3>`;
+                    }
+
+                    const itemHTML = `
+                        <a class="episode-item" data-episode="${episodeNumber}" data-episode-index="${index}">
+                            <img src="${ep.thumbnail}" alt="Ep ${episodeNumber}" class="episode-thumbnail">
+                            <div class="ep-info">
+                                <p class="ep-number">Episode ${episodeNumber}</p>
+                                <p class="ep-desc">${episodeTitle}</p>
+                            </div>
+                        </a>
+                    `;
+                    episodesListContainer.innerHTML += itemHTML;
+                });
+                
+                // Attach click listeners to the generated list items
+                episodesListContainer.querySelectorAll('.episode-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        updateUI(item.dataset.episodeIndex);
+                    });
+                });
+            }
+
+
+            // --- Event Handlers ---
+            const handlePlayClick = () => {
+                document.body.classList.add('watching-active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                generateEpisodeList(); // Generate list and attach click handlers
+                
+                // Initialize the player with the first episode
+                if (episodeData.length > 0) {
+                    updateUI(0);
+                }
+            };
+            
+            const handleTrailerClick = () => {
+                const trailerElement = document.getElementById('trailer-player');
+                if (trailerElement) {
+                    trailerElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            };
+            
+            const handleAddToWatchlist = async () => {
+                const username = localStorage.getItem('loggedInUser');
+                if (!username) {
+                    alert('Please log in to add to your watchlist.');
+                    window.location.href = '/login.html';
+                    return;
+                }
+            };
+
+            // --- Navigation Event Listeners ---
+            prevBtn.addEventListener('click', () => { 
+                if (currentEpisodeIndex > 0) updateUI(currentEpisodeIndex - 1); 
+            });
+            nextBtn.addEventListener('click', () => { 
+                if (currentEpisodeIndex < totalEpisodes - 1) updateUI(currentEpisodeIndex + 1); 
+            });
+
+            // --- Other Event Listeners ---
+            playButton.addEventListener('click', handlePlayClick);
+            mobilePlayButton.addEventListener('click', handlePlayClick);
+            trailerButton.addEventListener('click', handleTrailerClick);
+            mobileTrailerButton.addEventListener('click', handleTrailerClick);
+            addToWatchlistBtn.addEventListener('click', handleAddToWatchlist);
+
+            // --- Initialize Page ---
+            populateReviewSection();
+        });
+    </script>
+</body>
+</html>
