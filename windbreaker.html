@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review & Watch Wind Breaker - Anikan</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <body>
+
+    <header class="main-header">
+        <a href="home.html" class="logo">Ani<span>kan</span></a>
+        <nav class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="movies.html">Movies</a>
+            <a href="categories.html">Genre</a>
+        </nav>
+        <div class="main-header .search-bar" style="display: none;">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="main-header .user-profile" style="display: none;">
+            <img src="profile.jpg" alt="User Profile">
+        </div>
+    </header>
+
+    <main>
+        <div class="review-wrapper" id="review-wrapper">
+            <section class="hero-banner" id="hero-banner-section">
+                <div class="hero-content">
+                    <h1 id="anime-title-main"></h1>
+                    <div class="hero-meta">
+                        <span id="hero-meta-year"></span>
+                        <span>&bull;</span>
+                        <span id="hero-meta-type"></span>
+                        <span>&bull;</span>
+                        <span id="hero-meta-duration"></span>
+                    </div>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" id="play-button"><i class="fas fa-play"></i>Watch</button>
+                        <button class="btn btn-secondary" id="trailer-button"><i class="fas fa-film"></i> Trailer</button>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="review-main-content">
+                <div class="left-sidebar">
+                    <img id="anime-poster" class="movie-poster" src="" alt="Anime Poster">
+                    
+                    <div class="mobile-hero-buttons">
+                        <button class="btn btn-primary" id="mobile-play-button"><i class="fas fa-play"></i>Watch</button>
+                        <button class="btn btn-secondary" id="mobile-trailer-button"><i class="fas fa-film"></i> Trailer</button>
+                    </div>
+                    
+                    <div class="watchlist-section">
+                        <button id="add-to-watchlist-btn"><i class="fas fa-plus"></i> Add to Watchlist</button>
+                        <div class="user-rating-stars" id="user-rating-stars">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="info-panel">
+                        <div class="info-details">
+                            <ul>
+                                <li><strong>Title:</strong> <span id="info-title"></span></li>
+                                <li><strong>Cast:</strong> <span id="info-cast"></span></li>
+                                <li><strong>Creator:</strong> <span id="info-creator"></span></li>
+                                <li><strong>Genre:</strong> <span id="info-genre"></span></li>
+                            </ul>
+                        </div>
+                        <div class="info-rating-circle">
+                            <div class="rating-circle-bg" id="rating-circle">
+                                <div class="rating-circle-inner">
+                                    <span class="rating-score" id="rating-score"></span>
+                                    <span class="rating-max">out of 10</span>
+                                </div>
+                            </div>
+                            <p class="personal-rating-note">note: personal rating only</p>
+                        </div>
+                    </div>
+
+                    <div class="synopsis-panel">
+                        <h2 class="section-title">Synopsis</h2>
+                        <p id="synopsis-text"></p>
+                    </div>
+
+                    <h2 class="section-title">Photos</h2>
+                    <div class="photos-grid" id="photos-grid"></div>
+
+                    <h2 class="section-title">Official Trailer</h2>
+                    <div class="trailer-panel">
+                        <div class="player-container">
+                            <iframe id="trailer-player" src="" title="Official Trailer Player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+                         </div>
+                    </div>
+
+                    <h2 class="section-title">Main Characters</h2>
+                    <div class="characters-grid" id="character-list"></div>
+
+                    <h2 class="section-title">Who is this Anime for?</h2>
+                    <div class="synopsis-panel">
+                        <p id="anime-audience"></p>
+                    </div>
+
+                    <h2 class="section-title">Where to Watch Officially</h2>
+                    <div class="official-stream-grid" id="official-streams"></div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="watch-section" id="watch-section">
+            <div class="watch-layout" id="watch-layout">
+                <div class="main-content-col">
+                    <div class="video-player-container">
+                        <iframe 
+                            id="video-player-iframe"
+                            src="" 
+                            title="Video Player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <div class="EP-meta">
+                        <h1 class="EP-title" id="current-EP-title"></h1>
+                        <div class="EP-actions">
+                            <button class="action-btn" id="prev-ep-btn"><i class="fas fa-arrow-left"></i>Prev</button>
+                            <button class="action-btn" id="next-ep-btn">Next<i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="widget EPs-list-widget">
+                        <h2 class="widget-title">EPs</h2>
+                        <div class="EPs-list" id="EPs-list-container">
+                        </div>
+                    </div>
+                    
+                    <div class="widget download-widget">
+                        <h2 class="widget-title">Download (Placeholder Links)</h2>
+                        <div class="download-list">
+                            <table>
+                                <thead>
+                                    <tr><th>EP</th><th>Quality</th><th>Video</th><th>Subtitles</th></tr>
+                                </thead>
+                                <tbody id="download-links-tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-col">
+                    <div class="widget drama-info-widget">
+                        <div class="info-poster"><img id="sidebar-poster" src="" alt="Anime Poster"></div>
+                        <h2 class="info-title-sidebar" id="sidebar-title"></h2>
+                        <div class="info-details">
+                            <p><span>Type:</span> <span id="sidebar-type"></span></p>
+                            <p><span>EPs:</span> <span id="sidebar-EPs"></span></p>
+                            <p><span>Duration:</span> <span id="sidebar-duration"></span></p>
+                            <p><span>Studio:</span> <span id="sidebar-studio"></span></p>
+                            <p><span>Score:</span> <span id="sidebar-score"></span></p>
+                            <p><span>Genres:</span> <span id="sidebar-genres"></span></p>
+                        </div>
+                    </div>
+                    <div class="widget recommendations-widget">
+                        <h2 class="widget-title">More from Anikan</h2>
+                        <div class="recommendations-list">
+                           <p style="color: var(--color-text-muted); font-size: 0.9rem;">Recommendation list placeholder.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Data: Wind breaker ---
+            const selectedAnime = {
+                id: 1, title: 'Wind Breaker', title_japanese: 'ガチアクタ',
+                cast: ['Haruka Sakura', 'Kyotaro Sugishita', 'RiyoUmemiya Hajime'],
+                characters: [
+                    { name: 'Haruka Sakura', image: 'https://s1.zerochan.net/Sakura.Haruka.600.4079008.jpg' },
+                    { name: 'Kyotaro Sugishita', image: 'https://s1.zerochan.net/Sugishita.Kyoutarou.600.4079010.jpg' },
+                    { name: 'Umemiya Hajime', image: 'https://i.pinimg.com/736x/2f/04/d3/2f04d34f6e07a4e8b0e2cf854f5c1001.jpg' }
+                ],
+                creator: 'Satoru Nii (にい さとる)', studio: 'Bones', type: 'TV Series', EPs: 24,
+                genres: ['Action', 'School', 'Drama',],
+                duration: '24 min', rating: 7.5,
+                description: 'The story centres on Haruka Sakura, a first-year student who enrols in Furin High School — a school infamous for its weak academic record and reputation for tough, delinquents-on-campus. Sakura’s original goal: become “the strongest.” But upon arriving, he discovers that Furin High’s rough-and-tumble students are more than just trouble-makers — they form a group named Bofurin that actively protects their town from bullying, crime, and other gangs.',
+                audience: 'This anime is perfect for Anyone looking for something like a mix of “school fight club” + hero-protecting-town vibe (rather than pure fantasy or supernatural). People who like team dynamics, where the “group” matters as much as the individual. (Reviews mention that while the fights are central, the sense of community elevates the show.)',
+                coverImage: 'https://m.media-amazon.com/images/M/MV5BNDA2MDRhNTEtMjU4NC00MzZjLWJjM2UtZDg4MWI5OWU3ZjEwXkEyXkFqcGc@._V1_.jpg',
+                bgImage: 'https://cdn.oneesports.gg/cdn-data/2024/06/Anime_WindBreaker_Bofurin_Season1Finale_Keyart_2.jpg',
+                releaseYear: 2025,
+                trailer_url: 'https://www.youtube.com/embed/jp1bVUvYwYQ',
+                official_streams: [
+                    { platform: 'Crunchyroll', logo: 'https://cdn.worldvectorlogo.com/logos/crunchyroll-1.svg' },
+                    { platform: 'Netflix', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1200px-Netflix_2015_logo.svg.png' }
+                ],
+                gallery: [
+                    'https://preview.redd.it/wind-breaker-season-2-ep-2-preview-v0-p0kliw0thste1.jpg?width=640&crop=smart&auto=webp&s=071111daf0787c6e581f87b4d49ce6dbe48172db',
+                    'https://images.augustman.com/wp-content/uploads/sites/6/2024/08/05114503/go2xrykwsaen6wx-1024x576-1.jpeg',
+                    'https://www.anitrendz.com/_next/image?url=https%3A%2F%2Fi0.wp.com%2Fanitrendz.net%2Fnews%2Fwp-content%2Fuploads%2F2025%2F05%2FWind-Breaker-Season-2-Roppo-Ichiza-Arc-visual-1-e1746884277888.jpeg%3Ffit%3D1201%252C678%26ssl%3D1&w=1920&q=75',
+                    'https://akm-img-a-in.tosshub.com/sites/itgaming/resources/202506/image-2025-06-19t130256293190625011155.jpeg',
+                    'https://images.augustman.com/wp-content/uploads/sites/6/2024/08/05114526/untitled-design-2024-08-02t161713-302.jpeg',
+                    'https://a.storyblok.com/f/178900/920x518/9ad352b43c/wind-breaker-season-2.jpg/m/filters:quality(95)format(webp)'
+                ]
+            };
+
+            // --- EP DATA  ---
+            const EPData = [
+                { number: 1, title: 'EP 1 Sakura Arrives at Furin', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=1&e=1', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, 
+                { number: 2, title: 'EP 2 The Hero of My Dreams', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=1&e=2', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, 
+                { number: 3, title: 'EP 3 The Man Who Stands at the Top', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=1&e=3', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 4, title: 'EP 4 Clash', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=1&e=4', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 5, title: 'EP 5 A Gentleman', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=1&e=5', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 6, title: 'EP 6 Vow to Follow', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=1&e=6', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }, 
+                { number: 7, title: 'EP 7 Fight to Win', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=1&e=7', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 8, title: 'EP 8 Succeeding the Past', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=1&e=8', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 9, title: 'EP 9 Umemiya’s Style', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=1&e=9', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 10, title: 'EP 10 Dialogue', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=1&e=10', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 11, title: 'EP 11 New Classmates', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=1&e=11', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 12, title: 'EP 12 The Dependable One', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=1&e=12', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 13, title: 'EP 13: For a Friend', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=1&e=13', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 14, title: 'EP 14: Rage', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=2&e=1', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 15, title: 'EP 15: Conclusion', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=2&e=2', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 16, title: 'EP 16: Re:Start', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=2&e=3', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 17, title: 'EP 17: The Senpai’s Teachings', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=2&e=4', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 18, title: 'EP 18: A Place I Belong', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=2&e=5', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 19, title: 'EP 19: Hidden Feelings', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=2&e=6', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 20, title: 'EP 20: Night Street', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=2&e=7', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 21, title: 'EP 21: Shared Frontlines', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=2&e=8', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 22, title: 'EP 22: Shall We Dance?', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=2&e=9', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 23, title: 'EP 23: Salvation', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=2&e=10', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 24, title: 'EP 24: After the Storm', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=2&e=11', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 25, title: 'EP 25: Strength for Another', videoUrl: 'https://multiembed.mov/?video_id=tt29605391&s=2&e=12', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }
+            ];
+            
+            // --- Page Elements ---
+            const videoPlayer = document.getElementById('video-player-iframe');
+            const EPsListContainer = document.getElementById('EPs-list-container');
+            const downloadLinksTbody = document.getElementById('download-links-tbody');
+            const currentEPTitle = document.getElementById('current-EP-title');
+            const prevBtn = document.getElementById('prev-ep-btn');
+            const nextBtn = document.getElementById('next-ep-btn');
+
+            // --- Button Elements ---
+            const playButton = document.getElementById('play-button');
+            const mobilePlayButton = document.getElementById('mobile-play-button');
+            const trailerButton = document.getElementById('trailer-button');
+            const mobileTrailerButton = document.getElementById('mobile-trailer-button');
+            const addToWatchlistBtn = document.getElementById('add-to-watchlist-btn');
+
+            let currentEPIndex = 0; // Index starting at 0
+            const totalEPs = EPData.length;
+
+            function populateReviewSection() {
+                // ... (Original Review Population Logic - Kept same)
+                document.title = `Review & Watch ${selectedAnime.title} - Anikan`;
+                document.getElementById('hero-banner-section').style.backgroundImage = `url('${selectedAnime.bgImage}')`;
+                document.getElementById('anime-title-main').textContent = selectedAnime.title;
+                document.getElementById('hero-meta-year').textContent = selectedAnime.releaseYear;
+                document.getElementById('hero-meta-type').textContent = selectedAnime.type;
+                document.getElementById('hero-meta-duration').textContent = `${selectedAnime.duration}`;
+                document.getElementById('anime-poster').src = selectedAnime.coverImage;
+                document.getElementById('info-title').textContent = selectedAnime.title;
+                document.getElementById('info-cast').textContent = selectedAnime.cast.join(', ');
+                document.getElementById('info-creator').textContent = selectedAnime.creator;
+                document.getElementById('info-genre').textContent = selectedAnime.genres.join(', ');
+                const ratingCircle = document.getElementById('rating-circle');
+                document.getElementById('rating-score').textContent = selectedAnime.rating;
+                ratingCircle.style.setProperty('--rating-percent', selectedAnime.rating * 10);
+                document.getElementById('synopsis-text').textContent = selectedAnime.description;
+                document.getElementById('photos-grid').innerHTML = selectedAnime.gallery.map(img => `<img src="${img}" alt="Gallery image">`).join('');
+                document.getElementById('trailer-player').src = selectedAnime.trailer_url;
+                document.getElementById('character-list').innerHTML = selectedAnime.characters.map(char =>
+                    `<div class="character-card"><img src="${char.image}" alt="${char.name}"><h4>${char.name}</h4></div>`
+                ).join('');
+                document.getElementById('anime-audience').textContent = selectedAnime.audience;
+                const officialStreamsContainer = document.getElementById('official-streams');
+                officialStreamsContainer.innerHTML = selectedAnime.official_streams.map(stream =>
+                    `<a href="#" class="stream-logo"><img src="${stream.logo}" alt="${stream.platform}"></a>`
+                ).join('');
+                
+                // Populate Sidebar Info
+                document.getElementById('sidebar-poster').src = selectedAnime.coverImage;
+                document.getElementById('sidebar-title').textContent = selectedAnime.title;
+                document.getElementById('sidebar-type').textContent = selectedAnime.type;
+                document.getElementById('sidebar-EPs').textContent = selectedAnime.EPs;
+                document.getElementById('sidebar-duration').textContent = selectedAnime.duration;
+                document.getElementById('sidebar-studio').textContent = selectedAnime.studio;
+                document.getElementById('sidebar-score').textContent = selectedAnime.rating + '/10';
+                document.getElementById('sidebar-genres').textContent = selectedAnime.genres.join(', ');
+            }
+            
+            // --- NEW LOGIC: Using EPData constant ---
+
+            function updateUI(EPIndex) {
+                currentEPIndex = parseInt(EPIndex, 10);
+                const EP = EPData[currentEPIndex];
+                
+                if (!EP) return;
+                
+                const EPNumber = EP.number;
+                // Use regex to get the part of the title after the number/colon for cleaner display in the H1
+                const displayTitle = EP.title.match(/(?::\s?)(.*)/)?.[1] || EP.title;
+
+                currentEPTitle.textContent = `You are watching EP ${EPNumber} - ${displayTitle}`;
+                
+                // 1. Update Video Player
+                videoPlayer.src = EP.videoUrl;
+
+                // 2. Update Download Links
+                downloadLinksTbody.innerHTML = '';
+                const downloadQualities = Object.keys(EP.downloads);
+                const subtitleUrl = EP.subtitleUrl || '#';
+                
+                if (downloadQualities.length > 0) {
+                     downloadQualities.forEach(quality => {
+                        const downloadUrl = EP.downloads[quality];
+                        downloadLinksTbody.innerHTML += `
+                            <tr>
+                                <td data-label="EP">EP ${EPNumber}</td>
+                                <td data-label="Quality">${quality}</td>
+                                <td data-label="Video"><a href="${downloadUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-download"></i> Download</a></td>
+                                <td data-label="Subtitles"><a href="${subtitleUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-closed-captioning"></i> Download</a></td>
+                            </tr>`;
+                    });
+                } else {
+                    downloadLinksTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-text-muted);">Download links not available for this EP.</td></tr>`;
+                }
+                
+                // 3. Update EP List Active State and scroll
+                EPsListContainer.querySelectorAll('.EP-item').forEach(link => link.classList.remove('current'));
+                const activeEPLink = EPsListContainer.querySelector(`.EP-item[data-EP='${EPNumber}']`);
+                if (activeEPLink) {
+                    activeEPLink.classList.add('current');
+                    activeEPLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+
+                // 4. Update Navigation Buttons
+                prevBtn.disabled = EPNumber === 1;
+                nextBtn.disabled = EPNumber === totalEPs;
+            }
+
+            function generateEPList() {
+                EPsListContainer.innerHTML = '';
+                EPData.forEach((ep, index) => {
+                    const EPNumber = ep.number;
+                    const EPTitle = ep.title.match(/(?::\s?)(.*)/)?.[1] || ep.title; // Clean up title for display
+                    
+                    const itemHTML = `
+                        <a class="EP-item" data-EP="${EPNumber}" data-EP-index="${index}">
+                            <img src="${ep.thumbnail}" alt="Ep ${EPNumber}" class="EP-thumbnail">
+                            <div class="ep-info">
+                                <p class="ep-number">EP ${EPNumber}</p>
+                                <p class="ep-desc">${EPTitle}</p>
+                            </div>
+                        </a>
+                    `;
+                    EPsListContainer.innerHTML += itemHTML;
+                });
+                
+                // Attach click listeners to the generated list items
+                EPsListContainer.querySelectorAll('.EP-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        updateUI(item.dataset.EPIndex);
+                    });
+                });
+            }
+
+
+            // --- Event Handlers ---
+            const handlePlayClick = () => {
+                document.body.classList.add('watching-active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                generateEPList(); // Generate list and attach click handlers
+                
+                // Initialize the player with the first EP
+                if (EPData.length > 0) {
+                    updateUI(0);
+                }
+            };
+            
+            const handleTrailerClick = () => {
+                const trailerElement = document.getElementById('trailer-player');
+                if (trailerElement) {
+                    trailerElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            };
+            
+            const handleAddToWatchlist = async () => {
+                const username = localStorage.getItem('loggedInUser');
+                if (!username) {
+                    alert('Please log in to add to your watchlist.');
+                    window.location.href = '/login.html';
+                    return;
+                }
+            };
+
+            // --- Navigation Event Listeners ---
+            prevBtn.addEventListener('click', () => { 
+                if (currentEPIndex > 0) updateUI(currentEPIndex - 1); 
+            });
+            nextBtn.addEventListener('click', () => { 
+                if (currentEPIndex < totalEPs - 1) updateUI(currentEPIndex + 1); 
+            });
+
+            // --- Other Event Listeners ---
+            playButton.addEventListener('click', handlePlayClick);
+            mobilePlayButton.addEventListener('click', handlePlayClick);
+            trailerButton.addEventListener('click', handleTrailerClick);
+            mobileTrailerButton.addEventListener('click', handleTrailerClick);
+            addToWatchlistBtn.addEventListener('click', handleAddToWatchlist);
+
+            // --- Initialize Page ---
+            populateReviewSection();
+        });
+    </script>
+</body>
+</html>
