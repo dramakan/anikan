@@ -150,11 +150,17 @@
             #spotlight .spotlight-buttons { justify-content: center; }
             .carousel-controller { width: 100%; position: relative; right: auto; bottom: auto; padding: 2rem 0; overflow-x: auto; }
         }
+        
+        /* 2nd Change: Explicitly hide bottom nav on larger screens */
+        .bottom-nav {
+            display: none; 
+        }
+
         @media (max-width: 992px) {
             .main-nav { display: none; }
             .spotlight-content .anime-title { font-size: 3rem; }
-             /* 4. Hide bottom nav on desktop/tablet */
-            .bottom-nav { display: none; }
+            /* This rule is kept to ensure tablets (up to 992px) also hide it in case the generic rule above is overridden */
+            .bottom-nav { display: none; } 
         }
         
         /* * --------------------------------------------
@@ -187,21 +193,26 @@
                 border-bottom: 1px solid var(--border-color);
                 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
             }
+            
+            /* 1st Change: Hide the logo */
             .main-header .logo {
-                font-size: 1.5rem; /* Smaller logo */
+                display: none; 
             }
             .header-actions {
                 gap: 0.5rem; /* Reduced gap */
+                /* Ensure actions container takes full width to allow search to expand */
+                flex-grow: 1; 
             }
             /* Hide the main 'Sign In' button on the top right */
             .cta-button {
                 display: none;
             }
             .search-bar {
-                order: 2; /* Move search last */
-                flex-grow: 1; /* NEW: Allow search bar to grow */
+                order: 1; /* Move search first/center */
+                flex-grow: 1; 
+                margin-right: 0; /* Clear previous margin if any */
             }
-             /* NEW: Search bar full length */
+             /* 1st Change: Search bar full length */
             .search-bar input {
                 width: 100%; 
                 max-width: none;
@@ -210,7 +221,7 @@
                 width: 100%;
             }
             .search-results {
-                left: 0; /* Align to the left of the search bar, which is now full width */
+                left: 0; 
                 right: auto;
                 width: 100%;
                 top: 45px;
@@ -235,7 +246,7 @@
             }
             .spotlight-background img#spotlight-bg-img-mobile {
                 /* NEW: Style for the cover image (displayed via script) */
-                display: block; /* Ensure it is visible */
+                display: block; /* Ensure mobile one is visible */
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -349,18 +360,13 @@
                 height: 55px; /* Standard app-bar height */
                 background-color: var(--color-card); 
                 border-top: 1px solid var(--border-color);
-                display: flex;
+                display: flex; /* Force display on mobile */
                 justify-content: space-around;
                 align-items: center;
                 z-index: 2000;
                 box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
             }
             
-            /* Force bottom-nav to display on mobile */
-            .bottom-nav {
-                display: flex; 
-            }
-
             .bottom-nav-item {
                 display: flex;
                 flex-direction: column;
@@ -380,9 +386,9 @@
                 color: var(--color-primary);
             }
             
-            /* Adjust floating CTA button to be above the nav bar - Adjusted to 65px */
+            /* 3rd Change: Reposition floating CTA button slightly above the bottom nav bar */
             #drama-request-toggle-button {
-                bottom: 65px; /* ADJUSTED: Moved up from 65px */
+                bottom: 70px; /* Adjusted: Puts it 15px above the 55px nav bar */
                 right: 15px;
                 padding: 10px 15px; /* Smaller button */
                 font-size: 0.9rem;
@@ -404,9 +410,8 @@
             .anime-card-img, .play-icon-overlay { 
                 height: 140px;
             }
-            /* Search bar is already 100% on 768px, no need for specific 480px width */
             .search-results {
-                width: 100%; /* Should also be 100% of the container */
+                width: 100%; 
             }
             .bottom-nav-item {
                 font-size: 0.65rem;
@@ -423,7 +428,7 @@
           left: 0;
           width: 100%;
           height: 100%;
-          background: rgba(0, 0, 0, 0.85); 
+          background: rgba(0, 0, 0, 0.9); /* Enhanced transparency */
           z-index: 9998;
           display: flex;
           justify-content: center;
@@ -438,13 +443,15 @@
           visibility: visible;
         }
 
+        /* 4th Change: Improved Popup View */
         #drama-request-content-center {
-          background-color: var(--color-card); /* Mapped from --surface-color */
-          padding: 35px;
-          border-radius: 12px;
-          max-width: 480px;
+          background-color: #151419; /* Slightly darker card background for modal */
+          padding: 40px; /* Increased padding */
+          border-radius: 15px; /* Slightly more rounded */
+          max-width: 400px; /* Reduced max width for better mobile focus */
           text-align: center;
-          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9); /* Stronger shadow */
+          border: 1px solid var(--color-primary); /* Add subtle border */
           position: relative;
           transform: scale(0.9) translateY(20px); 
           transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.5, 1);
@@ -455,47 +462,54 @@
         }
         
         .popup-title-center {
-          color: var(--color-primary); /* Mapped from --primary-color */
+          color: var(--color-primary); 
           font-weight: 700;
-          font-size: 1.8rem;
+          font-size: 2rem; /* Larger title */
           margin-bottom: 10px;
-          text-shadow: 0 0 8px rgba(157, 78, 221, 0.8); /* Used Anikan primary color shadow */
+          text-shadow: 0 0 10px rgba(157, 78, 221, 0.8); 
+        }
+
+        .popup-message-center {
+            color: var(--color-text-muted);
+            margin-bottom: 15px;
+            font-size: 1rem;
         }
         
         .popup-promise {
-            color: var(--color-text); /* Mapped from --text-color */
-            font-size: 1.1rem;
+            color: var(--color-text); 
+            font-size: 1rem; /* Adjusted font size */
             font-weight: 500;
             margin-top: 15px;
-            margin-bottom: 25px;
-            padding: 10px;
-            background-color: #2b2b34; /* Darker background for emphasis */
-            border-left: 5px solid var(--color-secondary-cta); /* Mapped from --secondary-color */
+            margin-bottom: 30px; /* Increased bottom margin */
+            padding: 15px; /* Increased padding */
+            background-color: #2b2b34; 
+            border-left: 6px solid var(--color-secondary-cta); /* Thicker border */
+            border-radius: 4px;
         }
         
         .popup-close-btn {
           position: absolute;
           top: 10px;
-          right: 10px;
+          right: 15px; /* Move slightly left */
           background: none;
           border: none;
-          color: var(--color-text-muted); /* Mapped from --text-muted-color */
-          font-size: 1.8rem;
+          color: var(--color-text-muted); 
+          font-size: 2rem; /* Larger close button */
           cursor: pointer;
           transition: color 0.3s, transform 0.3s;
         }
 
         .popup-close-btn:hover {
-          color: var(--color-secondary-cta); /* Mapped from --secondary-color */
-          transform: rotate(90deg);
+          color: var(--color-secondary-cta); 
+          transform: rotate(180deg) scale(1.1); /* Smoother hover effect */
         }
 
         /* --- Bottom-Right Clickable Button (Component 2) --- */
         #drama-request-toggle-button {
             position: fixed;
-            bottom: 20px;
+            bottom: 60px;
             right: 20px;
-            background-color: var(--color-secondary-cta); /* Mapped from --secondary-color */
+            background-color: var(--color-secondary-cta); 
             color: white;
             padding: 12px 20px;
             border-radius: 8px;
@@ -635,32 +649,27 @@
         const spotlightItems = animeData.slice(0, 5);
 
         function updateSpotlightSection(anime, index) {
-            spotlightBgImg.style.opacity = '0';
-            spotlightBgImgMobile.style.opacity = '0'; 
-            spotlightContentElements.forEach(el => el.classList.remove('content-animate'));
             
             // Check if the current view is mobile
             const isMobile = window.matchMedia("(max-width: 768px)").matches;
             
-            // Determine image sources and wait for the fade out to complete
+            // Determine which image element to update and fade out
+            const imageToUpdate = isMobile ? spotlightBgImgMobile : spotlightBgImg;
+            const newImageSrc = isMobile ? anime.coverImage : anime.bgImage;
+
+            // Fade out the current image
+            imageToUpdate.style.opacity = '0';
+            
+            // Fade out content
+            spotlightContentElements.forEach(el => el.classList.remove('content-animate'));
+            
+            // Wait for the fade out to complete (500ms transition time is defined in CSS)
             setTimeout(() => {
                 
-                // NEW LOGIC for Mobile/Desktop Background Image
-                if (isMobile) {
-                    // Mobile: Use cover image as the background
-                    spotlightBgImg.src = ''; 
-                    spotlightBgImgMobile.src = anime.coverImage; 
-                    spotlightBgImgMobile.style.display = 'block'; // Ensure mobile one is visible
-                    spotlightBgImg.style.display = 'none'; // Ensure desktop one is hidden
-                } else {
-                    // Desktop/Tablet: Use background image
-                    spotlightBgImg.src = anime.bgImage; 
-                    spotlightBgImgMobile.src = ''; 
-                    spotlightBgImg.style.display = 'block'; // Ensure desktop one is visible
-                    spotlightBgImgMobile.style.display = 'none'; // Ensure mobile one is hidden
-                }
-
-
+                // Update the image source
+                imageToUpdate.src = newImageSrc;
+                
+                // Update the rest of the content
                 spotlightTitle.textContent = anime.title;
                 spotlightRating.textContent = anime.rating;
                 spotlightGenres.textContent = anime.genres.join(', ');
@@ -668,12 +677,13 @@
                 // MODIFICATION: Use the manual pageUrl from the database
                 spotlightWatchBtn.href = anime.pageUrl;
 
-                // Fade back in
-                spotlightBgImg.style.opacity = '1';
-                spotlightBgImgMobile.style.opacity = '1'; 
+                // Fade back in image and content
+                imageToUpdate.style.opacity = '1'; 
                 
+                // Animate content back in
                 spotlightContentElements.forEach(el => { el.classList.remove('content-animate'); void el.offsetWidth; el.classList.add('content-animate'); });
                 
+                // Update active state for carousel items and dots
                 document.querySelectorAll('.carousel-item').forEach((item, idx) => {
                     item.classList.toggle('active', idx === index);
                 });
@@ -682,9 +692,25 @@
                     dot.classList.toggle('active', idx === index);
                 });
 
-                currentSpotlightIndex = index;
+                // Crucial fix: Update the index *after* the change
+                currentSpotlightIndex = index; 
 
-            }, 500);
+            }, 100); // 500ms timeout matches the CSS transition time
+            
+            /* BEGIN SINGLE CHANGE FOR SLIDING CAROUSEL */
+            const carouselItemWidth = 180; // Defined in CSS for .carousel-item
+            const carouselGap = 16;        // Defined in CSS for .carousel-track (1.5rem ≈ 16px)
+            const itemFullWidth = carouselItemWidth + carouselGap;
+            
+            // Scroll the container to center the active item (or nearly center)
+            if (carouselTrack) {
+                const scrollPosition = (index * itemFullWidth) - (carouselTrack.clientWidth / 2) + (itemFullWidth / 2);
+                carouselTrack.scrollTo({
+                    left: scrollPosition,
+                    behavior: 'smooth'
+                });
+            }
+            /* END SINGLE CHANGE FOR SLIDING CAROUSEL */
         }
 
         function populateSpotlightCarousel(items) {
