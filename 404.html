@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Lost in the Void | Anikan</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        /* --- 1. Variables --- */
+        :root {
+            --font-family: 'Outfit', sans-serif;
+            --bg-gradient: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-blur: 10px;
+            --color-text: #ffffff;
+            --color-text-muted: #b3b3b3;
+            --accent-purple: #b06ab3;
+            --accent-pink: #ef629f;
+            --accent-glow: #4568dc;
+        }
+
+        /* --- 2. Global Reset --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html, body { 
+            width: 100%;
+            min-height: 100vh; /* Allow growing if content needs it */
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: var(--font-family); 
+            color: var(--color-text);
+            overflow-x: hidden; /* Prevent horizontal scroll only */
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- 3. Background Decor (Orbs) --- */
+        .orbs {
+            position: fixed; /* Fixed so they stay put when scrolling */
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent-purple), var(--accent-pink));
+            opacity: 0.3;
+            filter: blur(60px);
+            animation: floatOrb 20s infinite linear;
+        }
+        /* Orb placement */
+        .orb:nth-child(1) { top: -10%; left: -10%; width: 400px; height: 400px; animation-duration: 25s; }
+        .orb:nth-child(2) { bottom: -10%; right: -5%; width: 300px; height: 300px; animation-duration: 30s; animation-delay: -5s; background: var(--accent-glow); }
+        .orb:nth-child(3) { top: 40%; left: 40%; width: 200px; height: 200px; opacity: 0.15; animation-duration: 35s; }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(30px, 50px) rotate(180deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        /* --- 4. Main Layout --- */
+        .container-404 {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        .content-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+            /* No fixed height, allows flexibility */
+            gap: 40px;
+        }
+
+        /* --- 5. Text Section (Glass Card) --- */
+        .text-content {
+            flex: 1;
+            max-width: 550px;
+            padding: 40px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards 0.5s;
+        }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(20px); }
+        }
+
+        /* Typography */
+        .header-group { position: relative; }
+        
+        .giant-404 {
+            font-size: clamp(6rem, 10vw, 9rem); /* Responsive Font Size */
+            font-weight: 900;
+            line-height: 0.9;
+            background: linear-gradient(to right, #fff, #a5a5a5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -4px;
+            margin-left: -5px;
+        }
+
+        .giant-404::after {
+            content: '404';
+            position: absolute;
+            left: 2px; top: 2px;
+            z-index: -1;
+            color: transparent;
+            -webkit-text-stroke: 2px rgba(255,255,255,0.1);
+        }
+
+        .subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-pink);
+            text-shadow: 0 0 20px rgba(239, 98, 159, 0.5);
+            margin-top: 5px;
+        }
+
+        .description {
+            color: var(--color-text-muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .guidance-box {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 15px 20px;
+            border-left: 4px solid var(--accent-purple);
+        }
+        
+        .guidance-box p { font-size: 0.95rem; color: #ddd; }
+        .guidance-box strong { color: #fff; }
+
+        /* Buttons */
+        .actions {
+            display: flex;
+            flex-wrap: wrap; /* Allows wrapping on tiny screens */
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--accent-purple), var(--accent-pink));
+            color: white;
+            box-shadow: 0 4px 15px rgba(239, 98, 159, 0.4);
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(239, 98, 159, 0.6); }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.2); transform: translateY(-3px); }
+
+        /* --- 6. Image Section --- */
+        .image-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-height: 400px; /* Ensure space for image */
+        }
+
+        .anime-char {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            object-fit: contain;
+            animation: floatChar 6s ease-in-out infinite;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+            z-index: 5;
+        }
+
+        .char-bg-circle {
+            position: absolute;
+            width: 80%;
+            padding-bottom: 80%; /* Creates a perfect circle based on width */
+            background: radial-gradient(circle, rgba(176, 106, 179, 0.2) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            z-index: 1;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes floatChar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* --- 7. Responsive Breakpoints --- */
+        
+        /* Tablets and Small Laptops (Max Width 1024px) */
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                flex-direction: column-reverse; /* Text on top/bottom depending on preference, usually text first on mobile is better for SEO, but here we want visual first */
+                justify-content: center;
+                text-align: center;
+            }
+
+            .text-content {
+                width: 100%;
+                max-width: 700px;
+                align-items: center;
+            }
+
+            .guidance-box { text-align: left; }
+            
+            .image-section {
+                width: 100%;
+                min-height: 300px;
+                margin-bottom: -50px; /* Overlap effect */
+                z-index: 1;
+            }
+            
+            .anime-char { max-width: 350px; }
+        }
+
+        /* Mobile Devices (Max Width 768px) */
+        @media (max-width: 768px) {
+            .container-404 { padding: 15px; display: block; overflow-y: auto; }
+            .content-wrapper { margin-top: 20px; padding-bottom: 40px; gap: 0; }
+
+            .text-content {
+                backdrop-filter: blur(20px); /* Heavy blur for readability */
+                background: rgba(15, 12, 41, 0.75);
+                padding: 30px 20px;
+                border-radius: 20px;
+                margin-top: -30px; /* Pull text up over image */
+                z-index: 10;
+            }
+
+            .image-section { min-height: 250px; }
+            .anime-char { max-width: 280px; }
+            
+            .giant-404 { font-size: 5rem; }
+            .actions { width: 100%; justify-content: center; }
+            .btn { width: 100%; }
+        }
+
+        /* Landscape Mode on Mobile (Short screens) */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .container-404 { padding: 40px 20px; display: flex; align-items: flex-start; }
+            .content-wrapper { flex-direction: row; align-items: flex-start; gap: 20px; }
+            .image-section { display: none; /* Hide image on landscape mobile to save space */ }
+            .text-content { width: 100%; max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="orbs">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <div class="container-404">
+        <div class="content-wrapper">
+            
+            <div class="text-content">
+                <div class="header-group">
+                    <div class="giant-404">404</div>
+                    <div class="subtitle">Page Not Found</div>
+                </div>
+                
+                <p class="description">
+                    Oops! It seems you've wandered into a filler episode that doesn't exist. The link you followed has vanished into the spirit realm.
+                </p>
+
+                <div class="guidance-box">
+                    <p><strong>Mission Objective:</strong> Use the search bar on the homepage to relocate your target anime.</p>
+                </div>
+
+                <div class="actions">
+                    <a href="home.html" class="btn btn-primary">
+                        <i class="fas fa-home"></i> Back to Home
+                    </a>
+                    <a href="categories.html" class="btn btn-secondary">
+                        <i class="fas fa-compass"></i> Browse Anime
+                    </a>
+                </div>
+            </div>
+
+            <div class="image-section">
+                <div class="char-bg-circle"></div>
+                <img src="img.png" alt="Lost Anime Character" class="anime-char">
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
