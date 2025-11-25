@@ -242,7 +242,7 @@
                 { number: 25, title: 'EP 25: Strength for Another', videoUrl: 'https://www.2embed.cc/embedtv/tt29605391&s=2&e=12', thumbnail: 'https://4kwallpapers.com/images/wallpapers/wind-breaker-season-3840x2160-22080.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }
             ];
             
-            // --- Page Elements (Updated IDs) ---
+            // --- Page Elements (Standardized IDs) ---
             const videoPlayer = document.getElementById('video-player-iframe');
             const episodesListContainer = document.getElementById('episodes-list-container');
             const downloadLinksTbody = document.getElementById('download-links-tbody');
@@ -261,7 +261,7 @@
             const totalEpisodes = episodeData.length;
 
             function populateReviewSection() {
-                // ... (Review Population Logic) ...
+                // --- Review Population Logic ---
                 document.title = `Review & Watch ${selectedAnime.title} - Anikan`;
                 document.getElementById('hero-banner-section').style.backgroundImage = `url('${selectedAnime.bgImage}')`;
                 document.getElementById('anime-title-main').textContent = selectedAnime.title;
@@ -276,6 +276,7 @@
                 const ratingCircle = document.getElementById('rating-circle');
                 document.getElementById('rating-score').textContent = selectedAnime.rating;
                 if (ratingCircle) {
+                    // Assuming style.css defines the --rating-percent custom property on #rating-circle for the visual effect
                     ratingCircle.style.setProperty('--rating-percent', selectedAnime.rating * 10);
                 }
                 document.getElementById('synopsis-text').textContent = selectedAnime.description;
@@ -290,18 +291,18 @@
                     `<a href="#" class="stream-logo"><img src="${stream.logo}" alt="${stream.platform}"></a>`
                 ).join('');
                 
-                // Populate Sidebar Info (Updated ID)
+                // Populate Sidebar Info (Using standardized ID)
                 document.getElementById('sidebar-poster').src = selectedAnime.coverImage;
                 document.getElementById('sidebar-title').textContent = selectedAnime.title;
                 document.getElementById('sidebar-type').textContent = selectedAnime.type;
-                document.getElementById('sidebar-episodes').textContent = selectedAnime.EPs; // Uses EPs from original data
+                document.getElementById('sidebar-episodes').textContent = selectedAnime.EPs; // Retaining 'EPs' data key
                 document.getElementById('sidebar-duration').textContent = selectedAnime.duration;
                 document.getElementById('sidebar-studio').textContent = selectedAnime.studio;
                 document.getElementById('sidebar-score').textContent = selectedAnime.rating + '/10';
                 document.getElementById('sidebar-genres').textContent = selectedAnime.genres.join(', ');
             }
             
-            // --- WATCH UI LOGIC (Updated to use episode/episodes) ---
+            // --- WATCH UI LOGIC (Standardized variables and logic) ---
 
             function updateUI(episodeIndex) {
                 currentEpisodeIndex = parseInt(episodeIndex, 10);
@@ -359,7 +360,7 @@
                     
                     const itemHTML = `
                         <a class="episode-item" data-episode="${episodeNumber}" data-episode-index="${index}">
-                            <img src="${ep.thumbnail}" alt="Ep ${episodeNumber}" class="EP-thumbnail">
+                            <img src="${ep.thumbnail}" alt="Ep ${episodeNumber}" class="episode-thumbnail">
                             <div class="ep-info">
                                 <p class="ep-number">EP ${episodeNumber}</p>
                                 <p class="ep-desc">${episodeTitle}</p>
