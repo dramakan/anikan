@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review & Watch Sakamoto Days - Anikan</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> 
+    
+    </head>
+<body>
+
+    <header class="main-header">
+        <a href="home.html" class="logo">Ani<span>kan</span></a>
+        <nav class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="movies.html">Movies</a>
+            <a href="categories.html">Genre</a>
+        </nav>
+        <div class="main-header .search-bar" style="display: none;">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="main-header .user-profile" style="display: none;">
+            <img src="profile.jpg" alt="User Profile">
+        </div>
+    </header>
+
+    <main>
+        <div class="review-wrapper" id="review-wrapper">
+            <section class="hero-banner" id="hero-banner-section">
+                <div class="hero-content">
+                    <h1 id="anime-title-main"></h1>
+                    <div class="hero-meta">
+                        <span id="hero-meta-year"></span>
+                        <span>&bull;</span>
+                        <span id="hero-meta-type"></span>
+                        <span>&bull;</span>
+                        <span id="hero-meta-duration"></span>
+                    </div>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" id="play-button"><i class="fas fa-play"></i>Watch</button>
+                        <button class="btn btn-secondary" id="trailer-button"><i class="fas fa-film"></i> Trailer</button>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="review-main-content">
+                <div class="left-sidebar">
+                    <img id="anime-poster" class="movie-poster" src="" alt="Anime Poster">
+                    
+                    <div class="mobile-hero-buttons">
+                        <button class="btn btn-primary" id="mobile-play-button"><i class="fas fa-play"></i>Watch</button>
+                        <button class="btn btn-secondary" id="mobile-trailer-button"><i class="fas fa-film"></i> Trailer</button>
+                    </div>
+                    
+                    <div class="watchlist-section">
+                        <button id="add-to-watchlist-btn"><i class="fas fa-plus"></i> Add to Watchlist</button>
+                        <div class="user-rating-stars" id="user-rating-stars">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="info-panel">
+                        <div class="info-details">
+                            <ul>
+                                <li><strong>Title:</strong> <span id="info-title"></span></li>
+                                <li><strong>Cast:</strong> <span id="info-cast"></span></li>
+                                <li><strong>Creator:</strong> <span id="info-creator"></span></li>
+                                <li><strong>Genre:</strong> <span id="info-genre"></span></li>
+                            </ul>
+                        </div>
+                        <div class="info-rating-circle">
+                            <div class="rating-circle-bg" id="rating-circle">
+                                <div class="rating-circle-inner">
+                                    <span class="rating-score" id="rating-score"></span>
+                                    <span class="rating-max">out of 10</span>
+                                </div>
+                            </div>
+                            <p class="personal-rating-note">note: personal rating only</p>
+                        </div>
+                    </div>
+
+                    <div class="synopsis-panel">
+                        <h2 class="section-title">Synopsis</h2>
+                        <p id="synopsis-text"></p>
+                    </div>
+
+                    <h2 class="section-title">Photos</h2>
+                    <div class="photos-grid" id="photos-grid"></div>
+
+                    <h2 class="section-title">Official Trailer</h2>
+                    <div class="trailer-panel">
+                        <div class="player-container">
+                            <iframe id="trailer-player" src="" title="Official Trailer Player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+                         </div>
+                    </div>
+
+                    <h2 class="section-title">Main Characters</h2>
+                    <div class="characters-grid" id="character-list"></div>
+
+                    <h2 class="section-title">Who is this Anime for?</h2>
+                    <div class="synopsis-panel">
+                        <p id="anime-audience"></p>
+                    </div>
+
+                    <h2 class="section-title">Where to Watch Officially</h2>
+                    <div class="official-stream-grid" id="official-streams"></div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="watch-section" id="watch-section">
+            <div class="watch-layout" id="watch-layout">
+                <div class="main-content-col">
+                    <div class="video-player-container">
+                        <iframe 
+                            id="video-player-iframe"
+                            src="" 
+                            title="Video Player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <div class="EP-meta">
+                        <h1 class="EP-title" id="current-EP-title"></h1>
+                        <div class="EP-actions">
+                            <button class="action-btn" id="prev-ep-btn"><i class="fas fa-arrow-left"></i>Prev</button>
+                            <button class="action-btn" id="next-ep-btn">Next<i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="widget EPs-list-widget">
+                        <h2 class="widget-title">EPs</h2>
+                        <div class="EPs-list" id="EPs-list-container">
+                        </div>
+                    </div>
+                    
+                    <div class="widget download-widget">
+                        <h2 class="widget-title">Download (Placeholder Links)</h2>
+                        <div class="download-list">
+                            <table>
+                                <thead>
+                                    <tr><th>EP</th><th>Quality</th><th>Video</th><th>Subtitles</th></tr>
+                                </thead>
+                                <tbody id="download-links-tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-col">
+                    <div class="widget drama-info-widget">
+                        <div class="info-poster"><img id="sidebar-poster" src="" alt="Anime Poster"></div>
+                        <h2 class="info-title-sidebar" id="sidebar-title"></h2>
+                        <div class="info-details">
+                            <p><span>Type:</span> <span id="sidebar-type"></span></p>
+                            <p><span>EPs:</span> <span id="sidebar-EPs"></span></p>
+                            <p><span>Duration:</span> <span id="sidebar-duration"></span></p>
+                            <p><span>Studio:</span> <span id="sidebar-studio"></span></p>
+                            <p><span>Score:</span> <span id="sidebar-score"></span></p>
+                            <p><span>Genres:</span> <span id="sidebar-genres"></span></p>
+                        </div>
+                    </div>
+                    <div class="widget recommendations-widget">
+                        <h2 class="widget-title">More from Anikan</h2>
+                        <div class="recommendations-list">
+                           <p style="color: var(--color-text-muted); font-size: 0.9rem;">Recommendation list placeholder.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Data: Sakamoto Days Season 1 (Split-Cour) ---
+            const selectedAnime = {
+                id: 5, 
+                title: 'Sakamoto Days', 
+                title_japanese: 'サカモトデイズ',
+                cast: ['Tomokazu Sugita (Taro Sakamoto)', 'Nobunaga Shimazaki (Shin Asakura)', 'Ayane Sakura (Lu Xiaotang)'],
+                characters: [
+                    { name: 'Taro Sakamoto', image: 'https://i.imgur.com/d9j3pT3.jpg' }, // HQ Placeholder Image
+                    { name: 'Shin Asakura', image: 'https://i.imgur.com/5h8Q0D7.jpg' }, // HQ Placeholder Image
+                    { name: 'Lu Xiaotang', image: 'https://i.imgur.com/gTzS7w4.jpg' } // HQ Placeholder Image
+                ],
+                creator: 'Yuto Suzuki (Manga)', 
+                studio: 'TMS Entertainment',
+                type: 'TV Series', 
+                EPs: 22, // Total for Season 1 (Two Cours)
+                genres: ['Action', 'Comedy', 'Shonen', 'Crime'],
+                duration: '24 min', 
+                rating: 8.2, // Placeholder rating
+                description: "Taro Sakamoto was once the greatest hitman of all time, feared by the entire criminal underworld. But one day, he fell in love, got married, and retired to live a peaceful life as a family man who runs a convenience store. Now overweight and quiet, Sakamoto must protect his family and his everyday life from former enemies and colleagues trying to assassinate him, all while upholding his oath not to kill. He accomplishes this with the help of his clairvoyant employee, Shin Asakura.",
+                audience: 'Fans of high-octane action-comedy, martial arts, and shonen series with a unique, overpowered protagonist who fights for domestic bliss. If you enjoy series like *One-Punch Man* or *Gintama* with stylish action, this is for you.',
+                coverImage: 'https://a.storyblok.com/f/178900/1080x1350/73f019de0e/sakamoto-days-part-2-key-visual.jpg/m/filters:quality(95)format(webp)', // HQ Placeholder Image (Main Visual)
+                bgImage: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', // HQ Placeholder Image (Background Visual)
+                releaseYear: 2025, // Expected/Announced release year
+                trailer_url: 'https://www.youtube.com/embed/n3oP0t9V94M', // Netflix Official Trailer Placeholder
+                official_streams: [
+                    { platform: 'Netflix', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1200px-Netflix_2015_logo.svg.png' }, //
+                    { platform: 'TV Tokyo', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/8/87/TV_Tokyo_logo.svg/1200px-TV_Tokyo_logo.svg.png' } // Japanese Broadcast
+                ],
+                gallery: [
+                    'https://i.imgur.com/qE4fR2m.jpg', // Scene Placeholder
+                    'https://i.imgur.com/yF9W0Xj.jpg', // Scene Placeholder
+                    'https://i.imgur.com/2sZ9L4k.jpg', // Scene Placeholder
+                    'https://i.imgur.com/8QxW1B5.jpg', // Scene Placeholder
+                    'https://i.imgur.com/9C3B4Jg.jpg', // Scene Placeholder
+                    'https://i.imgur.com/J1P5mXv.jpg' // Scene Placeholder
+                ]
+            };
+
+            // --- EP DATA: Sakamoto Days S1 (22 EPs total - 11 in Cour 1, 11 in Cour 2) ---
+            const EPData = [
+                // Cour 1 (Jan - Mar 2025)
+                { number: 1, title: 'EP 1: The Legendary Hit Man', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=1', thumbnail: 'https://i.imgur.com/d9j3pT3.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 2, title: 'EP 2: Assassination is a Job', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=2', thumbnail: 'https://i.imgur.com/d9j3pT3.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 3, title: 'EP 3: Welcome to Sugar Park', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=3', thumbnail: 'https://i.imgur.com/d9j3pT3.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 4, title: 'EP 4: Hard-Boiled', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=4', thumbnail: 'https://i.imgur.com/d9j3pT3.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 5, title: 'EP 5: Order Member Shishiba', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=5', thumbnail: 'https://i.imgur.com/d9j3pT3.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 6, title: 'EP 6: Shin and the Target', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=6', thumbnail: 'https://i.imgur.com/d9j3pT3.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 7, title: 'EP 7: Family Time', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=7', thumbnail: 'https://i.imgur.com/d9j3pT3.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 8, title: 'EP 8: The JAA Exam Begins', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=8', thumbnail: 'https://i.imgur.com/d9j3pT3.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 9, title: 'EP 9: The Power of Sight', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=9', thumbnail: 'https://i.imgur.com/d9j3pT3.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 10, title: 'EP 10: Sniper Heisuke', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=10', thumbnail: 'https://i.imgur.com/d9j3pT3.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 11, title: 'EP 11: The Retired Hitman\'s Resolve', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=11', thumbnail: 'https://i.imgur.com/d9j3pT3.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                // Cour 2 (July - Sept 2025)
+                { number: 12, title: 'EP 12: New Mission, New Friends', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=12', thumbnail: 'https://i.imgur.com/2sZ9L4k.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 13, title: 'EP 13: Just Desserts', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=13', thumbnail: 'https://i.imgur.com/2sZ9L4k.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 14, title: 'EP 14: Strong Assault', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=14', thumbnail: 'https://i.imgur.com/2sZ9L4k.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 15, title: 'EP 15: Round and Round the Tower', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=15', thumbnail: 'https://i.imgur.com/2sZ9L4k.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 16, title: 'EP 16: Slice Slice Dance', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=16', thumbnail: 'https://i.imgur.com/2sZ9L4k.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 17, title: 'EP 17: Have a Nice Flight', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=17', thumbnail: 'https://i.imgur.com/2sZ9L4k.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 18, title: 'EP 18: Kanaguri', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=18', thumbnail: 'https://i.imgur.com/2sZ9L4k.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 19, title: 'EP 19: Exam, Stage Three', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=19', thumbnail: 'https://i.imgur.com/2sZ9L4k.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 20, title: 'EP 20: Mutual Fans', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=20', thumbnail: 'https://i.imgur.com/2sZ9L4k.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 21, title: 'EP 21: The Order\'s Move', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=21', thumbnail: 'https://i.imgur.com/2sZ9L4k.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 22, title: 'EP 22: Peace Reclaimed', videoUrl: 'https://multiembed.mov/?video_id=tt16866380&s=1&e=22', thumbnail: 'https://i.imgur.com/2sZ9L4k.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }
+            ];
+            
+            // --- Page Elements ---
+            const videoPlayer = document.getElementById('video-player-iframe');
+            const EPsListContainer = document.getElementById('EPs-list-container');
+            const downloadLinksTbody = document.getElementById('download-links-tbody');
+            const currentEPTitle = document.getElementById('current-EP-title');
+            const prevBtn = document.getElementById('prev-ep-btn');
+            const nextBtn = document.getElementById('next-ep-btn');
+
+            // --- Button Elements ---
+            const playButton = document.getElementById('play-button');
+            const mobilePlayButton = document.getElementById('mobile-play-button');
+            const trailerButton = document.getElementById('trailer-button');
+            const mobileTrailerButton = document.getElementById('mobile-trailer-button');
+            const addToWatchlistBtn = document.getElementById('add-to-watchlist-btn');
+
+            let currentEPIndex = 0; // Index starting at 0
+            const totalEPs = EPData.length;
+
+            function populateReviewSection() {
+                // --- Review Population Logic ---
+                document.title = `Review & Watch ${selectedAnime.title} - Anikan`;
+                document.getElementById('hero-banner-section').style.backgroundImage = `url('${selectedAnime.bgImage}')`;
+                document.getElementById('anime-title-main').textContent = selectedAnime.title;
+                document.getElementById('hero-meta-year').textContent = selectedAnime.releaseYear;
+                document.getElementById('hero-meta-type').textContent = selectedAnime.type;
+                document.getElementById('hero-meta-duration').textContent = `${selectedAnime.duration}`;
+                document.getElementById('anime-poster').src = selectedAnime.coverImage;
+                document.getElementById('info-title').textContent = selectedAnime.title;
+                document.getElementById('info-cast').textContent = selectedAnime.cast.join(', ');
+                document.getElementById('info-creator').textContent = selectedAnime.creator;
+                document.getElementById('info-genre').textContent = selectedAnime.genres.join(', ');
+                const ratingCircle = document.getElementById('rating-circle');
+                document.getElementById('rating-score').textContent = selectedAnime.rating;
+                if (ratingCircle) {
+                    ratingCircle.style.setProperty('--rating-percent', selectedAnime.rating * 10);
+                }
+                document.getElementById('synopsis-text').textContent = selectedAnime.description;
+                // Using an imgur CDN link for the high-quality images
+                document.getElementById('photos-grid').innerHTML = selectedAnime.gallery.map(img => `<img src="${img}" alt="Gallery image">`).join('');
+                document.getElementById('trailer-player').src = selectedAnime.trailer_url;
+                document.getElementById('character-list').innerHTML = selectedAnime.characters.map(char =>
+                    `<div class="character-card"><img src="${char.image}" alt="${char.name}"><h4>${char.name}</h4></div>`
+                ).join('');
+                document.getElementById('anime-audience').textContent = selectedAnime.audience;
+                const officialStreamsContainer = document.getElementById('official-streams');
+                officialStreamsContainer.innerHTML = selectedAnime.official_streams.map(stream =>
+                    `<a href="#" class="stream-logo"><img src="${stream.logo}" alt="${stream.platform}"></a>`
+                ).join('');
+                
+                // Populate Sidebar Info
+                document.getElementById('sidebar-poster').src = selectedAnime.coverImage;
+                document.getElementById('sidebar-title').textContent = selectedAnime.title;
+                document.getElementById('sidebar-type').textContent = selectedAnime.type;
+                document.getElementById('sidebar-EPs').textContent = selectedAnime.EPs;
+                document.getElementById('sidebar-duration').textContent = selectedAnime.duration;
+                document.getElementById('sidebar-studio').textContent = selectedAnime.studio;
+                document.getElementById('sidebar-score').textContent = selectedAnime.rating + '/10';
+                document.getElementById('sidebar-genres').textContent = selectedAnime.genres.join(', ');
+            }
+            
+            // --- NEW LOGIC: Using EPData constant ---
+
+            function updateUI(EPIndex) {
+                currentEPIndex = parseInt(EPIndex, 10);
+                const EP = EPData[currentEPIndex];
+                
+                if (!EP) return;
+                
+                const EPNumber = EP.number;
+                // Use regex to get the part of the title after the number/colon for cleaner display in the H1
+                const displayTitle = EP.title.match(/(?::\s?)(.*)/)?.[1] || EP.title;
+
+                currentEPTitle.textContent = `You are watching EP ${EPNumber} - ${displayTitle}`;
+                
+                // 1. Update Video Player
+                videoPlayer.src = EP.videoUrl;
+
+                // 2. Update Download Links
+                downloadLinksTbody.innerHTML = '';
+                const downloadQualities = Object.keys(EP.downloads);
+                const subtitleUrl = EP.subtitleUrl || '#';
+                
+                if (downloadQualities.length > 0) {
+                     downloadQualities.forEach(quality => {
+                        const downloadUrl = EP.downloads[quality];
+                        downloadLinksTbody.innerHTML += `
+                            <tr>
+                                <td data-label="EP">EP ${EPNumber}</td>
+                                <td data-label="Quality">${quality}</td>
+                                <td data-label="Video"><a href="${downloadUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-download"></i> Download</a></td>
+                                <td data-label="Subtitles"><a href="${subtitleUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-closed-captioning"></i> Download</a></td>
+                            </tr>`;
+                    });
+                } else {
+                    downloadLinksTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-text-muted);">Download links not available for this EP.</td></tr>`;
+                }
+                
+                // 3. Update EP List Active State and scroll
+                EPsListContainer.querySelectorAll('.EP-item').forEach(link => link.classList.remove('current'));
+                const activeEPLink = EPsListContainer.querySelector(`.EP-item[data-EP='${EPNumber}']`);
+                if (activeEPLink) {
+                    activeEPLink.classList.add('current');
+                    activeEPLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+
+                // 4. Update Navigation Buttons
+                prevBtn.disabled = EPNumber === 1;
+                nextBtn.disabled = EPNumber === totalEPs;
+            }
+
+            function generateEPList() {
+                EPsListContainer.innerHTML = '';
+                EPData.forEach((ep, index) => {
+                    const EPNumber = ep.number;
+                    const EPTitle = ep.title.match(/(?::\s?)(.*)/)?.[1] || ep.title; // Clean up title for display
+                    
+                    const itemHTML = `
+                        <a class="EP-item" data-EP="${EPNumber}" data-EP-index="${index}">
+                            <img src="${ep.thumbnail}" alt="Ep ${EPNumber}" class="EP-thumbnail">
+                            <div class="ep-info">
+                                <p class="ep-number">EP ${EPNumber}</p>
+                                <p class="ep-desc">${EPTitle}</p>
+                            </div>
+                        </a>
+                    `;
+                    EPsListContainer.innerHTML += itemHTML;
+                });
+                
+                // Attach click listeners to the generated list items
+                EPsListContainer.querySelectorAll('.EP-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        updateUI(item.dataset.EPIndex);
+                    });
+                });
+            }
+
+
+            // --- Event Handlers ---
+            const handlePlayClick = () => {
+                document.body.classList.add('watching-active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                generateEPList(); // Generate list and attach click handlers
+                
+                // Initialize the player with the first EP
+                if (EPData.length > 0) {
+                    updateUI(0);
+                }
+            };
+            
+            const handleTrailerClick = () => {
+                const trailerElement = document.getElementById('trailer-player');
+                if (trailerElement) {
+                    trailerElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            };
+            
+            const handleAddToWatchlist = async () => {
+                // Placeholder logic as in original
+                const username = null; // Assuming no user is logged in
+                if (!username) {
+                    alert('Please log in to add to your watchlist.');
+                    // window.location.href = '/login.html';
+                    return;
+                }
+            };
+
+            // --- Navigation Event Listeners ---
+            prevBtn.addEventListener('click', () => { 
+                if (currentEPIndex > 0) updateUI(currentEPIndex - 1); 
+            });
+            nextBtn.addEventListener('click', () => { 
+                if (currentEPIndex < totalEPs - 1) updateUI(currentEPIndex + 1); 
+            });
+
+            // --- Other Event Listeners ---
+            playButton.addEventListener('click', handlePlayClick);
+            mobilePlayButton.addEventListener('click', handlePlayClick);
+            trailerButton.addEventListener('click', handleTrailerClick);
+            mobileTrailerButton.addEventListener('click', handleTrailerClick);
+            addToWatchlistBtn.addEventListener('click', handleAddToWatchlist);
+
+            // --- Initialize Page ---
+            populateReviewSection();
+        });
+    </script>
+</body>
+</html>
