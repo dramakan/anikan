@@ -128,17 +128,17 @@
                         </iframe>
                     </div>
 
-                    <div class="EP-meta">
-                        <h1 class="EP-title" id="current-EP-title"></h1>
-                        <div class="EP-actions">
+                    <div class="episode-meta">
+                        <h1 class="episode-title" id="current-episode-title"></h1>
+                        <div class="episode-actions">
                             <button class="action-btn" id="prev-ep-btn"><i class="fas fa-arrow-left"></i>Prev</button>
                             <button class="action-btn" id="next-ep-btn">Next<i class="fas fa-arrow-right"></i></button>
                         </div>
                     </div>
                     
-                    <div class="widget EPs-list-widget">
-                        <h2 class="widget-title">EPs</h2>
-                        <div class="EPs-list" id="EPs-list-container">
+                    <div class="widget episodes-list-widget">
+                        <h2 class="widget-title">Episodes</h2>
+                        <div class="episodes-list" id="episodes-list-container">
                         </div>
                     </div>
                     
@@ -147,7 +147,7 @@
                         <div class="download-list">
                             <table>
                                 <thead>
-                                    <tr><th>EP</th><th>Quality</th><th>Video</th><th>Subtitles</th></tr>
+                                    <tr><th>Episode</th><th>Quality</th><th>Video</th><th>Subtitles</th></tr>
                                 </thead>
                                 <tbody id="download-links-tbody">
                                 </tbody>
@@ -162,7 +162,7 @@
                         <h2 class="info-title-sidebar" id="sidebar-title"></h2>
                         <div class="info-details">
                             <p><span>Type:</span> <span id="sidebar-type"></span></p>
-                            <p><span>EPs:</span> <span id="sidebar-EPs"></span></p>
+                            <p><span>Episodes:</span> <span id="sidebar-episodes"></span></p>
                             <p><span>Duration:</span> <span id="sidebar-duration"></span></p>
                             <p><span>Studio:</span> <span id="sidebar-studio"></span></p>
                             <p><span>Score:</span> <span id="sidebar-score"></span></p>
@@ -196,7 +196,7 @@
                 creator: 'Taizan5', // The manga creator
                 studio: 'N/A (Manga)', // Since it's a manga, using N/A for studio
                 type: 'Manga (Short Series)', 
-                EPs: 2, // Assuming 2 main chapters/volumes for structure purposes, adjust if an anime comes out
+                EPs: 2, // Original EP key retained for sidebar population
                 genres: ['Drama', 'Psychological', 'Sci-Fi'],
                 duration: 'N/A', // Duration for a short manga is N/A
                 rating: 8.5, // Placeholder rating
@@ -218,22 +218,21 @@
                     'https://techwiser.com/wp-content/uploads/2025/07/Takopis-Original-Sin-Episode-4-ew.webp',
                     'https://m.media-amazon.com/images/M/MV5BNjQ3YzI3OGYtM2QzOC00NGU5LWIxYzQtNzU1YzMzODA4Y2Q5XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg',
                     'https://m.media-amazon.com/images/S/pv-target-images/c284a5ecbbb46e7bafc0e31de8dd641fb72f30834bc29c6d031721074cc12232._SX1080_FMjpg_.jpg',
-                    'https://m.media-amazon.com/images/M/MV5BNzAwNGQxMGQtZmEyMy00NGQ1LWEzY2YtYmNkZTY0ZGIzMjg3XkEyXkFqcGc@._V1_.jpg'
+                    'https://m.media-amazon.com/images/M/MV5BNzAwNGQxMGQtZmEyMy00NGQ1LWEzY2YtM25kZTY0ZGIzMjg3XkEyXkFqcGc@._V1_.jpg'
                 ]
             };
 
             // --- EP DATA: Takopi (Simulated EP Structure) ---
-            // Simulating a short series structure, e.g., 2 Volumes or a short OVA/Anime series
-            const EPData = [
-                { number: 1, title: 'EP 1: The Happy Alien', videoUrl: 'https://hnembed.cc/embed/tv/tt36988358&s=1&e=1', thumbnail: 'https://imgsrv.crunchyroll.com/cdn-cgi/image/fit=contain,format=auto,quality=85,width=1200,height=675/catalog/crunchyroll/fe04fb008e1f7efbd1ff61a73dc88de0.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 2, title: 'EP 2: The Original Sin', videoUrl: 'https://hnembed.cc/embed/tv/tt36988358&s=1&e=2', thumbnail: 'https://imgsrv.crunchyroll.com/cdn-cgi/image/fit=contain,format=auto,quality=85,width=1200,height=675/catalog/crunchyroll/fe04fb008e1f7efbd1ff61a73dc88de0.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }
+            const episodeData = [
+                { number: 1, title: 'Episode 1: The Happy Alien', videoUrl: 'https://hnembed.cc/embed/tv/tt36988358&s=1&e=1', thumbnail: 'https://imgsrv.crunchyroll.com/cdn-cgi/image/fit=contain,format=auto,quality=85,width=1200,height=675/catalog/crunchyroll/fe04fb008e1f7efbd1ff61a73dc88de0.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 2, title: 'Episode 2: The Original Sin', videoUrl: 'https://hnembed.cc/embed/tv/tt36988358&s=1&e=2', thumbnail: 'https://imgsrv.crunchyroll.com/cdn-cgi/image/fit=contain,format=auto,quality=85,width=1200,height=675/catalog/crunchyroll/fe04fb008e1f7efbd1ff61a73dc88de0.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }
             ];
             
-            // --- Page Elements ---
+            // --- Page Elements (Updated IDs) ---
             const videoPlayer = document.getElementById('video-player-iframe');
-            const EPsListContainer = document.getElementById('EPs-list-container');
+            const episodesListContainer = document.getElementById('episodes-list-container');
             const downloadLinksTbody = document.getElementById('download-links-tbody');
-            const currentEPTitle = document.getElementById('current-EP-title');
+            const currentEpisodeTitle = document.getElementById('current-episode-title');
             const prevBtn = document.getElementById('prev-ep-btn');
             const nextBtn = document.getElementById('next-ep-btn');
 
@@ -244,11 +243,11 @@
             const mobileTrailerButton = document.getElementById('mobile-trailer-button');
             const addToWatchlistBtn = document.getElementById('add-to-watchlist-btn');
 
-            let currentEPIndex = 0; // Index starting at 0
-            const totalEPs = EPData.length;
+            let currentEpisodeIndex = 0; // Index starting at 0
+            const totalEpisodes = episodeData.length;
 
             function populateReviewSection() {
-                // ... (Original Review Population Logic - Kept same)
+                // ... (Review Population Logic) ...
                 document.title = `Review & Watch ${selectedAnime.title} - Anikan`;
                 document.getElementById('hero-banner-section').style.backgroundImage = `url('${selectedAnime.bgImage}')`;
                 document.getElementById('anime-title-main').textContent = selectedAnime.title;
@@ -278,90 +277,90 @@
                     `<a href="#" class="stream-logo"><img src="${stream.logo}" alt="${stream.platform}"></a>`
                 ).join('');
                 
-                // Populate Sidebar Info
+                // Populate Sidebar Info (Updated ID)
                 document.getElementById('sidebar-poster').src = selectedAnime.coverImage;
                 document.getElementById('sidebar-title').textContent = selectedAnime.title;
                 document.getElementById('sidebar-type').textContent = selectedAnime.type;
-                document.getElementById('sidebar-EPs').textContent = selectedAnime.EPs;
+                document.getElementById('sidebar-episodes').textContent = selectedAnime.EPs; // Uses EPs from original data
                 document.getElementById('sidebar-duration').textContent = selectedAnime.duration;
                 document.getElementById('sidebar-studio').textContent = selectedAnime.studio;
                 document.getElementById('sidebar-score').textContent = selectedAnime.rating + '/10';
                 document.getElementById('sidebar-genres').textContent = selectedAnime.genres.join(', ');
             }
             
-            // --- NEW LOGIC: Using EPData constant ---
+            // --- WATCH UI LOGIC (Updated to use episode/episodes) ---
 
-            function updateUI(EPIndex) {
-                currentEPIndex = parseInt(EPIndex, 10);
-                const EP = EPData[currentEPIndex];
+            function updateUI(episodeIndex) {
+                currentEpisodeIndex = parseInt(episodeIndex, 10);
+                const episode = episodeData[currentEpisodeIndex];
                 
-                if (!EP) return;
+                if (!episode) return;
                 
-                const EPNumber = EP.number;
+                const episodeNumber = episode.number;
                 // Use regex to get the part of the title after the number/colon for cleaner display in the H1
-                const displayTitle = EP.title.match(/(?::\s?)(.*)/)?.[1] || EP.title;
+                const displayTitle = episode.title.match(/(?::\s?)(.*)/)?.[1] || episode.title;
 
-                currentEPTitle.textContent = `You are watching EP ${EPNumber} - ${displayTitle}`;
+                currentEpisodeTitle.textContent = `You are watching Episode ${episodeNumber} - ${displayTitle}`;
                 
                 // 1. Update Video Player
-                videoPlayer.src = EP.videoUrl;
+                videoPlayer.src = episode.videoUrl;
 
                 // 2. Update Download Links
                 downloadLinksTbody.innerHTML = '';
-                const downloadQualities = Object.keys(EP.downloads);
-                const subtitleUrl = EP.subtitleUrl || '#';
+                const downloadQualities = Object.keys(episode.downloads);
+                const subtitleUrl = episode.subtitleUrl || '#';
                 
                 if (downloadQualities.length > 0) {
                      downloadQualities.forEach(quality => {
-                        const downloadUrl = EP.downloads[quality];
+                        const downloadUrl = episode.downloads[quality];
                         downloadLinksTbody.innerHTML += `
                             <tr>
-                                <td data-label="EP">EP ${EPNumber}</td>
+                                <td data-label="Episode">Episode ${episodeNumber}</td>
                                 <td data-label="Quality">${quality}</td>
                                 <td data-label="Video"><a href="${downloadUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-download"></i> Download</a></td>
                                 <td data-label="Subtitles"><a href="${subtitleUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-closed-captioning"></i> Download</a></td>
                             </tr>`;
                     });
                 } else {
-                    downloadLinksTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-text-muted);">Download links not available for this EP.</td></tr>`;
+                    downloadLinksTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-text-muted);">Download links not available for this episode.</td></tr>`;
                 }
                 
-                // 3. Update EP List Active State and scroll
-                EPsListContainer.querySelectorAll('.EP-item').forEach(link => link.classList.remove('current'));
-                const activeEPLink = EPsListContainer.querySelector(`.EP-item[data-EP='${EPNumber}']`);
-                if (activeEPLink) {
-                    activeEPLink.classList.add('current');
-                    activeEPLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                // 3. Update Episode List Active State and scroll
+                episodesListContainer.querySelectorAll('.episode-item').forEach(link => link.classList.remove('current'));
+                const activeEpisodeLink = episodesListContainer.querySelector(`.episode-item[data-episode='${episodeNumber}']`);
+                if (activeEpisodeLink) {
+                    activeEpisodeLink.classList.add('current');
+                    activeEpisodeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }
 
                 // 4. Update Navigation Buttons
-                prevBtn.disabled = EPNumber === 1;
-                nextBtn.disabled = EPNumber === totalEPs;
+                prevBtn.disabled = episodeNumber === 1;
+                nextBtn.disabled = episodeNumber === totalEpisodes;
             }
 
-            function generateEPList() {
-                EPsListContainer.innerHTML = '';
-                EPData.forEach((ep, index) => {
-                    const EPNumber = ep.number;
-                    const EPTitle = ep.title.match(/(?::\s?)(.*)/)?.[1] || ep.title; // Clean up title for display
+            function generateEpisodeList() {
+                episodesListContainer.innerHTML = '';
+                episodeData.forEach((ep, index) => {
+                    const episodeNumber = ep.number;
+                    const episodeTitle = ep.title.match(/(?::\s?)(.*)/)?.[1] || ep.title; // Clean up title for display
                     
                     const itemHTML = `
-                        <a class="EP-item" data-EP="${EPNumber}" data-EP-index="${index}">
-                            <img src="${ep.thumbnail}" alt="Ep ${EPNumber}" class="EP-thumbnail">
+                        <a class="episode-item" data-episode="${episodeNumber}" data-episode-index="${index}">
+                            <img src="${ep.thumbnail}" alt="Ep ${episodeNumber}" class="EP-thumbnail">
                             <div class="ep-info">
-                                <p class="ep-number">EP ${EPNumber}</p>
-                                <p class="ep-desc">${EPTitle}</p>
+                                <p class="ep-number">EP ${episodeNumber}</p>
+                                <p class="ep-desc">${episodeTitle}</p>
                             </div>
                         </a>
                     `;
-                    EPsListContainer.innerHTML += itemHTML;
+                    episodesListContainer.innerHTML += itemHTML;
                 });
                 
                 // Attach click listeners to the generated list items
-                EPsListContainer.querySelectorAll('.EP-item').forEach(item => {
+                episodesListContainer.querySelectorAll('.episode-item').forEach(item => {
                     item.addEventListener('click', (e) => {
                         e.preventDefault();
-                        updateUI(item.dataset.EPIndex);
+                        updateUI(item.dataset.episodeIndex);
                     });
                 });
             }
@@ -372,10 +371,10 @@
                 document.body.classList.add('watching-active');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 
-                generateEPList(); // Generate list and attach click handlers
+                generateEpisodeList(); // Generate list and attach click handlers
                 
                 // Initialize the player with the first EP
-                if (EPData.length > 0) {
+                if (episodeData.length > 0) {
                     updateUI(0);
                 }
             };
@@ -399,10 +398,10 @@
 
             // --- Navigation Event Listeners ---
             prevBtn.addEventListener('click', () => { 
-                if (currentEPIndex > 0) updateUI(currentEPIndex - 1); 
+                if (currentEpisodeIndex > 0) updateUI(currentEpisodeIndex - 1); 
             });
             nextBtn.addEventListener('click', () => { 
-                if (currentEPIndex < totalEPs - 1) updateUI(currentEPIndex + 1); 
+                if (currentEpisodeIndex < totalEpisodes - 1) updateUI(currentEpisodeIndex + 1); 
             });
 
             // --- Other Event Listeners ---
