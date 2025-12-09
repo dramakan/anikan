@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review & Watch Mob Psycho 100 - Anikan</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> 
+    
+    </head>
+<body>
+
+    <header class="main-header">
+        <a href="home.html" class="logo">Ani<span>kan</span></a>
+        <nav class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="movies.html">Movies</a>
+            <a href="categories.html">Genre</a>
+        </nav>
+        <div class="main-header .search-bar" style="display: none;">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="main-header .user-profile" style="display: none;">
+            <img src="profile.jpg" alt="User Profile">
+        </div>
+    </header>
+
+    <main>
+        <div class="review-wrapper" id="review-wrapper">
+            <section class="hero-banner" id="hero-banner-section">
+                <div class="hero-content">
+                    <h1 id="anime-title-main"></h1>
+                    <div class="hero-meta">
+                        <span id="hero-meta-year"></span>
+                        <span>&bull;</span>
+                        <span id="hero-meta-type"></span>
+                        <span>&bull;</span>
+                        <span id="hero-meta-duration"></span>
+                    </div>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" id="play-button"><i class="fas fa-play"></i>Watch</button>
+                        <button class="btn btn-secondary" id="trailer-button"><i class="fas fa-film"></i> Trailer</button>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="review-main-content">
+                <div class="left-sidebar">
+                    <img id="anime-poster" class="movie-poster" src="" alt="Anime Poster">
+                    
+                    <div class="mobile-hero-buttons">
+                        <button class="btn btn-primary" id="mobile-play-button"><i class="fas fa-play"></i>Watch</button>
+                        <button class="btn btn-secondary" id="mobile-trailer-button"><i class="fas fa-film"></i> Trailer</button>
+                    </div>
+                    
+                    <div class="watchlist-section">
+                        <button id="add-to-watchlist-btn"><i class="fas fa-plus"></i> Add to Watchlist</button>
+                        <div class="user-rating-stars" id="user-rating-stars">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="info-panel">
+                        <div class="info-details">
+                            <ul>
+                                <li><strong>Title:</strong> <span id="info-title"></span></li>
+                                <li><strong>Cast:</strong> <span id="info-cast"></span></li>
+                                <li><strong>Creator:</strong> <span id="info-creator"></span></li>
+                                <li><strong>Genre:</strong> <span id="info-genre"></span></li>
+                            </ul>
+                        </div>
+                        <div class="info-rating-circle">
+                            <div class="rating-circle-bg" id="rating-circle">
+                                <div class="rating-circle-inner">
+                                    <span class="rating-score" id="rating-score"></span>
+                                    <span class="rating-max">out of 10</span>
+                                </div>
+                            </div>
+                            <p class="personal-rating-note">note: personal rating only</p>
+                        </div>
+                    </div>
+
+                    <div class="synopsis-panel">
+                        <h2 class="section-title">Synopsis</h2>
+                        <p id="synopsis-text"></p>
+                    </div>
+
+                    <h2 class="section-title">Photos</h2>
+                    <div class="photos-grid" id="photos-grid"></div>
+
+                    <h2 class="section-title">Official Trailer</h2>
+                    <div class="trailer-panel">
+                        <div class="player-container">
+                            <iframe id="trailer-player" src="" title="Official Trailer Player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+                         </div>
+                    </div>
+
+                    <h2 class="section-title">Main Characters</h2>
+                    <div class="characters-grid" id="character-list"></div>
+
+                    <h2 class="section-title">Who is this Anime for?</h2>
+                    <div class="synopsis-panel">
+                        <p id="anime-audience"></p>
+                    </div>
+
+                    <h2 class="section-title">Where to Watch Officially</h2>
+                    <div class="official-stream-grid" id="official-streams"></div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="watch-section" id="watch-section">
+            <div class="watch-layout" id="watch-layout">
+                <div class="main-content-col">
+                    <div class="video-player-container">
+                        <iframe 
+                            id="video-player-iframe"
+                            src="" 
+                            title="Video Player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <div class="episode-meta">
+                        <h1 class="episode-title" id="current-episode-title"></h1>
+                        <div class="episode-actions">
+                            <button class="action-btn" id="prev-ep-btn"><i class="fas fa-arrow-left"></i>Prev</button>
+                            <button class="action-btn" id="next-ep-btn">Next<i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="widget episodes-list-widget">
+                        <h2 class="widget-title">Episodes</h2>
+                        <div class="episodes-list" id="episodes-list-container">
+                        </div>
+                    </div>
+                    
+                    <div class="widget download-widget">
+                        <h2 class="widget-title">Download (Placeholder Links)</h2>
+                        <div class="download-list">
+                            <table>
+                                <thead>
+                                    <tr><th>Episode</th><th>Quality</th><th>Video</th><th>Subtitles</th></tr>
+                                </thead>
+                                <tbody id="download-links-tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-col">
+                    <div class="widget drama-info-widget">
+                        <div class="info-poster"><img id="sidebar-poster" src="" alt="Anime Poster"></div>
+                        <h2 class="info-title-sidebar" id="sidebar-title"></h2>
+                        <div class="info-details">
+                            <p><span>Type:</span> <span id="sidebar-type"></span></p>
+                            <p><span>Episodes:</span> <span id="sidebar-episodes"></span></p>
+                            <p><span>Duration:</span> <span id="sidebar-duration"></span></p>
+                            <p><span>Studio:</span> <span id="sidebar-studio"></span></p>
+                            <p><span>Score:</span> <span id="sidebar-score"></span></p>
+                            <p><span>Genres:</span> <span id="sidebar-genres"></span></p>
+                        </div>
+                    </div>
+                    <div class="widget recommendations-widget">
+                        <h2 class="widget-title">More from Anikan</h2>
+                        <div class="recommendations-list">
+                           <p style="color: var(--color-text-muted); font-size: 0.9rem;">Recommendation list placeholder.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Data: Mob Psycho 100 (All Seasons) ---
+            const selectedAnime = {
+                id: 3, 
+                title: 'Mob Psycho 100', 
+                title_japanese: 'モブサイコ100',
+                cast: ['Setsuo Ito (Shigeo "Mob" Kageyama)', 'Takahiro Sakurai (Reigen Arataka)', 'Akio Ohtsuka (Dimple)'],
+                characters: [
+                    { name: 'Shigeo "Mob" Kageyama', image: 'https://cdn.anisearch.com/images/character/cover/57/57612_400.webp' }, 
+                    { name: 'Reigen Arataka', image: 'https://preview.redd.it/is-that-reigen-arataka-from-hit-series-mob-psycho-100-v0-as3cwx4i5jfe1.jpg?width=640&crop=smart&auto=webp&s=8dc55d3041836dcb691509cc5c407f9cabd65e3a' }, 
+                    { name: 'Dimple', image: 'https://preview.redd.it/dimple-backstory-v0-y5fydpf87gzd1.jpeg?auto=webp&s=73e09dc0b7631177b5cdee9c1164897a8999c7e2' } 
+                ],
+                creator: 'ONE (Manga)', 
+                studio: 'Bones',
+                type: 'TV Series', 
+                EPs: 37, // Total Episodes (S1: 12, S2: 13, S3: 12)
+                genres: ['Action', 'Comedy', 'Supernatural', 'School', 'Shonen'],
+                duration: '24 min', 
+                rating: 8.8, 
+                description: "Shigeo 'Mob' Kageyama is a seemingly ordinary middle school boy, but he is a powerful Esper with immense psychic abilities. To keep his powers in check, Mob works as an assistant to Reigen Arataka, a self-proclaimed psychic who is secretly a fraud. Mob desires to live a normal life and be friends with the girl he likes, but his powers threaten to spiral out of control whenever his emotional 'gauge' reaches 100%. The series follows Mob as he deals with spirits, rival Espers, and the universal struggle of growing up and accepting himself.",
+                audience: 'Recommended for fans of unique art styles, explosive action animation (especially by Studio Bones), and hilarious comedy balanced with strong themes of self-worth and emotional growth. If you enjoyed One-Punch Man (also by ONE), this is a must-watch.',
+                coverImage: 'https://m.media-amazon.com/images/M/MV5BYzU3NDM4ZjgtY2UyMi00YTczLTgyNDEtMjBiMDJlOGUxNjcxXkEyXkFqcGc@._V1_.jpg', // S3 Key Visual Placeholder
+                bgImage: 'https://pixel-deep.com/media/5/img_lg_1.jpg', // Main Visual Placeholder
+                releaseYear: 2016, // Start year
+                trailer_url: 'https://www.youtube.com/embed/n42kK3bF410', // S1 Official Trailer Placeholder
+                official_streams: [
+                    { platform: 'Crunchyroll', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Crunchyroll.svg/1024px-Crunchyroll.svg.png' }, 
+                    { platform: 'Hulu', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Hulu_logo_%282018%29.svg/1200px-Hulu_logo_%282018%29.svg.png' } 
+                ],
+                gallery: [
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBcoqCcFgLKXGJwSnpMbpH0YrJLqUViJuo4Q&s', 
+                    'https://m.media-amazon.com/images/M/MV5BMWZlNGYzZTctYjhhYy00ZWEyLWIzODctMTZiNTQ3NzIzOTQ3XkEyXkFqcGc@._V1_QL75_UX500_CR0,0,500,281_.jpg', 
+                    'https://i0.wp.com/anitrendz.net/news/wp-content/uploads/2022/10/mob-psycho-100-III-mob-and-dimple.jpg?resize=696%2C392&ssl=1', 
+                    'https://4kwallpapers.com/images/wallpapers/shigeo-kageyama-1920x1080-16137.jpg', 
+                    'https://i.pinimg.com/originals/67/9a/f8/679af883c08e5c5439723295de021c81.jpg', 
+                    'https://a.storyblok.com/f/178900/2880x1620/888010a1b7/d24f125358efa19c23d4e482ca5875671664356014_main.jpg/m/filters:quality(95)format(webp)' 
+                ]
+            };
+
+            // --- EP DATA: Mob Psycho 100 (37 EPs - S1, S2, S3) ---
+            const episodeData = [
+                // Season 1 (12 Episodes)
+                { number: 1, title: 'EP 1: Self-Proclaimed Psychic: Reigen Arataka', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=1&e=1', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 2, title: 'EP 2: Doubts About Youth ~The Telepathy Club Appears~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=1&e=2', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 3, title: 'EP 3: An Invitation to a Meeting ~Simply Put, I Just Wanna Be Popular~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=1&e=3', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 4, title: 'EP 4: Idiots Only Event ~Kin~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=1&e=4', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 5, title: 'EP 5: Ogre Inside ~The Violence That Accompanies Power~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=1&e=5', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 6, title: 'EP 6: Discord ~To Become One~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=1&e=6', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 7, title: 'EP 7: Exaltation ~I\'ve Got Loss~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=1&e=7', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 8, title: 'EP 8: The Brooding Terror ~The Monster Strikes~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=1&e=8', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 9, title: 'EP 9: "Claw" ~7th Division~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=1&e=9', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 10, title: 'EP 10: The Massive Aura ~The Boss Appears~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=1&e=10', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 11, title: 'EP 11: Master ~The Leader~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=1&e=11', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 12, title: 'EP 12: Mob and Reigen ~A Gigantic Tsume Threat~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=1&e=12', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+
+                // Season 2 (13 Episodes)
+                { number: 13, title: 'EP 13: The Ripped Apart', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=2&e=1', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 14, title: 'EP 14: Urban Legends ~Encountering Rumors~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=2&e=2', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 15, title: 'EP 15: One Danger After Another ~Instinct~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=2&e=3', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 16, title: 'EP 16: Inside ~The Evil Spirit Inside~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=2&e=4', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 17, title: 'EP 17: Discord ~Choices~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=2&e=5', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 18, title: 'EP 18: Poor, Lonely, Whitey', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=2&e=6', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 19, title: 'EP 19: The Crisis of the Master ~The Biggest Crisis Ever~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=2&e=7', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 20, title: 'EP 20: The One Who Even Shuts Off the Light', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=2&e=8', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 21, title: 'EP 21: Show Me What You Got!', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=2&e=9', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 22, title: 'EP 22: Collapse', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=2&e=10', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 23, title: 'EP 23: Guidance ~A Psychic Master~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=2&e=11', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 24, title: 'EP 24: Boss Fight ~The Final Light~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=2&e=12', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 25, title: 'EP 25: The Future', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=2&e=13', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+
+                // Season 3 (12 Episodes)
+                { number: 26, title: 'EP 26: Into the City ~Getting Kinda Lost~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=3&e=1', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 27, title: 'EP 27: Yokai Hunter Amakusa Haruaki Appears! ~The Threat of a Hundred Demons~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=3&e=2', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 28, title: 'EP 28: Kageyama Shigeo is on the Move ~Public Notice~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=3&e=3', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 29, title: 'EP 29: Divine Tree ~The Savior Has Arrived~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=3&e=4', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 30, title: 'EP 30: Conflict ~Selection~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=3&e=5', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 31, title: 'EP 31: The Best Way to Become a Friend ~The Whole Story~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=3&e=6', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 32, title: 'EP 32: The Divine Tree in the Middle of the City', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=3&e=7', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 33, title: 'EP 33: Mob 7 ~What’s It Like to Be a Psychic?~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=3&e=8', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 34, title: 'EP 34: Mob 7 ~Power~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=3&e=9', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 35, title: 'EP 35: Mob 7 ~Kageyama Shigeo~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=3&e=10', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 36, title: 'EP 36: Mob 7 ~Are You Still Looking at Yourself?~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=3&e=11', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 37, title: 'EP 37: Confession ~The Future~', videoUrl: 'https://multiembed.mov/?video_id=tt5897304&s=3&e=12', thumbnail: 'https://m.media-amazon.com/images/S/pv-target-images/aaa253b7a9f9fb95264c68c31cd04b9030a5d7b0212e1b01d437dc5631c62799.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }
+            ];
+            
+            // --- Page Elements ---
+            const videoPlayer = document.getElementById('video-player-iframe');
+            const episodesListContainer = document.getElementById('episodes-list-container');
+            const downloadLinksTbody = document.getElementById('download-links-tbody');
+            const currentEpisodeTitle = document.getElementById('current-episode-title');
+            const prevBtn = document.getElementById('prev-ep-btn');
+            const nextBtn = document.getElementById('next-ep-btn');
+
+            // --- Button Elements ---
+            const playButton = document.getElementById('play-button');
+            const mobilePlayButton = document.getElementById('mobile-play-button');
+            const trailerButton = document.getElementById('trailer-button');
+            const mobileTrailerButton = document.getElementById('mobile-trailer-button');
+            const addToWatchlistBtn = document.getElementById('add-to-watchlist-btn');
+
+            let currentEpisodeIndex = 0; // Index starting at 0
+            const totalEpisodes = episodeData.length;
+
+            function populateReviewSection() {
+                // --- Review Population Logic ---
+                document.title = `Review & Watch ${selectedAnime.title} - Anikan`;
+                document.getElementById('hero-banner-section').style.backgroundImage = `url('${selectedAnime.bgImage}')`;
+                document.getElementById('anime-title-main').textContent = selectedAnime.title;
+                document.getElementById('hero-meta-year').textContent = selectedAnime.releaseYear;
+                document.getElementById('hero-meta-type').textContent = selectedAnime.type;
+                document.getElementById('hero-meta-duration').textContent = `${selectedAnime.duration}`;
+                document.getElementById('anime-poster').src = selectedAnime.coverImage;
+                document.getElementById('info-title').textContent = selectedAnime.title;
+                document.getElementById('info-cast').textContent = selectedAnime.cast.join(', ');
+                document.getElementById('info-creator').textContent = selectedAnime.creator;
+                document.getElementById('info-genre').textContent = selectedAnime.genres.join(', ');
+                const ratingCircle = document.getElementById('rating-circle');
+                document.getElementById('rating-score').textContent = selectedAnime.rating;
+                if (ratingCircle) {
+                    // Set color and rotation based on score
+                    const score = selectedAnime.rating;
+                    let color = 'var(--color-primary)'; // Default or high
+                    if (score < 7.0) color = 'var(--color-warning)';
+                    else if (score < 8.5) color = 'var(--color-highlight)';
+
+                    ratingCircle.style.setProperty('--rating-percent', selectedAnime.rating * 10);
+                    ratingCircle.style.borderColor = color;
+                    ratingCircle.style.boxShadow = `0 0 10px ${color}`;
+                }
+                document.getElementById('synopsis-text').textContent = selectedAnime.description;
+                // Using an imgur CDN link for the high-quality images
+                document.getElementById('photos-grid').innerHTML = selectedAnime.gallery.map(img => `<img src="${img}" alt="Gallery image">`).join('');
+                document.getElementById('trailer-player').src = selectedAnime.trailer_url;
+                document.getElementById('character-list').innerHTML = selectedAnime.characters.map(char =>
+                    `<div class="character-card"><img src="${char.image}" alt="${char.name}"><h4>${char.name}</h4></div>`
+                ).join('');
+                document.getElementById('anime-audience').textContent = selectedAnime.audience;
+                const officialStreamsContainer = document.getElementById('official-streams');
+                officialStreamsContainer.innerHTML = selectedAnime.official_streams.map(stream =>
+                    `<a href="#" class="stream-logo"><img src="${stream.logo}" alt="${stream.platform}"></a>`
+                ).join('');
+                
+                // Populate Sidebar Info
+                document.getElementById('sidebar-poster').src = selectedAnime.coverImage;
+                document.getElementById('sidebar-title').textContent = selectedAnime.title;
+                document.getElementById('sidebar-type').textContent = selectedAnime.type;
+                document.getElementById('sidebar-episodes').textContent = selectedAnime.EPs;
+                document.getElementById('sidebar-duration').textContent = selectedAnime.duration;
+                document.getElementById('sidebar-studio').textContent = selectedAnime.studio;
+                document.getElementById('sidebar-score').textContent = selectedAnime.rating + '/10';
+                document.getElementById('sidebar-genres').textContent = selectedAnime.genres.join(', ');
+            }
+            
+            // --- NEW LOGIC: Using episodeData constant ---
+
+            function updateUI(episodeIndex) {
+                currentEpisodeIndex = parseInt(episodeIndex, 10);
+                const episode = episodeData[currentEpisodeIndex];
+                
+                if (!episode) return;
+                
+                const episodeNumber = episode.number;
+                // Use regex to get the part of the title after the number/colon for cleaner display in the H1
+                const displayTitle = episode.title.match(/(?::\s?)(.*)/)?.[1] || episode.title;
+
+                currentEpisodeTitle.textContent = `You are watching Episode ${episodeNumber} - ${displayTitle}`;
+                
+                // 1. Update Video Player
+                videoPlayer.src = episode.videoUrl;
+
+                // 2. Update Download Links
+                downloadLinksTbody.innerHTML = '';
+                const downloadQualities = Object.keys(episode.downloads);
+                const subtitleUrl = episode.subtitleUrl || '#';
+                
+                if (downloadQualities.length > 0) {
+                     downloadQualities.forEach(quality => {
+                        const downloadUrl = episode.downloads[quality];
+                        downloadLinksTbody.innerHTML += `
+                            <tr>
+                                <td data-label="Episode">Episode ${episodeNumber}</td>
+                                <td data-label="Quality">${quality}</td>
+                                <td data-label="Video"><a href="${downloadUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-download"></i> Download</a></td>
+                                <td data-label="Subtitles"><a href="${subtitleUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-closed-captioning"></i> Download</a></td>
+                            </tr>`;
+                    });
+                } else {
+                    downloadLinksTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-text-muted);">Download links not available for this episode.</td></tr>`;
+                }
+                
+                // 3. Update Episode List Active State and scroll
+                episodesListContainer.querySelectorAll('.episode-item').forEach(link => link.classList.remove('current'));
+                const activeEpisodeLink = episodesListContainer.querySelector(`.episode-item[data-episode='${episodeNumber}']`);
+                if (activeEpisodeLink) {
+                    activeEpisodeLink.classList.add('current');
+                    activeEpisodeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+
+                // 4. Update Navigation Buttons
+                prevBtn.disabled = episodeNumber === 1;
+                nextBtn.disabled = episodeNumber === totalEpisodes;
+            }
+
+            function generateEpisodeList() {
+                episodesListContainer.innerHTML = '';
+                episodeData.forEach((ep, index) => {
+                    const episodeNumber = ep.number;
+                    const episodeTitle = ep.title.match(/(?::\s?)(.*)/)?.[1] || ep.title; // Clean up title for display
+                    
+                    const itemHTML = `
+                        <a class="episode-item" data-episode="${episodeNumber}" data-episode-index="${index}">
+                            <img src="${ep.thumbnail}" alt="Ep ${episodeNumber}" class="episode-thumbnail">
+                            <div class="ep-info">
+                                <p class="ep-number">Episode ${episodeNumber}</p>
+                                <p class="ep-desc">${episodeTitle}</p>
+                            </div>
+                        </a>
+                    `;
+                    episodesListContainer.innerHTML += itemHTML;
+                });
+                
+                // Attach click listeners to the generated list items
+                episodesListContainer.querySelectorAll('.episode-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        updateUI(item.dataset.episodeIndex);
+                    });
+                });
+            }
+
+
+            // --- Event Handlers ---
+            const handlePlayClick = () => {
+                document.body.classList.add('watching-active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                generateEpisodeList(); // Generate list and attach click handlers
+                
+                // Initialize the player with the first EP
+                if (episodeData.length > 0) {
+                    updateUI(0);
+                }
+            };
+            
+            const handleTrailerClick = () => {
+                const trailerElement = document.getElementById('trailer-player');
+                if (trailerElement) {
+                    trailerElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            };
+            
+            const handleAddToWatchlist = async () => {
+                // Placeholder logic as in original
+                const username = null; // Assuming no user is logged in
+                if (!username) {
+                    alert('Please log in to add to your watchlist.');
+                    // window.location.href = '/login.html';
+                    return;
+                }
+            };
+
+            // --- Navigation Event Listeners ---
+            prevBtn.addEventListener('click', () => { 
+                if (currentEpisodeIndex > 0) updateUI(currentEpisodeIndex - 1); 
+            });
+            nextBtn.addEventListener('click', () => { 
+                if (currentEpisodeIndex < totalEpisodes - 1) updateUI(currentEpisodeIndex + 1); 
+            });
+
+            // --- Other Event Listeners ---
+            playButton.addEventListener('click', handlePlayClick);
+            mobilePlayButton.addEventListener('click', handlePlayClick);
+            trailerButton.addEventListener('click', handleTrailerClick);
+            mobileTrailerButton.addEventListener('click', handleTrailerClick);
+            addToWatchlistBtn.addEventListener('click', handleAddToWatchlist);
+
+            // --- Initialize Page ---
+            populateReviewSection();
+        });
+    </script>
+</body>
+</html>
