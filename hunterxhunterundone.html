@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review & Watch Hunter x Hunter - Anikan</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> 
+    
+    </head>
+<body>
+
+    <header class="main-header">
+        <a href="home.html" class="logo">Ani<span>kan</span></a>
+        <nav class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="movies.html">Movies</a>
+            <a href="categories.html">Genre</a>
+        </nav>
+        <div class="main-header .search-bar" style="display: none;">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="main-header .user-profile" style="display: none;">
+            <img src="profile.jpg" alt="User Profile">
+        </div>
+    </header>
+
+    <main>
+        <div class="review-wrapper" id="review-wrapper">
+            <section class="hero-banner" id="hero-banner-section">
+                <div class="hero-content">
+                    <h1 id="anime-title-main"></h1>
+                    <div class="hero-meta">
+                        <span id="hero-meta-year"></span>
+                        <span>&bull;</span>
+                        <span id="hero-meta-type"></span>
+                        <span>&bull;</span>
+                        <span id="hero-meta-duration"></span>
+                    </div>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" id="play-button"><i class="fas fa-play"></i>Watch</button>
+                        <button class="btn btn-secondary" id="trailer-button"><i class="fas fa-film"></i> Trailer</button>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="review-main-content">
+                <div class="left-sidebar">
+                    <img id="anime-poster" class="movie-poster" src="" alt="Anime Poster">
+                    
+                    <div class="mobile-hero-buttons">
+                        <button class="btn btn-primary" id="mobile-play-button"><i class="fas fa-play"></i>Watch</button>
+                        <button class="btn btn-secondary" id="mobile-trailer-button"><i class="fas fa-film"></i> Trailer</button>
+                    </div>
+                    
+                    <div class="watchlist-section">
+                        <button id="add-to-watchlist-btn"><i class="fas fa-plus"></i> Add to Watchlist</button>
+                        <div class="user-rating-stars" id="user-rating-stars">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="info-panel">
+                        <div class="info-details">
+                            <ul>
+                                <li><strong>Title:</strong> <span id="info-title"></span></li>
+                                <li><strong>Cast:</strong> <span id="info-cast"></span></li>
+                                <li><strong>Creator:</strong> <span id="info-creator"></span></li>
+                                <li><strong>Genre:</strong> <span id="info-genre"></span></li>
+                            </ul>
+                        </div>
+                        <div class="info-rating-circle">
+                            <div class="rating-circle-bg" id="rating-circle">
+                                <div class="rating-circle-inner">
+                                    <span class="rating-score" id="rating-score"></span>
+                                    <span class="rating-max">out of 10</span>
+                                </div>
+                            </div>
+                            <p class="personal-rating-note">note: personal rating only</p>
+                        </div>
+                    </div>
+
+                    <div class="synopsis-panel">
+                        <h2 class="section-title">Synopsis</h2>
+                        <p id="synopsis-text"></p>
+                    </div>
+
+                    <h2 class="section-title">Photos</h2>
+                    <div class="photos-grid" id="photos-grid"></div>
+
+                    <h2 class="section-title">Official Trailer</h2>
+                    <div class="trailer-panel">
+                        <div class="player-container">
+                            <iframe id="trailer-player" src="" title="Official Trailer Player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+                         </div>
+                    </div>
+
+                    <h2 class="section-title">Main Characters</h2>
+                    <div class="characters-grid" id="character-list"></div>
+
+                    <h2 class="section-title">Who is this Anime for?</h2>
+                    <div class="synopsis-panel">
+                        <p id="anime-audience"></p>
+                    </div>
+
+                    <h2 class="section-title">Where to Watch Officially</h2>
+                    <div class="official-stream-grid" id="official-streams"></div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="watch-section" id="watch-section">
+            <div class="watch-layout" id="watch-layout">
+                <div class="main-content-col">
+                    <div class="video-player-container">
+                        <iframe 
+                            id="video-player-iframe"
+                            src="" 
+                            title="Video Player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <div class="episode-meta">
+                        <h1 class="episode-title" id="current-episode-title"></h1>
+                        <div class="episode-actions">
+                            <button class="action-btn" id="prev-ep-btn"><i class="fas fa-arrow-left"></i>Prev</button>
+                            <button class="action-btn" id="next-ep-btn">Next<i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="widget episodes-list-widget">
+                        <h2 class="widget-title">Episodes</h2>
+                        <div class="episodes-list" id="episodes-list-container">
+                        </div>
+                    </div>
+                    
+                    <div class="widget download-widget">
+                        <h2 class="widget-title">Download (Placeholder Links)</h2>
+                        <div class="download-list">
+                            <table>
+                                <thead>
+                                    <tr><th>Episode</th><th>Quality</th><th>Video</th><th>Subtitles</th></tr>
+                                </thead>
+                                <tbody id="download-links-tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-col">
+                    <div class="widget drama-info-widget">
+                        <div class="info-poster"><img id="sidebar-poster" src="" alt="Anime Poster"></div>
+                        <h2 class="info-title-sidebar" id="sidebar-title"></h2>
+                        <div class="info-details">
+                            <p><span>Type:</span> <span id="sidebar-type"></span></p>
+                            <p><span>Episodes:</span> <span id="sidebar-episodes"></span></p>
+                            <p><span>Duration:</span> <span id="sidebar-duration"></span></p>
+                            <p><span>Studio:</span> <span id="sidebar-studio"></span></p>
+                            <p><span>Score:</span> <span id="sidebar-score"></span></p>
+                            <p><span>Genres:</span> <span id="sidebar-genres"></span></p>
+                        </div>
+                    </div>
+                    <div class="widget recommendations-widget">
+                        <h2 class="widget-title">More from Anikan</h2>
+                        <div class="recommendations-list">
+                           <p style="color: var(--color-text-muted); font-size: 0.9rem;">Recommendation list placeholder.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Data: Hunter x Hunter (2011) ---
+            const selectedAnime = {
+                id: 2, 
+                title: 'Hunter x Hunter (2011)', 
+                title_japanese: 'ハンター×ハンター',
+                cast: ['Megumi Han (Gon Freecss)', 'Mariya Ise (Killua Zoldyck)', 'Miyuki Sawashiro (Kurapika)', 'Keiji Fujiwara (Leorio Paradinight)'],
+                characters: [
+                    { name: 'Gon Freecss', image: 'https://cdn.myanimelist.net/images/characters/16/438062.jpg' }, 
+                    { name: 'Killua Zoldyck', image: 'https://cdn.myanimelist.net/images/characters/10/437996.jpg' }, 
+                    { name: 'Kurapika', image: 'https://cdn.myanimelist.net/images/characters/12/437997.jpg' },
+                    { name: 'Hisoka Morow', image: 'https://cdn.myanimelist.net/images/characters/14/464879.jpg' }
+                ],
+                creator: 'Yoshihiro Togashi (Manga)', 
+                studio: 'Madhouse',
+                type: 'TV Series', 
+                EPs: 148, 
+                genres: ['Adventure', 'Action', 'Shonen', 'Super Power', 'Fantasy'],
+                duration: '24 min', 
+                rating: 9.0, // High general rating
+                description: "The story follows a young boy named Gon Freecss, who learns that his long-gone father, Ging, is actually a legendary Hunter—an elite professional licensed to go anywhere and do virtually anything. Despite Ging leaving him to pursue his dreams, Gon is determined to follow in his father's footsteps, pass the rigorous 'Hunter Examination', and eventually find him. Throughout his journey, he befriends three other candidates: Killua, a former assassin; Kurapika, the last survivor of his clan seeking revenge; and Leorio, who seeks money for an altruistic goal.",
+                audience: 'Anyone who enjoys expansive world-building, high-stakes psychological battles, deep character development, and strategic combat (Nen system). It is a quintessential shonen adventure with mature themes, perfect for viewers moving into more complex battle series.',
+                coverImage: 'https://cdn.myanimelist.net/images/anime/1337/99066.jpg', // Main Visual
+                bgImage: 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/39c9f6943b17c3855a901844a4759600.jpe', // Background Visual
+                releaseYear: 2011,
+                trailer_url: 'https://www.youtube.com/embed/kU0gC-b5eR8', // Official Trailer Placeholder
+                official_streams: [
+                    { platform: 'Crunchyroll', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Crunchyroll_Logo.svg/1200px-Crunchyroll_Logo.svg.png' },
+                    { platform: 'Netflix', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1200px-Netflix_2015_logo.svg.png' },
+                    { platform: 'Amazon Prime Video', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Amazon_Prime_Video_logo.svg/1200px-Amazon_Prime_Video_logo.svg.png' }
+                ],
+                gallery: [
+                    'https://images7.alphacoders.com/109/1091546.png', 
+                    'https://wallpapercave.com/wp/wp6662993.jpg',
+                    'https://images2.alphacoders.com/111/1118128.jpg', 
+                    'https://images7.alphacoders.com/132/1323381.jpg', 
+                    'https://images.alphacoders.com/624/624009.png', 
+                    'https://images5.alphacoders.com/712/712760.jpg' 
+                ]
+            };
+
+            // --- EP DATA: Hunter x Hunter (2011) - 148 EPs ---
+            // Condensed list using Arc names for placeholders
+            const episodeData = [];
+            
+            // Utility function to generate episode data
+            const createEpisodes = (start, end, arcName) => {
+                for (let i = start; i <= end; i++) {
+                    // Use a placeholder title and URL pattern
+                    episodeData.push({ 
+                        number: i, 
+                        title: `EP ${i}: ${arcName} - Part ${i - start + 1}`, 
+                        videoUrl: `https://multiembed.mov/?video_id=hxh_2011&e=${i}`, 
+                        thumbnail: 'https://i.imgur.com/your-hxh-ep-thumbnail.jpg', // Placeholder thumbnail
+                        downloads: { '1080p': '#', '720p': '#', '480p': '#' }, 
+                        subtitleUrl: '#' 
+                    });
+                }
+            };
+
+            // Hunter Exam Arc (1-26)
+            createEpisodes(1, 26, 'Hunter Exam Arc');
+            // Zoldyck Family Arc / Heavens Arena Arc (27-36) - Adjusted per search results (ep 27-36 covers both)
+            createEpisodes(27, 38, 'Zoldyck/Heavens Arena Arc');
+            // Yorknew City Arc (39-58)
+            createEpisodes(39, 58, 'Yorknew City Arc');
+            // Greed Island Arc (59-75)
+            createEpisodes(59, 75, 'Greed Island Arc');
+            // Chimera Ant Arc (76-136)
+            createEpisodes(76, 136, 'Chimera Ant Arc');
+            // 13th Hunter Chairman Election Arc (137-148)
+            createEpisodes(137, 148, 'Election Arc');
+            
+            // Overwrite specific titles for clarity and to mark arc starts
+            if(episodeData[0]) episodeData[0].title = 'EP 1: Departure x And x Friends';
+            if(episodeData[26]) episodeData[26].title = 'EP 27: Arrival x At x The Arena';
+            if(episodeData[38]) episodeData[38].title = 'EP 39: Target x And x Target';
+            if(episodeData[58]) episodeData[58].title = 'EP 59: Hard x And x Hard';
+            if(episodeData[75]) episodeData[75].title = 'EP 76: Reunion x And x Understanding';
+            if(episodeData[136]) episodeData[136].title = 'EP 137: The 13th x Hunter x Chairman';
+            if(episodeData[147]) episodeData[147].title = 'EP 148: Past x And x Future';
+
+            // --- Page Elements ---
+            const videoPlayer = document.getElementById('video-player-iframe');
+            const episodesListContainer = document.getElementById('episodes-list-container');
+            const downloadLinksTbody = document.getElementById('download-links-tbody');
+            const currentEpisodeTitle = document.getElementById('current-episode-title');
+            const prevBtn = document.getElementById('prev-ep-btn');
+            const nextBtn = document.getElementById('next-ep-btn');
+
+            // --- Button Elements ---
+            const playButton = document.getElementById('play-button');
+            const mobilePlayButton = document.getElementById('mobile-play-button');
+            const trailerButton = document.getElementById('trailer-button');
+            const mobileTrailerButton = document.getElementById('mobile-trailer-button');
+            const addToWatchlistBtn = document.getElementById('add-to-watchlist-btn');
+
+            let currentEpisodeIndex = 0; // Index starting at 0
+            const totalEpisodes = episodeData.length;
+
+            function populateReviewSection() {
+                // --- Review Population Logic ---
+                document.title = `Review & Watch ${selectedAnime.title} - Anikan`;
+                document.getElementById('hero-banner-section').style.backgroundImage = `url('${selectedAnime.bgImage}')`;
+                document.getElementById('anime-title-main').textContent = selectedAnime.title;
+                document.getElementById('hero-meta-year').textContent = selectedAnime.releaseYear;
+                document.getElementById('hero-meta-type').textContent = selectedAnime.type;
+                document.getElementById('hero-meta-duration').textContent = `${selectedAnime.duration}`;
+                document.getElementById('anime-poster').src = selectedAnime.coverImage;
+                document.getElementById('info-title').textContent = selectedAnime.title;
+                document.getElementById('info-cast').textContent = selectedAnime.cast.join(', ');
+                document.getElementById('info-creator').textContent = selectedAnime.creator;
+                document.getElementById('info-genre').textContent = selectedAnime.genres.join(', ');
+                const ratingCircle = document.getElementById('rating-circle');
+                document.getElementById('rating-score').textContent = selectedAnime.rating;
+                if (ratingCircle) {
+                    // Set a default high rating visually
+                    ratingCircle.style.setProperty('--rating-percent', selectedAnime.rating * 10);
+                }
+                document.getElementById('synopsis-text').textContent = selectedAnime.description;
+                // Using image URLs from search/placeholders
+                document.getElementById('photos-grid').innerHTML = selectedAnime.gallery.map(img => `<img src="${img}" alt="Gallery image">`).join('');
+                document.getElementById('trailer-player').src = selectedAnime.trailer_url;
+                document.getElementById('character-list').innerHTML = selectedAnime.characters.map(char =>
+                    `<div class="character-card"><img src="${char.image}" alt="${char.name}"><h4>${char.name}</h4></div>`
+                ).join('');
+                document.getElementById('anime-audience').textContent = selectedAnime.audience;
+                const officialStreamsContainer = document.getElementById('official-streams');
+                officialStreamsContainer.innerHTML = selectedAnime.official_streams.map(stream =>
+                    `<a href="#" class="stream-logo"><img src="${stream.logo}" alt="${stream.platform}"></a>`
+                ).join('');
+                
+                // Populate Sidebar Info
+                document.getElementById('sidebar-poster').src = selectedAnime.coverImage;
+                document.getElementById('sidebar-title').textContent = selectedAnime.title;
+                document.getElementById('sidebar-type').textContent = selectedAnime.type;
+                document.getElementById('sidebar-episodes').textContent = selectedAnime.EPs;
+                document.getElementById('sidebar-duration').textContent = selectedAnime.duration;
+                document.getElementById('sidebar-studio').textContent = selectedAnime.studio;
+                document.getElementById('sidebar-score').textContent = selectedAnime.rating + '/10';
+                document.getElementById('sidebar-genres').textContent = selectedAnime.genres.join(', ');
+            }
+            
+            // --- NEW LOGIC: Using episodeData constant ---
+
+            function getArcName(epNum) {
+                if (epNum >= 1 && epNum <= 26) return 'Hunter Exam Arc';
+                if (epNum >= 27 && epNum <= 38) return 'Zoldyck/Heavens Arena Arc';
+                if (epNum >= 39 && epNum <= 58) return 'Yorknew City Arc';
+                if (epNum >= 59 && epNum <= 75) return 'Greed Island Arc';
+                if (epNum >= 76 && epNum <= 136) return 'Chimera Ant Arc';
+                if (epNum >= 137 && epNum <= 148) return 'Election Arc';
+                return 'Unknown Arc';
+            }
+
+            function updateUI(episodeIndex) {
+                currentEpisodeIndex = parseInt(episodeIndex, 10);
+                const episode = episodeData[currentEpisodeIndex];
+                
+                if (!episode) return;
+                
+                const episodeNumber = episode.number;
+                const arcName = getArcName(episodeNumber);
+                // Use regex to get the part of the title after the number/colon for cleaner display in the H1
+                const displayTitle = episode.title.match(/(?::\s?)(.*)/)?.[1] || episode.title;
+
+                currentEpisodeTitle.textContent = `${arcName} | EP ${episodeNumber} - ${displayTitle}`;
+                
+                // 1. Update Video Player
+                videoPlayer.src = episode.videoUrl;
+
+                // 2. Update Download Links
+                downloadLinksTbody.innerHTML = '';
+                const downloadQualities = Object.keys(episode.downloads);
+                const subtitleUrl = episode.subtitleUrl || '#';
+                
+                if (downloadQualities.length > 0) {
+                     downloadQualities.forEach(quality => {
+                        const downloadUrl = episode.downloads[quality];
+                        downloadLinksTbody.innerHTML += `
+                            <tr>
+                                <td data-label="Episode">Episode ${episodeNumber}</td>
+                                <td data-label="Quality">${quality}</td>
+                                <td data-label="Video"><a href="${downloadUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-download"></i> Download</a></td>
+                                <td data-label="Subtitles"><a href="${subtitleUrl}" class="download-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-closed-captioning"></i> Download</a></td>
+                            </tr>`;
+                    });
+                } else {
+                    downloadLinksTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-text-muted);">Download links not available for this episode.</td></tr>`;
+                }
+                
+                // 3. Update Episode List Active State and scroll
+                episodesListContainer.querySelectorAll('.episode-item').forEach(link => link.classList.remove('current'));
+                const activeEpisodeLink = episodesListContainer.querySelector(`.episode-item[data-episode='${episodeNumber}']`);
+                if (activeEpisodeLink) {
+                    activeEpisodeLink.classList.add('current');
+                    activeEpisodeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+
+                // 4. Update Navigation Buttons
+                prevBtn.disabled = episodeNumber === 1;
+                nextBtn.disabled = episodeNumber === totalEpisodes;
+            }
+
+            function generateEpisodeList() {
+                episodesListContainer.innerHTML = '';
+                let currentArc = '';
+                
+                episodeData.forEach((ep, index) => {
+                    const episodeNumber = ep.number;
+                    const episodeTitle = ep.title.match(/(?::\s?)(.*)/)?.[1] || ep.title; // Clean up title for display
+                    const arcName = getArcName(episodeNumber);
+                    
+                    let seasonLabel = '';
+                    if (arcName !== currentArc) {
+                        seasonLabel = `<span class="season-label">${arcName}</span>`;
+                        currentArc = arcName;
+                    }
+
+                    const itemHTML = `
+                        ${seasonLabel}
+                        <a class="episode-item" data-episode="${episodeNumber}" data-episode-index="${index}">
+                            <img src="${ep.thumbnail}" alt="Ep ${episodeNumber}" class="episode-thumbnail">
+                            <div class="ep-info">
+                                <p class="ep-number">Episode ${episodeNumber}</p>
+                                <p class="ep-desc">${episodeTitle}</p>
+                            </div>
+                        </a>
+                    `;
+                    episodesListContainer.innerHTML += itemHTML;
+                });
+                
+                // Attach click listeners to the generated list items
+                episodesListContainer.querySelectorAll('.episode-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        updateUI(item.dataset.episodeIndex);
+                    });
+                });
+            }
+
+
+            // --- Event Handlers ---
+            const handlePlayClick = () => {
+                document.body.classList.add('watching-active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                generateEpisodeList(); // Generate list and attach click handlers
+                
+                // Initialize the player with the first EP
+                if (episodeData.length > 0) {
+                    updateUI(0);
+                }
+            };
+            
+            const handleTrailerClick = () => {
+                const trailerElement = document.getElementById('trailer-player');
+                if (trailerElement) {
+                    trailerElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            };
+            
+            const handleAddToWatchlist = async () => {
+                // Placeholder logic as in original
+                const username = null; // Assuming no user is logged in
+                if (!username) {
+                    alert('Please log in to add to your watchlist.');
+                    // window.location.href = '/login.html';
+                    return;
+                }
+            };
+
+            // --- Navigation Event Listeners ---
+            prevBtn.addEventListener('click', () => { 
+                if (currentEpisodeIndex > 0) updateUI(currentEpisodeIndex - 1); 
+            });
+            nextBtn.addEventListener('click', () => { 
+                if (currentEpisodeIndex < totalEpisodes - 1) updateUI(currentEpisodeIndex + 1); 
+            });
+
+            // --- Other Event Listeners ---
+            playButton.addEventListener('click', handlePlayClick);
+            mobilePlayButton.addEventListener('click', handlePlayClick);
+            trailerButton.addEventListener('click', handleTrailerClick);
+            mobileTrailerButton.addEventListener('click', handleTrailerClick);
+            addToWatchlistBtn.addEventListener('click', handleAddToWatchlist);
+
+            // --- Initialize Page ---
+            populateReviewSection();
+        });
+    </script>
+</body>
+</html>
