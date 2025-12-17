@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Review & Watch Sakamoto Days - Anikan</title>
+    <title>Review & Watch ERASED - Anikan</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -182,70 +182,58 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- Data: Sakamoto Days Season 1 (Split-Cour) ---
+            // --- Data: ERASED (Boku dake ga Inai Machi) ---
             const selectedAnime = {
-                id: 5, 
-                title: 'Sakamoto Days', 
-                title_japanese: 'サカモトデイズ',
-                cast: ['Tomokazu Sugita (Taro Sakamoto)', 'Nobunaga Shimazaki (Shin Asakura)', 'Ayane Sakura (Lu Xiaotang)'],
+                id: 7, 
+                title: 'ERASED', 
+                title_japanese: '僕だけがいない街',
+                cast: ['Shinnosuke Mitsushima (Satoru Fujinuma - Adult)', 'Aoi Yuki (Kayo Hinazuki)', 'Takahiro Sakurai (Manabu Yashiro)'],
                 characters: [
-                    { name: 'Taro Sakamoto', image: 'https://images.immediate.co.uk/production/volatile/sites/3/2025/09/taro-sakamoto-fight-sakamoto-days-37dfa82.jpg' }, // HQ Placeholder Image
-                    { name: 'Shin Asakura', image: 'https://www.nautiljon.com/images/perso/00/10/asakura_shin_22801.webp' }, // HQ Placeholder Image
-                    { name: 'Lu Xiaotang', image: 'https://www.getpersonality.com/_next/image?url=https%3A%2F%2Fstatic1.personality-database.com%2Fprofile_images%2F14cb1905366245c2be2b1e044e648a29.png&w=3840&q=75' } // HQ Placeholder Image
+                    { name: 'Satoru Fujinuma (Adult)', image: 'https://cdn.myanimelist.net/images/characters/14/287317.jpg' }, 
+                    { name: 'Kayo Hinazuki', image: 'https://cdn.myanimelist.net/images/characters/16/287320.jpg' }, 
+                    { name: 'Satoru Fujinuma (Child)', image: 'https://cdn.myanimelist.net/images/characters/10/292888.jpg' } 
                 ],
-                creator: 'Yuto Suzuki (Manga)', 
-                studio: 'TMS Entertainment',
+                creator: 'Kei Sanbe (Manga)', 
+                studio: 'A-1 Pictures',
                 type: 'TV Series', 
-                EPs: 22, // Total for Season 1 (Two Cours) - Kept 'EPs' key to match original data source, but renamed the HTML ID for consistency.
-                genres: ['Action', 'Comedy', 'Shonen', 'Crime'],
-                duration: '24 min', 
-                rating: 8.2, // Placeholder rating
-                description: "Taro Sakamoto was once the greatest hitman of all time, feared by the entire criminal underworld. But one day, he fell in love, got married, and retired to live a peaceful life as a family man who runs a convenience store. Now overweight and quiet, Sakamoto must protect his family and his everyday life from former enemies and colleagues trying to assassinate him, all while upholding his oath not to kill. He accomplishes this with the help of his clairvoyant employee, Shin Asakura.",
-                audience: 'Fans of high-octane action-comedy, martial arts, and shonen series with a unique, overpowered protagonist who fights for domestic bliss. If you enjoy series like *One-Punch Man* or *Gintama* with stylish action, this is for you.',
-                coverImage: 'https://a.storyblok.com/f/178900/1080x1350/73f019de0e/sakamoto-days-part-2-key-visual.jpg/m/filters:quality(95)format(webp)', // HQ Placeholder Image (Main Visual)
-                bgImage: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', // HQ Placeholder Image (Background Visual)
-                releaseYear: 2025, // Expected/Announced release year
-                trailer_url: 'https://www.youtube.com/embed/y-PdMVbil3o', // Netflix Official Trailer Placeholder
+                EPs: 12, // Total Episodes for the series
+                genres: ['Mystery', 'Supernatural', 'Psychological', 'Thriller', 'Time Travel'],
+                duration: '23 min', 
+                rating: 8.35, 
+                description: "Satoru Fujinuma possesses a mysterious ability he calls 'Revival,' which forces him to travel back in time moments before a life-threatening incident occurs, allowing him to prevent it. When his mother is murdered, Satoru is framed and involuntarily sent eighteen years into the past—just before the 1988 kidnapping and murder case that scarred his hometown. He realizes the murders are connected, and his only chance to change the present is to protect his former classmate, Kayo Hinazuki, and solve the original crime.",
+                audience: 'Perfect for fans of intense mystery thrillers, psychological dramas, and stories involving time travel mechanics and high stakes. If you enjoy solving puzzles alongside the protagonist and appreciate darker themes, this series is highly recommended.',
+                coverImage: 'https://cdn.myanimelist.net/images/anime/10/77579.jpg', 
+                bgImage: 'https://i.imgur.com/vH1M4Wn.jpeg', // Key Visual Placeholder
+                releaseYear: 2016, 
+                trailer_url: 'https://www.youtube.com/embed/Y-9kC2h0Xl4', // Official Trailer Placeholder
                 official_streams: [
-                    { platform: 'Netflix', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1200px-Netflix_2015_logo.svg.png' }, //
-                    { platform: 'TV Tokyo', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/TV_Tokyo_logo_20110629.svg/2560px-TV_Tokyo_logo_20110629.svg.png' } // Japanese Broadcast
+                    { platform: 'Crunchyroll', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Crunchyroll_logo.svg/1200px-Crunchyroll_logo.svg.png' }, 
+                    { platform: 'Netflix', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1200px-Netflix_2015_logo.svg.png' } 
                 ],
                 gallery: [
-                    'https://www.leisurebyte.com/wp-content/uploads/2025/07/Sakamoto-Days-Season-1-Part-2-Episode-1-Review-6.jpg', // Scene Placeholder
-                    'https://static0.srcdn.com/wordpress/wp-content/uploads/2025/10/sakamoto-days-anime-sakamoto-and-his-friends-during-assassin-training-school.png?q=49&fit=crop&w=825&dpr=2', // Scene Placeholder
-                    'https://thetv.jp/i/nw/1254412/14297717.jpg?w=1284', // Scene Placeholder
-                    'https://cdn.oneesports.gg/cdn-data/2024/05/Anime_SakamotoDays_FirstTrailerFeatImage-1024x576.jpg', // Scene Placeholder
-                    'https://www.hindustantimes.com/ht-img/img/2025/07/10/1600x900/saamoto_wp_10_1741722762885_1752179277512.jpg', // Scene Placeholder
-                    'https://www.thepopverse.com/_next/image?url=https%3A%2F%2Fmedia.thepopverse.com%2Fmedia%2Fsakamoto-days-midseason-trailer-screenshot-bboogsihntcejc0zcl4hlmawzu.jpg&w=1280&q=75' // Scene Placeholder
+                    'https://i.imgur.com/KzR3X8E.jpeg', 
+                    'https://i.imgur.com/o5X7e6T.jpeg', 
+                    'https://i.imgur.com/H6z1B4g.jpeg', 
+                    'https://i.imgur.com/Qf2A8N7.jpeg', 
+                    'https://i.imgur.com/x0C3s9W.jpeg', 
+                    'https://i.imgur.com/M8A9k1Y.jpeg' 
                 ]
             };
 
-            // --- EP DATA: Sakamoto Days S1 (22 EPs total - 11 in Cour 1, 11 in Cour 2) ---
+            // --- EP DATA: ERASED (12 EPs) ---
             const episodeData = [
-                // Cour 1 (Jan - Mar 2025)
-                { number: 1, title: 'EP 1: The Legendary Hit Man', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=1', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 2, title: 'EP 2: Assassination is a Job', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=2', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 3, title: 'EP 3: Welcome to Sugar Park', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=3', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 4, title: 'EP 4: Hard-Boiled', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=4', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 5, title: 'EP 5: Order Member Shishiba', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=5', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 6, title: 'EP 6: Shin and the Target', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=6', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 7, title: 'EP 7: Family Time', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=7', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 8, title: 'EP 8: The JAA Exam Begins', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=8', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 9, title: 'EP 9: The Power of Sight', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=9', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 10, title: 'EP 10: Sniper Heisuke', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=10', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 11, title: 'EP 11: The Retired Hitman\'s Resolve', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=11', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                // Cour 2 (July - Sept 2025)
-                { number: 12, title: 'EP 12: New Mission, New Friends', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=12', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 13, title: 'EP 13: Just Desserts', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=13', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 14, title: 'EP 14: Strong Assault', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=14', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 15, title: 'EP 15: Round and Round the Tower', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=15', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 16, title: 'EP 16: Slice Slice Dance', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=16', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 17, title: 'EP 17: Have a Nice Flight', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=17', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 18, title: 'EP 18: Kanaguri', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=18', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 19, title: 'EP 19: Exam, Stage Three', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=19', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 20, title: 'EP 20: Mutual Fans', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=20', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 21, title: 'EP 21: The Order\'s Move', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=21', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
-                { number: 22, title: 'EP 22: Peace Reclaimed', videoUrl: 'https://www.2embed.cc/embedtv/tt17069148&s=1&e=22', thumbnail: 'https://www.whats-on-netflix.com/wp-content/uploads/2025/10/sakamoto-days-season-2-netflix-renewal.jpg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }
+                { number: 1, title: 'EP 1: Flash Back', videoUrl: 'https://multiembed.mov/?video_id=tt5249490&s=1&e=1', thumbnail: 'https://i.imgur.com/vH1M4Wn.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 2, title: 'EP 2: Palm of the Hand', videoUrl: 'https://multiembed.mov/?video_id=tt5249490&s=1&e=2', thumbnail: 'https://i.imgur.com/vH1M4Wn.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 3, title: 'EP 3: Birthmark', videoUrl: 'https://multiembed.mov/?video_id=tt5249490&s=1&e=3', thumbnail: 'https://i.imgur.com/vH1M4Wn.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 4, title: 'EP 4: The Accomplishment', videoUrl: 'https://multiembed.mov/?video_id=tt5249490&s=1&e=4', thumbnail: 'https://i.imgur.com/vH1M4Wn.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 5, title: 'EP 5: The Gate', videoUrl: 'https://multiembed.mov/?video_id=tt5249490&s=1&e=5', thumbnail: 'https://i.imgur.com/vH1M4Wn.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 6, title: 'EP 6: Grim Reaper', videoUrl: 'https://multiembed.mov/?video_id=tt5249490&s=1&e=6', thumbnail: 'https://i.imgur.com/vH1M4Wn.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 7, title: 'EP 7: The Final Act', videoUrl: 'https://multiembed.mov/?video_id=tt5249490&s=1&e=7', thumbnail: 'https://i.imgur.com/vH1M4Wn.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 8, title: 'EP 8: Spiral', videoUrl: 'https://multiembed.mov/?video_id=tt5249490&s=1&e=8', thumbnail: 'https://i.imgur.com/vH1M4Wn.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 9, title: 'EP 9: The Time Stopper', videoUrl: 'https://multiembed.mov/?video_id=tt5249490&s=1&e=9', thumbnail: 'https://i.imgur.com/vH1M4Wn.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 10, title: 'EP 10: Joy', videoUrl: 'https://multiembed.mov/?video_id=tt5249490&s=1&e=10', thumbnail: 'https://i.imgur.com/vH1M4Wn.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 11, title: 'EP 11: Future', videoUrl: 'https://multiembed.mov/?video_id=tt5249490&s=1&e=11', thumbnail: 'https://i.imgur.com/vH1M4Wn.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' },
+                { number: 12, title: 'EP 12: Treasure', videoUrl: 'https://multiembed.mov/?video_id=tt5249490&s=1&e=12', thumbnail: 'https://i.imgur.com/vH1M4Wn.jpeg', downloads: { '1080p': '#', '720p': '#', '480p': '#' }, subtitleUrl: '#' }
             ];
             
             // --- Page Elements ---
@@ -282,7 +270,15 @@
                 const ratingCircle = document.getElementById('rating-circle');
                 document.getElementById('rating-score').textContent = selectedAnime.rating;
                 if (ratingCircle) {
+                    // Set color and rotation based on score
+                    const score = selectedAnime.rating;
+                    let color = 'var(--color-primary)'; // Default or high
+                    if (score < 7.0) color = 'var(--color-warning)';
+                    else if (score < 8.5) color = 'var(--color-highlight)';
+
                     ratingCircle.style.setProperty('--rating-percent', selectedAnime.rating * 10);
+                    ratingCircle.style.borderColor = color;
+                    ratingCircle.style.boxShadow = `0 0 10px ${color}`;
                 }
                 document.getElementById('synopsis-text').textContent = selectedAnime.description;
                 // Using an imgur CDN link for the high-quality images
