@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure DB Bulk Updater</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { background: #100F14; color: #F5F5F5; font-family: 'Poppins', sans-serif; padding: 30px; }
+        h1 { text-align: center; color: #9D4EDD; }
+        .login-container { max-width: 400px; margin: 0 auto 30px; background: #1A1A1D; padding: 30px; border-radius: 12px; border: 1px solid #9D4EDD; text-align: center; }
+        .grid { display: none; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 30px; }
+        .card { background: #1A1A1D; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .card h3 { margin: 0; font-size: 1.1rem; color: #fff; }
+        .card span { font-size: 0.8rem; color: #9D4EDD; }
+        input { background: #0B0C10; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 12px; margin-bottom: 10px; border-radius: 6px; font-family: 'Poppins'; width: 100%; box-sizing: border-box; }
+        input:focus { outline: none; border-color: #9D4EDD; }
+        button { background: #9D4EDD; color: #fff; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; width: 100%; }
+        button:hover { background: #c77dff; }
+        .success { background: #10b981 !important; }
+        .preview-img { width: 100px; height: 140px; object-fit: cover; border-radius: 6px; margin: 0 auto; display: block; background: #000; }
+        #auth-status { margin-top: 10px; font-size: 0.9rem; color: #ef4444; }
+    </style>
+</head>
+<body>
+
+    <h1>Anikan Database Updater</h1>
+    <p style="text-align: center; color: #a0a0a0;">Login securely to add Posters and IMDb IDs.</p>
+
+    <div class="login-container" id="login-section">
+        <input type="email" id="admin-email" placeholder="Admin Email" required>
+        <input type="password" id="admin-password" placeholder="Admin Password" required>
+        <button id="login-btn">Login & Load Database</button>
+        <div id="auth-status"></div>
+    </div>
+    
+    <div class="grid" id="anime-list">
+        <p style="text-align:center; width: 100%;">Loading database...</p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+        // Your bhx-beats config
+        const firebaseConfig = {
+            apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
+            authDomain: "bhx-beats.firebaseapp.com",
+            projectId: "bhx-beats",
+            storageBucket: "bhx-beats.firebasestorage.app",
+            messagingSenderId: "491393581039",
+            appId: "1:491393581039:web:8204fb8753094a64a9401a"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // LOGIN LOGIC
+        document.getElementById('login-btn').addEventListener('click', async () => {
+            const email = document.getElementById('admin-email').value;
+            const pass = document.getElementById('admin-password').value;
+            const statusDiv = document.getElementById('auth-status');
+            const loginBtn = document.getElementById('login-btn');
+
+            if(!email || !pass) {
+                statusDiv.innerText = "Please enter both email and password.";
+                return;
+            }
+
+            loginBtn.innerText = "Authenticating...";
+            loginBtn.disabled = true;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('anime-list').style.display = 'grid';
+                loadAnime(); // Load database only after successful login
+            } catch(e) {
+                statusDiv.innerText = "Error: " + e.message;
+                loginBtn.innerText = "Login & Load Database";
+                loginBtn.disabled = false;
+            }
+        });
+
+        // LOAD DATABASE LOGIC
+        async function loadAnime() {
+            const listDiv = document.getElementById('anime-list');
+            listDiv.innerHTML = ''; 
+            
+            try {
+                const querySnapshot = await getDocs(collection(db, "anime"));
+                
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const id = docSnap.id;
+                    
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <img src="${data.img || ''}" class="preview-img" alt="No Poster Yet" onerror="this.src='https://via.placeholder.com/100x140?text=No+Image'">
+                        <h3>${data.title}</h3>
+                        <span>Type: ${data.type || 'Unknown'}</span>
+                        
+                        <label style="font-size: 0.8rem; margin-top: 5px;">IMDb ID (e.g. tt1234567)</label>
+                        <input type="text" id="imdb-${id}" value="${data.imdbId || ''}" placeholder="tt...">
+                        
+                        <label style="font-size: 0.8rem;">Poster Image URL</label>
+                        <input type="text" id="img-${id}" value="${data.img || ''}" placeholder="https://...">
+                        
+                        <button id="btn-${id}" onclick="updateAnime('${id}')">Update Anime</button>
+                    `;
+                    listDiv.appendChild(card);
+                });
+            } catch (error) {
+                listDiv.innerHTML = `<p style="color: #ef4444;">Error loading database: ${error.message}</p>`;
+            }
+        }
+
+        // UPDATE LOGIC
+        window.updateAnime = async function(id) {
+            const btn = document.getElementById(`btn-${id}`);
+            const imdbVal = document.getElementById(`imdb-${id}`).value.trim();
+            const imgVal = document.getElementById(`img-${id}`).value.trim();
+            
+            btn.innerText = "Updating...";
+            
+            try {
+                const animeRef = doc(db, "anime", id);
+                await updateDoc(animeRef, {
+                    imdbId: imdbVal,
+                    img: imgVal
+                });
+                
+                btn.innerText = "Saved!";
+                btn.classList.add('success');
+                setTimeout(() => { 
+                    btn.innerText = "Update Anime"; 
+                    btn.classList.remove('success');
+                }, 2000);
+                
+                // Update preview image
+                btn.parentElement.querySelector('.preview-img').src = imgVal;
+            } catch (error) {
+                alert("Error updating: " + error.message);
+                btn.innerText = "Error";
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - AniKan</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <link rel="stylesheet" href="anikan-style.css">
+
+    <style>
+        /* =========================================
+           PROFILE SPECIFIC STYLES & OVERRIDES
+        ========================================= */
+        body { 
+            padding-bottom: 120px !important; 
+            background-color: var(--background-color); 
+            background-image: radial-gradient(circle at 50% -10%, rgba(157, 78, 221, 0.1) 0%, transparent 50%);
+        }
+        
+        .profile-container { 
+            max-width: 1200px; 
+            margin: 20px auto 40px auto; 
+            padding: 0 4%; 
+            animation: fadeIn 0.6s cubic-bezier(0.25, 1, 0.5, 1); 
+            overflow-x: hidden; 
+        }
+
+        /* =========================================
+           SLEEK APP-LIKE HEADER
+        ========================================= */
+        .app-header {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(var(--bg-rgb), 0.65);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 5%; height: 64px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+        }
+        .app-header-btn {
+            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+            color: var(--text-color); font-size: 1.2rem; text-decoration: none;
+            border-radius: 50%; transition: background 0.3s ease;
+        }
+        .app-header-btn:hover { background: rgba(255,255,255,0.1); }
+        .app-header-title { font-weight: 600; font-size: 1.15rem; letter-spacing: 0.5px; color: var(--text-color); }
+        
+        /* =========================================
+           ULTRA-PREMIUM HEADER CARD 
+        ========================================= */
+        .profile-header-card {
+            background: rgba(var(--bg-rgb), 0.45); 
+            backdrop-filter: var(--glass-blur); 
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border); 
+            border-radius: 32px; 
+            padding: 40px 45px; 
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+            margin-bottom: 35px; 
+            position: relative; 
+            overflow: hidden; 
+            display: flex; 
+            align-items: center; 
+            gap: 35px;
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .avatar-section { position: relative; flex-shrink: 0; z-index: 2; }
+        .profile-avatar-wrapper { 
+            width: 120px; height: 120px; border-radius: 50%; 
+            background: rgba(var(--text-rgb), 0.05); padding: 6px; 
+            border: 2px solid rgba(157, 78, 221, 0.5); 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4), inset 0 0 20px rgba(157, 78, 221, 0.2); 
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
+        }
+        .profile-avatar-wrapper:hover { transform: scale(1.08); border-color: var(--primary-color); box-shadow: 0 20px 50px var(--primary-glow); }
+        .profile-avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: rgba(var(--bg-rgb), 1); }
+        
+        .avatar-upload-btn { 
+            position: absolute; bottom: 0px; right: 0px; 
+            background: var(--primary-color); color: white; 
+            width: 40px; height: 40px; border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; 
+            cursor: pointer; border: 4px solid var(--background-color); 
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); font-size: 1.1rem; 
+        }
+        .avatar-upload-btn:hover { transform: scale(1.15) rotate(15deg); background: #c77dff; box-shadow: 0 8px 25px var(--primary-glow); }
+        #avatar-input { display: none; }
+
+        .profile-info { flex-grow: 1; z-index: 2; }
+        .profile-name { font-size: 2.2rem; font-weight: 700; color: var(--text-color); margin-bottom: 2px; letter-spacing: -0.5px; line-height: 1.2; text-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+        .profile-email { color: var(--text-muted-color); font-size: 1rem; margin-bottom: 15px; font-weight: 400; font-family: monospace; }
+        
+        /* Dynamic Badges */
+        .badge-vip { 
+            background: rgba(157, 78, 221, 0.15); color: #d8b4fe; 
+            padding: 8px 18px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; 
+            border: 1px solid rgba(157, 78, 221, 0.3); display: inline-flex; align-items: center; gap: 8px; 
+            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.1);
+        }
+        .badge-partner { 
+            background: rgba(212, 175, 55, 0.15); color: #f1c40f; 
+            padding: 8px 18px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; 
+            border: 1px solid rgba(212, 175, 55, 0.4); display: inline-flex; align-items: center; gap: 8px; 
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+        }
+        :root.light-mode .badge-vip { color: var(--primary-color); }
+        :root.light-mode .badge-partner { color: #d4af37; }
+
+        .btn-logout { 
+            background: rgba(239, 68, 68, 0.08); color: var(--danger, #ef4444); border: 1px solid rgba(239, 68, 68, 0.25); 
+            padding: 12px 24px; border-radius: 50px; cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
+            font-weight: 600; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 10px; z-index: 2; 
+        }
+        .btn-logout:hover { background: #ef4444; color: #fff; box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4); transform: translateY(-3px); border-color: #ef4444; }
+
+        /* =========================================
+           MODERN SEGMENTED TABS
+        ========================================= */
+        .profile-tabs { 
+            display: flex; gap: 8px; margin-bottom: 35px; 
+            background: rgba(var(--text-rgb), 0.03); border: 1px solid var(--glass-border);
+            padding: 8px; border-radius: 20px;
+            overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; 
+        }
+        .profile-tabs::-webkit-scrollbar { display: none; }
+        
+        .tab-btn { 
+            background: transparent; border: 1px solid transparent; color: var(--text-muted-color); 
+            font-size: 0.95rem; font-weight: 500; cursor: pointer; padding: 12px 24px; 
+            border-radius: 14px; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); white-space: nowrap; display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center;
+        }
+        .tab-btn:hover { color: var(--text-color); background: rgba(var(--text-rgb), 0.04); }
+        .tab-btn.active { 
+            background: rgba(var(--bg-rgb), 0.8); backdrop-filter: blur(12px); color: var(--text-color); 
+            border: 1px solid var(--glass-border-light); font-weight: 600; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .tab-btn.active i { color: var(--primary-color); }
+        
+        .tab-content { display: none; animation: slideUp 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; opacity: 0; }
+        .tab-content.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* =========================================
+           ANIME GRIDS 
+        ========================================= */
+        .item-wrapper { position: relative; height: 100%; display: flex; flex-direction: column; }
+        .item-wrapper .anime-card { height: 100%; width: 100%; margin: 0; }
+        
+        .remove-btn { 
+            position: absolute; top: 10px; right: 10px; z-index: 10; 
+            background: rgba(239, 68, 68, 0.25); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(239, 68, 68, 0.5); color: #FCA5A5; border-radius: 50%; 
+            width: 34px; height: 34px; display: flex; justify-content: center; align-items: center; 
+            cursor: pointer; opacity: 0; transform: scale(0.8); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .item-wrapper:hover .remove-btn { opacity: 1; transform: scale(1); }
+        .remove-btn:hover { background: #ef4444; color: #fff; transform: scale(1.1); box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6); border-color: #ef4444; }
+
+        /* =========================================
+           REQUESTS TAB
+        ========================================= */
+        .request-item { 
+            background: rgba(var(--bg-rgb), 0.4); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); 
+            border: 1px solid var(--glass-border); padding: 20px 25px; border-radius: 20px; 
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
+        }
+        .request-item:hover { border-color: var(--glass-border-light); background: rgba(var(--bg-rgb), 0.6); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .req-info { display: flex; flex-direction: column; gap: 6px; }
+        .req-title { font-weight: 600; color: var(--text-color); font-size: 1.15rem; letter-spacing: -0.2px;}
+        .req-date { font-size: 0.85rem; color: var(--text-muted-color); display: flex; align-items: center; gap: 6px; }
+        
+        .req-status-box { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+        .req-status { padding: 6px 18px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-pending { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .status-uploaded { background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .req-link-btn { background: var(--primary-color); color: white; padding: 10px 20px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: 0.4s; box-shadow: 0 4px 15px var(--primary-glow); }
+        .req-link-btn:hover { background: #c77dff; transform: translateY(-2px); color: white;}
+
+        /* =========================================
+           SETTINGS & FORMS 
+        ========================================= */
+        .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
+        
+        .settings-card { 
+            background: rgba(var(--bg-rgb), 0.4); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); 
+            border: 1px solid var(--glass-border); border-radius: 24px; padding: 35px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+        }
+        
+        .settings-card h3 { color: var(--text-color); font-size: 1.25rem; font-weight: 600; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .settings-card h3 i { color: var(--primary-color); }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 0.85rem; color: var(--text-muted-color); margin-bottom: 8px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;}
+        .profile-input { 
+            width: 100%; padding: 14px 18px; background: rgba(var(--text-rgb), 0.03); 
+            border: 1px solid var(--glass-border); border-radius: 14px; 
+            color: var(--text-color); font-family: 'Poppins', sans-serif; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); font-size: 1rem; 
+        }
+        .profile-input:focus { outline: none; border-color: var(--primary-color); background: rgba(var(--text-rgb), 0.06); box-shadow: 0 0 15px var(--primary-glow); }
+        
+        .btn-save { width: 100%; background: var(--primary-color); color: #fff; border: none; padding: 14px; border-radius: 14px; font-weight: 600; cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); font-size: 1rem; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 15px var(--primary-glow); }
+        .btn-save:hover { background: #c77dff; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(157, 78, 221, 0.4); }
+        
+        .danger-zone { margin-top: 35px; padding-top: 25px; border-top: 1px solid var(--glass-border); }
+        .btn-clear-history { width: 100%; background: transparent; color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); padding: 14px; border-radius: 14px; font-weight: 600; cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 1rem;}
+        .btn-clear-history:hover { background: rgba(239, 68, 68, 0.1); border-color: #ef4444; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);}
+
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted-color); grid-column: 1/-1; background: rgba(var(--bg-rgb), 0.2); border: 2px dashed var(--glass-border); border-radius: 24px;}
+        .empty-state i { font-size: 3.5rem; margin-bottom: 15px; color: rgba(var(--text-rgb),0.1); }
+        .empty-state h3 { font-weight: 600; font-size: 1.2rem; color: var(--text-color); margin-bottom: 6px;}
+
+        /* =========================================
+           PARTNER DASHBOARD (GOLD THEME OVERRIDE)
+        ========================================= */
+        #tab-btn-partner.active { background: rgba(212, 175, 55, 0.15); border-color: rgba(212, 175, 55, 0.4); color: #d4af37; box-shadow: 0 6px 20px rgba(212, 175, 55, 0.1); }
+        #tab-btn-partner.active i { color: #d4af37; }
+        
+        .policy-warning {
+            display: none; 
+            background: rgba(229, 9, 20, 0.1);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 9, 20, 0.4);
+            border-radius: 20px; padding: 20px 25px;
+            margin-bottom: 25px; color: #fff;
+            align-items: flex-start; gap: 15px;
+            box-shadow: 0 10px 30px rgba(229, 9, 20, 0.15);
+            animation: slideDown 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .policy-warning i { color: var(--danger); font-size: 2rem; margin-top: 4px; filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.5)); animation: pulse 2s infinite;}
+        .policy-warning h4 { color: #fca5a5; margin-bottom: 6px; font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
+        .policy-warning p { font-size: 0.9rem; color: #f4f4f5; line-height: 1.5; opacity: 0.9; }
+        
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.2); padding: 25px; border-radius: 20px; text-align: left; position: relative; overflow: hidden; transition: all 0.4s ease;}
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(212, 175, 55, 0.1); border-color: rgba(212, 175, 55, 0.4); }
+        .stat-card::after { content: ''; position: absolute; top: -15px; right: -15px; width: 100px; height: 100px; background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%); border-radius: 50%; pointer-events: none;}
+        .stat-card i { font-size: 1.8rem; color: #d4af37; margin-bottom: 15px; display: inline-block; padding: 12px; background: rgba(212, 175, 55, 0.15); border-radius: 14px;}
+        .stat-value { font-size: 2.4rem; font-weight: 700; color: var(--text-color); line-height: 1.1; letter-spacing: -0.5px;}
+        
+        .progress-container { width: 100%; background: rgba(var(--text-rgb),0.06); border-radius: 50px; height: 8px; overflow: hidden; margin-top: 15px; border: 1px solid var(--glass-border); }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #d4af37, #f1c40f); width: 0%; transition: width 1s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 50px; box-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
+        
+        .link-box { display: flex; gap: 10px; background: rgba(var(--text-rgb),0.03); padding: 8px; border-radius: 16px; border: 1px solid var(--glass-border); margin-top: 12px; width: 100%; box-sizing: border-box; overflow: hidden;}
+        .link-input { flex: 1; background: transparent; border: none; color: #d4af37; font-family: monospace; outline: none; font-size: 1rem; padding-left: 12px; letter-spacing: 0.5px; min-width: 0;}
+        .btn-copy { background: rgba(212, 175, 55, 0.15); color: #d4af37; border: 1px solid rgba(212, 175, 55, 0.3); padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+        .btn-copy:hover { background: #d4af37; color: #fff; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); transform: translateY(-2px);}
+        
+        .btn-claim { background: #10b981; color: #fff; border: none; padding: 14px 20px; border-radius: 14px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 20px; font-size: 1rem; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); display: flex; justify-content: center; gap: 8px; align-items: center;}
+        .btn-claim:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4); }
+
+        /* =========================================
+           MOBILE OPTIMIZATION
+        ========================================= */
+        @media (max-width: 768px) {
+            .app-header { padding: 0 4%; height: 56px; }
+            .profile-container { margin: 15px auto 30px auto; padding: 0 4%; }
+            .profile-header-card { flex-direction: column; text-align: center; padding: 30px 20px; gap: 20px; border-radius: 24px; }
+            .profile-avatar-wrapper { width: 100px; height: 100px; margin: 0 auto; }
+            .profile-name { font-size: 1.8rem; }
+            .btn-logout { position: static; width: 100%; margin-top: 5px; justify-content: center;}
+            
+            .remove-btn { opacity: 1; transform: scale(1); }
+            
+            .request-item { flex-direction: column; align-items: flex-start; gap: 15px; padding: 20px; }
+            .req-status-box { width: 100%; flex-direction: row; justify-content: space-between; align-items: center; border-top: 1px solid var(--glass-border); padding-top: 15px; }
+            
+            .settings-grid { grid-template-columns: 1fr; gap: 20px; }
+            
+            .profile-tabs { margin-inline: -4%; padding-inline: 4%; width: 108%; border: none; background: transparent; border-radius: 0; padding-bottom: 5px; }
+            .tab-btn { background: rgba(var(--text-rgb), 0.03); border: 1px solid var(--glass-border); font-size: 0.9rem; padding: 10px 20px;}
+            
+            .policy-warning { flex-direction: column; align-items: center; text-align: center; padding: 20px; gap: 10px; }
+        }
+    </style>
+    
+    <script src="anikan-bottom-bar.js" defer></script>
+    <script src="lightmode.js"></script> 
+    <link rel="stylesheet" href="lightmode.css"> 
+</head>
+<body>
+
+    <header class="app-header">
+        <a href="anikan.html" class="app-header-btn" title="Back to Home"><i class="fas fa-chevron-left"></i></a>
+        <div class="app-header-title">My Profile</div>
+        <div class="app-header-btn" style="opacity: 0; pointer-events: none;"><i class="fas fa-cog"></i></div> 
+    </header>
+
+    <main class="profile-container">
+        
+        <div class="profile-header-card">
+            <div class="avatar-section">
+                <div class="profile-avatar-wrapper"><img id="ui-avatar" class="profile-avatar" src="https://api.dicebear.com/7.x/adventurer/svg?seed=Loading" alt="Avatar"></div>
+                <label for="avatar-input" class="avatar-upload-btn" title="Change Profile Picture"><i class="fas fa-camera"></i></label>
+                <input type="file" id="avatar-input" accept="image/png, image/jpeg, image/webp">
+            </div>
+            <div class="profile-info">
+                <h1 class="profile-name" id="ui-username">Loading...</h1>
+                <p class="profile-email" id="ui-email">Fetching details...</p>
+                <div class="badge-vip" id="ui-badge"><i class="fas fa-gem"></i> VIP Member</div>
+            </div>
+            <button class="btn-logout" id="logout-btn"><i class="fas fa-power-off"></i> Sign Out</button>
+        </div>
+
+        <div class="profile-tabs">
+            <button class="tab-btn active" data-target="watching-tab"><i class="fas fa-play-circle"></i> Continue</button>
+            <button class="tab-btn" data-target="mylist-tab"><i class="fas fa-bookmark"></i> My List</button>
+            <button class="tab-btn" data-target="requests-tab"><i class="fas fa-envelope-open-text"></i> Requests</button>
+            <button class="tab-btn" data-target="settings-tab"><i class="fas fa-sliders-h"></i> Settings</button>
+            <button class="tab-btn" id="tab-btn-partner" data-target="partner-tab" style="display: none;"><i class="fas fa-crown"></i> Partner</button>
+        </div>
+
+        <div id="watching-tab" class="tab-content active">
+            <div class="anime-grid" id="history-grid"></div>
+        </div>
+
+        <div id="mylist-tab" class="tab-content">
+            <div class="anime-grid" id="mylist-grid-container"></div>
+        </div>
+
+        <div id="requests-tab" class="tab-content">
+            <div id="requests-list-container"></div>
+        </div>
+
+        <div id="settings-tab" class="tab-content">
+            <div class="settings-grid">
+                
+                <div class="settings-card">
+                    <h3><i class="fas fa-user-edit"></i> Edit Profile</h3>
+                    <form id="update-profile-form">
+                        <div class="input-group">
+                            <label>Display Name</label>
+                            <input type="text" id="edit-username" class="profile-input" required maxlength="20">
+                        </div>
+                        <div class="input-group">
+                            <label>Registered Email</label>
+                            <input type="email" id="edit-email" class="profile-input" disabled style="opacity: 0.5; cursor: not-allowed;" title="Email cannot be changed">
+                        </div>
+                        <button type="submit" class="btn-save" id="btn-save"><i class="fas fa-check"></i> Update Profile</button>
+                    </form>
+                </div>
+
+                <div class="settings-card">
+                    <h3><i class="fas fa-shield-alt"></i> Security & Data</h3>
+                    <form id="change-password-form">
+                        <div class="input-group">
+                            <label>New Password</label>
+                            <input type="password" id="new-password" class="profile-input" required minlength="6" placeholder="Min. 6 characters">
+                        </div>
+                        <p id="pwd-status" style="font-size: 0.9rem; margin-bottom: 15px; display: none;"></p>
+                        <button type="submit" class="btn-save" id="btn-update-pwd" style="background: rgba(var(--text-rgb),0.04); border: 1px solid var(--glass-border); color: var(--text-color); box-shadow: none;">
+                            <i class="fas fa-lock"></i> Change Password
+                        </button>
+                    </form>
+
+                    <div class="danger-zone">
+                        <h4 style="color: #ef4444; font-size: 0.85rem; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Data Control</h4>
+                        <button class="btn-clear-history" onclick="clearAllHistory()"><i class="fas fa-trash-alt"></i> Clear Watch History</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="partner-tab" class="tab-content">
+            <div class="settings-card" style="max-width: 100%;">
+                
+                <div class="policy-warning" id="ui-policy-warning">
+                    <i class="fas fa-shield-virus"></i>
+                    <div>
+                        <h4>Policy Violation Warning</h4>
+                        <p>We have detected suspicious traffic or activity that violates our promotional guidelines. Your account has been restricted, and <strong>all payout capabilities are currently frozen.</strong> Continued violations will result in permanent termination.</p>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 25px; color: #d4af37;"><i class="fas fa-chart-line"></i> Affiliate Overview</h3>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-mouse-pointer"></i>
+                        <div class="stat-value" id="ui-total-clicks">0</div>
+                        <div style="color: var(--text-muted-color); font-size: 0.9rem; margin-top: 6px;">Valid Referred Clicks</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-wallet"></i>
+                        <div class="stat-value" id="ui-earnings">$0.00</div>
+                        <div style="color: var(--text-muted-color); font-size: 0.9rem; margin-top: 6px;">Available Balance</div>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(var(--text-rgb),0.02); padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border); margin-bottom: 25px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 8px;">
+                        <span style="font-size: 1rem; font-weight: 500; color: var(--text-color);">Payout Threshold</span>
+                        <span id="progress-text" style="color: #d4af37; font-size: 1.05rem; font-weight: 600; font-family: monospace;">$0.00 / $100.00</span>
+                    </div>
+                    <div class="progress-container"><div class="progress-bar" id="ui-progress-bar"></div></div>
+                    
+                    <div id="ui-payout-lock" style="text-align: center; color: var(--text-muted-color); margin-top: 20px; font-size: 0.9rem; background: rgba(var(--text-rgb), 0.04); padding: 18px; border-radius: 14px; border: 1px dashed var(--glass-border);">
+                        <i class="fas fa-lock" style="margin-right: 6px; font-size: 1.1rem;"></i> You must reach the <strong>$100.00</strong> minimum threshold to request a payout.
+                    </div>
+                    
+                    <div id="ui-payout-form" style="display: none; margin-top: 20px;">
+                        <input type="text" class="profile-input" placeholder="Enter UPI ID, Bank Acct, or PayPal Email" id="payout-details">
+                        <button class="btn-claim" id="btn-request-payout"><i class="fas fa-paper-plane"></i> Request Secure Payout</button>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(var(--text-rgb),0.02); padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border);">
+                    <span style="font-size: 1rem; font-weight: 600; display: block; margin-bottom: 6px; color: var(--text-color);">Your Tracking Link</span>
+                    <p style="color: var(--text-muted-color); font-size: 0.9rem; margin-bottom: 15px;">Distribute this link. You earn $0.05 per verified valid click.</p>
+                    <div class="link-box">
+                        <input type="text" id="ui-tracking-link" class="link-input" readonly>
+                        <button class="btn-copy" id="copy-btn"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="anikan.html" class="bottom-nav-item">
+            <i class="fa-solid fa-house nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="community.html" class="bottom-nav-item">
+            <i class="fa-solid fa-users nav-icon"></i>
+            <span class="nav-label">Community</span>
+        </a>
+        <a href="mylist.html" class="bottom-nav-item">
+            <i class="fa-solid fa-bookmark nav-icon"></i>
+            <span class="nav-label">My List</span>
+        </a>
+        <a href="profile.html" class="bottom-nav-item active" id="bottomAuthBtn">
+            <i class="fa-solid fa-user nav-icon"></i>
+            <span class="nav-label">Profile</span>
+        </a>
+    </nav>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, deleteField, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+               // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
+  authDomain: "bhx-beats.firebaseapp.com",
+  projectId: "bhx-beats",
+  storageBucket: "bhx-beats.firebasestorage.app",
+  messagingSenderId: "491393581039",
+  appId: "1:491393581039:web:8204fb8753094a64a9401a",
+  measurementId: "G-PCV97GFYQ7"
+};
+        
+        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
+
+        let currentUserDocRef = null; let creatorDocRef = null; let currentUsername = ""; let hasCustomAvatar = false;
+
+        // UI Tabs Logic
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active'); document.getElementById(btn.dataset.target).classList.add('active');
+            });
+        });
+
+        // 1. RENDER MY LIST 
+        window.renderMyList = function(listArray) {
+            const myListGrid = document.getElementById('mylist-grid-container');
+            if (listArray && listArray.length > 0) {
+                myListGrid.innerHTML = listArray.reverse().map(item => `
+                    <div class="item-wrapper">
+                        <a href="${item.link}" class="anime-card">
+                            <div class="anime-card-img"><img src="${item.img}"></div>
+                            <div class="anime-card-info">
+                                <h3 class="anime-card-title">${item.title}</h3>
+                            </div>
+                        </a>
+                        <button class="remove-btn" onclick="removeFromMyList('${item.title.replace(/'/g, "\\'")}')" title="Remove from My List"><i class="fas fa-times"></i></button>
+                    </div>
+                `).join('');
+            } else {
+                myListGrid.innerHTML = `<div class="empty-state"><i class="fas fa-bookmark"></i><h3>Your list is empty</h3><p style="font-size:0.9rem; margin-top:6px;">Saved anime appear here.</p></div>`;
+            }
+        };
+
+        // 2. RENDER HISTORY 
+        window.loadHistory = function() {
+            try {
+                const historyGrid = document.getElementById('history-grid');
+                if(!historyGrid) return;
+                
+                const historyObj = JSON.parse(localStorage.getItem('anikan_history')) || {};
+                const historyArr = Object.entries(historyObj)
+                    .filter(([k, i]) => i && i.link && i.title && !i.link.includes('anikan.html'))
+                    .sort((a, b) => b[1].timestamp - a[1].timestamp);
+                
+                if (historyArr.length === 0) return historyGrid.innerHTML = `<div class="empty-state"><i class="fas fa-tv"></i><h3>No watch history</h3><p style="font-size:0.9rem; margin-top:6px;">Anime you start watching appear here.</p></div>`;
+                
+                historyGrid.innerHTML = historyArr.map(([id, item]) => `
+                    <div class="item-wrapper">
+                        <a href="${item.link}" class="anime-card">
+                            <div class="anime-card-img"><img src="${item.img}"></div>
+                            <div class="anime-card-info">
+                                <h3 class="anime-card-title">${item.title}</h3>
+                                <p class="anime-card-meta"><i class="fas fa-play"></i> Ep ${item.epIndex === "0" ? "1" : item.epIndex}</p>
+                            </div>
+                        </a>
+                        <button class="remove-btn" onclick="removeFromHistory('${id}')" title="Remove from History"><i class="fas fa-times"></i></button>
+                    </div>
+                `).join('');
+            } catch(e) { console.error("Profile History Error", e); }
+        };
+
+        // 3. REMOVE HISTORY ITEM 
+        window.removeFromHistory = async function(id) {
+            let localHistory = JSON.parse(localStorage.getItem('anikan_history')) || {};
+            delete localHistory[id];
+            localStorage.setItem('anikan_history', JSON.stringify(localHistory));
+            loadHistory(); 
+            
+            if (currentUserDocRef) {
+                const updateObj = {};
+                updateObj[`watchHistory.${id}`] = deleteField();
+                await updateDoc(currentUserDocRef, updateObj).catch(()=>{});
+            }
+        };
+
+        // 4. REMOVE MY LIST ITEM
+        window.removeFromMyList = async function(title) {
+            if (currentUserDocRef) {
+                const docSnap = await getDoc(currentUserDocRef);
+                if (docSnap.exists()) {
+                    let list = docSnap.data().myList || [];
+                    list = list.filter(item => item.title !== title);
+                    await updateDoc(currentUserDocRef, { myList: list });
+                    renderMyList(list);
+                }
+            }
+        };
+
+        // 5. CLEAR ALL HISTORY 
+        window.clearAllHistory = async function() {
+            if(confirm("Clear your entire watch history? This cannot be undone.")) {
+                localStorage.removeItem('anikan_history');
+                loadHistory();
+                if(currentUserDocRef) {
+                    await updateDoc(currentUserDocRef, { watchHistory: {} }).catch(()=>{});
+                }
+            }
+        };
+
+        // Initialize App & Fetch Cloud Data
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    currentUserDocRef = doc(db, "users", user.uid);
+                    const docSnap = await getDoc(currentUserDocRef);
+
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        currentUsername = data.username;
+                        document.getElementById('ui-username').textContent = currentUsername;
+                        document.getElementById('edit-username').value = currentUsername;
+                        document.getElementById('ui-email').textContent = data.email;
+                        document.getElementById('edit-email').value = data.email;
+                        
+                        if (data.avatarUrl) { document.getElementById('ui-avatar').src = data.avatarUrl; hasCustomAvatar = true; } 
+                        else { document.getElementById('ui-avatar').src = `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(currentUsername)}`; }
+
+                        renderMyList(data.myList || []);
+                    }
+
+                    // Fetch Requests
+                    const reqContainer = document.getElementById('requests-list-container');
+                    const reqQuery = query(collection(db, "requests"), where("userId", "==", user.uid));
+                    const reqSnap = await getDocs(reqQuery);
+                    
+                    if (!reqSnap.empty) {
+                        const sortedReqs = [];
+                        reqSnap.forEach(r => sortedReqs.push(r.data()));
+                        sortedReqs.sort((a,b) => b.createdAt - a.createdAt);
+
+                        let reqHtml = '';
+                        sortedReqs.forEach(rd => {
+                            const isUploaded = rd.status === "Uploaded";
+                            const statusClass = isUploaded ? "status-uploaded" : "status-pending";
+                            const icon = isUploaded ? "fa-check-circle" : "fa-clock";
+                            
+                            const watchBtnHtml = (isUploaded && rd.link) 
+                                ? `<a href="${rd.link}" class="req-link-btn"><i class="fas fa-play"></i> Watch</a>` : ``;
+
+                            reqHtml += `
+                                <div class="request-item">
+                                    <div class="req-info">
+                                        <div class="req-title">${rd.animeName}</div>
+                                        <div class="req-date"><i class="fas fa-calendar-alt"></i> ${new Date(rd.createdAt).toLocaleDateString()}</div>
+                                    </div>
+                                    <div class="req-status-box">
+                                        <div class="req-status ${statusClass}"><i class="fas ${icon}"></i> ${rd.status}</div>
+                                        ${watchBtnHtml}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        reqContainer.innerHTML = reqHtml;
+                    } else {
+                        reqContainer.innerHTML = `<div class="empty-state"><i class="fas fa-envelope-open-text"></i><h3>No requests made</h3><p style="font-size:0.9rem; margin-top:6px;">Use the request button on the homepage.</p></div>`;
+                    }
+
+                    // ==========================================
+                    // DYNAMIC BADGE & SYNCHRONIZED PARTNER SETUP
+                    // ==========================================
+                    creatorDocRef = doc(db, "creators", user.uid);
+                    const creatorSnap = await getDoc(creatorDocRef);
+                    const badgeEl = document.getElementById('ui-badge');
+
+                    if (creatorSnap.exists()) {
+                        // User is an Affiliate Partner
+                        badgeEl.innerHTML = '<i class="fas fa-crown"></i> Affiliate Partner';
+                        badgeEl.className = 'badge-partner';
+                        
+                        const creatorData = creatorSnap.data();
+                        document.getElementById('tab-btn-partner').style.display = 'inline-flex';
+                        document.getElementById('ui-total-clicks').textContent = creatorData.totalClicks || 0;
+                        document.getElementById('ui-tracking-link').value = creatorData.trackingUrl || '';
+                        
+                        const earnings = (creatorData.unpaidClicks || 0) * 0.05;
+                        document.getElementById('ui-earnings').textContent = "$" + earnings.toFixed(2);
+                        document.getElementById('progress-text').textContent = `$${earnings.toFixed(2)} / $100.00`;
+                        document.getElementById('ui-progress-bar').style.width = Math.min((earnings / 100) * 100, 100) + "%";
+                        
+                        // 1. Check for Admin Policy Violations
+                        const isWarned = creatorData.policyWarning === true || creatorData.accountStatus === "Warning";
+
+                        if (isWarned) {
+                            document.getElementById('ui-policy-warning').style.display = 'flex';
+                            document.getElementById('ui-payout-lock').style.display = 'none';
+                            
+                            const payoutForm = document.getElementById('ui-payout-form');
+                            payoutForm.style.display = 'block';
+                            payoutForm.innerHTML = `
+                                <div style="padding: 20px; border-radius: 16px; background: rgba(239, 68, 68, 0.1); border: 2px dashed #ef4444; text-align: center; color: #ef4444;">
+                                    <i class="fas fa-ban" style="font-size: 2rem; margin-bottom: 10px; display: block; filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.4));"></i>
+                                    <strong style="font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.5px;">Earnings on Hold</strong>
+                                    <p style="font-size: 0.9rem; margin-top: 6px; color: #fff;">Your payout capabilities have been securely locked by the administration due to policy violations.</p>
+                                </div>
+                            `;
+                        } else {
+                            // 2. Standard Payout Flow
+                            if (creatorData.payoutRequested) {
+                                document.getElementById('ui-payout-lock').style.display = 'none';
+                                document.getElementById('ui-payout-form').style.display = 'block';
+                                document.getElementById('ui-payout-form').innerHTML = `<div style="text-align:center; padding: 20px; border-radius: 16px; background: rgba(16, 185, 129, 0.1); border: 2px dashed #10b981; color: #10b981;"><i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i><strong style="font-size: 1.1rem;">Payout Processing</strong><p style="font-size: 0.9rem; margin-top: 6px; color: #fff;">Your request is securely under review.</p></div>`;
+                            } else if (earnings >= 100) {
+                                document.getElementById('ui-payout-lock').style.display = 'none';
+                                document.getElementById('ui-payout-form').style.display = 'block';
+                            }
+                        }
+                    } else {
+                        // User is a standard viewer, ensure the badge is VIP
+                        badgeEl.innerHTML = '<i class="fas fa-gem"></i> VIP Member';
+                        badgeEl.className = 'badge-vip';
+                    }
+
+                } catch (error) { console.error(error); }
+            } else { window.location.replace('login.html'); }
+        });
+
+        loadHistory(); 
+        window.addEventListener('historySynced', loadHistory);
+
+        // Avatar Upload Logic
+        document.getElementById('avatar-input').addEventListener('change', function(e) {
+            const file = e.target.files[0]; if (!file) return;
+            const imgUI = document.getElementById('ui-avatar'); imgUI.style.opacity = '0.5';
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = async function() {
+                    const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
+                    let w = img.width; let h = img.height; if(w>h){if(w>250){h*=250/w;w=250;}}else{if(h>250){w*=250/h;h=250;}}
+                    canvas.width = w; canvas.height = h; ctx.drawImage(img, 0, 0, w, h);
+                    const b64 = canvas.toDataURL('image/jpeg', 0.8);
+                    imgUI.src = b64; imgUI.style.opacity = '1'; hasCustomAvatar = true;
+                    await updateDoc(currentUserDocRef, { avatarUrl: b64 });
+                }; img.src = event.target.result;
+            }; reader.readAsDataURL(file);
+        });
+
+        // Save Profile Setting Logic
+        document.getElementById('update-profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); const newName = document.getElementById('edit-username').value.trim();
+            const btn = document.getElementById('btn-save');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Data...';
+            
+            if (newName !== currentUsername) {
+                const snap = await getDocs(query(collection(db, "users"), where("username", "==", newName)));
+                if (!snap.empty) {
+                    btn.innerHTML = '<i class="fas fa-times-circle"></i> Username Taken';
+                    setTimeout(() => btn.innerHTML = '<i class="fas fa-check"></i> Update Profile', 2500);
+                    return;
+                }
+                await updateDoc(currentUserDocRef, { username: newName });
+                currentUsername = newName; document.getElementById('ui-username').textContent = newName;
+                if(!hasCustomAvatar) document.getElementById('ui-avatar').src = `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(newName)}`;
+                
+                btn.style.background = '#10b981';
+                btn.innerHTML = '<i class="fas fa-check-double"></i> Profile Updated!';
+                setTimeout(() => { btn.style.background = 'var(--primary-color)'; btn.innerHTML = '<i class="fas fa-check"></i> Update Profile'; }, 3000);
+            } else {
+                btn.innerHTML = '<i class="fas fa-check"></i> Update Profile';
+            }
+        });
+
+        // Change Password Logic
+        document.getElementById('change-password-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newPwd = document.getElementById('new-password').value;
+            const btn = document.getElementById('btn-update-pwd');
+            const statusMsg = document.getElementById('pwd-status');
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating Security...';
+            statusMsg.style.display = 'none';
+
+            try {
+                await updatePassword(auth.currentUser, newPwd);
+                btn.style.background = '#10b981';
+                btn.style.borderColor = '#10b981';
+                btn.style.color = '#fff';
+                btn.innerHTML = '<i class="fas fa-check"></i> Password Secured';
+                document.getElementById('new-password').value = '';
+                
+                setTimeout(() => { 
+                    btn.style.background = 'rgba(var(--text-rgb),0.04)'; 
+                    btn.style.borderColor = 'var(--glass-border)';
+                    btn.style.color = 'var(--text-color)';
+                    btn.innerHTML = '<i class="fas fa-lock"></i> Change Password'; 
+                }, 3500);
+            } catch (error) {
+                statusMsg.style.display = 'block';
+                statusMsg.style.color = '#ef4444';
+                if (error.code === 'auth/requires-recent-login') {
+                    statusMsg.innerHTML = '<i class="fas fa-exclamation-triangle"></i> For security, please log out and log back in to change your password.';
+                } else {
+                    statusMsg.innerText = error.message;
+                }
+                btn.innerHTML = '<i class="fas fa-lock"></i> Change Password';
+            }
+        });
+
+        // Partner Tools
+        document.getElementById('copy-btn').addEventListener('click', () => { 
+            document.getElementById('ui-tracking-link').select(); 
+            document.execCommand('copy'); 
+            const copyBtn = document.getElementById('copy-btn');
+            copyBtn.innerHTML = '<i class="fas fa-check-double"></i> Copied';
+            setTimeout(() => copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy', 2500);
+        });
+        
+        document.getElementById('btn-request-payout').addEventListener('click', async () => {
+            const val = document.getElementById('payout-details').value.trim();
+            if(!val) return alert("Please enter your payout details to proceed.");
+            document.getElementById('btn-request-payout').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Securing Transfer...';
+            await updateDoc(creatorDocRef, { payoutRequested: true, payoutDetails: val });
+            window.location.reload(); 
+        });
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', () => signOut(auth).then(()=>window.location.replace('login.html')));
+    </script>
+</body>
+</html>

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Anime - AniKan</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <link rel="stylesheet" href="anikan-style.css">
+    <link rel="stylesheet" href="bottom-bar.css"> 
+
+    <style>
+        :root {
+            --bg-base: #0B0C10; 
+            --primary: #9D4EDD; /* Anikan Vibrant Purple */
+            --primary-glow: rgba(157, 78, 221, 0.4); 
+            --glass-bg: rgba(26, 26, 29, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-blur: blur(16px);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            --text-main: #F5F5F5;
+        }
+
+        body { 
+            background-color: var(--bg-base); 
+            color: var(--text-main); 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            overflow-x: hidden;
+        }
+
+        /* Full Page Loader */
+        #page-loader { position: fixed; inset: 0; background: var(--bg-base); z-index: 10000; display: flex; justify-content: center; align-items: center; flex-direction: column; color: #fff; }
+        .spinner { width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Liquid Glass Overrides */
+        .main-header {
+            background: rgba(11, 12, 16, 0.75);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 4%;
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-size: 1.8rem; font-weight: 700; color: #fff; text-decoration: none; }
+        .logo span { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
+
+        /* Global Widget System */
+        .widget {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--glass-shadow);
+            transition: 0.3s;
+        }
+        .widget:hover { border-color: rgba(255,255,255,0.15); }
+
+        .widget-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 20px; color: #fff; display: flex; align-items: center; gap: 8px;}
+
+        /* Video Player Layer */
+        .video-player-container {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 25px;
+            box-shadow: var(--glass-shadow);
+            aspect-ratio: 16/9;
+            width: 100%;
+        }
+        .video-player-container iframe { width: 100%; height: 100%; border-radius: 12px; background: #000; }
+
+        /* Episode Navigation Meta */
+        .episode-meta {
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
+            background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; margin-bottom: 25px;
+            box-shadow: var(--glass-shadow);
+        }
+        .episode-title { font-size: 1.3rem; font-weight: 600; margin: 0; color: #fff;}
+        
+        .action-btn {
+            background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--glass-border);
+            padding: 10px 20px; border-radius: 50px; cursor: pointer; transition: 0.3s;
+            display: inline-flex; align-items: center; gap: 8px; font-weight: 500;
+        }
+        .action-btn:hover:not(:disabled) { background: var(--primary); border-color: var(--primary); box-shadow: 0 4px 15px var(--primary-glow); }
+        .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* Seasons & Episode Grid */
+        .season-selector-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .season-select {
+            background: rgba(0,0,0,0.6); color: #fff; border: 1px solid rgba(157, 78, 221, 0.4);
+            padding: 8px 16px; border-radius: 8px; font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem; font-weight: 600; outline: none; cursor: pointer; transition: 0.3s;
+        }
+        .season-select:hover { border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
+        .season-select option { background: #1a1a1d; color: #fff; }
+
+        .episodes-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
+        .episode-item {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+            border-radius: 12px; padding: 12px 10px; text-align: center; cursor: pointer;
+            transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .episode-item:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+        .episode-item.current { background: var(--primary); border-color: var(--primary); box-shadow: 0 4px 15px var(--primary-glow); color: #fff; }
+        .ep-number { color: #fff; font-weight: 600; margin: 0 0 4px 0; font-size: 1.1rem; }
+        .ep-desc { font-size: 0.75rem; opacity: 0.8; margin: 0; }
+
+        /* Tables & Downloads */
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 15px; border-bottom: 1px solid var(--glass-border); }
+        th { background: rgba(0,0,0,0.2); font-weight: 600; color: #a1a1aa; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+        .download-btn { background: rgba(157, 78, 221, 0.15); color: var(--primary); padding: 6px 16px; border-radius: 50px; text-decoration: none; border: 1px solid rgba(157, 78, 221, 0.3); transition: 0.3s; font-size: 0.85rem; font-weight: 600; display: inline-block; }
+        .download-btn:hover { background: var(--primary); color: #fff; box-shadow: 0 4px 10px var(--primary-glow); transform: translateY(-2px); }
+
+        /* Cast Row */
+        .cast-list { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 10px; }
+        .cast-list::-webkit-scrollbar { height: 6px; }
+        .cast-list::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
+        .cast-card { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 10px; border-radius: 16px; min-width: 200px; transition: 0.3s;}
+        .cast-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); }
+        .cast-card img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        .actor-name { margin: 0 0 2px 0; font-size: 0.95rem; color:#fff;}
+        .character-name { margin: 0; font-size: 0.8rem; color: #a1a1aa; }
+
+        /* Comment Section */
+        .comment-form { display: flex; gap: 15px; align-items: flex-start; }
+        .user-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);}
+        .comment-form textarea { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 16px; padding: 15px; color: #fff; font-family: 'Poppins'; resize: vertical; min-height: 80px; transition: 0.3s; outline: none;}
+        .comment-form textarea:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); background: rgba(255,255,255,0.08); }
+        .comment-form button { background: var(--primary); color: #fff; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px var(--primary-glow); }
+        .comment-form button:hover { background: #c77dff; transform: scale(1.1); }
+
+        /* Sidebar Info */
+        .info-poster { position: relative; }
+        .info-poster img { width: 100%; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid var(--glass-border); }
+        
+        /* Add to My List Button */
+        .bookmark-btn {
+            position: absolute; top: 10px; right: 10px; z-index: 10;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            border: 1px solid var(--glass-border); border-radius: 50%;
+            width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+            color: white; cursor: pointer; transition: 0.3s; font-size: 1.1rem;
+        }
+        .bookmark-btn:hover { background: var(--primary); transform: scale(1.1); border-color: var(--primary); box-shadow: 0 4px 10px var(--primary-glow);}
+        
+        .info-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 10px; line-height: 1.2; color: #fff;}
+        .info-synopsis { font-size: 0.95rem; color: #d4d4d8; margin-bottom: 10px; line-height: 1.6; }
+        .info-synopsis.truncated { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+        .read-more-btn { color: var(--primary); cursor: pointer; font-weight: 600; font-size: 0.9rem; margin-bottom: 20px; display: inline-block; }
+        .info-details p { margin-bottom: 8px; font-size: 0.9rem; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; color: #fff;}
+        .info-details p span:first-child { color: #a1a1aa; }
+        .info-details p span:last-child { font-weight: 500; text-align: right; }
+
+        /* Recommendations Sidebar */
+        .recommendations-list { display: flex; flex-direction: column; gap: 15px; }
+        .rec-card { display: flex; gap: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 10px; border-radius: 12px; align-items: center; transition: 0.3s; text-decoration: none;}
+        .rec-card:hover { background: rgba(157, 78, 221, 0.15); border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .rec-card img { width: 65px; height: 90px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .rec-card-info { flex: 1; }
+        .rec-title { font-size: 0.95rem; font-weight: 600; color: #fff; margin: 0 0 5px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3;}
+        .rec-meta { font-size: 0.8rem; color: var(--primary); margin: 0; font-weight: 500;}
+
+        /* Main Grid Layout */
+        .container { max-width: 1400px; margin: 0 auto; padding: 30px 4%; }
+        .watch-layout { display: grid; grid-template-columns: 1fr 360px; gap: 30px; }
+        
+        /* Mobile Adjustments */
+        @media (max-width: 1024px) {
+            .watch-layout { grid-template-columns: 1fr; }
+            .sidebar-col { display: flex; flex-direction: column; }
+            .drama-info-widget { order: -1; } 
+        }
+
+        /* Apple Liquid Glass Bottom Nav */
+        @media (max-width: 992px) {
+            .bottom-nav {
+                display: flex !important; 
+                position: fixed !important; 
+                bottom: 10px !important; 
+                left: 50% !important; 
+                transform: translateX(-50%) !important; 
+                width: 90% !important; 
+                max-width: 400px !important; 
+                background: rgba(20, 20, 25, 0.45) !important; 
+                backdrop-filter: blur(40px) saturate(180%) !important; 
+                -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+                border: 1px solid rgba(255, 255, 255, 0.08) !important; 
+                border-top: 1px solid rgba(255, 255, 255, 0.25) !important; 
+                border-radius: 50px !important; 
+                z-index: 9999 !important;
+                padding: 5px 10px !important; 
+                box-shadow: 0 25px 50px rgba(0,0,0,0.7), inset 0 1px 1px rgba(255,255,255,0.1) !important;
+            }
+            .bottom-nav-item {
+                flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+                padding: 6px 0; color: rgba(255, 255, 255, 0.5); 
+                transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); position: relative; text-decoration: none;
+            }
+            .bottom-nav-item.active { color: #fff; text-shadow: 0 0 15px var(--primary-glow); }
+            .nav-icon { font-size: 1.35rem; margin-bottom: 4px; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+            .bottom-nav-item.active .nav-icon { transform: translateY(-4px) scale(1.15); color: var(--primary); filter: drop-shadow(0 5px 12px var(--primary-glow)); }
+            .nav-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.3px; transition: all 0.3s ease; }
+            .bottom-nav-item.active .nav-label { font-weight: 700; }
+            body { padding-bottom: 80px; }
+        }
+        @media (min-width: 993px) {
+            .bottom-nav { display: none !important; }
+        }
+    </style>
+    <script src="anikan-bottom-bar.js" defer></script>
+    <script src="lightmode.js"></script> 
+    <link rel="stylesheet" href="lightmode.css"> 
+</head>
+<body>
+
+    <div id="page-loader">
+        <div class="spinner"></div>
+        <p>Loading Anime...</p>
+    </div>
+
+    <header class="main-header">
+        <a href="anikan.html" class="logo">Ani<span>Kan</span></a>
+    </header>
+
+    <main class="container" style="display: none;" id="main-content">
+        <div class="watch-layout">
+            
+            <div class="main-content-col">
+                <div class="video-player-container">
+                    <iframe 
+                        id="video-player-iframe"
+                        src="" 
+                        title="Video Player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+
+                <div class="episode-meta">
+                    <h1 class="episode-title" id="current-episode-title">Select an Episode</h1>
+                    <div class="episode-actions">
+                        <button class="action-btn" id="add-to-list-btn" title="Add to My List">
+                            <i class="fas fa-plus"></i> My List
+                        </button>
+                        <button class="action-btn" id="prev-ep-btn"><i class="fas fa-arrow-left"></i>Prev</button>
+                        <button class="action-btn" id="next-ep-btn">Next<i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <div class="widget episodes-list-widget">
+                    <div class="season-selector-wrapper">
+                        <h2 class="widget-title" style="margin: 0;"><i class="fas fa-list"></i> Episode List</h2>
+                        <select id="season-selector" class="season-select" style="display: none;"></select>
+                    </div>
+                    <div class="episodes-list" id="episodes-list-container"></div>
+                </div>
+                
+                <div class="widget download-widget">
+                    <h2 class="widget-title"><i class="fas fa-download"></i> Download Links</h2>
+                    <div class="download-list" style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr><th>Episode</th><th>Quality</th><th>Video</th><th>Subtitles</th></tr>
+                            </thead>
+                            <tbody id="download-links-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="widget cast-section">
+                    <h2 class="widget-title"><i class="fas fa-user-friends"></i> Main Cast / Voice Actors</h2>
+                    <div class="cast-list-wrapper">
+                        <div class="cast-list">
+                            <div class="cast-card">
+                                <img id="ui-cast1-img" src="" alt="Cast 1">
+                                <div class="cast-info"><h4 class="actor-name" id="ui-cast1-name">Loading...</h4><p class="character-name">Lead</p></div>
+                            </div>
+                            <div class="cast-card">
+                                <img id="ui-cast2-img" src="" alt="Cast 2">
+                                <div class="cast-info"><h4 class="actor-name" id="ui-cast2-name">Loading...</h4><p class="character-name">Lead</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget comments-widget">
+                     <div class="comments-header"><h2 class="widget-title"><i class="fas fa-comments"></i> Comments</h2></div>
+                     <form class="comment-form" id="comment-form">
+                        <img class="user-avatar" src="https://api.dicebear.com/7.x/adventurer/svg?seed=User" alt="User Avatar">
+                        <textarea placeholder="Join the discussion..." required></textarea>
+                        <button type="button" aria-label="Post Comment"><i class="fas fa-paper-plane"></i></button>
+                     </form>
+                </div>
+            </div>
+
+            <div class="sidebar-col">
+                <div class="widget drama-info-widget">
+                    <div class="info-poster">
+                        <img id="ui-poster" src="" alt="Poster">
+                    </div>
+                    <h2 class="info-title" id="ui-title">Loading...</h2>
+                    <p class="info-synopsis truncated" id="synopsis-text">Loading synopsis...</p>
+                    <a id="read-more-btn" class="read-more-btn">Read More</a>
+                    <div class="info-details">
+                        <p><span>Type:</span> <span id="ui-type"></span></p>
+                        <p><span>Total Episodes:</span> <span id="ui-total-eps"></span></p>
+                        <p><span>Status:</span> <span id="ui-status"></span></p>
+                        <p><span>Score:</span> <span id="ui-score"></span>/10</p>
+                        <p><span>Genres:</span> <span id="ui-genre"></span></p>
+                    </div>
+                </div>
+
+                <div class="widget recommendations-widget">
+                    <h2 class="widget-title"><i class="fas fa-random"></i> You Might Also Like</h2>
+                    <div class="recommendations-list" id="ui-recs">
+                        <p style="color:var(--text-muted); font-size:0.9rem;">Fetching recommendations...</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <footer class="main-footer" style="text-align: center; padding: 20px 0; border-top: 1px solid var(--glass-border); margin-top: 50px;">
+        <p style="color: var(--text-muted-color); font-size: 0.9rem;">&copy; 2026 AniKan. All rights reserved.</p>
+    </footer>
+
+    <nav class="bottom-nav">
+        <a href="anikan.html" class="bottom-nav-item">
+            <i class="fa-solid fa-house nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="community.html" class="bottom-nav-item">
+            <i class="fa-solid fa-users nav-icon"></i>
+            <span class="nav-label">Community</span>
+        </a>
+        <a href="mylist.html" class="bottom-nav-item">
+            <i class="fa-solid fa-bookmark nav-icon"></i>
+            <span class="nav-label">My List</span>
+        </a>
+        <a href="login.html" class="bottom-nav-item" id="bottomAuthBtn">
+            <i class="fa-solid fa-user nav-icon"></i>
+            <span class="nav-label">Profile</span>
+        </a>
+    </nav>
+
+    <script type="module" src="bottom-bar.js"></script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+    // --- ANIKAN CONFIG: Points to your bhx-beats database ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
+        authDomain: "bhx-beats.firebaseapp.com",
+        projectId: "bhx-beats",
+        storageBucket: "bhx-beats.firebasestorage.app",
+        messagingSenderId: "491393581039",
+        appId: "1:491393581039:web:8204fb8753094a64a9401a",
+        measurementId: "G-PCV97GFYQ7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const animeId = urlParams.get('id');
+
+        if (!animeId) {
+            alert("Anime not found!");
+            window.location.replace('anikan.html');
+            return;
+        }
+
+        try {
+            // Fetching from the "anime" collection
+            const docRef = doc(db, "anime", animeId); 
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+
+                // UI Setup
+                document.title = `Watch ${data.title} - AniKan`;
+                document.getElementById('ui-title').textContent = data.title || 'Unknown Title';
+                document.getElementById('ui-poster').src = data.img || 'https://via.placeholder.com/300x450?text=No+Poster';
+                document.getElementById('synopsis-text').textContent = data.synopsis || 'No synopsis available.';
+                document.getElementById('ui-type').textContent = data.type || 'N/A';
+                document.getElementById('ui-total-eps').textContent = data.totalEps || 'N/A';
+                document.getElementById('ui-status').textContent = data.status || 'N/A';
+                document.getElementById('ui-score').textContent = data.imdb || data.score || 'N/A';
+                document.getElementById('ui-genre').textContent = data.genre || 'N/A';
+
+                // Optional cast fields (fail-safed in case they don't exist in anime DB yet)
+                if(document.getElementById('ui-cast1-name')) document.getElementById('ui-cast1-name').textContent = data.actor1 || 'Unknown';
+                if(document.getElementById('ui-cast1-img')) document.getElementById('ui-cast1-img').src = data.actor1Img || 'https://api.dicebear.com/7.x/adventurer/svg?seed=cast1';
+                if(document.getElementById('ui-cast2-name')) document.getElementById('ui-cast2-name').textContent = data.actor2 || 'Unknown';
+                if(document.getElementById('ui-cast2-img')) document.getElementById('ui-cast2-img').src = data.actor2Img || 'https://api.dicebear.com/7.x/adventurer/svg?seed=cast2';
+
+                loadRecommendations(animeId);
+
+                // ==========================================
+                // ADD TO MY LIST LOGIC
+                // ==========================================
+                const bookmarkBtn = document.getElementById('add-to-list-btn');
+                const safeTitle = data.title;
+                const safeImg = data.img;
+                const safeLink = window.location.pathname + window.location.search;
+
+                let myList = JSON.parse(localStorage.getItem('anikan_mylist')) || [];
+                if (myList.some(item => item.link === safeLink)) {
+                    bookmarkBtn.innerHTML = '<i class="fas fa-check"></i> Added';
+                    bookmarkBtn.style.color = 'var(--primary-color)';
+                    bookmarkBtn.style.borderColor = 'var(--primary-color)';
+                }
+
+                bookmarkBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    if (typeof window.toggleMyList === 'function') {
+                        window.toggleMyList(this, encodeURIComponent(safeTitle), encodeURIComponent(safeImg), encodeURIComponent(safeLink));
+                    } else {
+                        let currentList = JSON.parse(localStorage.getItem('anikan_mylist')) || [];
+                        const animeObj = { title: safeTitle, img: safeImg, link: safeLink };
+                        const existsIndex = currentList.findIndex(item => item.link === animeObj.link);
+                        
+                        if (existsIndex > -1) {
+                            currentList.splice(existsIndex, 1);
+                            this.innerHTML = '<i class="fas fa-plus"></i> My List';
+                            this.style.color = '#fff';
+                            this.style.borderColor = 'var(--glass-border)';
+                        } else {
+                            currentList.push(animeObj);
+                            this.innerHTML = '<i class="fas fa-check"></i> Added';
+                            this.style.color = 'var(--primary-color)';
+                            this.style.borderColor = 'var(--primary-color)';
+                        }
+                        
+                        localStorage.setItem('anikan_mylist', JSON.stringify(currentList));
+                        window.dispatchEvent(new Event('myListUpdated'));
+                    }
+                });
+
+                // ==========================================
+                // EPISODE & SEASON LOGIC
+                // ==========================================
+                let seasonsArr = data.seasons || [data.totalEps || 1];
+                let currentSeason = 1;
+                let currentEpisode = 1;
+
+                const seasonSelector = document.getElementById('season-selector');
+                const grid = document.getElementById('episodes-list-container');
+
+                if (seasonsArr.length > 1 && seasonSelector) {
+                    seasonSelector.style.display = 'block';
+                    seasonSelector.innerHTML = seasonsArr.map((_, idx) => `<option value="${idx + 1}">Season ${idx + 1}</option>`).join('');
+                }
+
+                function renderEpisodeGrid(seasonNum) {
+                    currentSeason = parseInt(seasonNum);
+                    const epsInThisSeason = seasonsArr[currentSeason - 1] || 1;
+                    
+                    let buttonsHtml = '';
+                    for (let i = 1; i <= epsInThisSeason; i++) {
+                        buttonsHtml += `<a class="episode-item" data-season="${currentSeason}" data-index="${currentSeason}-${i}"><div class="ep-info"><p class="ep-number">EP ${i}</p><p class="ep-desc">Season ${currentSeason}</p></div></a>`;
+                    }
+                    if(grid) grid.innerHTML = buttonsHtml;
+                    updateActiveButton();
+                }
+
+                function updateActiveButton() {
+                    document.querySelectorAll('.episode-item').forEach((item) => {
+                        const isMatch = parseInt(item.dataset.season) === currentSeason && item.getAttribute('data-index') === `${currentSeason}-${currentEpisode}`;
+                        item.classList.toggle('current', isMatch);
+                    });
+                }
+
+                const videoPlayer = document.getElementById('video-player-iframe');
+                const epText = document.getElementById('current-episode-title');
+                const downloadTbody = document.getElementById('download-links-tbody');
+                const prevBtn = document.getElementById('prev-ep-btn');
+                const nextBtn = document.getElementById('next-ep-btn');
+
+                function loadEpisode(seasonNum, epNum) {
+                    currentSeason = parseInt(seasonNum);
+                    currentEpisode = parseInt(epNum);
+                    
+                    if (seasonSelector && parseInt(seasonSelector.value) !== currentSeason) {
+                        seasonSelector.value = currentSeason;
+                        renderEpisodeGrid(currentSeason);
+                    }
+
+                    // --- THE FIX: Movies vs TV Shows & Missing IMDb IDs ---
+                    if (!data.imdbId) {
+                        videoPlayer.removeAttribute("src");
+                        videoPlayer.srcdoc = `
+                            <style>
+                                body { display:flex; justify-content:center; align-items:center; height:100vh; margin:0; background:#000; color:#fff; font-family:sans-serif; text-align:center; }
+                                h2 { color: #9D4EDD; margin-bottom: 5px; }
+                                p { color: #a0a0a0; font-size: 0.9rem;}
+                            </style>
+                            <div>
+                                <h2>Video Not Available Yet</h2>
+                                <p>We are currently updating the database. Check back soon!</p>
+                            </div>
+                        `;
+                    } else if (data.type === "Movie" || data.type === "movie") {
+                        videoPlayer.removeAttribute("srcdoc");
+                        videoPlayer.src = `https://www.2embed.cc/embed/${data.imdbId}`;
+                    } else {
+                        videoPlayer.removeAttribute("srcdoc");
+                        videoPlayer.src = `https://www.2embed.cc/embedtv/${data.imdbId}&s=${currentSeason}&e=${currentEpisode}`;
+                    }
+                    
+                    if(epText) {
+                        epText.textContent = seasonsArr.length > 1 
+                            ? `Playing S${currentSeason} EP ${currentEpisode} - ${data.title}`
+                            : `Playing EP ${currentEpisode} - ${data.title}`;
+                    }
+                    
+                    updateActiveButton();
+
+                    // Tracker Save Fix
+                    const epIndexToSave = `${currentSeason}-${currentEpisode}`;
+                    localStorage.setItem(`anikan_ep_${animeId}`, epIndexToSave);
+                    
+                    let history = JSON.parse(localStorage.getItem('anikan_history')) || {};
+                    history[animeId] = {
+                        title: data.title,
+                        img: data.img,
+                        link: window.location.pathname + window.location.search,
+                        timestamp: Date.now(),
+                        epIndex: epIndexToSave
+                    };
+                    localStorage.setItem('anikan_history', JSON.stringify(history));
+                    window.dispatchEvent(new CustomEvent('updateCloudHistory', { detail: { id: animeId, epIndex: epIndexToSave } }));
+
+                    if(downloadTbody) {
+                        downloadTbody.innerHTML = `<tr><td data-label="Episode">S${currentSeason} EP ${currentEpisode}</td><td data-label="Quality">1080p</td><td data-label="Video"><a href="#" class="download-btn">Download</a></td><td data-label="Subtitles"><a href="#" class="download-btn">Download</a></td></tr>`;
+                    }
+
+                    if(prevBtn && nextBtn) {
+                        prevBtn.disabled = (currentSeason === 1 && currentEpisode === 1);
+                        nextBtn.disabled = (currentSeason === seasonsArr.length && currentEpisode === seasonsArr[currentSeason - 1]);
+                    }
+                }
+
+                if (seasonSelector) seasonSelector.addEventListener('change', (e) => { renderEpisodeGrid(e.target.value); });
+                
+                if (grid) {
+                    grid.addEventListener('click', (e) => {
+                        const item = e.target.closest('.episode-item');
+                        if (item) {
+                            const rawIndex = item.getAttribute('data-index');
+                            const parts = rawIndex.split('-');
+                            loadEpisode(parts[0], parts[1]);
+                        }
+                    });
+                }
+
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => { 
+                        let nextEp = currentEpisode + 1;
+                        let nextSeason = currentSeason;
+                        if (nextEp > seasonsArr[currentSeason - 1]) {
+                            if (currentSeason < seasonsArr.length) { nextSeason++; nextEp = 1; } else { return; }
+                        }
+                        loadEpisode(nextSeason, nextEp); 
+                    });
+                }
+
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => { 
+                        let prevEp = currentEpisode - 1;
+                        let prevSeason = currentSeason;
+                        if (prevEp < 1) {
+                            if (currentSeason > 1) { prevSeason--; prevEp = seasonsArr[prevSeason - 1]; } else { return; }
+                        }
+                        loadEpisode(prevSeason, prevEp); 
+                    });
+                }
+
+                renderEpisodeGrid(1);
+
+                setTimeout(() => {
+                    const savedEpRaw = localStorage.getItem(`anikan_ep_${animeId}`);
+                    if (savedEpRaw && savedEpRaw !== "0") {
+                        if (savedEpRaw.includes('-')) {
+                            const parts = savedEpRaw.split('-');
+                            loadEpisode(parts[0], parts[1]);
+                        } else {
+                            loadEpisode(1, savedEpRaw);
+                        }
+                    } else {
+                        loadEpisode(1, 1);
+                    }
+                }, 500);
+
+                const loader = document.getElementById('page-loader');
+                const mainContent = document.getElementById('main-content');
+                if(loader) loader.style.display = 'none';
+                if(mainContent) mainContent.style.display = 'block';
+
+            } else {
+                alert("Anime not found or has been removed.");
+                window.location.replace('anikan.html');
+            }
+        } catch (error) { 
+            console.error("Error loading anime:", error); 
+        }
+        
+        const readMoreBtn = document.getElementById('read-more-btn');
+        if (readMoreBtn) {
+            readMoreBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const synopsisText = document.getElementById('synopsis-text');
+                if (synopsisText) {
+                    synopsisText.classList.toggle('truncated');
+                    readMoreBtn.textContent = synopsisText.classList.contains('truncated') ? 'Read More' : 'Read Less';
+                }
+            });
+        }
+    });
+
+    // Dynamic Recommendation Engine 
+    async function loadRecommendations(currentId) {
+        const recsContainer = document.getElementById('ui-recs');
+        if (!recsContainer) return;
+        
+        try {
+            const snap = await getDocs(collection(db, "anime"));
+            let allAnime = [];
+            snap.forEach(d => {
+                if (d.id !== currentId) {
+                    allAnime.push({ id: d.id, ...d.data() });
+                }
+            });
+
+            for (let i = allAnime.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [allAnime[i], allAnime[j]] = [allAnime[j], allAnime[i]];
+            }
+
+            const recs = allAnime.slice(0, 5); 
+            
+            recsContainer.innerHTML = recs.map(rec => `
+                <a href="${rec.link || `watch.html?id=${rec.id}`}" class="rec-card">
+                    <img src="${rec.img || 'https://via.placeholder.com/65x90?text=No+Img'}" alt="Poster" loading="lazy">
+                    <div class="rec-card-info">
+                        <p class="rec-title">${rec.title}</p>
+                        <p class="rec-meta">⭐ ${rec.imdb || rec.score || 'N/A'} • ${rec.type || 'Anime'}</p>
+                    </div>
+                </a>
+            `).join('');
+
+        } catch(e) {
+            console.error("Error generating recommendations: ", e);
+            recsContainer.innerHTML = `<p style="color:var(--secondary-color); font-size:0.85rem;">Failed to load recommendations.</p>`;
+        }
+    }
+</script>
+</body>
+</html>

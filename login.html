@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AniKan</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <link rel="stylesheet" href="anikan-style.css">
+
+    <style>
+        /* Unique Glassmorphism for the Auth Page */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(157, 78, 221, 0.15), transparent 50%),
+                radial-gradient(circle at 85% 50%, rgba(157, 78, 221, 0.08), transparent 50%);
+            overflow: hidden;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
+            background: rgba(26, 26, 29, 0.65);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 10;
+            animation: popIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-logo {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .auth-logo span {
+            color: var(--primary-color);
+            text-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        /* Toggle Buttons */
+        .auth-tabs {
+            display: flex;
+            background: rgba(0,0,0,0.3);
+            border-radius: 50px;
+            padding: 5px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-muted-color);
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .auth-tab.active {
+            background: var(--primary-color);
+            color: #fff;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        /* Forms */
+        .auth-form { display: none; animation: fadeIn 0.4s ease; }
+        .auth-form.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted-color);
+            transition: color 0.3s;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 14px 14px 14px 45px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .auth-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255,255,255,0.08);
+            box-shadow: inset 0 0 10px rgba(157, 78, 221, 0.1);
+        }
+        
+        .auth-input:focus + i { color: var(--primary-color); }
+
+        .auth-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 16px;
+            background: #fff;
+            color: #000;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .auth-btn:hover {
+            background: var(--primary-color);
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px var(--primary-glow);
+        }
+
+        .auth-error {
+            color: #ff4d4d;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+            background: rgba(255, 77, 77, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 77, 77, 0.3);
+        }
+
+        .back-home {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: var(--text-muted-color);
+            font-size: 1.5rem;
+            transition: 0.3s;
+            z-index: 100;
+        }
+        .back-home:hover { color: var(--primary-color); transform: translateX(-5px); }
+
+        @media (max-width: 480px) {
+            .auth-container { width: 90%; padding: 30px 20px; }
+            .back-home { top: 20px; left: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="anikan.html" class="back-home" title="Back to Home"><i class="fas fa-arrow-left"></i></a>
+
+    <div class="auth-container">
+        <div class="auth-header">
+            <a href="anikan.html" class="auth-logo">Ani<span>Kan</span></a>
+            <p style="color: var(--text-muted-color); font-size: 0.9rem; margin: 0;">Unlock your personal anime universe.</p>
+        </div>
+
+        <div class="auth-tabs">
+            <div class="auth-tab active" id="tab-login">Log In</div>
+            <div class="auth-tab" id="tab-register">Sign Up</div>
+        </div>
+
+        <form id="login-form" class="auth-form active">
+            <div class="input-group">
+                <input type="email" id="login-email" class="auth-input" placeholder="Email Address" required>
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="input-group">
+                <input type="password" id="login-password" class="auth-input" placeholder="Password" required>
+                <i class="fas fa-lock"></i>
+            </div>
+            <button type="submit" class="auth-btn" id="btn-login-submit">Continue to AniKan <i class="fas fa-arrow-right"></i></button>
+            <div id="login-error" class="auth-error"></div>
+        </form>
+
+        <form id="register-form" class="auth-form">
+            <div class="input-group">
+                <input type="text" id="register-name" class="auth-input" placeholder="Username" required>
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="input-group">
+                <input type="email" id="register-email" class="auth-input" placeholder="Email Address" required>
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="input-group">
+                <input type="password" id="register-password" class="auth-input" placeholder="Create Password" required>
+                <i class="fas fa-lock"></i>
+            </div>
+            <button type="submit" class="auth-btn" id="btn-register-submit">Create Account <i class="fas fa-user-plus"></i></button>
+            <div id="register-error" class="auth-error"></div>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+              // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
+  authDomain: "bhx-beats.firebaseapp.com",
+  projectId: "bhx-beats",
+  storageBucket: "bhx-beats.firebasestorage.app",
+  messagingSenderId: "491393581039",
+  appId: "1:491393581039:web:8204fb8753094a64a9401a",
+  measurementId: "G-PCV97GFYQ7"
+};
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // UI Toggle Logic
+        const tabLogin = document.getElementById('tab-login');
+        const tabRegister = document.getElementById('tab-register');
+        const formLogin = document.getElementById('login-form');
+        const formRegister = document.getElementById('register-form');
+        
+        const loginError = document.getElementById('login-error');
+        const registerError = document.getElementById('register-error');
+
+        tabLogin.addEventListener('click', () => {
+            tabLogin.classList.add('active');
+            tabRegister.classList.remove('active');
+            formLogin.classList.add('active');
+            formRegister.classList.remove('active');
+            loginError.style.display = 'none';
+        });
+
+        tabRegister.addEventListener('click', () => {
+            tabRegister.classList.add('active');
+            tabLogin.classList.remove('active');
+            formRegister.classList.add('active');
+            formLogin.classList.remove('active');
+            registerError.style.display = 'none';
+        });
+
+        // Handle Login
+        formLogin.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-login-submit');
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Authenticating...';
+            btn.style.pointerEvents = 'none';
+            loginError.style.display = 'none';
+
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                // Success! Route back to the Anikan homepage
+                window.location.replace('profile.html');
+            } catch (error) {
+                loginError.style.display = 'block';
+                loginError.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Invalid email or password.`;
+                btn.innerHTML = 'Continue to AniKan <i class="fas fa-arrow-right"></i>';
+                btn.style.pointerEvents = 'auto';
+            }
+        });
+
+        // Handle Register
+        formRegister.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-register-submit');
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Creating Universe...';
+            btn.style.pointerEvents = 'none';
+            registerError.style.display = 'none';
+
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+
+            try {
+                // 1. Create the Auth User
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // 2. Update their display name
+                await updateProfile(user, { displayName: name });
+
+                // 3. Create a profile document in Firestore
+                await setDoc(doc(db, "users", user.uid), {
+                    username: name,
+                    email: email,
+                    role: "user",
+                    createdAt: new Date().getTime(),
+                    avatar: `https://api.dicebear.com/7.x/adventurer/svg?seed=${name}`
+                });
+
+                // Success! Route back to the Anikan homepage
+                window.location.replace('profile.html');
+
+            } catch (error) {
+                registerError.style.display = 'block';
+                if (error.code === 'auth/email-already-in-use') {
+                    registerError.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Email is already in use.`;
+                } else if (error.code === 'auth/weak-password') {
+                    registerError.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Password must be at least 6 characters.`;
+                } else {
+                    registerError.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${error.message}`;
+                }
+                btn.innerHTML = 'Create Account <i class="fas fa-user-plus"></i>';
+                btn.style.pointerEvents = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,413 +1,290 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anikan - The best site to watch anime online for Free</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Anikan - Watch Anime Online</title>
+    <meta name="title" content="Anikan - Stream High-Quality Anime Online">
+    <meta name="description" content="Stream the latest Shonen, Isekai, Romance, and Action anime online. Your ultimate destination for anime entertainment with daily updates.">
+    <meta name="robots" content="index, follow">
 
-    <style>
-        /* --- 1. Global Styles & Imported Purple Theme --- */
-        :root {
-            --color-background: #100f14;
-            --color-card: #1c1b22;
-            --color-text: #e0e0e0;
-            --color-text-muted: #a0a0e0;
-            --color-primary: #9D4EDD; /* Vibrant Purple Accent from home.html */
-            --color-primary-light: #c77dff;
-            --border-color: #2c2c34;
-            --font-family: 'Poppins', sans-serif;
-        }
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: var(--color-background);
-            color: var(--color-text);
-            font-family: var(--font-family);
-            font-size: 16px;
-        }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        a {
-            color: var(--color-text);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        a:hover {
-            color: var(--color-primary);
-        }
-
-        /* --- 2. Header (SEPARATE) --- */
-        .main-header {
-            padding: 1rem 0;
-            margin-bottom: 1.5rem;
-        }
-        
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .logo span {
-            color: var(--color-primary);
-        }
-        
-        .main-nav {
-            display: flex;
-            gap: 2rem;
-        }
-        
-        .main-nav a {
-            font-weight: 500;
-            color: var(--color-text-muted);
-        }
-        
-        .main-nav a.active, .main-nav a:hover {
-            color: var(--color-text);
-        }
-
-          /* --- 3. Hero Section with VIDEO BANNER --- */
-        .hero-banner {
-            position: relative;
-            border-radius: 24px;
-            overflow: hidden;
-            padding: 3rem;
-            display: flex;
-            align-items: center;
-            min-height: 400px;
-        }
-        .hero-video-bg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-        }
-        .hero-banner::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to right, var(--color-card) 30%, rgba(28, 27, 34, 0.7) 60%, transparent 100%);
-            z-index: 1;
-        }
-        
-        .hero-text {
-            position: relative;
-            z-index: 2; /* Sits on top of the overlay */
-            max-width: 500px;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        
-        .search-form {
-            display: flex;
-            height: 50px;
-        }
-        
-        .search-form input {
-            flex-grow: 1;
-            border: none;
-            outline: none;
-            background-color: var(--color-background);
-            padding: 0 1.5rem;
-            font-size: 1rem;
-            color: var(--color-text);
-            border-radius: 8px 0 0 8px;
-        }
-
-        .search-form button {
-            background-color: var(--color-primary);
-            border: none;
-            color: #fff;
-            padding: 0 1.5rem;
-            font-size: 1.2rem;
-            cursor: pointer;
-            border-radius: 0 8px 8px 0;
-            transition: background-color 0.3s;
-        }
-
-        .search-form button:hover {
-            background-color: var(--color-primary-light);
-        }
-
-        .top-searches p {
-            color: var(--color-text-muted);
-            font-weight: 500;
-        }
-
-        .top-searches .search-links {
-            margin-top: 0.5rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-
-        .cta-button {
-            background-color: var(--color-primary);
-            color: #fff;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            width: fit-content;
-            transition: all 0.3s ease;
-        }
-
-        .cta-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(157, 78, 221, 0.5);
-            background-color: var(--color-primary-light);
-        }
-
-        /* --- 4. Main Content --- */
-        .main-content {
-            margin-top: 4rem;
-            padding-bottom: 4rem;
-        }
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 3rem;
-        }
-        
-        .share-section h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
-        .share-section p { color: var(--color-text-muted); font-size: 0.9rem; }
-        .main-article h1 { font-size: 2rem; margin-bottom: 1.5rem; }
-        .main-article h2 { font-size: 1.4rem; margin-top: 2rem; margin-bottom: 1rem; color: var(--color-primary-light); }
-        .main-article p, .main-article li { color: var(--color-text-muted); line-height: 1.8; margin-bottom: 1rem; }
-        .main-article ul { list-style-position: inside; padding-left: 1rem; }
-        .main-article strong { color: var(--color-text); font-weight: 600; }
-        .sidebar h2 { font-size: 1.5rem; margin-bottom: 1.5rem; }
-        .post-card { background-color: var(--color-card); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--border-color); }
-        .post-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 0.75rem; }
-        .post-meta .tag { color: var(--color-primary); font-weight: 600; }
-        .post-meta .comments { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; }
-        .post-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
-        .post-title a:hover { text-decoration: underline; }
-        .post-excerpt { font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.6; margin-bottom: 1rem; }
-        .post-author { font-size: 0.8rem; font-weight: 500; color: var(--color-text-muted); }
-        .post-author span { color: #3498db; font-weight: 600; }
-
-        /* --- 5. Responsive Design --- */
-        @media (max-width: 992px) {
-            .main-nav { display: none; }
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            body { font-size: 14px; }
-            .container { padding: 0 1rem; }
-            .logo { font-size: 2rem; }
-            .main-article h1 { font-size: 1.5rem; }
-            .hero-banner {
-                padding: 2rem;
-                min-height: 350px;
-                background-position: 75% center; /* Adjust image focus for mobile */
-            }
-            .hero-banner::before {
-                 background: linear-gradient(to right, 
-                    var(--color-card) 10%, 
-                    rgba(28, 27, 34, 0.8) 70%, 
-                    transparent 100%
-                );
-            }
-            .hero-text {
-                max-width: 100%;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <link rel="stylesheet" href="anikan-style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+    <script src="anikan-script.js" defer></script>
+    <script src="anikan-bottom-bar.js" defer></script>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Anikan">
+    <meta name="theme-color" content="#9D4EDD">
+    <link rel="manifest" href="/manifest.json">
 </head>
 <body>
 
-    <header class="main-header container">
-        <div class="header-content">
-            <a href="#" class="logo">Ani<span>kan</span></a>
-            <nav class="main-nav">
-                <a href="home.html" class="active">Home</a>
-                <a href="movies.html">Movies</a>
-                <a href="terms.html">Terms</a>
-                <a href="privacy.html">Privacy-policy</a>
-                <a href="disclaimer.html">Disclaimer</a>
+    <header class="main-header">
+        <div class="container">
+            <div class="header-top-row">
+                <div class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <a href="anikan.html" class="logo">Ani<span>Kan</span></a>
+                <div class="header-actions-placeholder">
+                    <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                </div> 
+            </div>
+
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input id="searchInput" type="text" placeholder="Search anime...">
+                <a href="filter.html" class="search-filter-link" title="Advanced Filter">
+                    <i class="fas fa-sliders-h"></i>
+                </a>
+                <div id="searchResults" class="search-results"></div>
+            </div>
+
+            <nav class="nav-links" id="navLinks">
+                <ul>
+                    <li><a href="shonen.html">Shonen</a></li>
+                    <li><a href="isekai.html">Isekai</a></li>
+                    <li><a href="romance.html">Romance</a></li>
+                    <li><a href="movies.html">Movies</a></li>
+                    
+                    <li><a href="affiliate.html" class="earn-nav-link"><i class="fas fa-hand-holding-dollar"></i> Earn</a></li>
+                </ul>
             </nav>
+            <a href="login.html" class="header-download-btn" id="topAuthBtn">
+                <i class="fa-solid fa-user-plus"></i> Login
+            </a>
         </div>
     </header>
-
-    <main class="container">
-        <section class="hero-banner">
-            <video autoplay muted loop playsinline class="hero-video-bg">
-                <source src="b1.mp4" type="video/mp4">
-            </video>
-            <div class="hero-text">
-                <form class="search-form">
-                    <input type="text" placeholder="Search anime...">
-                  <button type="button"><a href="home.html"></a><i class="fas fa-search"></i></button>
-                </form>
-                <div class="top-searches">
-                    <p>Top search:</p>
-                    <div class="search-links">
-                        <a href="demonslayer.html">Demon Slayer: Kimetsu no ...</a>
-                        <a href="chainsawmanmovie1.html">Chainsaw Man the Movie: R...</a>
-                        <a href="#">One Piece,</a>
-                        <a href="dicam.html">Demon Slayer: Kimetsu no ...</a>
-                        <a href="kaijuno8.html">Kaiju No. 8 Season 2,</a>
-                        <a href="#">The Fragrant Flower Bloom...</a>
-                        <a href="dicam.html">Demon Slayer: Mt. Natagu...</a>
-                        <a href="#">Farming Life in Another Wor...</a>
-                        <a href="gachiakuta.html">Gachiakuta,</a>
-                        <a href="#">Attack on Titan, ...</a>
-                    </div>
+    
+    <section class="hero-slider">
+        <div class="slider-wrapper" id="hero-slider-wrapper">
+           <div class="slide slide-1">
+                <img class="slide-bg-image" src="https://m.media-amazon.com/images/S/pv-target-images/89c6bce08e3e6057d82c3306ca87f5c0327039aa1248e7176bf1a228c33bd3a6.jpg" alt="Solo Leveling">
+                <div class="slide-content">
+                    <h1 class="slide-title">Solo Leveling</h1>
+                    <div class="slide-meta"><span>⭐ 9.8</span><span>Action, Fantasy</span></div>
+                    <p class="slide-desc">In a world where hunters with magical abilities fight deadly monsters, Sung Jinwoo, the weakest hunter, discovers a secret quest that will change his destiny forever.</p>
+                    <a href="watch.html?id=sololeveling" class="btn btn-primary">Watch Now</a>
                 </div>
-                <a href="home.html" class="cta-button">
-                    Watch anime <i class="fas fa-arrow-right"></i>
-                </a>
+                <div class="hero-mobile-bar">
+                    <div class="hero-mobile-title">Solo Leveling</div>
+                    <a href="watch.html?id=sololeveling"><button class="hero-play-btn"><i class="fas fa-play"></i></button></a>
+                </div>
+            </div>
+
+            <div class="slide slide-2">
+                <img class="slide-bg-image" src="https://m.media-amazon.com/images/S/pv-target-images/5f4a8e3153e279f5cf0ce69b98a8deb97944925d04704a66afd46b69cd71c7f1.jpg" alt="Kaiju No. 8">
+                <div class="slide-content">
+                    <h1 class="slide-title">Kaiju No. 8</h1>
+                    <div class="slide-meta"><span>⭐ 9.1</span><span>Action, Sci-Fi</span></div>
+                    <p class="slide-desc">In a Japan plagued by monstrous creatures known as Kaiju, Kafka Hibino works a dead-end job cleaning up the aftermath of their battles until a bizarre encounter gives him the power to become one himself.</p>
+                    <a href="watch.html?id=kaijuno8" class="btn btn-primary">Watch Now</a>
+                </div>
+                <div class="hero-mobile-bar">
+                    <div class="hero-mobile-title">Kaiju No. 8</div>
+                    <a href="watch.html?id=kaijuno8"><button class="hero-play-btn"><i class="fas fa-play"></i></button></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="slider-nav">
+            <button id="prevSlide"><i class="fas fa-chevron-left"></i></button>
+            <button id="nextSlide"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <section class="platforms-section">
+        <div class="container">
+            <h3 class="platforms-title">Available Content From Platforms</h3>
+        </div>
+        <div class="marquee-container">
+            <div class="marquee-content">
+                <a href="netflix.html" class="platform-link brand-netflix"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix"></a>
+                <a href="prime.html" class="platform-link brand-prime"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Amazon_Prime_Video_logo.svg/960px-Amazon_Prime_Video_logo.svg.png" alt="Prime Video"></a>
+                <a href="crunchyroll.html" class="platform-link brand-crunchyroll"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Crunchyroll_Logo.png/1200px-Crunchyroll_Logo.png" alt="Crunchyroll"></a>
+                <a href="disneyplus.html" class="platform-link brand-disney"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Disney%2B_logo.svg/1280px-Disney%2B_logo.svg.png" alt="Disney+"></a>
+                
+                <a href="netflix.html" class="platform-link brand-netflix"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix"></a>
+                <a href="prime.html" class="platform-link brand-prime"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Amazon_Prime_Video_logo.svg/960px-Amazon_Prime_Video_logo.svg.png" alt="Prime Video"></a>
+                <a href="crunchyroll.html" class="platform-link brand-crunchyroll"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Crunchyroll_Logo.png/1200px-Crunchyroll_Logo.png" alt="Crunchyroll"></a>
+                <a href="disneyplus.html" class="platform-link brand-disney"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Disney%2B_logo.svg/1280px-Disney%2B_logo.svg.png" alt="Disney+"></a>
+           
+                    <a href="netflix.html" class="platform-link brand-netflix"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix"></a>
+                <a href="prime.html" class="platform-link brand-prime"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Amazon_Prime_Video_logo.svg/960px-Amazon_Prime_Video_logo.svg.png" alt="Prime Video"></a>
+                <a href="crunchyroll.html" class="platform-link brand-crunchyroll"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Crunchyroll_Logo.png/1200px-Crunchyroll_Logo.png" alt="Crunchyroll"></a>
+                <a href="disneyplus.html" class="platform-link brand-disney"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Disney%2B_logo.svg/1280px-Disney%2B_logo.svg.png" alt="Disney+"></a>
+                <a href="netflix.html" class="platform-link brand-netflix"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix"></a>
+                <a href="prime.html" class="platform-link brand-prime"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Amazon_Prime_Video_logo.svg/960px-Amazon_Prime_Video_logo.svg.png" alt="Prime Video"></a>
+                <a href="crunchyroll.html" class="platform-link brand-crunchyroll"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Crunchyroll_Logo.png/1200px-Crunchyroll_Logo.png" alt="Crunchyroll"></a>
+                <a href="disneyplus.html" class="platform-link brand-disney"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Disney%2B_logo.svg/1280px-Disney%2B_logo.svg.png" alt="Disney+"></a>
+            
+           
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <section class="latest-episodes" id="continue-watching-section" style="display: none;">
+            <div class="container">
+                <div class="section-glass-box" style="background: rgba(var(--bg-rgb), 0.05); border-color: var(--primary-color);">
+                    <div class="section-header">
+                        <h2 class="section-title"><i class="fas fa-play-circle" style="color: var(--primary-color);"></i> Continue Watching</h2>
+                    </div>
+                    <div id="continue-watching-grid" class="anime-grid carousel-mode"></div>
+                </div>
             </div>
         </section>
 
-        <section class="main-content">
-            <div class="content-grid">
-                <article class="main-article">
-                    <div class="share-section">
-                        <h3>Share AniKan</h3>
-                        <p>to your friends</p>
+        <section class="latest-episodes">
+            <div class="container">
+                <div class="section-glass-box">
+                    <div class="section-header">
+                        <h2 class="section-title">Trending Now</h2>
+                        <a href="trending.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
                     </div>
-                    <h1>Anikan.to - The best site to watch anime online for Free</h1>
-                    <p>
-                        Do you know that according to Google, the monthly search volume for anime related topics is up to over 1 Billion times? Anime is famous worldwide and it is no wonder we've seen a sharp rise in the number of free anime streaming sites.
-                    </p>
-                    <p>
-                        Just like free online movie streaming sites, anime watching sites are not created equally, some are better than the rest, so we've decided to build Anikan.to to be one of the best free anime streaming site for all anime fans on the world.
-                    </p>
-                    
-                    <h2>1/ What is Anikan.to?</h2>
-                    <p>Anikan.to is a free site to watch anime and you can even download subbed or dubbed anime in ultra HD quality without any registration or payment. By having only one ads in all kinds, we are trying to make it the safest site for free anime.</p>
-                    
-                    <h2>2/ Is Anikan.to safe?</h2>
-                    <p>Yes we are, we do have only one Ads to cover the server cost and we keep scanning the ads 24/7 to make sure all are clean, If you find any ads that is suspicious, please forward us the info and we will remove it.</p>
-                    
-                    <h2>3/ So what make Anikan.to the best site to watch anime free online?</h2>
-                    <p>Before building Anikan.to, we've checked many other free anime sites, and learnt from them. We only keep the good things and remove all the bad things from all the competitors, to put it in our Anikan website. Let's see how we're so confident about being the best site for anime streaming:</p>
-                    <ul>
-                        <li><strong>Safety:</strong> We try our best to not having harmful ads on Anikan.</li>
-                        <li><strong>Content library:</strong> Our main focus is anime. You can find here popular, classic, as well as current titles from all genres such as action, drama, kids, fantasy, horror, mystery, police, romance, school, comedy, music, game and many more. All these titles come with English subtitles or are dubbed in many languages.</li>
-                        <li><strong>Quality/Resolution:</strong> All titles are in excellent resolution, the best quality possible. Anikan.to also has a quality setting function to make sure our users can enjoy streaming no matter how fast your Internet speed is. You can stream the anime at 360p if your Internet is being ridiculous, Or if it is good, you can go with 720p or even 1080p anime.</li>
-                        <li><strong>Streaming experience:</strong> Compared to other anime streaming sites, the loading speed at Anikan.to is faster. Downloading is just as easy as streaming, you won't have any problem saving the videos to watch offline later.</li>
-                        <li><strong>Updates:</strong> We updates new titles as well as fulfill the requests on a daily basis so be warned, you will never run out of what to watch on Anikan.</li>
-                        <li><strong>User interface:</strong> Our UI and UX makes it easy for anyone, no matter how old you are, how long have you been on the Internet. Literally, you can figure out how to navigate our site after a quick look. If you want to watch a specific title, search for it via the search box. If you want to look for suggestions, you can use the site's categories or simply scroll down for new releases.</li>
-                        <li><strong>Device compatibility:</strong> Anikan works alright on both your mobile and desktop. However, we'd recommend you use your desktop for a smoother streaming experience.</li>
-                        <li><strong>Customer care:</strong> We are in active mode 24/7. You can always contact us for any help, query, or business-related inquiry. On our previous projects, we were known for our great customer service as we were quick to fix broken links or upload requested content.</li>
-                    </ul>
-                    <p>So if you're looking for a trustworthy and safe site for your Anime streaming, let's give Anikan.to a try. And if you like us, please help us to spread the words and do not forget to bookmark our site.</p>
-                    <p>Thank you!</p>
-                </article>
-
-                <aside class="sidebar">
-                    <h2>Trending Posts</h2>
-                    
-                    <div class="post-card">
-                        <div class="post-meta">
-                            <span class="tag">#General</span>
-                            <span class="time">16 hours ago</span>
-                            <span class="comments"><i class="fas fa-comment-alt"></i> 538</span>
-                        </div>
-                        <h3 class="post-title"><a href="#">🎊THE SURPRISE EVENT🎊</a></h3>
-                        <p class="post-excerpt">So after the great success of the previous event in the past month, an another event is soon going to happen, so get get ready for it, because this time we are cooking something massive...</p>
-                        <p class="post-author">A GUY WHO DOESN'T TOUCH GRASS <span>Dolphin</span></p>
-                    </div>
-
-                    <div class="post-card">
-                        <div class="post-meta">
-                            <span class="tag">#Question</span>
-                            <span class="time">14 hours ago</span>
-                            <span class="comments"><i class="fas fa-comment-alt"></i> 283</span>
-                        </div>
-                        <h3 class="post-title"><a href="#">🔥Ur signature Emoji🔥</a></h3>
-                        <p class="post-excerpt">So guys what's ur signature emoji: AS U GUYS CAN SEE MINE IS 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥 THIS ONE</p>
-                        <p class="post-author">🔥Hange San🔥 <span>Dolphin</span></p>
-                    </div>
-
-                    <div class="post-card">
-                        <div class="post-meta">
-                            <span class="tag">#General</span>
-                            <span class="time">15 hours ago</span>
-                            <span class="comments"><i class="fas fa-comment-alt"></i> 243</span>
-                        </div>
-                        <h3 class="post-title"><a href="#">Highest likes, dislikes and comments you got for a post?🤔</a></h3>
-                        <p class="post-excerpt">What are the highest likes, dislikes and comments you got for a post? For me highest likes are= 31 Highest dislikes= 6 Highest comments=556...</p>
-                        <p class="post-author">👻 FACTS <span>Angelfish</span></p>
-                    </div>
-                    
-                    <div class="post-card">
-                        <div class="post-meta">
-                            <span class="tag">#General</span>
-                            <span class="time">13 hours ago</span>
-                            <span class="comments"><i class="fas fa-comment-alt"></i> 189</span>
-                        </div>
-                        <h3 class="post-title"><a href="#">imma say it again, i would molestt anybody who goons to waguri 😤😠</a></h3>
-                        <p class="post-excerpt">finally S1 is over and i have some spare time today yeah lol 🥀. mute me again you waguri gooning garlic ahhh 😛...</p>
-                        <p class="post-author">not_a_bad_slime ˢᵃᵇᵉʳ <span>Dolphin</span></p>
-                    </div>
-
-                    <div class="post-card">
-                        <div class="post-meta">
-                            <span class="tag">#General</span>
-                            <span class="time">15 hours ago</span>
-                            <span class="comments"><i class="fas fa-comment-alt"></i> 181</span>
-                        </div>
-                        <h3 class="post-title"><a href="#">Look at the shine ✨️ in my name 😁😙</a></h3>
-                        <p class="post-excerpt">Finally I reached final stage of Unemployment 🤧 . I beat you Isekai guy 👀🌝 ..</p>
-                        <p class="post-author">VERGIL🎭ᵇᵃᵏᵃ ᶜˡᵃⁿ <span>Dolphin</span></p>
-                    </div>
-
-                    <div class="post-card">
-                        <div class="post-meta">
-                            <span class="tag">#General</span>
-                            <span class="time">13 hours ago</span>
-                            <span class="comments"><i class="fas fa-comment-alt"></i> 120</span>
-                        </div>
-                        <h3 class="post-title"><a href="#">How do you see life 🧐</a></h3>
-                        <p class="post-excerpt">Hey guys how's your outlook towards life ? I am an optimistic guy 😄 and a bit introvert what abt u ?</p>
-                        <p class="post-author">𝗘𝗿𝗲𝗻 𝗬𝗮𝗴𝗮𝗺𝗶 マニピュレータ <span>Crab</span></p>
-                    </div>
-
-                </aside>
+                    <div id="trending-grid" class="anime-grid carousel-mode"></div>
+                </div>
             </div>
         </section>
+
+        <section class="latest-episodes">
+            <div class="container">
+                <div class="section-glass-box">
+                    <div class="section-header">
+                        <h2 class="section-title">Action & Shonen</h2>
+                        <a href="shonen.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                    <div id="shonen-grid" class="anime-grid carousel-mode"></div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="latest-episodes">
+            <div class="container">
+                <div class="section-glass-box">
+                    <div class="section-header">
+                        <h2 class="section-title">Romance & Slice of Life</h2>
+                        <a href="romance.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                    <div id="romance-grid" class="anime-grid carousel-mode"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="latest-episodes">
+            <div class="container">
+                <div class="section-glass-box">
+                    <div class="section-header">
+                        <h2 class="section-title">Anime Movies</h2>
+                        <a href="movies.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                    <div id="movies-grid" class="anime-grid carousel-mode"></div>
+                </div>
+            </div>
+        </section>
+     
+        <section class="latest-episodes">
+            <div class="container">
+                <div class="section-glass-box">
+                    <div class="section-header">
+                        <h2 class="section-title">Upcoming Anime</h2>
+                        <a href="upcoming.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                    <div id="upcoming-grid" class="anime-grid carousel-mode"></div>
+                </div>
+            </div>
+        </section>
+
+        <button id="animeRequestBtn" class="anime-fab">
+            <span class="fab-text">Didn't find your anime?</span>
+        </button>
+
+        <div id="animeModal" class="anime-modal-overlay">
+            <div class="anime-modal-card">
+                <button class="anime-modal-close" id="closeAnimeModal">&times;</button>
+                
+                <div class="anime-section-highlight">
+                    <h4>Can't find what you're looking for?</h4>
+                    <p>Request it and we'll add it for you!</p>
+                </div>
+                
+                <div class="anime-section-main">
+                    <form id="animeRequestForm">
+                        <input type="text" id="animeName" placeholder="Enter Anime Name..." required class="anime-input">
+                        <p class="anime-timer-text">Your request will be available <strong>the same day</strong> or within <strong>48 hours</strong>. We will notify you directly in your profile.</p>
+                        <button type="submit" class="anime-submit-btn" id="submitBtn">Send Request</button>
+                    </form>
+                   
+                    <div id="statusMessage" style="margin-top: 10px; font-size: 0.8rem; display: none;"></div>
+                </div>
+                
+                <div class="anime-modal-footer">
+                    <p style="font-size: 0.8rem; margin-bottom: 10px; opacity: 0.7;">Having issues with a broken link? Text us:</p>
+                    <a href="https://t.me/iamashish6700" target="_blank" class="anime-tg-link">On Telegram</a>
+                </div>
+            </div>
+        </div> 
     </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <a href="#" class="logo">Ani<span>Kan</span></a>
+                <div class="footer-socials">
+                    <a href="contact.html"><i class="fas fa-address-book"></i></a>
+                    <a href="privacy.html"><i class="fas fa-file-alt"></i></a>
+                    <a href="terms.html"><i class="fas fa-file-contract"></i></a>
+                    <a href="disclaimer.html"><i class="fas fa-shield-alt"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">&copy; 2026 Anikan. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <div id="appInstallPopup" class="app-install-popup">
+        <div class="popup-content">
+            <img src="favicon.png" alt="App Icon" class="popup-icon" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/9D4EDD/FFFFFF?text=AniKan'">
+            <div class="popup-text">
+                <h4>AniKan App</h4>
+                <p>Install the app now for the best experience!</p>
+            </div>
+            <a href="app.html" class="btn-install">Install</a>
+            <button id="closeInstallPopup" class="btn-close-popup"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="anikan.html" class="bottom-nav-item active">
+            <i class="fa-solid fa-house nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="community.html" class="bottom-nav-item">
+            <i class="fa-solid fa-users nav-icon"></i>
+            <span class="nav-label">Community</span>
+        </a>
+        <a href="mylist.html" class="bottom-nav-item">
+            <i class="fa-solid fa-bookmark nav-icon"></i>
+            <span class="nav-label">My List</span>
+        </a>
+        <a href="login.html" class="bottom-nav-item" id="bottomAuthBtn">
+            <i class="fa-solid fa-user nav-icon"></i>
+            <span class="nav-label">Profile</span>
+        </a>
+    </nav>
 
 </body>
 </html>

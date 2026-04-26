@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniKan OS - Master Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        :root { 
+            --bg-base: #09090B; 
+            --bg-surface: rgba(24, 24, 27, 0.45); 
+            --primary: #9D4EDD; 
+            --primary-glow: rgba(157, 78, 221, 0.4); 
+            --primary-hover: #c77dff;
+            --text-main: #F5F5F5; 
+            --text-muted: #A1A1AA; 
+            --border-subtle: rgba(255, 255, 255, 0.08); 
+            --border-highlight: rgba(255, 255, 255, 0.15);
+            --danger: #EF4444;
+            --success: #10B981;
+            --warning: #F59E0B;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body { 
+            background-color: var(--bg-base); color: var(--text-main); 
+            display: flex; min-height: 100vh; overflow-x: hidden;
+            background-image: radial-gradient(circle at 15% 50%, rgba(157, 78, 221, 0.05), transparent 50%);
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px; background: rgba(9, 9, 11, 0.85); backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border-subtle); padding: 30px 20px;
+            display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; z-index: 100;
+        }
+        .brand { font-size: 1.8rem; font-weight: 700; color: #fff; margin-bottom: 40px; text-align: center; letter-spacing: -0.5px;}
+        .brand span { color: var(--primary); text-shadow: 0 0 15px var(--primary-glow); }
+        
+        .nav-menu { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
+        .nav-item {
+            padding: 14px 20px; border-radius: 12px; color: var(--text-muted);
+            text-decoration: none; display: flex; align-items: center; gap: 12px;
+            transition: all 0.3s ease; font-weight: 500; cursor: pointer; border: 1px solid transparent;
+        }
+        .nav-item:hover { background: rgba(255,255,255,0.03); color: #fff; border-color: var(--border-subtle); }
+        .nav-item.active {
+            background: rgba(157, 78, 221, 0.1); color: #fff;
+            border-color: rgba(157, 78, 221, 0.3); box-shadow: 0 4px 20px var(--primary-glow);
+        }
+        .nav-item i { width: 20px; text-align: center; font-size: 1.1rem; }
+        .nav-item.active i { color: var(--primary); }
+
+        .btn-logout {
+            margin-top: auto; background: rgba(239, 68, 68, 0.1); color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.2); padding: 12px; border-radius: 12px;
+            text-align: center; cursor: pointer; transition: 0.3s; font-weight: 600;
+        }
+        .btn-logout:hover { background: var(--danger); color: #fff; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); }
+
+        /* MAIN CONTENT AREA */
+        .main-content { flex-grow: 1; padding: 40px 50px; overflow-y: auto; height: 100vh;}
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .page-title { font-size: 1.8rem; font-weight: 600; color: #fff; }
+        .admin-badge { background: rgba(157, 78, 221, 0.15); border: 1px solid rgba(157, 78, 221, 0.4); color: #d8b4fe; padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+
+        /* TAB SYSTEM */
+        .tab-section { display: none; animation: fadeIn 0.4s ease forwards; }
+        .tab-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* GLASS WIDGETS */
+        .glass-widget {
+            background: var(--bg-surface); backdrop-filter: blur(16px);
+            border: 1px solid var(--border-subtle); border-radius: 20px;
+            padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .widget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .widget-title { font-size: 1.2rem; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .widget-title i { color: var(--primary); }
+
+        /* TABLES */
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th { text-align: left; padding: 15px; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border-subtle); font-weight: 600;}
+        .data-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); color: #e4e4e7; font-size: 0.95rem; vertical-align: middle;}
+        .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+        
+        .poster-cell img { width: 45px; height: 60px; object-fit: cover; border-radius: 6px; }
+
+        /* STATUS PILLS */
+        .status-pill { padding: 6px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; display: inline-block; letter-spacing: 0.5px;}
+        .status-pending { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
+        .status-uploaded { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
+
+        /* ACTION BUTTONS */
+        .action-btns { display: flex; gap: 8px; }
+        .btn-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; justify-content: center; align-items: center; border: none; cursor: pointer; transition: 0.3s; color: #fff; }
+        .btn-edit { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: #60a5fa; }
+        .btn-edit:hover { background: #3b82f6; color: #fff; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); }
+        .btn-approve { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--success); }
+        .btn-approve:hover { background: var(--success); color: #fff; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
+        .btn-delete { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--danger); }
+        .btn-delete:hover { background: var(--danger); color: #fff; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); }
+
+        /* INPUTS & FORMS */
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; font-weight: 500; text-transform: uppercase; }
+        .admin-input { width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: 12px; color: #fff; font-family: 'Poppins'; outline: none; transition: 0.3s; }
+        .admin-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(157, 78, 221, 0.2); background: rgba(0,0,0,0.5); }
+        .admin-btn { background: var(--primary); color: #fff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px var(--primary-glow); display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; }
+        .admin-btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+        /* MODALS */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 9999; overflow-y: auto; padding: 20px; }
+        .modal-card { background: var(--bg-surface); border: 1px solid var(--border-highlight); border-radius: 20px; padding: 30px; width: 100%; max-width: 600px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); max-height: 90vh; overflow-y: auto;}
+        .modal-card::-webkit-scrollbar { width: 6px; }
+        .modal-card::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        .modal-title { font-size: 1.4rem; color: #fff; margin-bottom: 25px; font-weight: 600; display: flex; justify-content: space-between; align-items: center;}
+        .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; transition: 0.3s; }
+        .close-modal:hover { color: #fff; }
+        
+        .modal-actions { display: flex; gap: 10px; margin-top: 30px; }
+        .btn-cancel { flex: 1; background: transparent; border: 1px solid var(--border-subtle); color: #fff; padding: 12px; border-radius: 10px; cursor: pointer; transition: 0.3s; font-weight: 600;}
+        .btn-cancel:hover { background: rgba(255,255,255,0.05); }
+        .btn-confirm { flex: 1; background: var(--success); border: none; color: #fff; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn-confirm:hover { background: #059669; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="brand">Ani<span>Kan</span> OS</div>
+        <nav class="nav-menu">
+            <a class="nav-item active" data-tab="cms-tab"><i class="fas fa-video"></i> Anime CMS</a>
+            <a class="nav-item" data-tab="requests-tab"><i class="fas fa-inbox"></i> Viewer Requests</a>
+            <a class="nav-item" data-tab="users-tab"><i class="fas fa-users"></i> Database Users</a>
+            <a class="nav-item" data-tab="affiliate-tab"><i class="fas fa-network-wired"></i> Affiliate Network</a>
+            <a class="nav-item" data-tab="broadcast-tab"><i class="fas fa-satellite-dish"></i> Global Broadcast</a>
+            <a class="nav-item" href="anikan.html" target="_blank"><i class="fas fa-external-link-alt"></i> Live Site</a>
+        </nav>
+        <button class="btn-logout" id="btn-logout"><i class="fas fa-power-off"></i> Secure Logout</button>
+    </aside>
+
+    <main class="main-content">
+        <div class="header-top">
+            <h1 class="page-title" id="page-title-display">Anime CMS Manager</h1>
+            <div class="admin-badge"><i class="fas fa-shield-alt"></i> System Administrator</div>
+        </div>
+
+        <section id="cms-tab" class="tab-section active">
+            <div class="glass-widget">
+                <div class="widget-header">
+                    <h2 class="widget-title"><i class="fas fa-database"></i> Database Content</h2>
+                    <button class="admin-btn" onclick="openAnimeModal()"><i class="fas fa-plus"></i> Upload Anime</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Poster</th>
+                                <th>Title</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Trend</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="anime-tbody">
+                            <tr><td colspan="6" style="text-align:center;"><i class="fas fa-spinner fa-spin"></i> Fetching Anime Database...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="requests-tab" class="tab-section">
+            <div class="glass-widget">
+                <div class="widget-header">
+                    <h2 class="widget-title"><i class="fas fa-list-ul"></i> Pending Anime Uploads</h2>
+                    <button class="admin-btn" onclick="fetchRequests()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>User Email</th>
+                                <th>Requested Anime</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="requests-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="users-tab" class="tab-section">
+            <div class="glass-widget">
+                <div class="widget-header">
+                    <h2 class="widget-title"><i class="fas fa-users"></i> Registered Users</h2>
+                    <button class="admin-btn" onclick="fetchUsers()"><i class="fas fa-sync-alt"></i> Sync</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Display Name</th>
+                                <th>Email</th>
+                                <th>Join Date</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="affiliate-tab" class="tab-section">
+            <div class="glass-widget">
+                <div class="widget-header">
+                    <h2 class="widget-title"><i class="fas fa-users-cog"></i> Creator Ledger & Payouts</h2>
+                    <button class="admin-btn" onclick="fetchCreators()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Creator ID</th>
+                                <th>Valid Clicks</th>
+                                <th>Unpaid Clicks</th>
+                                <th>Owed ($0.05)</th>
+                                <th>Payout Data</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="affiliate-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="broadcast-tab" class="tab-section">
+            <div class="glass-widget" style="max-width: 600px;">
+                <h2 class="widget-title" style="margin-bottom: 25px;"><i class="fas fa-broadcast-tower"></i> Transmit Push Notification</h2>
+                <form id="broadcast-form">
+                    <div class="input-group">
+                        <label>Target Audience</label>
+                        <select id="notif-target" class="admin-input">
+                            <option value="all">All Users (Global)</option>
+                            <option value="creators">Affiliate Partners Only</option>
+                            <option value="viewers">Standard Viewers Only</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Notification Title</label>
+                        <input type="text" id="notif-title" class="admin-input" placeholder="e.g. Solo Leveling Episode 12 is OUT!" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Message Payload</label>
+                        <textarea id="notif-message" class="admin-input" rows="3" placeholder="Enter broadcast details..." required></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Action Link (Optional)</label>
+                        <input type="text" id="notif-link" class="admin-input" placeholder="e.g. watch.html?id=sololeveling">
+                    </div>
+                    <button type="submit" class="admin-btn" style="width: 100%; justify-content: center;" id="btn-broadcast"><i class="fas fa-satellite-dish"></i> Execute Broadcast</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="anime-modal">
+        <div class="modal-card" style="max-width: 800px;">
+            <div class="modal-title">
+                <span id="anime-modal-title"><i class="fas fa-upload"></i> Upload New Anime</span>
+                <button class="close-modal" onclick="closeAnimeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <form id="anime-form">
+                <input type="hidden" id="edit-anime-id">
+                
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Anime Title</label>
+                        <input type="text" id="db-title" class="admin-input" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Document ID / URL Slug (e.g. sololeveling)</label>
+                        <input type="text" id="db-id" class="admin-input" required>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Poster Image URL</label>
+                        <input type="url" id="db-img" class="admin-input" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Genres (e.g. Shonen, Action)</label>
+                        <input type="text" id="db-genre" class="admin-input" required>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Format Type</label>
+                        <select id="db-type" class="admin-input">
+                            <option value="TV Series">TV Series</option>
+                            <option value="Movie">Movie</option>
+                            <option value="OVA">OVA</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Status</label>
+                        <select id="db-status" class="admin-input">
+                            <option value="Ongoing">Ongoing</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Upcoming">Upcoming</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Total Episodes (or Season Array e.g., [12, 12])</label>
+                        <input type="text" id="db-eps" class="admin-input" placeholder="e.g. 24 or [12, 24]" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Score / Rating</label>
+                        <input type="text" id="db-score" class="admin-input" placeholder="e.g. 9.1">
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Hero Slider / Trending? (T = Yes, N = No)</label>
+                        <select id="db-trend" class="admin-input">
+                            <option value="N">No (Standard Grid)</option>
+                            <option value="T">Yes (Trending Carousel)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Synopsis</label>
+                    <textarea id="db-synopsis" class="admin-input" rows="4" required></textarea>
+                </div>
+
+                <h4 style="color:var(--primary); margin: 20px 0 10px 0; font-size:1rem;">Voice Actors / Cast</h4>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Actor 1 Name</label>
+                        <input type="text" id="db-a1" class="admin-input">
+                    </div>
+                    <div class="input-group">
+                        <label>Actor 1 Image URL</label>
+                        <input type="url" id="db-a1img" class="admin-input">
+                    </div>
+                    <div class="input-group">
+                        <label>Actor 2 Name</label>
+                        <input type="text" id="db-a2" class="admin-input">
+                    </div>
+                    <div class="input-group">
+                        <label>Actor 2 Image URL</label>
+                        <input type="url" id="db-a2img" class="admin-input">
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeAnimeModal()">Cancel</button>
+                    <button type="submit" class="btn-confirm" id="btn-save-anime"><i class="fas fa-save"></i> Save Anime</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="resolve-modal">
+        <div class="modal-card">
+            <div class="modal-title">
+                <span>Mark Anime as Uploaded</span>
+                <button class="close-modal" onclick="closeResolveModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Provide the direct link to the anime so the user receives a clickable notification in their profile.</p>
+            <input type="hidden" id="resolve-req-id">
+            <div class="input-group">
+                <input type="text" id="resolve-link" class="admin-input" placeholder="e.g. watch.html?id=kaijuno8" required>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeResolveModal()">Cancel</button>
+                <button type="button" class="btn-confirm" onclick="submitResolution()"><i class="fas fa-check"></i> Confirm Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, setDoc, getDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+             // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
+  authDomain: "bhx-beats.firebaseapp.com",
+  projectId: "bhx-beats",
+  storageBucket: "bhx-beats.firebasestorage.app",
+  messagingSenderId: "491393581039",
+  appId: "1:491393581039:web:8204fb8753094a64a9401a",
+  measurementId: "G-PCV97GFYQ7"
+};
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Security Gatekeeper
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.replace('login.html');
+            } else {
+                // Initialize all tables
+                fetchAnimeDB();
+                fetchRequests();
+                fetchUsers();
+                fetchCreators();
+            }
+        });
+
+        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+
+        // UI Tab Routing Logic
+        document.querySelectorAll('.nav-item').forEach(item => {
+            if(item.hasAttribute('data-tab')) {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    document.querySelectorAll('.tab-section').forEach(tab => tab.classList.remove('active'));
+                    
+                    item.classList.add('active');
+                    document.getElementById(item.getAttribute('data-tab')).classList.add('active');
+                    document.getElementById('page-title-display').innerText = item.innerText;
+                });
+            }
+        });
+
+// =====================================
+// 1. ANIME CMS (Database Engine)
+// =====================================
+        let currentAnimeList = [];
+
+        window.fetchAnimeDB = async function() {
+            const tbody = document.getElementById('anime-tbody');
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr>';
+            try {
+                const snap = await getDocs(collection(db, "anime"));
+                currentAnimeList = [];
+                let html = '';
+                
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    data.id = doc.id;
+                    currentAnimeList.push(data);
+                    
+                    html += `
+                        <tr>
+                            <td class="poster-cell"><img src="${data.img}" alt="Poster"></td>
+                            <td style="font-weight:600;">${data.title}</td>
+                            <td>${data.type}</td>
+                            <td>${data.status}</td>
+                            <td><span class="status-pill ${data.Trend === 'T' ? 'status-uploaded' : 'status-pending'}">${data.Trend === 'T' ? 'Trending' : 'Standard'}</span></td>
+                            <td class="action-btns">
+                                <button class="btn-icon btn-edit" onclick="editAnime('${data.id}')" title="Edit Content"><i class="fas fa-edit"></i></button>
+                                <button class="btn-icon btn-delete" onclick="deleteAnime('${data.id}')" title="Delete Anime"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center;">No anime found.</td></tr>';
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--danger);">Error loading Database: ${e.message}</td></tr>`;
+            }
+        };
+
+        window.openAnimeModal = function() {
+            document.getElementById('anime-form').reset();
+            document.getElementById('edit-anime-id').value = '';
+            document.getElementById('db-id').disabled = false; // Allow ID entry for new uploads
+            document.getElementById('anime-modal-title').innerHTML = '<i class="fas fa-upload"></i> Upload New Anime';
+            document.getElementById('anime-modal').style.display = 'flex';
+        };
+
+        window.closeAnimeModal = function() {
+            document.getElementById('anime-modal').style.display = 'none';
+        };
+
+        window.editAnime = function(id) {
+            const anime = currentAnimeList.find(a => a.id === id);
+            if(!anime) return;
+
+            document.getElementById('edit-anime-id').value = id;
+            document.getElementById('db-id').value = id;
+            document.getElementById('db-id').disabled = true; // Don't let them change ID on edit
+            document.getElementById('db-title').value = anime.title || '';
+            document.getElementById('db-img').value = anime.img || '';
+            document.getElementById('db-genre').value = anime.genre || '';
+            document.getElementById('db-type').value = anime.type || 'TV Series';
+            document.getElementById('db-status').value = anime.status || 'Ongoing';
+            
+            // Handle seasons array parsing for HTML input
+            let epsDisplay = anime.totalEps || anime.seasons || '';
+            if(Array.isArray(anime.seasons)) epsDisplay = `[${anime.seasons.join(', ')}]`;
+            document.getElementById('db-eps').value = epsDisplay;
+            
+            document.getElementById('db-score').value = anime.score || anime.imdb || '';
+            document.getElementById('db-trend').value = anime.Trend || 'N';
+            document.getElementById('db-synopsis').value = anime.synopsis || '';
+            
+            document.getElementById('db-a1').value = anime.actor1 || '';
+            document.getElementById('db-a1img').value = anime.actor1Img || '';
+            document.getElementById('db-a2').value = anime.actor2 || '';
+            document.getElementById('db-a2img').value = anime.actor2Img || '';
+
+            document.getElementById('anime-modal-title').innerHTML = '<i class="fas fa-edit"></i> Edit Anime';
+            document.getElementById('anime-modal').style.display = 'flex';
+        };
+
+        document.getElementById('anime-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save-anime');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            btn.disabled = true;
+
+            const isEdit = document.getElementById('edit-anime-id').value;
+            const docId = document.getElementById('db-id').value.trim();
+            
+            let epsInput = document.getElementById('db-eps').value.trim();
+            let finalEps = epsInput;
+            let finalSeasons = null;
+
+            // Simple parser to handle season arrays like [12, 12, 24]
+            if(epsInput.startsWith('[') && epsInput.endsWith(']')) {
+                try {
+                    finalSeasons = JSON.parse(epsInput);
+                    finalEps = finalSeasons.reduce((a, b) => a + b, 0); // Total count
+                } catch(err) { alert("Invalid Array format for seasons."); btn.disabled = false; return; }
+            }
+
+            const payload = {
+                title: document.getElementById('db-title').value.trim(),
+                img: document.getElementById('db-img').value.trim(),
+                genre: document.getElementById('db-genre').value.trim(),
+                type: document.getElementById('db-type').value,
+                status: document.getElementById('db-status').value,
+                totalEps: finalEps,
+                score: document.getElementById('db-score').value.trim(),
+                imdb: document.getElementById('db-score').value.trim(),
+                Trend: document.getElementById('db-trend').value,
+                synopsis: document.getElementById('db-synopsis').value.trim(),
+                actor1: document.getElementById('db-a1').value.trim(),
+                actor1Img: document.getElementById('db-a1img').value.trim(),
+                actor2: document.getElementById('db-a2').value.trim(),
+                actor2Img: document.getElementById('db-a2img').value.trim(),
+            };
+
+            if (finalSeasons) payload.seasons = finalSeasons;
+
+            try {
+                if (isEdit) {
+                    await updateDoc(doc(db, "anime", docId), payload);
+                } else {
+                    await setDoc(doc(db, "anime", docId), payload);
+                }
+                
+                // Force a cache version update so users get the new data instantly
+                await setDoc(doc(db, "system", "config"), { lastUpdated: new Date().getTime() }, { merge: true });
+
+                closeAnimeModal();
+                fetchAnimeDB();
+            } catch (err) {
+                alert("Save Failed: " + err.message);
+            } finally {
+                btn.innerHTML = '<i class="fas fa-save"></i> Save Anime';
+                btn.disabled = false;
+            }
+        });
+
+        window.deleteAnime = async function(id) {
+            if(confirm(`WARNING: Are you sure you want to completely delete "${id}"?`)) {
+                try {
+                    await deleteDoc(doc(db, "anime", id));
+                    await setDoc(doc(db, "system", "config"), { lastUpdated: new Date().getTime() }, { merge: true });
+                    fetchAnimeDB();
+                } catch (e) { alert("Delete failed."); }
+            }
+        };
+
+// =====================================
+// 2. USER DATABASE MANAGEMENT
+// =====================================
+        window.fetchUsers = async function() {
+            const tbody = document.getElementById('users-tbody');
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;"><i class="fas fa-circle-notch fa-spin"></i> Syncing users...</td></tr>';
+            try {
+                const snap = await getDocs(collection(db, "users"));
+                if (snap.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No users registered yet.</td></tr>';
+                    return;
+                }
+                
+                let html = '';
+                snap.forEach(doc => {
+                    const user = doc.data();
+                    const date = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Unknown';
+                    
+                    html += `
+                        <tr>
+                            <td><code style="color:#A1A1AA; font-size:0.8rem;">${doc.id}</code></td>
+                            <td style="font-weight:600;">${user.username || 'N/A'}</td>
+                            <td>${user.email || 'N/A'}</td>
+                            <td>${date}</td>
+                            <td><span class="status-pill status-uploaded">${user.role || 'User'}</span></td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--danger);"><i class="fas fa-exclamation-triangle"></i> Access Denied.</td></tr>`;
+            }
+        };
+
+// =====================================
+// 3. VIEWER REQUEST ENGINE
+// =====================================
+        window.fetchRequests = async function() {
+            const tbody = document.getElementById('requests-tbody');
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;"><i class="fas fa-circle-notch fa-spin"></i> Decrypting ledger...</td></tr>';
+            try {
+                const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
+                const snap = await getDocs(q);
+                if (snap.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Ledger empty. No pending requests.</td></tr>';
+                    return;
+                }
+                
+                let html = '';
+                snap.forEach(doc => {
+                    const req = doc.data();
+                    const date = new Date(req.createdAt).toLocaleDateString();
+                    const isPending = req.status === 'Pending';
+                    const statusClass = isPending ? 'status-pending' : 'status-uploaded';
+                    
+                    html += `
+                        <tr>
+                            <td>${date}</td>
+                            <td><span style="font-family:monospace; color:#d8b4fe;">${req.userEmail}</span></td>
+                            <td style="font-weight:600;">${req.animeName}</td>
+                            <td><span class="status-pill ${statusClass}">${req.status}</span></td>
+                            <td class="action-btns">
+                                ${isPending ? `<button class="btn-icon btn-approve" onclick="openResolveModal('${doc.id}')" title="Mark as Uploaded"><i class="fas fa-check"></i></button>` : ''}
+                                <button class="btn-icon btn-delete" onclick="deleteRequest('${doc.id}')" title="Delete Record"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+            } catch (e) { console.error(e); }
+        };
+
+        window.openResolveModal = function(id) {
+            document.getElementById('resolve-req-id').value = id;
+            document.getElementById('resolve-modal').style.display = 'flex';
+        };
+
+        window.closeResolveModal = function() {
+            document.getElementById('resolve-modal').style.display = 'none';
+            document.getElementById('resolve-link').value = '';
+        };
+
+        window.submitResolution = async function() {
+            const id = document.getElementById('resolve-req-id').value;
+            const link = document.getElementById('resolve-link').value.trim();
+            if(!link) return alert("You must provide the watch link.");
+
+            try {
+                await updateDoc(doc(db, "requests", id), {
+                    status: "Uploaded",
+                    link: link
+                });
+                closeResolveModal();
+                fetchRequests();
+            } catch(e) { alert("Database update failed."); }
+        };
+
+        window.deleteRequest = async function(id) {
+            if(confirm("Confirm permanent deletion of this request?")) {
+                await deleteDoc(doc(db, "requests", id));
+                fetchRequests();
+            }
+        };
+
+// =====================================
+// 4. AFFILIATE / CREATOR LEDGER
+// =====================================
+        window.fetchCreators = async function() {
+            const tbody = document.getElementById('affiliate-tbody');
+            try {
+                const snap = await getDocs(collection(db, "creators"));
+                if (snap.empty) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No registered affiliates.</td></tr>';
+                    return;
+                }
+                let html = '';
+                snap.forEach(documentSnapshot => {
+                    const c = documentSnapshot.data();
+                    const owed = ((c.unpaidClicks || 0) * 0.05).toFixed(2);
+                    
+                    let payoutInfo = c.payoutRequested 
+                        ? `<span style="color:var(--warning); font-weight:600;"><i class="fas fa-exclamation-circle"></i> Payout Pending:</span><br><code style="background:rgba(0,0,0,0.5); padding:4px; border-radius:4px;">${c.payoutDetails}</code>`
+                        : `<span style="color:var(--text-muted);">No Request</span>`;
+
+                    html += `
+                        <tr>
+                            <td><code style="color:#d8b4fe;">${c.creatorId}</code></td>
+                            <td>${c.totalClicks || 0}</td>
+                            <td style="font-weight:600; color:var(--warning);">${c.unpaidClicks || 0}</td>
+                            <td style="font-weight:700; color:var(--success);">$${owed}</td>
+                            <td>${payoutInfo}</td>
+                            <td class="action-btns">
+                                ${c.payoutRequested ? `<button class="btn-icon btn-approve" onclick="clearPayout('${documentSnapshot.id}')" title="Mark Paid & Clear Debt"><i class="fas fa-money-bill-wave"></i></button>` : ''}
+                                <button class="btn-icon" style="background:rgba(245, 158, 11, 0.1); border:1px solid rgba(245, 158, 11, 0.3); color:var(--warning);" onclick="warnCreator('${documentSnapshot.id}')" title="Issue Policy Warning"><i class="fas fa-shield-virus"></i></button>
+                                <button class="btn-icon btn-delete" onclick="terminateCreator('${documentSnapshot.id}', '${c.creatorId}')" title="Terminate Affiliate"><i class="fas fa-ban"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+            } catch(e) { console.error(e); }
+        };
+
+        window.clearPayout = async function(id) {
+            if (confirm("Confirm payment sent? This will reset their unpaid clicks to 0.")) {
+                await updateDoc(doc(db, "creators", id), {
+                    unpaidClicks: 0,
+                    payoutRequested: false,
+                    payoutDetails: ""
+                });
+                fetchCreators();
+            }
+        };
+
+        window.warnCreator = async function(id) {
+            if (confirm("Lock this affiliate's payout capabilities for suspicious activity?")) {
+                await updateDoc(doc(db, "creators", id), {
+                    policyWarning: true,
+                    accountStatus: "Warning"
+                });
+                alert("Policy strike applied. Their dashboard is now locked.");
+            }
+        };
+
+        window.terminateCreator = async function(id, name) {
+            if (confirm(`CRITICAL: Confirm permanent termination of affiliate @${name}? All ledger data will be destroyed.`)) {
+                await deleteDoc(doc(db, "creators", id));
+                fetchCreators();
+            }
+        };
+
+// =====================================
+// 5. BROADCAST NOTIFICATION SYSTEM
+// =====================================
+        document.getElementById('broadcast-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-broadcast');
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Transmitting Protocol...';
+            btn.disabled = true;
+
+            try {
+                await setDoc(doc(collection(db, "notifications")), {
+                    target: document.getElementById('notif-target').value,
+                    title: document.getElementById('notif-title').value.trim(),
+                    message: document.getElementById('notif-message').value.trim(),
+                    link: document.getElementById('notif-link').value.trim(),
+                    createdAt: new Date().getTime()
+                });
+                
+                alert("Protocol transmitted successfully across network.");
+                e.target.reset();
+            } catch (error) {
+                console.error(error);
+                alert("Transmission failure. Check console payload.");
+            } finally {
+                btn.innerHTML = '<i class="fas fa-satellite-dish"></i> Execute Broadcast';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
