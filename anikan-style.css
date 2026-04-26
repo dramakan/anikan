@@ -237,19 +237,32 @@ img { max-width: 100%; height: auto; display: block; }
 ===================================================== */
 .platforms-section { background: var(--background-color); padding: 20px 0; border-bottom: 1px solid var(--glass-border); position: relative; z-index: 2; margin: 0; transition: background-color 0.5s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.5s cubic-bezier(0.25, 1, 0.5, 1);}
 .platforms-title { text-align: center; font-size: 0.85rem; color: var(--text-muted-color); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
-.marquee-container { width: 100%; overflow: hidden; white-space: nowrap; position: relative; }
-.marquee-container::before, .marquee-container::after { content: ''; position: absolute; top: 0; width: 150px; height: 100%; z-index: 2; pointer-events: none; transition: background 0.5s cubic-bezier(0.25, 1, 0.5, 1);}
+.marquee-container { 
+    width: 100%; 
+    overflow: hidden; 
+    white-space: nowrap; 
+    position: relative; 
+    display: flex; /* NEW: Forces a rigid horizontal track */
+}
+.marquee-container::before, .marquee-container::after { 
+    content: ''; position: absolute; top: 0; width: 150px; height: 100%; z-index: 2; pointer-events: none; transition: background 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
 .marquee-container::before { left: 0; background: linear-gradient(to right, var(--background-color), transparent); }
 .marquee-container::after { right: 0; background: linear-gradient(to left, var(--background-color), transparent); }
 
 .marquee-content { 
-    display: inline-flex; /* Changed from inline-block to flex */
-    width: max-content;   /* Forces perfect width calculation */
-    animation: scroll 25s linear infinite; 
+    display: flex; 
+    flex-shrink: 0; /* NEW: Prevents logos from squeezing on small screens */
+    align-items: center;
+    width: max-content; 
+    animation: scroll 30s linear infinite; /* Slightly smoothed out the speed */
 }
 .marquee-content:hover { animation-play-state: paused; }
-@keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
+@keyframes scroll { 
+    0% { transform: translateX(0); } 
+    100% { transform: translateX(-100%); } /* NEW: Scrolls the entire track length */
+}
 .platform-link {
   display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; margin: 0 8px;
   background: var(--glass-bg); backdrop-filter: var(--glass-blur); border-radius: 50px;

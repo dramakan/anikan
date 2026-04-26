@@ -52,6 +52,15 @@ async function getFirebase() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    // --- 3. PLATFORM MARQUEE SEAMLESS LOOP ---
+    const marqueeContainer = document.querySelector('.marquee-container');
+    const marqueeContent = document.querySelector('.marquee-content');
+    if (marqueeContainer && marqueeContent) {
+        // Dynamically clones the track to create a perfect infinite loop 
+        // without you needing to duplicate HTML manually
+        const clone = marqueeContent.cloneNode(true);
+        marqueeContainer.appendChild(clone);
+    }
 
     // --- 0. THEME TOGGLE LISTENER ---
     const themeToggle = document.getElementById('themeToggle');
