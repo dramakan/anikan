@@ -127,7 +127,7 @@ Promise.all([
                     let changed = false;
 
                     for (const [id, cloudItem] of Object.entries(cloudHistory)) {
-                        if (cloudItem.link && !cloudItem.link.includes('anikan.html')) {
+                        if (cloudItem.link && !cloudItem.link.includes('index.html')) {
                             if (!localHistory[id] || Number(cloudItem.timestamp) > Number(localHistory[id].timestamp || 0)) {
                                 localHistory[id] = cloudItem;
                                 if (cloudItem.epIndex) localStorage.setItem(`anikan_ep_${id}`, cloudItem.epIndex);

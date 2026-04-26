@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 try {
                     const historyObj = JSON.parse(localStorage.getItem('anikan_history')) || {};
                     const historyArr = Object.values(historyObj)
-                        .filter(item => item && item.link && item.title && !item.link.toLowerCase().includes('anikan.html'))
+                        .filter(item => item && item.link && item.title && !item.link.toLowerCase().includes('index.html'))
                         .sort((a, b) => b.timestamp - a.timestamp).slice(0, 10);
                     
                     const cwSection = document.getElementById('continue-watching-section');

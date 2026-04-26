@@ -290,7 +290,7 @@
 <body>
 
     <header class="app-header">
-        <a href="anikan.html" class="app-header-btn" title="Back to Home"><i class="fas fa-chevron-left"></i></a>
+        <a href="index.html" class="app-header-btn" title="Back to Home"><i class="fas fa-chevron-left"></i></a>
         <div class="app-header-title">My Profile</div>
         <div class="app-header-btn" style="opacity: 0; pointer-events: none;"><i class="fas fa-cog"></i></div> 
     </header>
@@ -428,7 +428,7 @@
     </main>
 
     <nav class="bottom-nav">
-        <a href="anikan.html" class="bottom-nav-item">
+        <a href="index.html" class="bottom-nav-item">
             <i class="fa-solid fa-house nav-icon"></i>
             <span class="nav-label">Home</span>
         </a>
@@ -503,7 +503,7 @@ const firebaseConfig = {
                 
                 const historyObj = JSON.parse(localStorage.getItem('anikan_history')) || {};
                 const historyArr = Object.entries(historyObj)
-                    .filter(([k, i]) => i && i.link && i.title && !i.link.includes('anikan.html'))
+                    .filter(([k, i]) => i && i.link && i.title && !i.link.includes('index.html'))
                     .sort((a, b) => b[1].timestamp - a[1].timestamp);
                 
                 if (historyArr.length === 0) return historyGrid.innerHTML = `<div class="empty-state"><i class="fas fa-tv"></i><h3>No watch history</h3><p style="font-size:0.9rem; margin-top:6px;">Anime you start watching appear here.</p></div>`;
