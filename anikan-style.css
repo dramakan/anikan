@@ -499,12 +499,13 @@ img { max-width: 100%; height: auto; display: block; }
     position: relative; 
   }
   .slider-wrapper { 
-    width: 85%; /* Removed the hard margins, replaced with proper width */
+    width: 65%; /* Removed the hard margins, replaced with proper width */
     margin: 0 auto; 
     display: flex; 
-    height: 85%; 
+    height: 95%; 
     overflow: visible !important; 
     align-items: center; 
+    padding-top: 11%;
   }
 
   .slide { 
@@ -516,6 +517,19 @@ img { max-width: 100%; height: auto; display: block; }
   
   .slide-bg-image, .slide-content, .slider-nav { display: none !important; }
   .slide::after { background: linear-gradient(to top, rgba(var(--bg-rgb),0.95) 0%, rgba(var(--bg-rgb),0.2) 60%, transparent 100%); }
+
+  /* --- NEW: MOBILE POSTER OVERRIDE --- */
+  .slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--mobile-poster);
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    border-radius: inherit;
+    pointer-events: none;
+  }
 
   .hero-mobile-bar { 
     position: absolute; 

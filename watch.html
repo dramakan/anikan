@@ -9,12 +9,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <link rel="stylesheet" href="anikan-style.css">
-    <link rel="stylesheet" href="bottom-bar.css"> 
 
     <style>
         :root {
             --bg-base: #0B0C10; 
-            --primary: #9D4EDD; /* Anikan Vibrant Purple */
+            --primary: #9D4EDD; 
             --primary-glow: rgba(157, 78, 221, 0.4); 
             --glass-bg: rgba(26, 26, 29, 0.45);
             --glass-border: rgba(255, 255, 255, 0.08);
@@ -62,7 +61,6 @@
             transition: 0.3s;
         }
         .widget:hover { border-color: rgba(255,255,255,0.15); }
-
         .widget-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 20px; color: #fff; display: flex; align-items: center; gap: 8px;}
 
         /* Video Player Layer */
@@ -88,17 +86,20 @@
             box-shadow: var(--glass-shadow);
         }
         .episode-title { font-size: 1.3rem; font-weight: 600; margin: 0; color: #fff;}
+        .episode-actions { display: flex; flex-wrap: wrap; gap: 10px; }
         
         .action-btn {
             background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--glass-border);
             padding: 10px 20px; border-radius: 50px; cursor: pointer; transition: 0.3s;
-            display: inline-flex; align-items: center; gap: 8px; font-weight: 500;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 500;
         }
         .action-btn:hover:not(:disabled) { background: var(--primary); border-color: var(--primary); box-shadow: 0 4px 15px var(--primary-glow); }
         .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        /* Seasons & Episode Grid */
-        .season-selector-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        /* Seasons & Smooth Episode Batches */
+        .season-selector-wrapper { display: flex; flex-direction: column; margin-bottom: 20px; width: 100%; }
+        .season-header-row { display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; }
+        
         .season-select {
             background: rgba(0,0,0,0.6); color: #fff; border: 1px solid rgba(157, 78, 221, 0.4);
             padding: 8px 16px; border-radius: 8px; font-family: 'Poppins', sans-serif;
@@ -106,6 +107,20 @@
         }
         .season-select:hover { border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
         .season-select option { background: #1a1a1d; color: #fff; }
+
+        /* NEW: Cute Scrollable Pills for Batches */
+        .batch-pills-container {
+            display: flex; gap: 8px; overflow-x: auto; padding: 12px 0 5px 0; width: 100%;
+            scrollbar-width: none; -ms-overflow-style: none;
+        }
+        .batch-pills-container::-webkit-scrollbar { display: none; }
+        .batch-pill {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+            color: #a1a1aa; padding: 6px 16px; border-radius: 50px; font-size: 0.85rem;
+            font-weight: 500; cursor: pointer; white-space: nowrap; transition: 0.3s;
+        }
+        .batch-pill:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .batch-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
 
         .episodes-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
         .episode-item {
@@ -145,9 +160,20 @@
 
         /* Sidebar Info */
         .info-poster { position: relative; }
-        .info-poster img { width: 100%; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid var(--glass-border); }
         
-        /* Add to My List Button */
+        /* THE POSTER FIX: Forces all banners into perfect vertical posters */
+        .info-poster img { 
+            width: 100%; 
+            max-width: 100%; 
+            aspect-ratio: 2/3; 
+            object-fit: cover; 
+            border-radius: 16px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            border: 1px solid var(--glass-border); 
+            display: block;
+        }
+        
         .bookmark-btn {
             position: absolute; top: 10px; right: 10px; z-index: 10;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
@@ -174,15 +200,33 @@
         .rec-title { font-size: 0.95rem; font-weight: 600; color: #fff; margin: 0 0 5px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3;}
         .rec-meta { font-size: 0.8rem; color: var(--primary); margin: 0; font-weight: 500;}
 
-        /* Main Grid Layout */
+        /* THE GRID BLOWOUT FIX: Added min-width: 0 */
         .container { max-width: 1400px; margin: 0 auto; padding: 30px 4%; }
         .watch-layout { display: grid; grid-template-columns: 1fr 360px; gap: 30px; }
+        .main-content-col, .sidebar-col { min-width: 0; width: 100%; } 
         
-        /* Mobile Adjustments */
+        /* =========================================================
+           MOBILE OPTIMIZATIONS (FIXED ALIGNMENT & SIZING)
+        ========================================================= */
         @media (max-width: 1024px) {
             .watch-layout { grid-template-columns: 1fr; }
             .sidebar-col { display: flex; flex-direction: column; }
             .drama-info-widget { order: -1; } 
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 15px 4%; }
+            .video-player-container { padding: 8px; border-radius: 12px; margin-bottom: 15px; }
+            .widget { padding: 15px; margin-bottom: 15px; border-radius: 16px; }
+            .episode-title { font-size: 1.15rem; text-align: center; width: 100%; margin-bottom: 10px; }
+            .episode-actions { width: 100%; display: flex; justify-content: space-between; }
+            .action-btn { flex: 1; padding: 10px; font-size: 0.85rem; }
+            .season-selector-wrapper { gap: 0; }
+            .season-select { width: auto; font-size: 0.85rem; padding: 6px 12px;}
+            .episodes-list { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; }
+            .episode-item { padding: 8px 5px; }
+            .ep-number { font-size: 0.95rem; }
+            .ep-desc { font-size: 0.65rem; }
         }
 
         /* Apple Liquid Glass Bottom Nav */
@@ -222,8 +266,6 @@
         }
     </style>
     <script src="anikan-bottom-bar.js" defer></script>
-    <script src="lightmode.js"></script> 
-    <link rel="stylesheet" href="lightmode.css"> 
 </head>
 <body>
 
@@ -264,8 +306,11 @@
 
                 <div class="widget episodes-list-widget">
                     <div class="season-selector-wrapper">
-                        <h2 class="widget-title" style="margin: 0;"><i class="fas fa-list"></i> Episode List</h2>
-                        <select id="season-selector" class="season-select" style="display: none;"></select>
+                        <div class="season-header-row">
+                            <h2 class="widget-title" style="margin: 0;"><i class="fas fa-list"></i> Episode List</h2>
+                            <select id="season-selector" class="season-select" style="display: none;"></select>
+                        </div>
+                        <div id="batch-pills-container" class="batch-pills-container" style="display: none;"></div>
                     </div>
                     <div class="episodes-list" id="episodes-list-container"></div>
                 </div>
@@ -359,12 +404,10 @@
         </a>
     </nav>
 
-    <script type="module" src="bottom-bar.js"></script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-    // --- ANIKAN CONFIG: Points to your bhx-beats database ---
     const firebaseConfig = {
         apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
         authDomain: "bhx-beats.firebaseapp.com",
@@ -389,7 +432,6 @@
         }
 
         try {
-            // Fetching from the "anime" collection
             const docRef = doc(db, "anime", animeId); 
             const docSnap = await getDoc(docRef);
 
@@ -407,7 +449,6 @@
                 document.getElementById('ui-score').textContent = data.imdb || data.score || 'N/A';
                 document.getElementById('ui-genre').textContent = data.genre || 'N/A';
 
-                // Optional cast fields (fail-safed in case they don't exist in anime DB yet)
                 if(document.getElementById('ui-cast1-name')) document.getElementById('ui-cast1-name').textContent = data.actor1 || 'Unknown';
                 if(document.getElementById('ui-cast1-img')) document.getElementById('ui-cast1-img').src = data.actor1Img || 'https://api.dicebear.com/7.x/adventurer/svg?seed=cast1';
                 if(document.getElementById('ui-cast2-name')) document.getElementById('ui-cast2-name').textContent = data.actor2 || 'Unknown';
@@ -432,13 +473,11 @@
 
                 bookmarkBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    
                     if (typeof window.toggleMyList === 'function') {
                         window.toggleMyList(this, encodeURIComponent(safeTitle), encodeURIComponent(safeImg), encodeURIComponent(safeLink));
                     } else {
                         let currentList = JSON.parse(localStorage.getItem('anikan_mylist')) || [];
-                        const animeObj = { title: safeTitle, img: safeImg, link: safeLink };
-                        const existsIndex = currentList.findIndex(item => item.link === animeObj.link);
+                        const existsIndex = currentList.findIndex(item => item.link === safeLink);
                         
                         if (existsIndex > -1) {
                             currentList.splice(existsIndex, 1);
@@ -446,25 +485,25 @@
                             this.style.color = '#fff';
                             this.style.borderColor = 'var(--glass-border)';
                         } else {
-                            currentList.push(animeObj);
+                            currentList.push({ title: safeTitle, img: safeImg, link: safeLink });
                             this.innerHTML = '<i class="fas fa-check"></i> Added';
                             this.style.color = 'var(--primary-color)';
                             this.style.borderColor = 'var(--primary-color)';
                         }
-                        
                         localStorage.setItem('anikan_mylist', JSON.stringify(currentList));
                         window.dispatchEvent(new Event('myListUpdated'));
                     }
                 });
 
                 // ==========================================
-                // EPISODE & SEASON LOGIC
+                // EPISODE & SEASON BATCH LOGIC
                 // ==========================================
                 let seasonsArr = data.seasons || [data.totalEps || 1];
                 let currentSeason = 1;
                 let currentEpisode = 1;
 
                 const seasonSelector = document.getElementById('season-selector');
+                const batchContainer = document.getElementById('batch-pills-container');
                 const grid = document.getElementById('episodes-list-container');
 
                 if (seasonsArr.length > 1 && seasonSelector) {
@@ -472,12 +511,45 @@
                     seasonSelector.innerHTML = seasonsArr.map((_, idx) => `<option value="${idx + 1}">Season ${idx + 1}</option>`).join('');
                 }
 
-                function renderEpisodeGrid(seasonNum) {
+                function renderEpisodeGrid(seasonNum, batchIndex = 0) {
                     currentSeason = parseInt(seasonNum);
                     const epsInThisSeason = seasonsArr[currentSeason - 1] || 1;
                     
+                    if (epsInThisSeason > 50) {
+                        batchContainer.style.display = 'flex';
+                        const totalBatches = Math.ceil(epsInThisSeason / 50);
+                        
+                        if (batchContainer.dataset.season != currentSeason) {
+                            let batchHtml = '';
+                            for (let b = 0; b < totalBatches; b++) {
+                                const start = b * 50 + 1;
+                                const end = Math.min((b + 1) * 50, epsInThisSeason);
+                                batchHtml += `<button class="batch-pill ${b === batchIndex ? 'active' : ''}" data-batch="${b}">Eps ${start}-${end}</button>`;
+                            }
+                            batchContainer.innerHTML = batchHtml;
+                            batchContainer.dataset.season = currentSeason;
+                            
+                            // Attach event listeners to new pills
+                            document.querySelectorAll('.batch-pill').forEach(pill => {
+                                pill.addEventListener('click', function() {
+                                    renderEpisodeGrid(currentSeason, parseInt(this.dataset.batch));
+                                });
+                            });
+                        } else {
+                            document.querySelectorAll('.batch-pill').forEach(pill => {
+                                pill.classList.toggle('active', parseInt(pill.dataset.batch) === batchIndex);
+                            });
+                        }
+                    } else {
+                        batchContainer.style.display = 'none';
+                        batchIndex = 0;
+                    }
+
+                    const startEp = batchIndex * 50 + 1;
+                    const endEp = Math.min((batchIndex + 1) * 50, epsInThisSeason);
+
                     let buttonsHtml = '';
-                    for (let i = 1; i <= epsInThisSeason; i++) {
+                    for (let i = startEp; i <= endEp; i++) {
                         buttonsHtml += `<a class="episode-item" data-season="${currentSeason}" data-index="${currentSeason}-${i}"><div class="ep-info"><p class="ep-number">EP ${i}</p><p class="ep-desc">Season ${currentSeason}</p></div></a>`;
                     }
                     if(grid) grid.innerHTML = buttonsHtml;
@@ -501,12 +573,27 @@
                     currentSeason = parseInt(seasonNum);
                     currentEpisode = parseInt(epNum);
                     
+                    const neededBatch = Math.floor((currentEpisode - 1) / 50);
+                    let requiresRender = false;
+                    
                     if (seasonSelector && parseInt(seasonSelector.value) !== currentSeason) {
                         seasonSelector.value = currentSeason;
-                        renderEpisodeGrid(currentSeason);
+                        requiresRender = true;
+                    }
+                    
+                    const activePill = document.querySelector('.batch-pill.active');
+                    const currentBatch = activePill ? parseInt(activePill.dataset.batch) : 0;
+                    
+                    if (batchContainer && batchContainer.style.display !== 'none' && currentBatch !== neededBatch) {
+                        requiresRender = true;
                     }
 
-                    // --- THE FIX: Movies vs TV Shows & Missing IMDb IDs ---
+                    if (requiresRender) {
+                        renderEpisodeGrid(currentSeason, neededBatch);
+                    } else {
+                        updateActiveButton();
+                    }
+
                     if (!data.imdbId) {
                         videoPlayer.removeAttribute("src");
                         videoPlayer.srcdoc = `
@@ -534,9 +621,6 @@
                             : `Playing EP ${currentEpisode} - ${data.title}`;
                     }
                     
-                    updateActiveButton();
-
-                    // Tracker Save Fix
                     const epIndexToSave = `${currentSeason}-${currentEpisode}`;
                     localStorage.setItem(`anikan_ep_${animeId}`, epIndexToSave);
                     
@@ -561,7 +645,7 @@
                     }
                 }
 
-                if (seasonSelector) seasonSelector.addEventListener('change', (e) => { renderEpisodeGrid(e.target.value); });
+                if (seasonSelector) seasonSelector.addEventListener('change', (e) => { renderEpisodeGrid(e.target.value, 0); });
                 
                 if (grid) {
                     grid.addEventListener('click', (e) => {
@@ -596,7 +680,7 @@
                     });
                 }
 
-                renderEpisodeGrid(1);
+                renderEpisodeGrid(1, 0);
 
                 setTimeout(() => {
                     const savedEpRaw = localStorage.getItem(`anikan_ep_${animeId}`);
@@ -638,7 +722,6 @@
         }
     });
 
-    // Dynamic Recommendation Engine 
     async function loadRecommendations(currentId) {
         const recsContainer = document.getElementById('ui-recs');
         if (!recsContainer) return;
