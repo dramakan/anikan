@@ -288,6 +288,17 @@
             <form id="anime-form">
                 <input type="hidden" id="edit-anime-id">
                 
+                <div class="input-group">
+                    <label>IMDb ID (Source Mapping)</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="db-imdb-id" class="admin-input" style="margin-bottom: 0;" placeholder="e.g. tt1234567" required>
+                        <button type="button" id="auto-fill-btn" class="admin-btn" style="white-space: nowrap;">
+                            <i class="fas fa-magic"></i> Auto-Fill
+                        </button>
+                    </div>
+                    <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 4px; display: block;">Enter IMDb ID and hit Auto-Fill to pull metadata and cast images.</small>
+                </div>
+
                 <div class="form-grid">
                     <div class="input-group">
                         <label>Anime Title</label>
@@ -404,9 +415,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, setDoc, getDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, setDoc, getDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-             // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
   authDomain: "bhx-beats.firebaseapp.com",
@@ -420,12 +430,10 @@ const firebaseConfig = {
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Security Gatekeeper
         onAuthStateChanged(auth, (user) => {
             if (!user) {
                 window.location.replace('login.html');
             } else {
-                // Initialize all tables
                 fetchAnimeDB();
                 fetchRequests();
                 fetchUsers();
@@ -435,7 +443,6 @@ const firebaseConfig = {
 
         document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
 
-        // UI Tab Routing Logic
         document.querySelectorAll('.nav-item').forEach(item => {
             if(item.hasAttribute('data-tab')) {
                 item.addEventListener('click', (e) => {
@@ -491,7 +498,7 @@ const firebaseConfig = {
         window.openAnimeModal = function() {
             document.getElementById('anime-form').reset();
             document.getElementById('edit-anime-id').value = '';
-            document.getElementById('db-id').disabled = false; // Allow ID entry for new uploads
+            document.getElementById('db-id').disabled = false;
             document.getElementById('anime-modal-title').innerHTML = '<i class="fas fa-upload"></i> Upload New Anime';
             document.getElementById('anime-modal').style.display = 'flex';
         };
@@ -506,14 +513,14 @@ const firebaseConfig = {
 
             document.getElementById('edit-anime-id').value = id;
             document.getElementById('db-id').value = id;
-            document.getElementById('db-id').disabled = true; // Don't let them change ID on edit
+            document.getElementById('db-id').disabled = true;
+            document.getElementById('db-imdb-id').value = anime.imdbId || '';
             document.getElementById('db-title').value = anime.title || '';
             document.getElementById('db-img').value = anime.img || '';
             document.getElementById('db-genre').value = anime.genre || '';
             document.getElementById('db-type').value = anime.type || 'TV Series';
             document.getElementById('db-status').value = anime.status || 'Ongoing';
             
-            // Handle seasons array parsing for HTML input
             let epsDisplay = anime.totalEps || anime.seasons || '';
             if(Array.isArray(anime.seasons)) epsDisplay = `[${anime.seasons.join(', ')}]`;
             document.getElementById('db-eps').value = epsDisplay;
@@ -531,63 +538,152 @@ const firebaseConfig = {
             document.getElementById('anime-modal').style.display = 'flex';
         };
 
+        // =====================================
+        // AUTO-FILL SYSTEM (OMDB + TMDB API)
+        // =====================================
+        document.getElementById('auto-fill-btn').addEventListener('click', async () => {
+            const imdbId = document.getElementById('db-imdb-id').value.trim();
+            if (!imdbId) return alert("Please enter an IMDb ID first.");
+
+            const btn = document.getElementById('auto-fill-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching...';
+
+            const omdbKey = "7739fdec"; 
+            const tmdbKey = "014fbdbe962cb38379e09e31d0652459"; // REPLACE WITH YOUR ACTUAL TMDB KEY
+
+            try {
+                // 1. OMDb Fetch
+                const res = await fetch(`https://www.omdbapi.com/?i=${imdbId}&plot=full&apikey=${omdbKey}`);
+                const data = await res.json();
+
+                if (data.Response === "False") {
+                    alert("IMDb ID not found: " + data.Error);
+                    return;
+                }
+
+                document.getElementById('db-title').value = data.Title || "";
+                document.getElementById('db-id').value = (data.Title || "").toLowerCase().replace(/[^a-z0-9]/g, '');
+                document.getElementById('db-img').value = data.Poster !== "N/A" ? data.Poster : "";
+                document.getElementById('db-synopsis').value = data.Plot || "";
+                document.getElementById('db-score').value = data.imdbRating || "";
+                document.getElementById('db-genre').value = data.Genre || "";
+
+                if (data.Type === "movie") {
+                    document.getElementById('db-type').value = "Movie";
+                    document.getElementById('db-eps').value = "1";
+                }
+
+                if (data.Actors && data.Actors !== "N/A") {
+                    const actors = data.Actors.split(',');
+                    if (actors[0]) document.getElementById('db-a1').value = actors[0].trim();
+                    if (actors[1]) document.getElementById('db-a2').value = actors[1].trim();
+                }
+
+                // 2. TMDB Fetch for Cast Headshots & TV Seasons
+                if (tmdbKey !== "014fbdbe962cb38379e09e31d0652459") {
+                    const findRes = await fetch(`https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`);
+                    const findData = await findRes.json();
+                    
+                    let mediaType = '';
+                    let tmdbId = null;
+                    
+                    if (findData.tv_results && findData.tv_results.length > 0) {
+                        tmdbId = findData.tv_results[0].id;
+                        mediaType = 'tv';
+                    } else if (findData.movie_results && findData.movie_results.length > 0) {
+                        tmdbId = findData.movie_results[0].id;
+                        mediaType = 'movie';
+                    }
+
+                    if (tmdbId) {
+                        const credRes = await fetch(`https://api.themoviedb.org/3/${mediaType}/${tmdbId}/credits?api_key=${tmdbKey}`);
+                        const credData = await credRes.json();
+                        if (credData.cast && credData.cast.length > 0) {
+                            if (credData.cast[0]?.profile_path) document.getElementById('db-a1img').value = `https://image.tmdb.org/t/p/w500${credData.cast[0].profile_path}`;
+                            if (credData.cast[1]?.profile_path) document.getElementById('db-a2img').value = `https://image.tmdb.org/t/p/w500${credData.cast[1].profile_path}`;
+                        }
+
+                        if (mediaType === 'tv') {
+                            const detailRes = await fetch(`https://api.themoviedb.org/3/tv/${tmdbId}?api_key=${tmdbKey}`);
+                            const detailData = await detailRes.json();
+                            if (detailData.seasons) {
+                                const seasonCounts = detailData.seasons
+                                    .filter(s => s.season_number > 0)
+                                    .map(s => s.episode_count);
+                                document.getElementById('db-eps').value = `[${seasonCounts.join(', ')}]`;
+                            }
+                        }
+                    }
+                }
+                alert("Auto-Fill complete!");
+            } catch(e) { alert("Fetch Error: " + e.message); }
+            finally { btn.innerHTML = '<i class="fas fa-magic"></i> Auto-Fill'; }
+        });
+
         document.getElementById('anime-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-save-anime');
+            const isEdit = document.getElementById('edit-anime-id').value;
+            const docId = document.getElementById('db-id').value.trim();
+            const imdbId = document.getElementById('db-imdb-id').value.trim();
+            
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
             btn.disabled = true;
 
-            const isEdit = document.getElementById('edit-anime-id').value;
-            const docId = document.getElementById('db-id').value.trim();
-            
-            let epsInput = document.getElementById('db-eps').value.trim();
-            let finalEps = epsInput;
-            let finalSeasons = null;
-
-            // Simple parser to handle season arrays like [12, 12, 24]
-            if(epsInput.startsWith('[') && epsInput.endsWith(']')) {
-                try {
-                    finalSeasons = JSON.parse(epsInput);
-                    finalEps = finalSeasons.reduce((a, b) => a + b, 0); // Total count
-                } catch(err) { alert("Invalid Array format for seasons."); btn.disabled = false; return; }
-            }
-
-            const payload = {
-                title: document.getElementById('db-title').value.trim(),
-                img: document.getElementById('db-img').value.trim(),
-                genre: document.getElementById('db-genre').value.trim(),
-                type: document.getElementById('db-type').value,
-                status: document.getElementById('db-status').value,
-                totalEps: finalEps,
-                score: document.getElementById('db-score').value.trim(),
-                imdb: document.getElementById('db-score').value.trim(),
-                Trend: document.getElementById('db-trend').value,
-                synopsis: document.getElementById('db-synopsis').value.trim(),
-                actor1: document.getElementById('db-a1').value.trim(),
-                actor1Img: document.getElementById('db-a1img').value.trim(),
-                actor2: document.getElementById('db-a2').value.trim(),
-                actor2Img: document.getElementById('db-a2img').value.trim(),
-            };
-
-            if (finalSeasons) payload.seasons = finalSeasons;
-
             try {
+                // Duplicate check
+                if (!isEdit) {
+                    const dupCheck = await getDocs(query(collection(db, "anime"), where("imdbId", "==", imdbId)));
+                    if (!dupCheck.empty) {
+                        btn.innerHTML = '<i class="fas fa-save"></i> Save Anime';
+                        btn.disabled = false;
+                        return alert("STOP: This Anime already exists in database!");
+                    }
+                }
+
+                let epsInput = document.getElementById('db-eps').value.trim();
+                let finalEps = epsInput;
+                let finalSeasons = null;
+
+                if(epsInput.startsWith('[') && epsInput.endsWith(']')) {
+                    finalSeasons = JSON.parse(epsInput);
+                    finalEps = finalSeasons.reduce((a, b) => a + b, 0);
+                }
+
+                const payload = {
+                    title: document.getElementById('db-title').value.trim(),
+                    imdbId: imdbId,
+                    img: document.getElementById('db-img').value.trim(),
+                    genre: document.getElementById('db-genre').value.trim(),
+                    type: document.getElementById('db-type').value,
+                    status: document.getElementById('db-status').value,
+                    totalEps: finalEps,
+                    score: document.getElementById('db-score').value.trim(),
+                    imdb: document.getElementById('db-score').value.trim(),
+                    Trend: document.getElementById('db-trend').value,
+                    synopsis: document.getElementById('db-synopsis').value.trim(),
+                    actor1: document.getElementById('db-a1').value.trim(),
+                    actor1Img: document.getElementById('db-a1img').value.trim(),
+                    actor2: document.getElementById('db-a2').value.trim(),
+                    actor2Img: document.getElementById('db-a2img').value.trim(),
+                    createdAt: new Date().getTime()
+                };
+
+                if (finalSeasons) payload.seasons = finalSeasons;
+
                 if (isEdit) {
                     await updateDoc(doc(db, "anime", docId), payload);
                 } else {
                     await setDoc(doc(db, "anime", docId), payload);
                 }
                 
-                // Force a cache version update so users get the new data instantly
                 await setDoc(doc(db, "system", "config"), { lastUpdated: new Date().getTime() }, { merge: true });
-
                 closeAnimeModal();
                 fetchAnimeDB();
-            } catch (err) {
-                alert("Save Failed: " + err.message);
-            } finally {
+            } catch (err) { alert("Save Failed: " + err.message); }
+            finally { 
                 btn.innerHTML = '<i class="fas fa-save"></i> Save Anime';
-                btn.disabled = false;
+                btn.disabled = false; 
             }
         });
 

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My List - AniKan</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <link rel="stylesheet" href="anikan-style.css">
+
+    <style>
+        /* Base Overrides for AniKan Branding */
+        :root {
+            --primary-color: #9D4EDD;
+            --primary-glow: rgba(157, 78, 221, 0.4);
+            --background-color: #0B0C10;
+        }
+
+        body { 
+            padding-bottom: 90px; 
+            background-color: var(--background-color); 
+        }
+
+        .main-header {
+            background: rgba(11, 12, 16, 0.85);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 15px 4%; position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-size: 1.8rem; font-weight: 700; color: #fff; text-decoration: none; letter-spacing: -0.5px; }
+        .logo span { color: var(--primary-color); text-shadow: 0 0 8px var(--primary-glow); }
+        
+        .mylist-container { 
+            max-width: 1200px; 
+            margin: 40px auto; 
+            padding: 0 4%; 
+            animation: fadeIn 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); 
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .anime-grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 25px; }
+        .item-wrapper { position: relative; transition: transform 0.3s; height: 100%; display: flex; }
+        .item-wrapper:hover { transform: translateY(-5px); z-index: 5; }
+        
+        .anime-grid-container .anime-card {
+            min-width: 100% !important; max-width: 100% !important; width: 100%; height: 100%; border-radius: 16px;
+            display: flex; flex-direction: column; overflow: hidden; margin: 0; text-decoration: none; color: #fff;
+            background: linear-gradient(145deg, rgba(30,30,35,0.4) 0%, rgba(15,15,20,0.6) 100%);
+            border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        .anime-grid-container .anime-card:hover { border-color: rgba(157, 78, 221, 0.4); box-shadow: 0 8px 25px var(--primary-glow); }
+        .anime-grid-container .anime-card-img { width: 100%; aspect-ratio: 2.7 / 4; border-radius: 16px 16px 0 0; overflow: hidden; flex-shrink: 0; }
+        .anime-grid-container .anime-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .item-wrapper:hover .anime-card-img img { transform: scale(1.08); }
+        .anime-grid-container .anime-card-info { padding: 16px; background: transparent; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .anime-grid-container .anime-card-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        .remove-btn { 
+            position: absolute; top: 10px; right: 10px; z-index: 10; background: rgba(239, 68, 68, 0.85); 
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.3); 
+            color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; 
+            cursor: pointer; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.5); opacity: 0; transform: scale(0.8); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .item-wrapper:hover .remove-btn { opacity: 1; transform: scale(1); }
+        .remove-btn:hover { background: #ef4444; transform: scale(1.15) !important; }
+
+        .empty-state, .loading-state { text-align: center; padding: 80px 20px; color: #a1a1aa; background: rgba(26, 26, 29, 0.4); border-radius: 24px; border: 1px dashed rgba(255,255,255,0.1); backdrop-filter: blur(10px); grid-column: 1 / -1; }
+        .empty-state i { font-size: 4rem; margin-bottom: 20px; color: rgba(157, 78, 221, 0.3); }
+        .empty-state h3 { font-weight: 500; font-size: 1.2rem; color: #e4e4e7; }
+        .loading-state i { font-size: 3rem; margin-bottom: 20px; color: var(--primary-color); }
+
+        .browse-btn { display:inline-block; margin-top:20px; padding: 10px 24px; background: linear-gradient(135deg, var(--primary-color) 0%, #7b2cbf 100%); color:#fff; border-radius:50px; text-decoration:none; font-weight:600; box-shadow: 0 4px 15px var(--primary-glow); transition: 0.3s;}
+        .browse-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(157, 78, 221, 0.6); }
+
+        @media (max-width: 768px) {
+            .mylist-container { margin: 20px auto; padding: 0 5%; }
+            .anime-grid-container { grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 15px; }
+            .remove-btn { opacity: 1; transform: scale(1); top: 8px; right: 8px; width: 30px; height: 30px; font-size: 0.85rem; }
+        }
+
+        /* Apple Liquid Glass Bottom Nav strictly for mobile */
+        @media (max-width: 992px) {
+            .bottom-nav { display: flex !important; position: fixed !important; bottom: 10px !important; left: 50% !important; transform: translateX(-50%) !important; width: 90% !important; max-width: 400px !important; background: rgba(20, 20, 25, 0.45) !important; backdrop-filter: blur(40px) saturate(180%) !important; -webkit-backdrop-filter: blur(40px) saturate(180%) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; border-top: 1px solid rgba(255, 255, 255, 0.25) !important; border-radius: 50px !important; z-index: 9999 !important; padding: 5px 10px !important; box-shadow: 0 25px 50px rgba(0,0,0,0.7), inset 0 1px 1px rgba(255,255,255,0.1) !important; }
+            .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 0; color: rgba(255, 255, 255, 0.5); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); position: relative; text-decoration: none; }
+            .bottom-nav-item.active { color: #fff; text-shadow: 0 0 15px var(--primary-glow); }
+            .nav-icon { font-size: 1.35rem; margin-bottom: 4px; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+            .bottom-nav-item.active .nav-icon { transform: translateY(-4px) scale(1.15); color: var(--primary-color); filter: drop-shadow(0 5px 12px var(--primary-glow)); }
+            .nav-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.3px; transition: all 0.3s ease; }
+            .bottom-nav-item.active .nav-label { font-weight: 700; }
+        }
+        @media (min-width: 993px) { .bottom-nav { display: none !important; } }
+    </style>
+    
+    <script src="anikan-bottom-bar.js" defer></script> 
+    <script src="lightmode.js" defer></script> 
+    <link rel="stylesheet" href="lightmode.css"> 
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
+            <a href="index.html" class="logo">Ani<span>Kan</span></a>
+            <a href="index.html" style="color: #a1a1aa; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.3s;">
+                <i class="fas fa-arrow-left"></i> Home
+            </a>
+        </div>
+    </header>
+
+    <main class="mylist-container">
+        <div class="page-header">
+            <i class="fas fa-bookmark" style="font-size: 1.8rem; color: var(--primary-color);"></i>
+            <h1 class="page-title">My List</h1>
+        </div>
+
+        <div class="anime-grid-container" id="mylist-grid-container">
+            <div class="loading-state" id="loading-spinner">
+                <i class="fas fa-circle-notch fa-spin"></i>
+                <p>Loading your saved anime...</p>
+            </div>
+        </div>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <i class="fa-solid fa-house nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="community.html" class="bottom-nav-item">
+            <i class="fa-solid fa-users nav-icon"></i>
+            <span class="nav-label">Community</span>
+        </a>
+        <a href="mylist.html" class="bottom-nav-item active">
+            <i class="fa-solid fa-bookmark nav-icon"></i>
+            <span class="nav-label">My List</span>
+        </a>
+        <a href="login.html" class="bottom-nav-item" id="bottomAuthBtn">
+            <i class="fa-solid fa-user nav-icon"></i>
+            <span class="nav-label">Profile</span>
+        </a>
+    </nav>
+
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // UPDATED: Using the bhx-beats config to perfectly match your authentication session
+        const firebaseConfig = {
+            apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
+            authDomain: "bhx-beats.firebaseapp.com",
+            projectId: "bhx-beats",
+            storageBucket: "bhx-beats.firebasestorage.app",
+            messagingSenderId: "491393581039",
+            appId: "1:491393581039:web:8204fb8753094a64a9401a",
+            measurementId: "G-PCV97GFYQ7"
+        };
+        
+        const app = !getApps().length ? initializeApp(firebaseConfig) : getApp(); 
+        const auth = getAuth(app); 
+        const db = getFirestore(app);
+
+        let currentUserDocRef = null;
+
+        // UI Renderer Function
+        window.renderMyList = function(listArray) {
+            const myListGrid = document.getElementById('mylist-grid-container');
+            if (listArray && listArray.length > 0) {
+                // Reverse creates a new array so we don't mutate the original data
+                const displayList = [...listArray].reverse();
+                myListGrid.innerHTML = displayList.map(item => `
+                    <div class="item-wrapper">
+                        <a href="${item.link}" class="anime-card">
+                            <div class="anime-card-img"><img src="${item.img}" alt="${item.title}"></div>
+                            <div class="anime-card-info"><h3 class="anime-card-title">${item.title}</h3></div>
+                        </a>
+                        <button class="remove-btn" onclick="removeFromMyList('${item.title.replace(/'/g, "\\'")}')" title="Remove from My List">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `).join('');
+            } else {
+                myListGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-bookmark"></i>
+                        <h3>Your list is empty</h3>
+                        <p style="font-size:0.9rem; margin-top:10px;">Find anime you like and tap the + button to save them here.</p>
+                        <a href="index.html" class="browse-btn">Browse Anime</a>
+                    </div>`;
+            }
+        };
+
+        // Remove Function
+        window.removeFromMyList = async function(title) {
+            // 1. Instantly remove from local storage
+            let localList = [];
+            try {
+                localList = JSON.parse(localStorage.getItem('dramakan_mylist')) || [];
+                localList = localList.filter(item => item.title !== title);
+                localStorage.setItem('dramakan_mylist', JSON.stringify(localList));
+                window.renderMyList(localList);
+            } catch(e) { console.error(e); }
+
+            // 2. Sync removal with Firestore
+            if (currentUserDocRef) {
+                try {
+                    await setDoc(currentUserDocRef, { myList: localList }, { merge: true });
+                } catch (error) { 
+                    console.error("Error removing item from cloud:", error); 
+                }
+            }
+        };
+
+        // --- BULLETPROOF SESSION LOADER & SMART MERGE ---
+        
+        // 1. Instantly load local storage data so the screen isn't blank
+        let localData = [];
+        try {
+            localData = JSON.parse(localStorage.getItem('dramakan_mylist')) || [];
+            window.renderMyList(localData);
+        } catch(e) {}
+
+        // 2. Validate Authentication & Sync
+        onAuthStateChanged(auth, async (user) => {
+            const customSession = localStorage.getItem('dramakan_user') || sessionStorage.getItem('dramakan_user') || localStorage.getItem('anikan_user');
+
+            let uid = user ? user.uid : null;
+            if (!uid && customSession) {
+                try {
+                    const parsed = JSON.parse(customSession);
+                    uid = parsed.uid || parsed.id;
+                } catch(e) {}
+            }
+
+            if (uid) {
+                currentUserDocRef = doc(db, "users", uid); 
+                try {
+                    const docSnap = await getDoc(currentUserDocRef);
+                    let cloudList = [];
+                    if (docSnap.exists()) {
+                        cloudList = docSnap.data().myList || [];
+                    }
+                    
+                    // SMART MERGE: Combine Cloud and Local data so newly saved items are never overwritten
+                    const mergedMap = new Map();
+                    // Load cloud items first
+                    cloudList.forEach(item => mergedMap.set(item.link, item));
+                    // Add local items (this ensures local saves are prioritized and not deleted)
+                    localData.forEach(item => mergedMap.set(item.link, item));
+                    
+                    const mergedList = Array.from(mergedMap.values());
+                    
+                    // Render and save the fully merged list
+                    window.renderMyList(mergedList);
+                    localStorage.setItem('dramakan_mylist', JSON.stringify(mergedList));
+                    
+                    // Push the updated, complete list back to the cloud database
+                    await setDoc(currentUserDocRef, { myList: mergedList }, { merge: true });
+
+                } catch (error) {
+                    console.error("Cloud Sync Error: ", error);
+                }
+            } 
+        });
+    </script>
+</body>
+</html>
