@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watch Anime - AniKan</title>
+    <title>Watch Anime - Anykan</title>
     
     <meta http-equiv="x-dns-prefetch-control" content="off">
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    <link rel="stylesheet" href="anikan-style.css">
+    <link rel="stylesheet" href="Anykan-style.css">
     <link rel="stylesheet" href="bottom-bar.css"> 
 
     <style>
@@ -333,7 +333,7 @@
         }
         @media (min-width: 993px) { .bottom-nav { display: none !important; } }
     </style>
-    <script src="anikan-bottom-bar.js" defer></script>
+    <script src="Anykan-bottom-bar.js" defer></script>
     <script src="lightmode.js"></script> 
     <link rel="stylesheet" href="lightmode.css"> 
 </head>
@@ -476,7 +476,7 @@
     </main>
 
     <footer class="main-footer" style="text-align: center; padding: 20px 0; border-top: 1px solid var(--glass-border); margin-top: 30px;">
-        <p style="color: var(--text-muted); font-size: 0.85rem;">&copy; 2026 AniKan. All rights reserved.</p>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">&copy; 2026 Anykan. All rights reserved.</p>
     </footer>
 
     <nav class="bottom-nav">
@@ -575,7 +575,7 @@
                 if (docSnap.exists()) {
                     const data = docSnap.data();
 
-                    document.title = `Watch ${data.title} - AniKan`;
+                    document.title = `Watch ${data.title} - Anykan`;
                     document.getElementById('ui-title').textContent = data.title;
                     document.getElementById('ui-poster').src = data.img;
                     document.getElementById('synopsis-text').textContent = data.synopsis;
@@ -786,11 +786,11 @@
                             : `EP ${window.currentEpisode} - ${data.title}`;
                         
                         const epIndexToSave = `${window.currentSeason}-${window.currentEpisode}`;
-                        localStorage.setItem(`anikan_ep_${animeId}`, epIndexToSave);
+                        localStorage.setItem(`Anykan_ep_${animeId}`, epIndexToSave);
                         
-                        let history = JSON.parse(localStorage.getItem('anikan_history')) || {};
+                        let history = JSON.parse(localStorage.getItem('Anykan_history')) || {};
                         history[animeId] = { title: data.title, img: data.img, link: window.location.pathname + window.location.search, timestamp: Date.now(), epIndex: epIndexToSave };
-                        localStorage.setItem('anikan_history', JSON.stringify(history));
+                        localStorage.setItem('Anykan_history', JSON.stringify(history));
                         window.dispatchEvent(new CustomEvent('updateCloudHistory', { detail: { id: animeId, epIndex: epIndexToSave } }));
 
                         const dlLink = `https://dl.vidsrc.vip/tv/${data.imdbId}/${window.currentSeason}/${window.currentEpisode}`;
@@ -838,7 +838,7 @@
                     renderEpisodeGrid(1, 0);
 
                     setTimeout(() => {
-                        const savedEpRaw = localStorage.getItem(`anikan_ep_${animeId}`);
+                        const savedEpRaw = localStorage.getItem(`Anykan_ep_${animeId}`);
                         if (savedEpRaw && savedEpRaw !== "0") {
                             if (savedEpRaw.includes('-')) {
                                 const parts = savedEpRaw.split('-');
@@ -909,7 +909,7 @@
                 };
 
                 onAuthStateChanged(auth, (user) => {
-                    const customSession = localStorage.getItem('dramakan_user') || localStorage.getItem('anikan_user');
+                    const customSession = localStorage.getItem('dramakan_user') || localStorage.getItem('Anykan_user');
                     if (user) {
                         const name = user.displayName || (user.email ? user.email.split('@')[0] : "User");
                         const avatar = user.photoURL || `https://api.dicebear.com/7.x/adventurer/svg?seed=${name}`;

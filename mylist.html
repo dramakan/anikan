@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My List - AniKan</title>
+    <title>My List - Anykan</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    <link rel="stylesheet" href="anikan-style.css">
+    <link rel="stylesheet" href="Anykan-style.css">
 
     <style>
-        /* Base Overrides for AniKan Branding */
+        /* Base Overrides for Anykan Branding */
         :root {
             --primary-color: #9D4EDD;
             --primary-glow: rgba(157, 78, 221, 0.4);
@@ -109,7 +109,7 @@
         @media (min-width: 993px) { .bottom-nav { display: none !important; } }
     </style>
     
-    <script src="anikan-bottom-bar.js" defer></script> 
+    <script src="Anykan-bottom-bar.js" defer></script> 
     <script src="lightmode.js" defer></script> 
     <link rel="stylesheet" href="lightmode.css"> 
 </head>
@@ -239,7 +239,7 @@
 
         // 2. Validate Authentication & Sync
         onAuthStateChanged(auth, async (user) => {
-            const customSession = localStorage.getItem('dramakan_user') || sessionStorage.getItem('dramakan_user') || localStorage.getItem('anikan_user');
+            const customSession = localStorage.getItem('dramakan_user') || sessionStorage.getItem('dramakan_user') || localStorage.getItem('Anykan_user');
 
             let uid = user ? user.uid : null;
             if (!uid && customSession) {

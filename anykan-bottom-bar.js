@@ -2,11 +2,11 @@
 // 1. PREMIUM PAGE TRANSITION ENGINE
 // ==========================================
 (function initPageTransitions() {
-    if (!document.getElementById('anikan-transition-styles')) {
+    if (!document.getElementById('Anykan-transition-styles')) {
         const style = document.createElement('style');
-        style.id = 'anikan-transition-styles';
+        style.id = 'Anykan-transition-styles';
         style.innerHTML = `
-            #anikan-global-loader {
+            #Anykan-global-loader {
                 position: fixed; inset: 0; z-index: 999999;
                 background: rgba(16, 15, 20, 0.35);
                 backdrop-filter: blur(24px) saturate(180%);
@@ -15,35 +15,35 @@
                 opacity: 1; visibility: visible;
                 transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.5s;
             }
-            #anikan-global-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-            .anikan-glass-pill {
+            #Anykan-global-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+            .Anykan-glass-pill {
                 display: flex; align-items: center; gap: 16px; background: rgba(255, 255, 255, 0.05);
                 border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
                 border-radius: 50px; padding: 12px 28px 12px 14px;
             }
-            .anikan-liquid-blob {
+            .Anykan-liquid-blob {
                 width: 32px; height: 32px;
                 background: linear-gradient(135deg, #9D4EDD, #c77dff);
                 box-shadow: 0 0 20px rgba(157, 78, 221, 0.4);
-                animation: anikan-liquid-morph 2s infinite;
+                animation: Anykan-liquid-morph 2s infinite;
             }
-            .anikan-loader-text { color: #F5F5F5; font-weight: 600; font-family: 'Poppins', sans-serif; letter-spacing: 1.5px; font-size: 0.95rem; }
-            @keyframes anikan-liquid-morph {
+            .Anykan-loader-text { color: #F5F5F5; font-weight: 600; font-family: 'Poppins', sans-serif; letter-spacing: 1.5px; font-size: 0.95rem; }
+            @keyframes Anykan-liquid-morph {
                 0%, 100% { border-radius: 40% 60% 70% 30% / 40% 40% 60% 50%; transform: rotate(0deg) scale(1); }
                 34% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; transform: rotate(120deg) scale(1.05); }
                 67% { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%; transform: rotate(240deg) scale(0.95); }
             }
-            body { animation: anikan-body-fade 0.6s forwards; }
-            @keyframes anikan-body-fade { from { opacity: 0.5; } to { opacity: 1; } }
+            body { animation: Anykan-body-fade 0.6s forwards; }
+            @keyframes Anykan-body-fade { from { opacity: 0.5; } to { opacity: 1; } }
         `;
         document.head.appendChild(style);
     }
 
-    let loader = document.getElementById('anikan-global-loader');
+    let loader = document.getElementById('Anykan-global-loader');
     if (!loader) {
         loader = document.createElement('div');
-        loader.id = 'anikan-global-loader';
-        loader.innerHTML = `<div class="anikan-glass-pill"><div class="anikan-liquid-blob"></div><div class="anikan-loader-text">ANIKAN</div></div>`;
+        loader.id = 'Anykan-global-loader';
+        loader.innerHTML = `<div class="Anykan-glass-pill"><div class="Anykan-liquid-blob"></div><div class="Anykan-loader-text">Anykan</div></div>`;
         document.documentElement.appendChild(loader); 
     }
 
@@ -67,11 +67,11 @@
 // 2. GLOBAL OPTIMISTIC UI (INSTANT DATA)
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    const cachedUser = localStorage.getItem('anikan_user_cache'); 
+    const cachedUser = localStorage.getItem('Anykan_user_cache'); 
     if (cachedUser) {
         try {
             const userData = JSON.parse(cachedUser);
-            let avatarSrc = 'https://api.dicebear.com/7.x/adventurer/svg?seed=AniKan';
+            let avatarSrc = 'https://api.dicebear.com/7.x/adventurer/svg?seed=Anykan';
             if(userData.avatarUrl) avatarSrc = userData.avatarUrl;
             else if(userData.username) avatarSrc = `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(userData.username)}`;
             
@@ -120,35 +120,35 @@ Promise.all([
                 const userDoc = await getDoc(userDocRef);
                 if (userDoc.exists()) {
                     const data = userDoc.data();
-                    localStorage.setItem('anikan_user_cache', JSON.stringify(data));
+                    localStorage.setItem('Anykan_user_cache', JSON.stringify(data));
 
                     let cloudHistory = data.watchHistory || {};
-                    let localHistory = JSON.parse(localStorage.getItem('anikan_history')) || {};
+                    let localHistory = JSON.parse(localStorage.getItem('Anykan_history')) || {};
                     let changed = false;
 
                     for (const [id, cloudItem] of Object.entries(cloudHistory)) {
                         if (cloudItem.link && !cloudItem.link.includes('index.html')) {
                             if (!localHistory[id] || Number(cloudItem.timestamp) > Number(localHistory[id].timestamp || 0)) {
                                 localHistory[id] = cloudItem;
-                                if (cloudItem.epIndex) localStorage.setItem(`anikan_ep_${id}`, cloudItem.epIndex);
+                                if (cloudItem.epIndex) localStorage.setItem(`Anykan_ep_${id}`, cloudItem.epIndex);
                                 changed = true;
                             }
                         }
                     }
                     if (changed) {
-                        localStorage.setItem('anikan_history', JSON.stringify(localHistory));
+                        localStorage.setItem('Anykan_history', JSON.stringify(localHistory));
                         window.dispatchEvent(new Event('historySynced')); 
                     }
                 }
             } catch (err) {}
         } else {
-            localStorage.removeItem('anikan_user_cache');
+            localStorage.removeItem('Anykan_user_cache');
         }
     });
 });
 
 // ==========================================
-// 4. GLOBAL FUNCTION: MY LIST (ANIKAN)
+// 4. GLOBAL FUNCTION: MY LIST (Anykan)
 // ==========================================
 window.toggleMyList = async function(btn, title, img, link) {
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';

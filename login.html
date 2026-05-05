@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - AniKan</title>
+    <title>Login - Anykan</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    <link rel="stylesheet" href="anikan-style.css">
+    <link rel="stylesheet" href="Anykan-style.css">
 
     <style>
         /* Unique Glassmorphism for the Auth Page */
@@ -206,7 +206,7 @@
                 <input type="password" id="login-password" class="auth-input" placeholder="Password" required>
                 <i class="fas fa-lock"></i>
             </div>
-            <button type="submit" class="auth-btn" id="btn-login-submit">Continue to AniKan <i class="fas fa-arrow-right"></i></button>
+            <button type="submit" class="auth-btn" id="btn-login-submit">Continue to Anykan <i class="fas fa-arrow-right"></i></button>
             <div id="login-error" class="auth-error"></div>
         </form>
 
@@ -286,12 +286,12 @@ const firebaseConfig = {
 
             try {
                 await signInWithEmailAndPassword(auth, email, password);
-                // Success! Route back to the Anikan homepage
+                // Success! Route back to the Anykan homepage
                 window.location.replace('profile.html');
             } catch (error) {
                 loginError.style.display = 'block';
                 loginError.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Invalid email or password.`;
-                btn.innerHTML = 'Continue to AniKan <i class="fas fa-arrow-right"></i>';
+                btn.innerHTML = 'Continue to Anykan <i class="fas fa-arrow-right"></i>';
                 btn.style.pointerEvents = 'auto';
             }
         });
@@ -325,7 +325,7 @@ const firebaseConfig = {
                     avatar: `https://api.dicebear.com/7.x/adventurer/svg?seed=${name}`
                 });
 
-                // Success! Route back to the Anikan homepage
+                // Success! Route back to the Anykan homepage
                 window.location.replace('profile.html');
 
             } catch (error) {

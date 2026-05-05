@@ -1,7 +1,7 @@
 // --- 0. THEME & HARDWARE DETECTION (RUNS IMMEDIATELY) ---
 (function initUI() {
     // A. Theme Setup
-    const savedTheme = localStorage.getItem('anikan_theme');
+    const savedTheme = localStorage.getItem('Anykan_theme');
     const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
     
     // Automatically apply light mode if user prefers it or previously saved it
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
         themeToggle.addEventListener('click', () => {
             document.documentElement.classList.toggle('light-mode');
             const isLight = document.documentElement.classList.contains('light-mode');
-            localStorage.setItem('anikan_theme', isLight ? 'light' : 'dark');
+            localStorage.setItem('Anykan_theme', isLight ? 'light' : 'dark');
             icon.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
         });
     }
@@ -138,8 +138,8 @@ document.addEventListener('DOMContentLoaded', function () {
     async function initializeAnimeSite() {
         let data = [];
         try {
-            const cachedAnime = localStorage.getItem('anikan_master_db');
-            const localVersion = localStorage.getItem('anikan_db_version') || "0";
+            const cachedAnime = localStorage.getItem('Anykan_master_db');
+            const localVersion = localStorage.getItem('Anykan_db_version') || "0";
             
             const fb = await getFirebase();
             const db = fb.db;
@@ -172,8 +172,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
                 
                 if(data.length > 0) {
-                    localStorage.setItem('anikan_master_db', JSON.stringify(data));
-                    localStorage.setItem('anikan_db_version', serverVersion);
+                    localStorage.setItem('Anykan_master_db', JSON.stringify(data));
+                    localStorage.setItem('Anykan_db_version', serverVersion);
                 }
             }
 
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             function renderContinueWatching() {
                 try {
-                    const historyObj = JSON.parse(localStorage.getItem('anikan_history')) || {};
+                    const historyObj = JSON.parse(localStorage.getItem('Anykan_history')) || {};
                     const historyArr = Object.values(historyObj)
                         .filter(item => item && item.link && item.title && !item.link.toLowerCase().includes('index.html'))
                         .sort((a, b) => b.timestamp - a.timestamp).slice(0, 10);
