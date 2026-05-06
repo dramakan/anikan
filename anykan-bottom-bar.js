@@ -193,3 +193,122 @@ window.toggleMyList = async function(btn, title, img, link) {
         alert("Error saving to My List.");
     }
 };
+// ==========================================
+// 🔥 ADMIN EASTER EGG (SECRET UNLOCK) 🔥
+// ==========================================
+(function initAdminEasterEgg() {
+    // --- 1. MOBILE TRIGGER: 5 Rapid Taps on Footer ---
+    let tapCount = 0;
+    let tapTimer;
+    
+    // Look for the main footer
+    const footer = document.querySelector('.main-footer');
+    if (footer) {
+        footer.addEventListener('click', () => {
+            tapCount++;
+            clearTimeout(tapTimer);
+            
+            // If tapped 5 times, trigger unlock
+            if (tapCount >= 5) {
+                triggerAdminUnlock();
+                tapCount = 0; // Reset
+            }
+            
+            // Reset counter if they pause for more than 800ms
+            tapTimer = setTimeout(() => {
+                tapCount = 0;
+            }, 800);
+        });
+    }
+
+    // --- 2. PC TRIGGER: Type "admin" ---
+    let keyBuffer = '';
+    const secretWord = 'admin';
+
+    document.addEventListener('keydown', (e) => {
+        // Ignore if typing inside a search bar or comment box
+        if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'textarea') return;
+        
+        // Add keystroke to buffer
+        keyBuffer += e.key.toLowerCase();
+        
+        // Keep buffer size manageable
+        if (keyBuffer.length > secretWord.length) {
+            keyBuffer = keyBuffer.substring(1);
+        }
+        
+        // Check if buffer matches the secret word
+        if (keyBuffer === secretWord) {
+            triggerAdminUnlock();
+            keyBuffer = ''; // Reset
+        }
+    });
+
+    // --- 3. THE COOL ANIMATION & REDIRECT ---
+    function triggerAdminUnlock() {
+        // Prevent multiple triggers running at once
+        if (document.getElementById('anykan-override-overlay')) return;
+
+        // Create Fullscreen Overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'anykan-override-overlay';
+        
+        // Inject Inline Styles & HTML for the animation
+        overlay.innerHTML = `
+            <div class="override-container">
+                <i class="fas fa-fingerprint scanner-icon"></i>
+                <div id="unlock-text" class="override-text">AUTHENTICATING...</div>
+            </div>
+            <style>
+                #anykan-override-overlay {
+                    position: fixed; inset: 0; background: #09090B; z-index: 999999;
+                    display: flex; flex-direction: column; justify-content: center; alignItems: center;
+                    opacity: 0; transition: opacity 0.5s ease;
+                }
+                .override-container {
+                    text-align: center;
+                    display: flex; flex-direction: column; align-items: center;
+                }
+                .scanner-icon {
+                    font-size: 5rem; color: #9D4EDD; margin-bottom: 25px;
+                    text-shadow: 0 0 30px rgba(157, 78, 221, 0.8);
+                    animation: pulseScan 1s infinite alternate;
+                }
+                .override-text {
+                    color: #fff; font-family: monospace; font-size: 1.4rem; font-weight: 600;
+                    letter-spacing: 4px; text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+                }
+                .text-success { color: #10B981 !important; text-shadow: 0 0 20px rgba(16, 185, 129, 0.8) !important; }
+                
+                @keyframes pulseScan {
+                    0% { transform: scale(0.95); filter: brightness(0.8); }
+                    100% { transform: scale(1.05); filter: brightness(1.5); }
+                }
+            </style>
+        `;
+
+        document.body.appendChild(overlay);
+
+        // Sequence 1: Fade In Overlay
+        setTimeout(() => overlay.style.opacity = '1', 50);
+
+        // Sequence 2: Access Granted (Green Success)
+        setTimeout(() => {
+            const textEl = document.getElementById('unlock-text');
+            textEl.innerText = "ACCESS GRANTED";
+            textEl.classList.add('text-success');
+            document.querySelector('.scanner-icon').style.color = '#10B981';
+            document.querySelector('.scanner-icon').style.textShadow = '0 0 30px rgba(16, 185, 129, 0.8)';
+        }, 1200);
+
+        // Sequence 3: Booting OS
+        setTimeout(() => {
+            document.getElementById('unlock-text').innerText = "BOOTING ANYKAN OS...";
+        }, 2000);
+        
+        // Sequence 4: Redirect to Dashboard
+        setTimeout(() => {
+            window.location.href = 'admin-dashboard.html'; // Ensure this matches your actual admin file name
+        }, 2800);
+    }
+})();
