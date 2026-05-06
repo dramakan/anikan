@@ -110,16 +110,9 @@
         .widget-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 20px; color: #fff; display: flex; align-items: center; gap: 8px;}
         .widget-title i { color: var(--primary); font-size: 1.1rem;}
 
-        /* FIX: Margin applied to the entire layout container, not just video player */
         .watch-layout { display: grid; grid-template-columns: 1fr 360px; gap: 30px; margin-top: 100px; }
-        @media (max-width: 992px) {
-            .watch-layout { margin-top: 80px; }
-        }
-        @media (max-width: 1024px) {
-            .watch-layout { grid-template-columns: 1fr; }
-            .sidebar-col { display: flex; flex-direction: column; }
-            .drama-info-widget { order: -1; } 
-        }
+        @media (max-width: 992px) { .watch-layout { margin-top: 80px; } }
+        @media (max-width: 1024px) { .watch-layout { grid-template-columns: 1fr; } .sidebar-col { display: flex; flex-direction: column; } .drama-info-widget { order: -1; } }
 
         .video-player-container { position: relative; background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 20px; padding: 12px; margin-bottom: 20px; box-shadow: var(--glass-shadow); aspect-ratio: 16/9; width: 100%; }
         .video-player-container iframe { width: 100%; height: 100%; border-radius: 12px; background: #000; border: none; }
@@ -142,10 +135,9 @@
         .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
         #add-to-list-btn.active-list { background: rgba(157, 78, 221, 0.15); color: var(--primary); border-color: var(--primary); box-shadow: 0 4px 15px var(--primary-glow); }
         #add-to-list-btn.active-list i { color: var(--primary); }
-        #share-btn:hover { color: #60A5FA; border-color: #60A5FA; }
-        #share-btn:hover i { color: #60A5FA; }
+        #share-btn:hover { color: #EC4899; border-color: #EC4899; }
+        #share-btn:hover i { color: #EC4899; }
 
-        /* Episode List Styles */
         .season-selector-wrapper { display: flex; flex-direction: column; margin-bottom: 20px; width: 100%; }
         .season-header-row { display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; }
         .season-select { background: rgba(0,0,0,0.6); color: #fff; border: 1px solid rgba(157, 78, 221, 0.4); padding: 8px 16px; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 500; outline: none; cursor: pointer; transition: all 0.3s ease; }
@@ -174,22 +166,13 @@
             .episode-item { padding: 12px 8px; }
         }
 
-        /* --- REDESIGNED CAST SECTION (Netflix Style) --- */
         .cast-list { display: flex; gap: 20px; overflow-x: auto; padding: 10px 5px 20px 5px; scrollbar-width: thin; scrollbar-color: var(--primary) transparent; }
         .cast-list::-webkit-scrollbar { height: 6px; }
         .cast-list::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
         
-        .cast-card { 
-            display: flex; flex-direction: column; align-items: center; gap: 8px; 
-            background: transparent; border: none; padding: 5px; min-width: 100px; 
-            text-align: center; transition: transform 0.4s ease;
-        }
+        .cast-card { display: flex; flex-direction: column; align-items: center; gap: 8px; background: transparent; border: none; padding: 5px; min-width: 100px; text-align: center; transition: transform 0.4s ease; }
         .cast-card:hover { transform: translateY(-5px); }
-        .cast-card img { 
-            width: 85px; height: 85px; border-radius: 50%; object-fit: cover; 
-            border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: all 0.4s ease;
-        }
+        .cast-card img { width: 85px; height: 85px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: all 0.4s ease; }
         .cast-card:hover img { border-color: var(--primary); box-shadow: 0 5px 20px var(--primary-glow); transform: scale(1.05); }
         .actor-name { margin: 5px 0 0 0; font-size: 0.9rem; color:#fff; font-weight: 600; line-height: 1.2;}
         .character-name { margin: 0; font-size: 0.75rem; color: var(--text-muted); font-weight: 400; }
@@ -198,11 +181,9 @@
         th, td { padding: 15px; border-bottom: 1px solid var(--glass-border); }
         th { background: rgba(0,0,0,0.2); font-weight: 500; color: var(--text-muted); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; }
         
-        /* Fixed Download Buttons */
         .download-btn { background: rgba(157,78,221,0.1); color: var(--primary); padding: 8px 18px; border-radius: 50px; border: 1px solid rgba(157,78,221,0.3); transition: all 0.3s ease; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;}
         .download-btn:hover { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-rich) 100%); color: #fff; border-color: var(--primary); box-shadow: 0 4px 15px var(--primary-glow); transform: translateY(-2px); }
 
-        /* Comment Section */
         .comments-widget { position: relative; }
         .comment-form-container { display: flex; gap: 15px; align-items: flex-start; margin-bottom: 30px; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 16px; border: 1px solid var(--glass-border); transition: all 0.3s ease; }
         .comment-form-container:focus-within { border-color: rgba(157, 78, 221, 0.3); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
@@ -225,7 +206,6 @@
         .comment-item:hover { background: rgba(255,255,255,0.04); border-color: rgba(157, 78, 221, 0.2); transform: translateX(2px); box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
         @keyframes slideInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Sidebar Info Widget */
         .info-poster { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 20px; border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         .info-poster img { width: 100%; max-width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 16px; display: block; transition: transform 0.5s ease; }
         .info-poster:hover img { transform: scale(1.05); }
@@ -245,7 +225,6 @@
         .info-details p span:last-child { font-weight: 500; text-align: right; }
         .status-badge { background: rgba(157, 78, 221, 0.15); color: #e9d5ff; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; border: 1px solid rgba(157, 78, 221, 0.25); box-shadow: inset 0 0 5px rgba(157, 78, 221, 0.1);}
 
-        /* Recommendations */
         .recommendations-list { display: flex; flex-direction: column; gap: 15px; }
         .rec-card { display: flex; gap: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 10px; border-radius: 12px; align-items: center; transition: all 0.3s ease; text-decoration: none;}
         .rec-card:hover { background: rgba(157, 78, 221, 0.1); border-color: rgba(157, 78, 221, 0.3); transform: translateY(-3px) translateX(2px); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
@@ -259,7 +238,6 @@
         .container { max-width: 1400px; margin: 0 auto; padding: 30px 4%; }
         .main-content-col, .sidebar-col { min-width: 0; width: 100%; } 
         
-        /* Apple Liquid Glass Bottom Nav strictly for mobile */
         @media (max-width: 992px) {
             .bottom-nav { display: flex !important; position: fixed !important; bottom: 10px !important; left: 50% !important; transform: translateX(-50%) !important; width: 90% !important; max-width: 400px !important; background: rgba(20, 20, 25, 0.45) !important; backdrop-filter: blur(40px) saturate(180%) !important; -webkit-backdrop-filter: blur(40px) saturate(180%) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; border-top: 1px solid rgba(255, 255, 255, 0.25) !important; border-radius: 50px !important; z-index: 9999 !important; padding: 5px 10px !important; box-shadow: 0 25px 50px rgba(0,0,0,0.7), inset 0 1px 1px rgba(255,255,255,0.1) !important; }
             .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 0; color: rgba(255, 255, 255, 0.5); transition: all 0.4s ease; position: relative; text-decoration: none; }
@@ -271,6 +249,25 @@
             body { padding-bottom: 80px; }
         }
         @media (min-width: 993px) { .bottom-nav { display: none !important; } }
+
+        /* 🔥 IG STORY SHARE MODAL CSS 🔥 */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: none; justify-content: center; align-items: center; z-index: 99999; padding: 20px; opacity: 0; transition: opacity 0.4s ease; }
+        .modal-overlay.show { display: flex; opacity: 1; }
+        .ig-card-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; }
+        .close-modal { position: absolute; top: -40px; right: 0; background: none; border: none; color: var(--text-muted); font-size: 1.8rem; cursor: pointer; transition: all 0.3s ease; }
+        .close-modal:hover { color: #fff; transform: rotate(90deg); }
+        
+        .ig-story-card { width: 300px; height: 533px; position: relative; border-radius: 24px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1); background: #0B0C10; transform: scale(0.9); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .modal-overlay.show .ig-story-card { transform: scale(1); }
+        .ig-bg { position: absolute; inset: -30px; background-size: cover; background-position: center; filter: blur(25px) brightness(0.3); z-index: 0; }
+        .ig-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 30px 20px; text-align: center; }
+        .ig-pill { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 8px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); font-size: 0.75rem; font-weight: 700; margin-bottom: 35px; color: #fff; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .ig-content img { width: 170px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1); margin-bottom: 30px; }
+        .ig-content h2 { font-size: 1.5rem; font-weight: 700; line-height: 1.2; margin-bottom: 8px; color: #fff; text-shadow: 0 4px 15px rgba(0,0,0,0.8); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .ig-content p { font-size: 0.95rem; color: #d8b4fe; font-weight: 500; text-shadow: 0 0 15px var(--primary-glow); }
+        
+        .ig-actions { margin-top: 25px; text-align: center; max-width: 300px; animation: slideInUp 0.5s ease 0.2s both; }
+        .ig-actions p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -338,8 +335,9 @@
                         <button class="action-btn" id="add-to-list-btn" title="Add to My List">
                             <i class="fas fa-bookmark"></i> <span>Save</span>
                         </button>
-                        <button class="action-btn" id="share-btn" title="Share Content">
-                            <i class="fas fa-share-alt"></i> <span>Share</span>
+                        <!-- Updated Share Button Trigger -->
+                        <button class="action-btn" id="share-btn" title="Share to IG Story">
+                            <i class="fab fa-instagram"></i> <span>Share</span>
                         </button>
                         <button class="action-btn" id="prev-ep-btn"><i class="fas fa-chevron-left"></i> Prev</button>
                         <button class="action-btn" id="next-ep-btn">Next <i class="fas fa-chevron-right"></i></button>
@@ -442,6 +440,26 @@
     <footer class="main-footer" style="text-align: center; padding: 20px 0; border-top: 1px solid var(--glass-border); margin-top: 30px;">
         <p style="color: var(--text-muted); font-size: 0.85rem;">&copy; 2026 Anykan. All rights reserved.</p>
     </footer>
+
+    <!-- 🔥 INSTAGRAM SHARE MODAL 🔥 -->
+    <div id="ig-share-modal" class="modal-overlay">
+        <div class="ig-card-wrapper">
+            <button class="close-modal" id="close-ig-modal"><i class="fas fa-times"></i></button>
+            <div class="ig-story-card" id="ig-story-card">
+                <div class="ig-bg" id="ig-bg"></div>
+                <div class="ig-content">
+                    <div class="ig-pill">Now Watching</div>
+                    <img id="ig-poster" src="" alt="Poster">
+                    <h2 id="ig-title">Movie Title</h2>
+                    <p>on Anykan</p>
+                </div>
+            </div>
+            <div class="ig-actions">
+                <p>Take a screenshot of the card above for your IG Story, or share the link directly!</p>
+                <button id="native-share-btn" class="action-btn" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3);"><i class="fas fa-link"></i> Copy Link</button>
+            </div>
+        </div>
+    </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="bottom-nav-item">
@@ -623,12 +641,27 @@
                     loadRecommendations(animeId);
                     initCommentSystem(animeId); 
 
-                    // --- SHARE BUTTON LOGIC ---
+                    // --- 🔥 NEW INSTAGRAM SHARE LOGIC 🔥 ---
                     document.getElementById('share-btn').addEventListener('click', () => {
+                        // Populate IG Card
+                        document.getElementById('ig-bg').style.backgroundImage = `url('${data.img}')`;
+                        document.getElementById('ig-poster').src = data.img;
+                        document.getElementById('ig-title').textContent = data.title;
+                        
+                        // Show Modal
+                        document.getElementById('ig-share-modal').classList.add('show');
+                    });
+
+                    document.getElementById('close-ig-modal').addEventListener('click', () => {
+                        document.getElementById('ig-share-modal').classList.remove('show');
+                    });
+
+                    // Native Fallback / Copy Link
+                    document.getElementById('native-share-btn').addEventListener('click', () => {
                         if (navigator.share) {
                             navigator.share({
                                 title: data.title,
-                                text: `Watch ${data.title} on AnyKan!`,
+                                text: `Watching ${data.title} on AnyKan!`,
                                 url: window.location.href
                             }).catch(err => console.log('Error sharing', err));
                         } else {
