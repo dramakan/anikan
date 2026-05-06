@@ -192,6 +192,11 @@
         input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
 
+        /* Progress Bar for Bulk Upload */
+        .progress-bar-container { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-top: 15px; display: none; }
+        .progress-bar { height: 100%; width: 0%; background: var(--primary); transition: width 0.3s ease; }
+        #bulk-log { font-family: monospace; font-size: 0.8rem; color: var(--text-muted); margin-top: 10px; max-height: 100px; overflow-y: auto; text-align: left; }
+
         /* RESPONSIVE DESIGN */
         @media (max-width: 1024px) {
             .main-content { padding: 30px; }
@@ -207,7 +212,6 @@
             .form-grid { grid-template-columns: 1fr; gap: 0; }
             .widget-header { flex-direction: column; align-items: flex-start; }
             .widget-header .admin-btn { width: 100%; margin-top: 15px; }
-            /* Search input full width on mobile */
             #db-search-container { width: 100%; margin-top: 10px; }
             #db-search { width: 100% !important; }
             .modal-actions { flex-direction: column; }
@@ -216,13 +220,13 @@
 </head>
 <body>
 
-    <!-- SIDEBAR OVERLAY FOR MOBILE -->
     <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <aside class="sidebar">
         <div class="brand">Any<span>Kan</span> OS</div>
         <nav class="nav-menu">
             <a class="nav-item active" data-tab="cms-tab"><i class="fas fa-video"></i> Media CMS</a>
+            <a class="nav-item" data-tab="mass-upload-tab"><i class="fas fa-layer-group"></i> Mass Import</a>
             <a class="nav-item" data-tab="requests-tab"><i class="fas fa-inbox"></i> Viewer Requests</a>
             <a class="nav-item" data-tab="users-tab"><i class="fas fa-users"></i> Database Users</a>
             <a class="nav-item" data-tab="affiliate-tab"><i class="fas fa-network-wired"></i> Affiliate Network</a>
@@ -270,6 +274,45 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </section>
+
+        <!-- MASS UPLOAD TAB -->
+        <section id="mass-upload-tab" class="tab-section">
+            <div class="glass-widget" style="max-width: 800px;">
+                <div class="widget-header">
+                    <h2 class="widget-title"><i class="fas fa-layer-group"></i> Bulk Mass Import</h2>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px; line-height: 1.6;">Paste multiple IMDb IDs below to fetch and upload content automatically. The system will auto-classify each entry (Anime, Hollywood, etc.) and fetch cast images. <br><strong style="color: var(--primary);">Note: Separate PC Banner images must be added manually later.</strong></p>
+                
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Apply to Entire Batch: Add to Trending?</label>
+                        <select id="bulk-trend" class="admin-select">
+                            <option value="N">No (Standard Grid)</option>
+                            <option value="T">Yes (Trending Grid)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Apply to Entire Batch: Add to Hero Banner?</label>
+                        <select id="bulk-hero" class="admin-select">
+                            <option value="N">No</option>
+                            <option value="Y">Yes (Display in Top Banner)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>IMDb IDs (Paste one per line, or comma-separated)</label>
+                    <textarea id="bulk-imdb-ids" class="admin-input" rows="8" placeholder="tt1234567&#10;tt9876543&#10;tt1122334" style="font-family: monospace;"></textarea>
+                </div>
+
+                <button id="btn-bulk-upload" class="admin-btn" style="width: 100%; justify-content: center;"><i class="fas fa-rocket"></i> Start Mass Import</button>
+                
+                <div id="bulk-progress-container" class="progress-bar-container">
+                    <div id="bulk-progress-bar" class="progress-bar"></div>
+                </div>
+                <div id="bulk-log"></div>
             </div>
         </section>
 
@@ -739,106 +782,163 @@
         };
 
         // =====================================
-        // UPGRADED AUTO-FILL SYSTEM
+        // MASS UPLOAD SYSTEM
         // =====================================
-        document.getElementById('auto-fill-btn').addEventListener('click', async () => {
-            const imdbId = document.getElementById('db-imdb-id').value.trim();
-            if (!imdbId) {
-                showToast("Please enter an IMDb ID first.");
-                return;
-            }
+        document.getElementById('btn-bulk-upload').addEventListener('click', async () => {
+            const idsText = document.getElementById('bulk-imdb-ids').value;
+            const ids = idsText.split(/[\n,]+/).map(id => id.trim()).filter(id => id.startsWith('tt'));
 
-            const btn = document.getElementById('auto-fill-btn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching...';
+            if (ids.length === 0) return alert("No valid IMDb IDs found. Make sure they start with 'tt'.");
+
+            const isTrending = document.getElementById('bulk-trend').value;
+            const isHero = document.getElementById('bulk-hero').value;
+            
+            const btn = document.getElementById('btn-bulk-upload');
+            const progressContainer = document.getElementById('bulk-progress-container');
+            const progressBar = document.getElementById('bulk-progress-bar');
+            const logDiv = document.getElementById('bulk-log');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Processing Batch...';
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+            logDiv.innerHTML = '';
 
             const omdbKey = "7739fdec"; 
             const tmdbKey = "014fbdbe962cb38379e09e31d0652459"; 
 
-            try {
-                // 1. OMDb Fetch for Text Data
-                const res = await fetch(`https://www.omdbapi.com/?i=${imdbId}&plot=full&apikey=${omdbKey}`);
-                const data = await res.json();
+            let successCount = 0;
 
-                if (data.Response === "False") {
-                    alert("IMDb ID not found: " + data.Error);
-                    return;
-                }
-
-                document.getElementById('db-title').value = data.Title || "";
-                // Makes sure the ID is purely the slug without spaces or special characters
-                document.getElementById('db-id').value = (data.Title || "").toLowerCase().replace(/[^a-z0-9]/g, '');
-                document.getElementById('db-img').value = data.Poster !== "N/A" ? data.Poster : "";
-                document.getElementById('db-synopsis').value = data.Plot || "";
-                document.getElementById('db-score').value = data.imdbRating || "";
-                document.getElementById('db-genre').value = data.Genre || "";
-
-                // Smart Classification Engine
-                let detectedType = "Hollywood Movie";
-                const isSeries = data.Type === "series";
-                const country = data.Country || "";
-                const genre = data.Genre || "";
-
-                if (genre.includes("Animation") && country.includes("Japan")) {
-                    detectedType = "Anime";
-                } else if (country.includes("India")) {
-                    detectedType = isSeries ? "Hindi Drama" : "Bollywood Movie";
-                } else {
-                    detectedType = isSeries ? "English Series" : "Hollywood Movie";
-                }
+            for (let i = 0; i < ids.length; i++) {
+                let imdbId = ids[i];
+                let progressPercent = Math.round(((i) / ids.length) * 100);
+                progressBar.style.width = progressPercent + '%';
                 
-                document.getElementById('db-type').value = detectedType;
-                document.getElementById('db-status').value = isSeries ? "Ongoing" : "Completed";
-                document.getElementById('db-eps').value = isSeries ? "Loading..." : "1";
-
-                if (data.Actors && data.Actors !== "N/A") {
-                    const actors = data.Actors.split(',');
-                    if (actors[0]) document.getElementById('db-a1').value = actors[0].trim();
-                    if (actors[1]) document.getElementById('db-a2').value = actors[1].trim();
+                function logMsg(msg, color = 'var(--text-muted)') {
+                    logDiv.innerHTML = `<span style="color: ${color}">[${i+1}/${ids.length}] ${msg}</span><br>` + logDiv.innerHTML;
                 }
 
-                // 2. TMDB Fetch for Cast Images & TV Seasons
-                if (tmdbKey !== "YOUR_TMDB_API_KEY") {
+                logMsg(`Fetching ${imdbId}...`);
+
+                // 1. Duplicate Check
+                try {
+                    const dupCheck = await getDocs(query(collection(db, "anime"), where("imdbId", "==", imdbId)));
+                    if (!dupCheck.empty) {
+                        logMsg(`Skipped ${imdbId}: Already exists in DB.`, 'var(--warning)');
+                        continue;
+                    }
+                } catch(e) {
+                     logMsg(`Error checking duplicate for ${imdbId}: ${e.message}`, 'var(--danger)');
+                     continue;
+                }
+
+                // 2. Fetch Metadata
+                try {
+                    const res = await fetch(`https://www.omdbapi.com/?i=${imdbId}&plot=full&apikey=${omdbKey}`);
+                    const data = await res.json();
+
+                    if (data.Response === "False") {
+                        logMsg(`Skipped ${imdbId}: OMDB Error - ${data.Error}`, 'var(--danger)');
+                        continue;
+                    }
+
+                    let title = data.Title || "";
+                    // Create unique slug
+                    let docId = title.toLowerCase().replace(/[^a-z0-9]/g, '') + "-" + Math.floor(Math.random() * 1000); 
+
+                    // Smart Classification
+                    let detectedType = "Hollywood Movie";
+                    const isSeries = data.Type === "series";
+                    const country = data.Country || "";
+                    const genre = data.Genre || "";
+
+                    if (genre.includes("Animation") && country.includes("Japan")) detectedType = "Anime";
+                    else if (country.includes("India")) detectedType = isSeries ? "Hindi Drama" : "Bollywood Movie";
+                    else detectedType = isSeries ? "English Series" : "Hollywood Movie";
+
+                    let actor1 = "", actor2 = "", actor1Img = "", actor2Img = "";
+                    if (data.Actors && data.Actors !== "N/A") {
+                        const actors = data.Actors.split(',');
+                        if (actors[0]) actor1 = actors[0].trim();
+                        if (actors[1]) actor2 = actors[1].trim();
+                    }
+
+                    let eps = isSeries ? 12 : 1; 
+                    let seasons = null;
+
+                    // TMDB Fetch
                     const findRes = await fetch(`https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`);
                     const findData = await findRes.json();
-                    
-                    let mediaType = '';
-                    let tmdbId = null;
-                    
-                    if (findData.tv_results && findData.tv_results.length > 0) {
-                        tmdbId = findData.tv_results[0].id;
-                        mediaType = 'tv';
-                    } else if (findData.movie_results && findData.movie_results.length > 0) {
-                        tmdbId = findData.movie_results[0].id;
-                        mediaType = 'movie';
-                    }
+                    let mediaType = '', tmdbId = null;
+
+                    if (findData.tv_results && findData.tv_results.length > 0) { tmdbId = findData.tv_results[0].id; mediaType = 'tv'; }
+                    else if (findData.movie_results && findData.movie_results.length > 0) { tmdbId = findData.movie_results[0].id; mediaType = 'movie'; }
 
                     if (tmdbId) {
                         const credRes = await fetch(`https://api.themoviedb.org/3/${mediaType}/${tmdbId}/credits?api_key=${tmdbKey}`);
                         const credData = await credRes.json();
                         if (credData.cast && credData.cast.length > 0) {
-                            if (credData.cast[0]?.profile_path) document.getElementById('db-a1img').value = `https://image.tmdb.org/t/p/w500${credData.cast[0].profile_path}`;
-                            if (credData.cast[1]?.profile_path) document.getElementById('db-a2img').value = `https://image.tmdb.org/t/p/w500${credData.cast[1].profile_path}`;
+                            if (credData.cast[0]?.profile_path) actor1Img = `https://image.tmdb.org/t/p/w500${credData.cast[0].profile_path}`;
+                            if (credData.cast[1]?.profile_path) actor2Img = `https://image.tmdb.org/t/p/w500${credData.cast[1].profile_path}`;
                         }
-
                         if (mediaType === 'tv') {
                             const detailRes = await fetch(`https://api.themoviedb.org/3/tv/${tmdbId}?api_key=${tmdbKey}`);
                             const detailData = await detailRes.json();
                             if (detailData.seasons) {
-                                const seasonCounts = detailData.seasons
-                                    .filter(s => s.season_number > 0)
-                                    .map(s => s.episode_count);
-                                document.getElementById('db-eps').value = `[${seasonCounts.join(', ')}]`;
+                                seasons = detailData.seasons.filter(s => s.season_number > 0).map(s => s.episode_count);
+                                eps = seasons.reduce((a,b)=>a+b,0);
                             }
                         }
                     }
+
+                    const payload = {
+                        title: title,
+                        imdbId: imdbId,
+                        img: data.Poster !== "N/A" ? data.Poster : "",
+                        genre: genre,
+                        type: detectedType,
+                        status: isSeries ? "Ongoing" : "Completed",
+                        totalEps: eps,
+                        score: data.imdbRating || "",
+                        imdb: data.imdbRating || "",
+                        Trend: isTrending,
+                        Hero: isHero,
+                        synopsis: data.Plot || "",
+                        actor1: actor1,
+                        actor1Img: actor1Img,
+                        actor2: actor2,
+                        actor2Img: actor2Img,
+                        createdAt: new Date().getTime()
+                    };
+                    if(seasons) payload.seasons = seasons;
+
+                    await setDoc(doc(db, "anime", docId), payload);
+                    successCount++;
+                    logMsg(`Successfully uploaded: ${title}`, 'var(--success)');
+
+                } catch(e) {
+                    logMsg(`Skipped ${imdbId}: Unknown error - ${e.message}`, 'var(--danger)');
                 }
-                showToast("Smart Auto-Fill complete!");
-            } catch(e) { alert("Fetch Error: " + e.message); }
-            finally { btn.innerHTML = '<i class="fas fa-magic"></i> Auto-Fill'; }
+                
+                // Add a small delay to prevent API rate limiting
+                await new Promise(r => setTimeout(r, 600));
+            }
+
+            progressBar.style.width = '100%';
+            btn.innerHTML = '<i class="fas fa-rocket"></i> Start Mass Import';
+            btn.disabled = false;
+            
+            showToast(`Batch Complete! ${successCount} titles imported.`);
+            fetchAnimeDB(); // Refresh table
+            
+            if(successCount > 0) {
+                 // Trigger build hook if at least one was added
+                 fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
+            }
         });
 
         // =====================================
-        // SAVE & DEPLOY
+        // SAVE & DEPLOY (SINGLE)
         // =====================================
         document.getElementById('anime-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -919,18 +1019,6 @@
             }
         });
 
-        window.deleteAnime = async function(id) {
-            if(confirm(`WARNING: Are you sure you want to completely delete "${id}"?`)) {
-                try {
-                    await deleteDoc(doc(db, "anime", id));
-                    fetchAnimeDB();
-                    showToast("Content Deleted.");
-                    // TRIGGER NETLIFY JSON BUILD HOOK
-                    fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
-                } catch (e) { alert("Delete failed."); }
-            }
-        };
-
         // =====================================
         // VIEWER REQUESTS & AUTO LINK FETCHER
         // =====================================
@@ -976,12 +1064,10 @@
         window.openResolveModal = function(id) {
             document.getElementById('resolve-req-id').value = id;
             
-            // Populate the Quick Select dropdown with the current database!
             const selectDropdown = document.getElementById('quick-resolve-select');
             selectDropdown.innerHTML = '<option value="">-- Select Downloaded Content --</option>' + 
                 currentAnimeList.map(a => `<option value="watch.html?id=${a.id}">${a.title}</option>`).join('');
                 
-            // When an option is picked, automatically fill the link input
             selectDropdown.onchange = function(e) {
                 if(e.target.value) document.getElementById('resolve-link').value = e.target.value;
             };
