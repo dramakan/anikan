@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bollywood Hits - Anykan</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="Anykan-style.css">
+    
+    <style>
+        /* Bollywood Vibrant Theme Adjustments */
+        .page-spacer { height: 120px; }
+        
+        .bw-header {
+            position: relative;
+            padding: 50px 20px;
+            text-align: center;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border-radius: 30px;
+            margin-bottom: 50px;
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            animation: fadeDown 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Warm, festive gradient glow for Bollywood */
+        .bw-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% -20%, rgba(245, 158, 11, 0.25), transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bw-header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .bw-header h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #fff;
+            margin-bottom: 12px;
+            text-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .bw-header h1 span {
+            color: #FBBF24; /* Golden accent */
+        }
+
+        .bw-header p {
+            color: var(--text-muted-color);
+            font-size: 1.05rem;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* Bollywood Grid Layout */
+        .bw-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+            padding-bottom: 60px;
+        }
+
+        .bw-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 12px;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            opacity: 0;
+            transform: translateY(25px);
+            animation: slideUpFade 0.6s forwards;
+        }
+
+        .bw-card:hover {
+            transform: translateY(-8px);
+            background: var(--glass-bg-hover);
+            border-color: rgba(245, 158, 11, 0.4);
+            box-shadow: 0 15px 35px rgba(245, 158, 11, 0.15);
+        }
+
+        .bw-img-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 2/3;
+            border-radius: 14px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .bw-poster {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .bw-card:hover .bw-poster {
+            transform: scale(1.08);
+        }
+
+        .bw-play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 50px;
+            height: 50px;
+            background: rgba(245, 158, 11, 0.9);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.5);
+            padding-left: 4px; /* Optically center the play icon */
+        }
+
+        .bw-card:hover .bw-play-btn {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .bw-info {
+            padding: 0 5px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .bw-title {
+            color: #fff;
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .bw-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted-color);
+        }
+
+        .bw-badge {
+            background: rgba(245, 158, 11, 0.1);
+            color: #FBBF24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.75rem;
+        }
+
+        @keyframes slideUpFade {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .bw-header h1 { font-size: 2.4rem; }
+            .bw-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+            .bw-card { padding: 10px; }
+            .bw-title { font-size: 0.95rem; }
+            .bw-play-btn { width: 40px; height: 40px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-top-row">
+                <div class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <a href="index.html" class="logo">Any<span>Kan</span></a>
+                <div class="header-actions-placeholder">
+                    <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                </div> 
+            </div>
+
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input id="searchInput" type="text" placeholder="Search Bollywood movies...">
+                <div id="searchResults" class="search-results"></div>
+            </div>
+
+            <nav class="nav-links" id="navLinks">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="community.html">Community</a></li>
+                    <li><a href="mylist.html">My List</a></li>
+                </ul>
+            </nav>
+
+            <a href="profile.html" class="header-download-btn" id="topAuthBtn">
+                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Anykan" alt="Profile" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.8);"> Profile
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-spacer"></div>
+
+        <div class="bw-header">
+            <div class="bw-header-content">
+                <h1>Bollywood <span>Hits</span></h1>
+                <p>Dive into the vibrant world of Indian cinema with top-charting movies, timeless classics, and fresh new releases.</p>
+            </div>
+        </div>
+
+        <div class="bw-grid" id="bollywood-page-grid">
+            <!-- Bollywood content injected here via JS -->
+        </div>
+    </main>
+
+    <!-- Bottom Nav - Pre-logged in configuration -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <i class="fa-solid fa-house nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="community.html" class="bottom-nav-item">
+            <i class="fa-solid fa-users nav-icon"></i>
+            <span class="nav-label">Community</span>
+        </a>
+        <a href="mylist.html" class="bottom-nav-item">
+            <i class="fa-solid fa-bookmark nav-icon"></i>
+            <span class="nav-label">My List</span>
+        </a>
+        <a href="profile.html" class="bottom-nav-item" id="bottomAuthBtn">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Anykan" alt="Profile" class="nav-icon" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-color); margin-bottom: 4px;">
+            <span class="nav-label">Profile</span>
+        </a>
+    </nav>
+
+    <script src="Anykan-script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('bollywood-page-grid');
+            
+            const dbData = localStorage.getItem('Anykan_master_db');
+            if (dbData) {
+                const data = JSON.parse(dbData);
+                
+                // Filter specifically for Bollywood Movies based on master DB classification
+                const bollywoodItems = data.filter(d => d.type === "Bollywood Movie");
+                
+                // Sort by newest first
+                bollywoodItems.sort((a, b) => b.createdAt - a.createdAt);
+                
+                if (bollywoodItems.length === 0) {
+                    grid.innerHTML = '<p style="text-align: center; color: var(--text-muted-color); grid-column: 1/-1;">No Bollywood movies found in the database.</p>';
+                    return;
+                }
+
+                grid.innerHTML = bollywoodItems.map((media, index) => {
+                    const safeLink = media.link || `watch.html?id=${media.id}`;
+                    const delay = (index % 12) * 0.05; // Batch delay animation
+                    
+                    return `
+                        <a href="${safeLink}" class="bw-card" style="animation-delay: ${delay}s">
+                            <div class="bw-img-wrap">
+                                <img src="${media.img}" alt="${media.title}" class="bw-poster" loading="lazy">
+                                <div class="bw-play-btn"><i class="fas fa-play"></i></div>
+                            </div>
+                            <div class="bw-info">
+                                <h3 class="bw-title">${media.title}</h3>
+                                <div class="bw-meta">
+                                    <span><i class="fas fa-star" style="color:#f1c40f;"></i> ${media.score || media.imdb || 'N/A'}</span>
+                                    <span class="bw-badge">${media.status}</span>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                }).join('');
+            } else {
+                grid.innerHTML = '<p style="text-align: center; color: var(--text-muted-color); grid-column: 1/-1;">Connecting to Database Engine...</p>';
+            }
+        });
+    </script>
+</body>
+</html>
