@@ -1,36 +1,47 @@
-async function getUniqueBulkIDs() {
+async function getUniqueDeepScanIDs() {
     const tmdbKey = "014fbdbe962cb38379e09e31d0652459"; 
     let uniqueIMDbIDs = new Set();
     
-    // Generates a random page number between 1 and 20 to ensure fresh content every run
-    const randomPage = Math.floor(Math.random() * 20) + 1;
+    // Pick a random year between 2010 and 2026 to ensure fresh variety
+    const randomYear = Math.floor(Math.random() * (2026 - 2010 + 1)) + 2010;
+    // Pick a random page to start
+    const randomPage = Math.floor(Math.random() * 10) + 1;
     
-    console.log(`%c Anykan OS: Pulling fresh batch from Page ${randomPage}...`, "color: #9D4EDD; font-weight: bold;");
+    console.log(`%c Anykan OS: Deep Scanning Year ${randomYear} starting at Page ${randomPage}...`, "color: #9D4EDD; font-weight: bold;");
 
-    async function fetchFromType(mediaType) {
-        for (let i = randomPage; i < randomPage + 5; i++) {
+    async function fetchDeep(mediaType) {
+        // We'll scan 3 pages with these random parameters
+        for (let i = randomPage; i < randomPage + 3; i++) {
             try {
-                const res = await fetch(`https://api.themoviedb.org/3/discover/${mediaType}?api_key=${tmdbKey}&sort_by=popularity.desc&page=${i}`);
+                // Filter by a specific year to force unique results compared to the general "Trending" list
+                const yearParam = mediaType === 'movie' ? 'primary_release_year' : 'first_air_date_year';
+                const url = `https://api.themoviedb.org/3/discover/${mediaType}?api_key=${tmdbKey}&sort_by=popularity.desc&${yearParam}=${randomYear}&page=${i}`;
+                
+                const res = await fetch(url);
                 const data = await res.json();
+                
                 for (let item of data.results) {
                     const extRes = await fetch(`https://api.themoviedb.org/3/${mediaType}/${item.id}/external_ids?api_key=${tmdbKey}`);
                     const extData = await extRes.json();
-                    if (extData.imdb_id) uniqueIMDbIDs.add(extData.imdb_id);
-                    if (uniqueIMDbIDs.size >= 150) break;
+                    
+                    if (extData.imdb_id) {
+                        uniqueIMDbIDs.add(extData.imdb_id);
+                    }
+                    if (uniqueIMDbIDs.size >= 120) break;
                 }
-            } catch (e) { console.error(e); }
-            if (uniqueIMDbIDs.size >= 150) break;
+            } catch (e) { console.error("Scan Error", e); }
+            if (uniqueIMDbIDs.size >= 120) break;
         }
     }
 
-    await fetchFromType('movie');
-    await fetchFromType('tv');
+    await fetchDeep('movie');
+    await fetchDeep('tv');
 
     const finalList = Array.from(uniqueIMDbIDs);
-    console.log("%c --- COPY THESE NEW UNIQUE IDs ---", "color: #10B981; font-weight: bold;");
+    console.log("%c --- COPY YOUR UNIQUE MASS IMPORT LIST ---", "color: #10B981; font-weight: bold;");
     console.log(finalList.join('\n'));
-    console.log(`%c Found ${finalList.length} Unique IDs!`, "color: #3B82F6; font-weight: bold;");
-    alert("Batch Ready: " + finalList.length + " unique items found.");
+    console.log(`%c Total Unique IDs Found: ${finalList.length}`, "color: #3B82F6; font-weight: bold;");
+    alert(`Anykan OS: Found ${finalList.length} unique items from the year ${randomYear}.`);
 }
 
-getUniqueBulkIDs();
+getUniqueDeepScanIDs();
