@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Explorer - Anykan</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="Anykan-style.css">
+    
+    <style>
+        .page-spacer { height: 110px; }
+        
+        /* Premium Filter Dashboard */
+        .filter-dashboard {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            animation: slideDownFade 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 15px;
+        }
+
+        .filter-header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .filter-header h1 i {
+            color: var(--primary-color);
+        }
+
+        .results-count {
+            background: rgba(157, 78, 221, 0.15);
+            color: #d8b4fe;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(157, 78, 221, 0.3);
+        }
+
+        /* Search Input */
+        .filter-search-wrap {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .filter-search-wrap i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted-color);
+            font-size: 1.2rem;
+        }
+
+        .filter-search-input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.05rem;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .filter-search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        /* Filter Row Controls */
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .filter-label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted-color);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Glass Pills for selection */
+        .pill-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            user-select: none;
+        }
+
+        .filter-pill:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-pill.active {
+            background: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 15px var(--primary-glow);
+            transform: translateY(-2px);
+        }
+
+        /* Dynamic Grid Engine */
+        .explorer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+            padding-bottom: 60px;
+            min-height: 400px;
+            align-content: start;
+        }
+
+        /* Universal Card Design */
+        .universal-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex;
+            flex-direction: column;
+            animation: cardFadeIn 0.5s ease forwards;
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        .universal-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 30px var(--primary-glow);
+            z-index: 2;
+        }
+
+        .uni-poster-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 2/3;
+            overflow: hidden;
+        }
+
+        .uni-poster {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .universal-card:hover .uni-poster {
+            transform: scale(1.1);
+        }
+
+        .uni-type-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .uni-info {
+            padding: 12px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .uni-title {
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.3;
+        }
+
+        .uni-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-muted-color);
+        }
+
+        /* Animations */
+        @keyframes slideDownFade {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes cardFadeIn {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .filter-dashboard { padding: 20px; }
+            .filter-header h1 { font-size: 1.5rem; }
+            .filter-row { flex-direction: column; gap: 15px; }
+            .explorer-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
+            .uni-title { font-size: 0.85rem; }
+            .filter-pill { padding: 6px 12px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-top-row">
+                <div class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <a href="index.html" class="logo">Any<span>Kan</span></a>
+                <div class="header-actions-placeholder">
+                    <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                </div> 
+            </div>
+
+            <!-- Hide top search bar on this page to avoid redundancy, let the big input handle it -->
+            <div class="search-bar" style="visibility: hidden;">
+                <i class="fas fa-search"></i>
+                <input type="text">
+            </div>
+
+            <nav class="nav-links" id="navLinks">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="trending.html">Trending</a></li>
+                    <li><a href="community.html">Community</a></li>
+                </ul>
+            </nav>
+
+            <a href="profile.html" class="header-download-btn" id="topAuthBtn">
+                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Anykan" alt="Profile" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.8);"> Profile
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-spacer"></div>
+
+        <div class="filter-dashboard">
+            <div class="filter-header">
+                <h1><i class="fas fa-sliders-h"></i> Explorer</h1>
+                <div class="results-count" id="results-counter">0 Results</div>
+            </div>
+
+            <div class="filter-search-wrap">
+                <i class="fas fa-search"></i>
+                <input type="text" id="master-search" class="filter-search-input" placeholder="Search across all categories, titles, or actors...">
+            </div>
+
+            <div class="filter-row">
+                <div class="filter-group">
+                    <span class="filter-label">Category</span>
+                    <div class="pill-container" id="category-pills">
+                        <div class="filter-pill active" data-val="All">All</div>
+                        <div class="filter-pill" data-val="Anime">Anime</div>
+                        <div class="filter-pill" data-val="Hollywood Movie">Hollywood</div>
+                        <div class="filter-pill" data-val="Bollywood Movie">Bollywood</div>
+                        <div class="filter-pill" data-val="Web Show">Web Shows</div>
+                        <div class="filter-pill" data-val="Hindi Drama">Hindi Drama</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-row">
+                <div class="filter-group">
+                    <span class="filter-label">Status</span>
+                    <div class="pill-container" id="status-pills">
+                        <div class="filter-pill active" data-val="All">All</div>
+                        <div class="filter-pill" data-val="Completed">Completed</div>
+                        <div class="filter-pill" data-val="Ongoing">Ongoing</div>
+                        <div class="filter-pill" data-val="Upcoming">Upcoming</div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <span class="filter-label">Sort By</span>
+                    <div class="pill-container" id="sort-pills">
+                        <div class="filter-pill active" data-val="newest">Newest Added</div>
+                        <div class="filter-pill" data-val="rating">Highest Rated</div>
+                        <div class="filter-pill" data-val="az">A-Z</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="explorer-grid" id="explorer-grid">
+            <!-- Filtered Content Injected Here -->
+        </div>
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <i class="fa-solid fa-house nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="filter.html" class="bottom-nav-item active">
+            <i class="fa-solid fa-compass nav-icon"></i>
+            <span class="nav-label">Explore</span>
+        </a>
+        <a href="mylist.html" class="bottom-nav-item">
+            <i class="fa-solid fa-bookmark nav-icon"></i>
+            <span class="nav-label">My List</span>
+        </a>
+        <a href="profile.html" class="bottom-nav-item" id="bottomAuthBtn">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Anykan" alt="Profile" class="nav-icon" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-color); margin-bottom: 4px;">
+            <span class="nav-label">Profile</span>
+        </a>
+    </nav>
+
+    <script src="Anykan-script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('explorer-grid');
+            const counter = document.getElementById('results-counter');
+            const searchInput = document.getElementById('master-search');
+            
+            // State
+            let allData = [];
+            let filters = {
+                search: '',
+                category: 'All',
+                status: 'All',
+                sort: 'newest'
+            };
+
+            // Fetch DB
+            const dbData = localStorage.getItem('Anykan_master_db');
+            if (dbData) {
+                allData = JSON.parse(dbData);
+                renderGrid();
+            } else {
+                grid.innerHTML = '<p style="color: var(--text-muted-color); grid-column: 1/-1;">No data available. Please check database connection.</p>';
+            }
+
+            // Pill Selection Logic
+            function setupPills(containerId, filterKey) {
+                const container = document.getElementById(containerId);
+                const pills = container.querySelectorAll('.filter-pill');
+                
+                pills.forEach(pill => {
+                    pill.addEventListener('click', () => {
+                        pills.forEach(p => p.classList.remove('active'));
+                        pill.classList.add('active');
+                        filters[filterKey] = pill.getAttribute('data-val');
+                        renderGrid();
+                    });
+                });
+            }
+
+            setupPills('category-pills', 'category');
+            setupPills('status-pills', 'status');
+            setupPills('sort-pills', 'sort');
+
+            // Search Logic
+            searchInput.addEventListener('input', (e) => {
+                filters.search = e.target.value.toLowerCase();
+                renderGrid();
+            });
+
+            // Engine
+            function renderGrid() {
+                let filtered = allData.filter(item => {
+                    // Search Filter
+                    const matchesSearch = filters.search === '' || 
+                                          (item.title && item.title.toLowerCase().includes(filters.search)) ||
+                                          (item.actor1 && item.actor1.toLowerCase().includes(filters.search)) ||
+                                          (item.actor2 && item.actor2.toLowerCase().includes(filters.search));
+                    
+                    // Category Filter
+                    const matchesCategory = filters.category === 'All' || item.type === filters.category;
+                    
+                    // Status Filter
+                    const matchesStatus = filters.status === 'All' || item.status === filters.status;
+
+                    return matchesSearch && matchesCategory && matchesStatus;
+                });
+
+                // Sorting
+                if (filters.sort === 'newest') {
+                    filtered.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                } else if (filters.sort === 'rating') {
+                    filtered.sort((a, b) => parseFloat(b.score || 0) - parseFloat(a.score || 0));
+                } else if (filters.sort === 'az') {
+                    filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+                }
+
+                counter.innerText = `${filtered.length} Results`;
+
+                if (filtered.length === 0) {
+                    grid.innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                            <i class="fas fa-ghost" style="font-size: 3rem; color: var(--glass-border-light); margin-bottom: 15px;"></i>
+                            <h3 style="color: var(--text-color);">No content found</h3>
+                            <p style="color: var(--text-muted-color);">Try adjusting your filters or search terms.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                grid.innerHTML = filtered.map((media, index) => {
+                    const safeLink = media.link || `watch.html?id=${media.id}`;
+                    // Limit delay so it doesn't wait forever on huge lists
+                    const delay = Math.min(index * 0.03, 0.5); 
+                    
+                    let ratingDisplay = media.score || media.imdb;
+                    ratingDisplay = ratingDisplay ? `<i class="fas fa-star" style="color:#f1c40f;"></i> ${ratingDisplay}` : '';
+
+                    return `
+                        <a href="${safeLink}" class="universal-card" style="animation-delay: ${delay}s">
+                            <div class="uni-poster-wrap">
+                                <span class="uni-type-badge">${media.type.replace(' Movie', '')}</span>
+                                <img src="${media.img}" alt="${media.title}" class="uni-poster" loading="lazy">
+                            </div>
+                            <div class="uni-info">
+                                <h3 class="uni-title">${media.title}</h3>
+                                <div class="uni-meta">
+                                    <span>${ratingDisplay}</span>
+                                    <span>${media.status}</span>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                }).join('');
+            }
+        });
+    </script>
+</body>
+</html>
