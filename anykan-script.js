@@ -110,11 +110,24 @@ document.addEventListener('DOMContentLoaded', function () {
             const safeTitle = encodeURIComponent(media.title);
             const safeImg = encodeURIComponent(media.img);
             const safeLink = encodeURIComponent(media.link || `watch.html?id=${media.id}`);
-            // Smooth stagger delay
             const delay = (index % 15) * 0.05;
+
+            // 🔥 DYNAMIC QUALITY REDUCTION FOR GRID POSTERS 🔥
+            let optimizedImg = media.img;
+            if (optimizedImg) {
+                // Downscale TMDB images from w500 to w342
+                if (optimizedImg.includes('image.tmdb.org/t/p/w500')) {
+                    optimizedImg = optimizedImg.replace('/w500/', '/w342/');
+                } 
+                // Downscale Amazon/IMDb images to a max width of 250px
+                else if (optimizedImg.includes('m.media-amazon.com') && optimizedImg.includes('._V1_')) {
+                    optimizedImg = optimizedImg.replace(/\._V1_.*\.jpg$/i, '._V1_SX250.jpg');
+                }
+            }
+
             return `
             <a href="${media.link || `watch.html?id=${media.id}`}" class="anime-card" style="animation-delay: ${delay}s">
-                <div class="anime-card-img"><img src="${media.img}" alt="${media.title}" loading="lazy" decoding="async"></div>
+                <div class="anime-card-img"><img src="${optimizedImg}" alt="${media.title}" loading="lazy" decoding="async"></div>
                 <div class="anime-card-info">
                     <h3 class="anime-card-title">${media.title}</h3>
                     <p class="anime-card-meta">${media.type}</p>
@@ -130,10 +143,6 @@ document.addEventListener('DOMContentLoaded', function () {
     async function initializeAnimeSite() {
         let data = [];
         try {
-            // ==========================================
-            // 🔥 CACHE-BUSTER IMPLEMENTED HERE 🔥
-            // Forces the browser to get the absolute newest version from Netlify
-            // ==========================================
             const timestamp = new Date().getTime();
             const response = await fetch(`/anykan.json?v=${timestamp}`, { cache: 'no-store' });
             data = await response.json();
@@ -146,7 +155,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (heroWrapper) {
                 let heroItems = data.filter(d => d.Hero === 'Y');
                 
-                // Fallback to top 3 trending if nothing is marked as Hero
                 if (heroItems.length === 0) {
                     heroItems = data.filter(d => d.Trend === "T").slice(0, 3);
                     if (heroItems.length === 0) heroItems = data.slice(0, 3); 
@@ -154,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 heroWrapper.innerHTML = heroItems.map(item => {
                     const safeLink = item.link || `watch.html?id=${item.id}`;
-                    // Use wide PC banner if it exists, otherwise fall back to regular poster
+                    // Banners remain untouched to preserve ultra high-quality
                     const pcBanner = item.heroPCImg ? item.heroPCImg : item.img; 
                     
                     return `
@@ -189,15 +197,27 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (cwSection && cwGrid) {
                         if(historyArr.length > 0) {
                             cwSection.style.display = 'block';
-                            cwGrid.innerHTML = historyArr.map((item, index) => `
+                            cwGrid.innerHTML = historyArr.map((item, index) => {
+                                // 🔥 DYNAMIC QUALITY REDUCTION FOR CONTINUE WATCHING 🔥
+                                let optimizedImg = item.img;
+                                if (optimizedImg) {
+                                    if (optimizedImg.includes('image.tmdb.org/t/p/w500')) {
+                                        optimizedImg = optimizedImg.replace('/w500/', '/w342/');
+                                    } else if (optimizedImg.includes('m.media-amazon.com') && optimizedImg.includes('._V1_')) {
+                                        optimizedImg = optimizedImg.replace(/\._V1_.*\.jpg$/i, '._V1_SX250.jpg');
+                                    }
+                                }
+
+                                return `
                                 <a href="${item.link}" class="anime-card" style="border-color: rgba(157, 78, 221, 0.4); animation-delay: ${index * 0.05}s;">
-                                    <div class="anime-card-img"><img src="${item.img}" alt="${item.title}" loading="lazy" decoding="async"></div>
+                                    <div class="anime-card-img"><img src="${optimizedImg}" alt="${item.title}" loading="lazy" decoding="async"></div>
                                     <div class="anime-card-info">
                                         <h3 class="anime-card-title">${item.title}</h3>
                                         <p class="anime-card-meta" style="color: var(--primary-color);"><i class="fas fa-play"></i> Resume</p>
                                     </div>
                                 </a>
-                            `).join('');
+                                `
+                            }).join('');
                         } else {
                             cwSection.style.display = 'none';
                         }
@@ -295,9 +315,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 const results = fuse.search(query, { limit: 10 });
                 searchResults.innerHTML = results.map(({ item }) => {
+                    
+                    // 🔥 EXTREME COMPRESSION FOR SEARCH DROPDOWN 🔥
+                    let optimizedImg = item.img;
+                    if (optimizedImg) {
+                        if (optimizedImg.includes('image.tmdb.org/t/p/w500')) {
+                            optimizedImg = optimizedImg.replace('/w500/', '/w92/'); // Super tiny thumbnail
+                        } else if (optimizedImg.includes('m.media-amazon.com') && optimizedImg.includes('._V1_')) {
+                            optimizedImg = optimizedImg.replace(/\._V1_.*\.jpg$/i, '._V1_SX90.jpg');
+                        }
+                    }
+
                     return `
                     <a href="${item.link || `watch.html?id=${item.id}`}" class="search-result-item">
-                        <img src="${item.img}" width="45" height="60" loading="lazy" decoding="async">
+                        <img src="${optimizedImg}" width="45" height="60" loading="lazy" decoding="async">
                         <div><div class="search-result-title">${item.title}</div><small style="color:var(--primary-color);">${item.type}</small></div>
                     </a>`;
                 }).join('');
@@ -337,7 +368,6 @@ document.addEventListener('DOMContentLoaded', function () {
             startAutoSlide();
         }
 
-        // Smoother cubic-bezier for sliding
         const sliderBezier = 'transform 0.8s cubic-bezier(0.25, 1, 0.3, 1)';
 
         function moveNext() {
