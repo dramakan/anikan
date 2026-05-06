@@ -1,15 +1,12 @@
 // --- 0. THEME & HARDWARE DETECTION (RUNS IMMEDIATELY) ---
 (function initUI() {
-    // A. Theme Setup
     const savedTheme = localStorage.getItem('Anykan_theme');
     const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
     
-    // Automatically apply light mode if user prefers it or previously saved it
     if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
         document.documentElement.classList.add('light-mode');
     }
 
-    // B. Hardware Power Setup (Lite Mode Fallback)
     let isLowEnd = false;
     if ('deviceMemory' in navigator && navigator.deviceMemory < 4) isLowEnd = true;
     if ('hardwareConcurrency' in navigator && navigator.hardwareConcurrency <= 4) isLowEnd = true;
@@ -21,7 +18,7 @@
     }
 })();
 
-// --- FIXED CONFIG: Now matches bhx-beats ---
+// --- UNIFIED MASTER FIREBASE CONFIGURATION ---
 const firebaseConfig = {
   apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
   authDomain: "bhx-beats.firebaseapp.com",
@@ -32,7 +29,6 @@ const firebaseConfig = {
   measurementId: "G-PCV97GFYQ7"
 };
 
-// --- SINGLETON FIREBASE LOADER ---
 let firebaseInstance = null;
 async function getFirebase() {
     if (firebaseInstance) return firebaseInstance;
@@ -52,17 +48,13 @@ async function getFirebase() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    // --- 3. PLATFORM MARQUEE SEAMLESS LOOP ---
     const marqueeContainer = document.querySelector('.marquee-container');
     const marqueeContent = document.querySelector('.marquee-content');
     if (marqueeContainer && marqueeContent) {
-        // Dynamically clones the track to create a perfect infinite loop 
-        // without you needing to duplicate HTML manually
         const clone = marqueeContent.cloneNode(true);
         marqueeContainer.appendChild(clone);
     }
 
-    // --- 0. THEME TOGGLE LISTENER ---
     const themeToggle = document.getElementById('themeToggle');
     if (themeToggle) {
         const icon = themeToggle.querySelector('i');
@@ -77,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // --- 1. MOBILE MENU LOGIC ---
     const menuToggle = document.getElementById('mobileMenuToggle');
     const navLinks = document.getElementById('navLinks');
     const overlay = document.createElement('div');
@@ -108,7 +99,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return shuffled;
     }
 
-    // --- 2. DATA POPULATION & CAROUSELS ---
     let fuse;
     const searchInput = document.getElementById('searchInput');
     const searchResults = document.getElementById('searchResults');
@@ -116,16 +106,16 @@ document.addEventListener('DOMContentLoaded', function () {
     function populateGrid(elementId, items) {
         const grid = document.getElementById(elementId);
         if (!grid) return;
-        grid.innerHTML = items.map(anime => {
-            const safeTitle = encodeURIComponent(anime.title);
-            const safeImg = encodeURIComponent(anime.img);
-            const safeLink = encodeURIComponent(anime.link || `watch.html?id=${anime.id}`);
+        grid.innerHTML = items.map(media => {
+            const safeTitle = encodeURIComponent(media.title);
+            const safeImg = encodeURIComponent(media.img);
+            const safeLink = encodeURIComponent(media.link || `watch.html?id=${media.id}`);
             return `
-            <a href="${anime.link || `watch.html?id=${anime.id}`}" class="anime-card">
-                <div class="anime-card-img"><img src="${anime.img}" alt="${anime.title}" loading="lazy" decoding="async"></div>
+            <a href="${media.link || `watch.html?id=${media.id}`}" class="anime-card">
+                <div class="anime-card-img"><img src="${media.img}" alt="${media.title}" loading="lazy" decoding="async"></div>
                 <div class="anime-card-info">
-                    <h3 class="anime-card-title">${anime.title}</h3>
-                    <p class="anime-card-meta">${anime.type}</p>
+                    <h3 class="anime-card-title">${media.title}</h3>
+                    <p class="anime-card-meta">${media.type}</p>
                 </div>
                 <button class="bookmark-btn" onclick="event.preventDefault(); window.toggleMyList(this, '${safeTitle}', '${safeImg}', '${safeLink}')" title="Add to My List">
                     <i class="fas fa-plus"></i>
@@ -138,45 +128,11 @@ document.addEventListener('DOMContentLoaded', function () {
     async function initializeAnimeSite() {
         let data = [];
         try {
-            const cachedAnime = localStorage.getItem('Anykan_master_db');
-            const localVersion = localStorage.getItem('Anykan_db_version') || "0";
+            // THE 0-READ JSON ARCHITECTURE
+            const response = await fetch('/anykan.json');
+            data = await response.json();
             
-            const fb = await getFirebase();
-            const db = fb.db;
-            const firestoreModule = fb.firestoreModule;
-            const { collection, getDocs, doc, getDoc, query, orderBy, limit } = firestoreModule;
-
-            let serverVersion = "0";
-            try {
-                const configRef = doc(db, "system", "config");
-                const configSnap = await getDoc(configRef);
-                if (configSnap.exists()) {
-                    serverVersion = configSnap.data().lastUpdated.toString();
-                }
-            } catch(e) { console.log("Version check skipped/failed.", e); }
-
-            // FIXED CACHE TRAP: Ensures cache isn't just an empty array causing blank screens
-            let parsedCache = [];
-            try { parsedCache = JSON.parse(cachedAnime) || []; } catch(e) {}
-
-            if (cachedAnime && localVersion === serverVersion && parsedCache.length > 0) {
-                data = parsedCache;
-                console.log("Database is up to date! Loaded from LocalStorage.");
-            } else {
-                console.log("Fetching fresh anime from Firebase...");
-                const cmsSnap = await getDocs(collection(db, "anime"));
-                cmsSnap.forEach((d) => { 
-                    let item = d.data();
-                    item.id = d.id; 
-                    data.push(item); 
-                });
-                
-                if(data.length > 0) {
-                    localStorage.setItem('Anykan_master_db', JSON.stringify(data));
-                    localStorage.setItem('Anykan_db_version', serverVersion);
-                }
-            }
-
+            localStorage.setItem('Anykan_master_db', JSON.stringify(data));
             fuse = new Fuse(data, { keys: ['title'], threshold: 0.4 });
 
             function renderContinueWatching() {
@@ -212,27 +168,15 @@ document.addEventListener('DOMContentLoaded', function () {
             window.addEventListener('historySynced', renderContinueWatching);
 
             // RENDER TRENDING
-            try {
-                const q = query(collection(db, "anime_stats"), orderBy("views", "desc"), limit(15));
-                const querySnapshot = await getDocs(q);
-                let dynamicTrending = [];
-                querySnapshot.forEach((docStats) => {
-                    if(docStats.data().title) {
-                        const found = data.find(d => d.title && d.title.toLowerCase() === docStats.data().title.toLowerCase());
-                        if(found) dynamicTrending.push(found);
-                    }
-                });
-                if(dynamicTrending.length > 0) populateGrid('trending-grid', dynamicTrending);
-                else populateGrid('trending-grid', data.filter(d => d.Trend === "T").slice(0, 15));
-            } catch(e) { 
-                populateGrid('trending-grid', data.filter(d => d.Trend === "T").slice(0, 15)); 
-            }
+            populateGrid('trending-grid', data.filter(d => d.Trend === "T").slice(0, 15));
 
+            // UNIVERSAL MEDIA GRID MAPPING
             const gridConfigs = [
-                { id: 'shonen-grid', filterType: "Shonen" },
-                { id: 'isekai-grid', filterType: "Isekai" },
-                { id: 'romance-grid', filterType: "Romance" },
-                { id: 'movies-grid', filterType: "Movie" },
+                { id: 'hollywood-grid', filterType: "Hollywood Movie" },
+                { id: 'bollywood-grid', filterType: "Bollywood Movie" },
+                { id: 'anime-classic-grid', filterType: "Anime" },
+                { id: 'web-shows-grid', filterType: ["Web Show", "English Series"] },
+                { id: 'hindi-dramas-grid', filterType: "Hindi Drama" },
                 { id: 'upcoming-grid', isUpcoming: true }
             ];
 
@@ -246,10 +190,10 @@ document.addEventListener('DOMContentLoaded', function () {
                             let sectionData = [];
                             if (config.isUpcoming) {
                                 sectionData = shuffleArray(data.filter(d => d.status === "Upcoming")).slice(0, 15);
-                            } else if (config.filterType === "Movie") {
-                                sectionData = shuffleArray(data.filter(d => d.type === "Movie")).slice(0, 15);
+                            } else if (Array.isArray(config.filterType)) {
+                                sectionData = shuffleArray(data.filter(d => config.filterType.includes(d.type))).slice(0, 15);
                             } else {
-                                sectionData = shuffleArray(data.filter(d => d.genre && d.genre.includes(config.filterType))).slice(0, 15);
+                                sectionData = shuffleArray(data.filter(d => d.type === config.filterType)).slice(0, 15);
                             }
                             
                             populateGrid(targetId, sectionData);
@@ -264,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (el) gridObserver.observe(el);
             });
 
-        } catch (err) { console.error("Firebase Database Load Error:", err); }
+        } catch (err) { console.error("AnyKan JSON Load Error:", err); }
     }
 
     if (searchInput) {
@@ -290,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-const sliderWrapper = document.querySelector('.slider-wrapper');
+    const sliderWrapper = document.querySelector('.slider-wrapper');
     if (sliderWrapper) {
         let slideIndex = 0;
         let autoSlideInterval;
@@ -299,14 +243,11 @@ const sliderWrapper = document.querySelector('.slider-wrapper');
         function initSlider() {
             let currentSlides = sliderWrapper.querySelectorAll('.slide');
             
-            // FIX FOR MOBILE HERO: Sets background image dynamically
             currentSlides.forEach(slide => {
                 const img = slide.querySelector('.slide-bg-image');
                 if (img) slide.style.backgroundImage = `url('${img.src}')`;
             });
 
-            // BUG FIX: Infinite carousels need at least 3 slides. 
-            // If you only have 2, this safely clones them so the mobile loop never crashes!
             if (currentSlides.length === 2) {
                 const clone1 = currentSlides[0].cloneNode(true);
                 const clone2 = currentSlides[1].cloneNode(true);
@@ -427,7 +368,6 @@ const sliderWrapper = document.querySelector('.slider-wrapper');
         sliderWrapper.addEventListener('mouseup', handleDragEnd);
         sliderWrapper.addEventListener('mouseleave', handleDragEnd);
 
-        // Uses event delegation for clicks since slides might be cloned dynamically
         sliderWrapper.addEventListener('click', (e) => {
             if (dragThresholdMet) { e.preventDefault(); return; }
             const slide = e.target.closest('.slide');
@@ -471,7 +411,7 @@ document.addEventListener("DOMContentLoaded", function() {
         openBtn.onclick = async () => {
             const { auth } = await getFirebase();
             if (!auth.currentUser) {
-                alert("You must be logged in to request an anime. Redirecting to Login...");
+                alert("You must be logged in to request content. Redirecting to Login...");
                 window.location.href = "login.html";
             } else { modal.style.display = "flex"; }
         };

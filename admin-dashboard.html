@@ -110,6 +110,8 @@
         .input-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; font-weight: 500; text-transform: uppercase; }
         .admin-input { width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: 12px; color: #fff; font-family: 'Poppins'; outline: none; transition: 0.3s; }
         .admin-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(157, 78, 221, 0.2); background: rgba(0,0,0,0.5); }
+        .admin-select { width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: 12px; color: #fff; font-family: 'Poppins'; outline: none; cursor: pointer;}
+        .admin-select option { background: #1A1A1D; color: #fff; }
         .admin-btn { background: var(--primary); color: #fff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px var(--primary-glow); display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; }
         .admin-btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
 
@@ -134,9 +136,9 @@
 <body>
 
     <aside class="sidebar">
-        <div class="brand">Ani<span>Kan</span> OS</div>
+        <div class="brand">Any<span>Kan</span> OS</div>
         <nav class="nav-menu">
-            <a class="nav-item active" data-tab="cms-tab"><i class="fas fa-video"></i> Anime CMS</a>
+            <a class="nav-item active" data-tab="cms-tab"><i class="fas fa-video"></i> Media CMS</a>
             <a class="nav-item" data-tab="requests-tab"><i class="fas fa-inbox"></i> Viewer Requests</a>
             <a class="nav-item" data-tab="users-tab"><i class="fas fa-users"></i> Database Users</a>
             <a class="nav-item" data-tab="affiliate-tab"><i class="fas fa-network-wired"></i> Affiliate Network</a>
@@ -148,7 +150,7 @@
 
     <main class="main-content">
         <div class="header-top">
-            <h1 class="page-title" id="page-title-display">Anime CMS Manager</h1>
+            <h1 class="page-title" id="page-title-display">Universal Media CMS</h1>
             <div class="admin-badge"><i class="fas fa-shield-alt"></i> System Administrator</div>
         </div>
 
@@ -156,7 +158,7 @@
             <div class="glass-widget">
                 <div class="widget-header">
                     <h2 class="widget-title"><i class="fas fa-database"></i> Database Content</h2>
-                    <button class="admin-btn" onclick="openAnimeModal()"><i class="fas fa-plus"></i> Upload Anime</button>
+                    <button class="admin-btn" onclick="openMediaModal()"><i class="fas fa-plus"></i> Upload Content</button>
                 </div>
                 <div style="overflow-x: auto;">
                     <table class="data-table">
@@ -164,24 +166,25 @@
                             <tr>
                                 <th>Poster</th>
                                 <th>Title</th>
-                                <th>Type</th>
+                                <th>Category</th>
                                 <th>Status</th>
                                 <th>Trend</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="anime-tbody">
-                            <tr><td colspan="6" style="text-align:center;"><i class="fas fa-spinner fa-spin"></i> Fetching Anime Database...</td></tr>
+                            <tr><td colspan="6" style="text-align:center;"><i class="fas fa-spinner fa-spin"></i> Fetching Database...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </section>
 
+        <!-- Requests, Users, Affiliate, and Broadcast sections remain functionally identical -->
         <section id="requests-tab" class="tab-section">
             <div class="glass-widget">
                 <div class="widget-header">
-                    <h2 class="widget-title"><i class="fas fa-list-ul"></i> Pending Anime Uploads</h2>
+                    <h2 class="widget-title"><i class="fas fa-list-ul"></i> Pending Uploads</h2>
                     <button class="admin-btn" onclick="fetchRequests()"><i class="fas fa-sync-alt"></i> Refresh</button>
                 </div>
                 <div style="overflow-x: auto;">
@@ -190,7 +193,7 @@
                             <tr>
                                 <th>Date</th>
                                 <th>User Email</th>
-                                <th>Requested Anime</th>
+                                <th>Requested Title</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -254,7 +257,7 @@
                 <form id="broadcast-form">
                     <div class="input-group">
                         <label>Target Audience</label>
-                        <select id="notif-target" class="admin-input">
+                        <select id="notif-target" class="admin-select">
                             <option value="all">All Users (Global)</option>
                             <option value="creators">Affiliate Partners Only</option>
                             <option value="viewers">Standard Viewers Only</option>
@@ -262,7 +265,7 @@
                     </div>
                     <div class="input-group">
                         <label>Notification Title</label>
-                        <input type="text" id="notif-title" class="admin-input" placeholder="e.g. Solo Leveling Episode 12 is OUT!" required>
+                        <input type="text" id="notif-title" class="admin-input" placeholder="e.g. Deadpool & Wolverine is OUT!" required>
                     </div>
                     <div class="input-group">
                         <label>Message Payload</label>
@@ -270,7 +273,7 @@
                     </div>
                     <div class="input-group">
                         <label>Action Link (Optional)</label>
-                        <input type="text" id="notif-link" class="admin-input" placeholder="e.g. watch.html?id=sololeveling">
+                        <input type="text" id="notif-link" class="admin-input" placeholder="e.g. watch.html?id=deadpool">
                     </div>
                     <button type="submit" class="admin-btn" style="width: 100%; justify-content: center;" id="btn-broadcast"><i class="fas fa-satellite-dish"></i> Execute Broadcast</button>
                 </form>
@@ -278,11 +281,12 @@
         </section>
     </main>
 
+    <!-- UNIVERSAL MEDIA MODAL -->
     <div class="modal-overlay" id="anime-modal">
         <div class="modal-card" style="max-width: 800px;">
             <div class="modal-title">
-                <span id="anime-modal-title"><i class="fas fa-upload"></i> Upload New Anime</span>
-                <button class="close-modal" onclick="closeAnimeModal()"><i class="fas fa-times"></i></button>
+                <span id="anime-modal-title"><i class="fas fa-upload"></i> Upload New Content</span>
+                <button class="close-modal" onclick="closeMediaModal()"><i class="fas fa-times"></i></button>
             </div>
             
             <form id="anime-form">
@@ -296,16 +300,16 @@
                             <i class="fas fa-magic"></i> Auto-Fill
                         </button>
                     </div>
-                    <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 4px; display: block;">Enter IMDb ID and hit Auto-Fill to pull metadata and cast images.</small>
+                    <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 4px; display: block;">Enter IMDb ID and hit Auto-Fill to intelligently pull metadata, classification, and cast images.</small>
                 </div>
 
                 <div class="form-grid">
                     <div class="input-group">
-                        <label>Anime Title</label>
+                        <label>Title</label>
                         <input type="text" id="db-title" class="admin-input" required>
                     </div>
                     <div class="input-group">
-                        <label>Document ID / URL Slug (e.g. sololeveling)</label>
+                        <label>URL Slug (e.g. deadpool)</label>
                         <input type="text" id="db-id" class="admin-input" required>
                     </div>
                 </div>
@@ -316,25 +320,28 @@
                         <input type="url" id="db-img" class="admin-input" required>
                     </div>
                     <div class="input-group">
-                        <label>Genres (e.g. Shonen, Action)</label>
+                        <label>Genres (e.g. Action, Comedy)</label>
                         <input type="text" id="db-genre" class="admin-input" required>
                     </div>
                 </div>
 
                 <div class="form-grid">
                     <div class="input-group">
-                        <label>Format Type</label>
-                        <select id="db-type" class="admin-input">
-                            <option value="TV Series">TV Series</option>
-                            <option value="Movie">Movie</option>
-                            <option value="OVA">OVA</option>
+                        <label>Content Category</label>
+                        <select id="db-type" class="admin-select">
+                            <option value="Hollywood Movie">Hollywood Movie</option>
+                            <option value="Bollywood Movie">Bollywood Movie</option>
+                            <option value="Anime">Anime</option>
+                            <option value="Web Show">Web Show</option>
+                            <option value="Hindi Drama">Hindi Drama</option>
+                            <option value="English Series">English Series</option>
                         </select>
                     </div>
                     <div class="input-group">
                         <label>Status</label>
-                        <select id="db-status" class="admin-input">
-                            <option value="Ongoing">Ongoing</option>
-                            <option value="Completed">Completed</option>
+                        <select id="db-status" class="admin-select">
+                            <option value="Completed">Completed (Movie)</option>
+                            <option value="Ongoing">Ongoing (Series)</option>
                             <option value="Upcoming">Upcoming</option>
                         </select>
                     </div>
@@ -343,18 +350,18 @@
                 <div class="form-grid">
                     <div class="input-group">
                         <label>Total Episodes (or Season Array e.g., [12, 12])</label>
-                        <input type="text" id="db-eps" class="admin-input" placeholder="e.g. 24 or [12, 24]" required>
+                        <input type="text" id="db-eps" class="admin-input" placeholder="Type 1 for Movies" required>
                     </div>
                     <div class="input-group">
-                        <label>Score / Rating</label>
-                        <input type="text" id="db-score" class="admin-input" placeholder="e.g. 9.1">
+                        <label>IMDb Score</label>
+                        <input type="text" id="db-score" class="admin-input" placeholder="e.g. 8.5">
                     </div>
                 </div>
                 
                 <div class="form-grid">
                     <div class="input-group">
-                        <label>Hero Slider / Trending? (T = Yes, N = No)</label>
-                        <select id="db-trend" class="admin-input">
+                        <label>Promote to Hero Slider/Trending?</label>
+                        <select id="db-trend" class="admin-select">
                             <option value="N">No (Standard Grid)</option>
                             <option value="T">Yes (Trending Carousel)</option>
                         </select>
@@ -366,7 +373,7 @@
                     <textarea id="db-synopsis" class="admin-input" rows="4" required></textarea>
                 </div>
 
-                <h4 style="color:var(--primary); margin: 20px 0 10px 0; font-size:1rem;">Voice Actors / Cast</h4>
+                <h4 style="color:var(--primary); margin: 20px 0 10px 0; font-size:1rem;">Lead Cast</h4>
                 <div class="form-grid">
                     <div class="input-group">
                         <label>Actor 1 Name</label>
@@ -387,27 +394,28 @@
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeAnimeModal()">Cancel</button>
-                    <button type="submit" class="btn-confirm" id="btn-save-anime"><i class="fas fa-save"></i> Save Anime</button>
+                    <button type="button" class="btn-cancel" onclick="closeMediaModal()">Cancel</button>
+                    <button type="submit" class="btn-confirm" id="btn-save-anime"><i class="fas fa-cloud-upload-alt"></i> Deploy Content</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- Resolve Request Modal -->
     <div class="modal-overlay" id="resolve-modal">
         <div class="modal-card">
             <div class="modal-title">
-                <span>Mark Anime as Uploaded</span>
+                <span>Mark as Uploaded</span>
                 <button class="close-modal" onclick="closeResolveModal()"><i class="fas fa-times"></i></button>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Provide the direct link to the anime so the user receives a clickable notification in their profile.</p>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Provide the direct link to the content so the user receives a clickable notification.</p>
             <input type="hidden" id="resolve-req-id">
             <div class="input-group">
-                <input type="text" id="resolve-link" class="admin-input" placeholder="e.g. watch.html?id=kaijuno8" required>
+                <input type="text" id="resolve-link" class="admin-input" placeholder="e.g. watch.html?id=deadpool" required>
             </div>
             <div class="modal-actions">
                 <button type="button" class="btn-cancel" onclick="closeResolveModal()">Cancel</button>
-                <button type="button" class="btn-confirm" onclick="submitResolution()"><i class="fas fa-check"></i> Confirm Upload</button>
+                <button type="button" class="btn-confirm" onclick="submitResolution()"><i class="fas fa-check"></i> Confirm</button>
             </div>
         </div>
     </div>
@@ -417,15 +425,16 @@
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, setDoc, getDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
-  authDomain: "bhx-beats.firebaseapp.com",
-  projectId: "bhx-beats",
-  storageBucket: "bhx-beats.firebasestorage.app",
-  messagingSenderId: "491393581039",
-  appId: "1:491393581039:web:8204fb8753094a64a9401a",
-  measurementId: "G-PCV97GFYQ7"
-};
+        const firebaseConfig = {
+          apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
+          authDomain: "bhx-beats.firebaseapp.com",
+          projectId: "bhx-beats",
+          storageBucket: "bhx-beats.firebasestorage.app",
+          messagingSenderId: "491393581039",
+          appId: "1:491393581039:web:8204fb8753094a64a9401a",
+          measurementId: "G-PCV97GFYQ7"
+        };
+        
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -458,14 +467,15 @@ const firebaseConfig = {
         });
 
 // =====================================
-// 1. ANIME CMS (Database Engine)
+// 1. UNIVERSAL CMS (Database Engine)
 // =====================================
         let currentAnimeList = [];
 
         window.fetchAnimeDB = async function() {
             const tbody = document.getElementById('anime-tbody');
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;"><i class="fas fa-circle-notch fa-spin"></i> Loading Data...</td></tr>';
             try {
+                // Keeping collection as 'anime' to preserve existing data
                 const snap = await getDocs(collection(db, "anime"));
                 currentAnimeList = [];
                 let html = '';
@@ -479,31 +489,31 @@ const firebaseConfig = {
                         <tr>
                             <td class="poster-cell"><img src="${data.img}" alt="Poster"></td>
                             <td style="font-weight:600;">${data.title}</td>
-                            <td>${data.type}</td>
+                            <td><span class="admin-badge" style="display:inline-block; padding: 4px 10px;">${data.type}</span></td>
                             <td>${data.status}</td>
                             <td><span class="status-pill ${data.Trend === 'T' ? 'status-uploaded' : 'status-pending'}">${data.Trend === 'T' ? 'Trending' : 'Standard'}</span></td>
                             <td class="action-btns">
                                 <button class="btn-icon btn-edit" onclick="editAnime('${data.id}')" title="Edit Content"><i class="fas fa-edit"></i></button>
-                                <button class="btn-icon btn-delete" onclick="deleteAnime('${data.id}')" title="Delete Anime"><i class="fas fa-trash"></i></button>
+                                <button class="btn-icon btn-delete" onclick="deleteAnime('${data.id}')" title="Delete"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
                     `;
                 });
-                tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center;">No anime found.</td></tr>';
+                tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center;">No content found.</td></tr>';
             } catch (e) {
                 tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--danger);">Error loading Database: ${e.message}</td></tr>`;
             }
         };
 
-        window.openAnimeModal = function() {
+        window.openMediaModal = function() {
             document.getElementById('anime-form').reset();
             document.getElementById('edit-anime-id').value = '';
             document.getElementById('db-id').disabled = false;
-            document.getElementById('anime-modal-title').innerHTML = '<i class="fas fa-upload"></i> Upload New Anime';
+            document.getElementById('anime-modal-title').innerHTML = '<i class="fas fa-upload"></i> Upload Content';
             document.getElementById('anime-modal').style.display = 'flex';
         };
 
-        window.closeAnimeModal = function() {
+        window.closeMediaModal = function() {
             document.getElementById('anime-modal').style.display = 'none';
         };
 
@@ -518,8 +528,8 @@ const firebaseConfig = {
             document.getElementById('db-title').value = anime.title || '';
             document.getElementById('db-img').value = anime.img || '';
             document.getElementById('db-genre').value = anime.genre || '';
-            document.getElementById('db-type').value = anime.type || 'TV Series';
-            document.getElementById('db-status').value = anime.status || 'Ongoing';
+            document.getElementById('db-type').value = anime.type || 'Hollywood Movie';
+            document.getElementById('db-status').value = anime.status || 'Completed';
             
             let epsDisplay = anime.totalEps || anime.seasons || '';
             if(Array.isArray(anime.seasons)) epsDisplay = `[${anime.seasons.join(', ')}]`;
@@ -534,12 +544,12 @@ const firebaseConfig = {
             document.getElementById('db-a2').value = anime.actor2 || '';
             document.getElementById('db-a2img').value = anime.actor2Img || '';
 
-            document.getElementById('anime-modal-title').innerHTML = '<i class="fas fa-edit"></i> Edit Anime';
+            document.getElementById('anime-modal-title').innerHTML = '<i class="fas fa-edit"></i> Edit Content';
             document.getElementById('anime-modal').style.display = 'flex';
         };
 
         // =====================================
-        // AUTO-FILL SYSTEM (OMDB + TMDB API)
+        // UPGRADED AUTO-FILL SYSTEM (Universal Media)
         // =====================================
         document.getElementById('auto-fill-btn').addEventListener('click', async () => {
             const imdbId = document.getElementById('db-imdb-id').value.trim();
@@ -549,10 +559,10 @@ const firebaseConfig = {
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching...';
 
             const omdbKey = "7739fdec"; 
-            const tmdbKey = "014fbdbe962cb38379e09e31d0652459"; // REPLACE WITH YOUR ACTUAL TMDB KEY
+            const tmdbKey = "014fbdbe962cb38379e09e31d0652459"; 
 
             try {
-                // 1. OMDb Fetch
+                // 1. OMDb Fetch for Text Data
                 const res = await fetch(`https://www.omdbapi.com/?i=${imdbId}&plot=full&apikey=${omdbKey}`);
                 const data = await res.json();
 
@@ -568,10 +578,23 @@ const firebaseConfig = {
                 document.getElementById('db-score').value = data.imdbRating || "";
                 document.getElementById('db-genre').value = data.Genre || "";
 
-                if (data.Type === "movie") {
-                    document.getElementById('db-type').value = "Movie";
-                    document.getElementById('db-eps').value = "1";
+                // Smart Classification Engine
+                let detectedType = "Hollywood Movie";
+                const isSeries = data.Type === "series";
+                const country = data.Country || "";
+                const genre = data.Genre || "";
+
+                if (genre.includes("Animation") && country.includes("Japan")) {
+                    detectedType = "Anime";
+                } else if (country.includes("India")) {
+                    detectedType = isSeries ? "Hindi Drama" : "Bollywood Movie";
+                } else {
+                    detectedType = isSeries ? "English Series" : "Hollywood Movie";
                 }
+                
+                document.getElementById('db-type').value = detectedType;
+                document.getElementById('db-status').value = isSeries ? "Ongoing" : "Completed";
+                document.getElementById('db-eps').value = isSeries ? "Loading..." : "1";
 
                 if (data.Actors && data.Actors !== "N/A") {
                     const actors = data.Actors.split(',');
@@ -579,8 +602,8 @@ const firebaseConfig = {
                     if (actors[1]) document.getElementById('db-a2').value = actors[1].trim();
                 }
 
-                // 2. TMDB Fetch for Cast Headshots & TV Seasons
-                if (tmdbKey !== "014fbdbe962cb38379e09e31d0652459") {
+                // 2. TMDB Fetch for Cast Images & TV Seasons
+                if (tmdbKey !== "YOUR_TMDB_API_KEY") {
                     const findRes = await fetch(`https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`);
                     const findData = await findRes.json();
                     
@@ -615,11 +638,14 @@ const firebaseConfig = {
                         }
                     }
                 }
-                alert("Auto-Fill complete!");
+                alert("Smart Auto-Fill complete!");
             } catch(e) { alert("Fetch Error: " + e.message); }
             finally { btn.innerHTML = '<i class="fas fa-magic"></i> Auto-Fill'; }
         });
 
+        // =====================================
+        // SAVE & DEPLOY (JSON WEBHOOK TRIGGER)
+        // =====================================
         document.getElementById('anime-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-save-anime');
@@ -627,17 +653,16 @@ const firebaseConfig = {
             const docId = document.getElementById('db-id').value.trim();
             const imdbId = document.getElementById('db-imdb-id').value.trim();
             
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deploying...';
             btn.disabled = true;
 
             try {
-                // Duplicate check
                 if (!isEdit) {
                     const dupCheck = await getDocs(query(collection(db, "anime"), where("imdbId", "==", imdbId)));
                     if (!dupCheck.empty) {
-                        btn.innerHTML = '<i class="fas fa-save"></i> Save Anime';
+                        btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Deploy Content';
                         btn.disabled = false;
-                        return alert("STOP: This Anime already exists in database!");
+                        return alert("STOP: This Title already exists in database!");
                     }
                 }
 
@@ -677,12 +702,18 @@ const firebaseConfig = {
                     await setDoc(doc(db, "anime", docId), payload);
                 }
                 
-                await setDoc(doc(db, "system", "config"), { lastUpdated: new Date().getTime() }, { merge: true });
-                closeAnimeModal();
+                closeMediaModal();
                 fetchAnimeDB();
+
+                // TRIGGER NETLIFY JSON BUILD HOOK
+                // REPLACE THIS URL WITH YOUR ANYKAN PROJECT WEBHOOK
+                fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' })
+                    .then(() => alert("Deployed successfully! Site is updating the JSON file in the background."))
+                    .catch(() => alert("Saved to DB, but failed to trigger site rebuild."));
+
             } catch (err) { alert("Save Failed: " + err.message); }
             finally { 
-                btn.innerHTML = '<i class="fas fa-save"></i> Save Anime';
+                btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Deploy Content';
                 btn.disabled = false; 
             }
         });
@@ -691,15 +722,15 @@ const firebaseConfig = {
             if(confirm(`WARNING: Are you sure you want to completely delete "${id}"?`)) {
                 try {
                     await deleteDoc(doc(db, "anime", id));
-                    await setDoc(doc(db, "system", "config"), { lastUpdated: new Date().getTime() }, { merge: true });
                     fetchAnimeDB();
+                    // TRIGGER NETLIFY JSON BUILD HOOK
+                    // REPLACE THIS URL WITH YOUR ANYKAN PROJECT WEBHOOK
+                    fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
                 } catch (e) { alert("Delete failed."); }
             }
         };
 
-// =====================================
-// 2. USER DATABASE MANAGEMENT
-// =====================================
+        // All User, Request, Affiliate, and Broadcast functions remain perfectly intact below
         window.fetchUsers = async function() {
             const tbody = document.getElementById('users-tbody');
             tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;"><i class="fas fa-circle-notch fa-spin"></i> Syncing users...</td></tr>';
@@ -731,9 +762,6 @@ const firebaseConfig = {
             }
         };
 
-// =====================================
-// 3. VIEWER REQUEST ENGINE
-// =====================================
         window.fetchRequests = async function() {
             const tbody = document.getElementById('requests-tbody');
             tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;"><i class="fas fa-circle-notch fa-spin"></i> Decrypting ledger...</td></tr>';
@@ -801,9 +829,6 @@ const firebaseConfig = {
             }
         };
 
-// =====================================
-// 4. AFFILIATE / CREATOR LEDGER
-// =====================================
         window.fetchCreators = async function() {
             const tbody = document.getElementById('affiliate-tbody');
             try {
@@ -868,9 +893,6 @@ const firebaseConfig = {
             }
         };
 
-// =====================================
-// 5. BROADCAST NOTIFICATION SYSTEM
-// =====================================
         document.getElementById('broadcast-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-broadcast');
