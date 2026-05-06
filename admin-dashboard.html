@@ -129,6 +129,7 @@
         .status-pending { background: rgba(239, 68, 68, 0.1); color: #FCA5A5; border: 1px solid rgba(239, 68, 68, 0.3); }
         .status-uploaded { background: rgba(16, 185, 129, 0.1); color: #6EE7B7; border: 1px solid rgba(16, 185, 129, 0.3); }
         .status-hero { background: rgba(59, 130, 246, 0.1); color: #93C5FD; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .status-trending { background: rgba(245, 158, 11, 0.1); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); }
 
         /* ACTION BUTTONS */
         .action-btns { display: flex; gap: 8px; align-items: center; }
@@ -181,6 +182,15 @@
         .btn-confirm:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5); }
 
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* Conditional styling for PC banner image input */
+        #pc-banner-group { display: none; margin-top: -10px; }
+        #db-hero.active ~ #pc-banner-group { display: block; }
+
+        /* Styling for number input for trending order */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
 
         /* RESPONSIVE DESIGN */
         @media (max-width: 1024px) {
@@ -393,8 +403,8 @@
 
                 <div class="form-grid">
                     <div class="input-group">
-                        <label>Poster Image URL</label>
-                        <input type="url" id="db-img" class="admin-input" required>
+                        <label>Poster / Mobile Banner (Original IMDb Image)</label>
+                        <input type="url" id="db-img" class="admin-input" required placeholder="IMDb poster URL (used as mobile banner)">
                     </div>
                     <div class="input-group">
                         <label>Genres (e.g. Action, Comedy)</label>
@@ -438,17 +448,22 @@
                 <div class="form-grid">
                     <div class="input-group">
                         <label>Add to Main Banner (Hero Slider)?</label>
-                        <select id="db-hero" class="admin-select">
+                        <select id="db-hero" class="admin-select" onchange="togglePCBannerInput()">
                             <option value="N">No</option>
                             <option value="Y">Yes (Display in Top Banner)</option>
                         </select>
                     </div>
+                    <div class="input-group" id="pc-banner-group">
+                        <label>Separate Image for PC Banner (Wide)</label>
+                        <input type="url" id="db-heroPCImg" class="admin-input" placeholder="Wide banner URL for desktop">
+                    </div>
+                </div>
+
+                <div class="form-grid">
                     <div class="input-group">
-                        <label>Add to Trending Section?</label>
-                        <select id="db-trend" class="admin-select">
-                            <option value="N">No</option>
-                            <option value="T">Yes (Trending Grid)</option>
-                        </select>
+                        <label>Add to Trending Section? (Number = Order)</label>
+                        <input type="number" id="db-trendingOrder" class="admin-input" placeholder="Enter number for order (1, 2, 3...) or leave empty" min="1">
+                        <small style="color: var(--text-muted); font-size: 0.75rem; display: block;">Enter a number to show in Trending. Lower numbers show first. Empty means not trending.</small>
                     </div>
                 </div>
 
@@ -550,6 +565,19 @@
             }, 3000);
         };
 
+        // Conditional display for PC banner image input
+        window.togglePCBannerInput = function() {
+            const heroSelect = document.getElementById('db-hero');
+            const pcBannerGroup = document.getElementById('pc-banner-group');
+            if (heroSelect.value === 'Y') {
+                heroSelect.classList.add('active');
+                pcBannerGroup.style.display = 'block';
+            } else {
+                heroSelect.classList.remove('active');
+                pcBannerGroup.style.display = 'none';
+            }
+        }
+
         // Copy Direct Link Function
         window.copyMediaLink = function(link) {
             const fullUrl = window.location.origin + '/' + link;
@@ -609,7 +637,7 @@
                     currentAnimeList.push(data);
                     
                     let badgesHtml = '';
-                    if(data.Trend === 'T') badgesHtml += '<span class="status-pill status-uploaded" style="margin-right: 5px;"><i class="fas fa-fire"></i> Trending</span>';
+                    if(data.trendingOrder) badgesHtml += '<span class="status-pill status-trending" style="margin-right: 5px;"><i class="fas fa-fire"></i> Trending #' + data.trendingOrder + '</span>';
                     if(data.Hero === 'Y') badgesHtml += '<span class="status-pill status-hero"><i class="fas fa-star"></i> Hero Banner</span>';
                     if(!badgesHtml) badgesHtml = '<span class="status-pill status-pending" style="color:var(--text-muted); border-color:var(--border-subtle); background:transparent;">Standard</span>';
                     
@@ -642,6 +670,7 @@
             document.getElementById('edit-anime-id').value = '';
             document.getElementById('db-id').disabled = false;
             document.getElementById('anime-modal-title').innerHTML = '<i class="fas fa-upload"></i> Upload Content';
+            togglePCBannerInput(); // Hide PC banner group on new upload
             
             const modal = document.getElementById('anime-modal');
             modal.classList.add('show');
@@ -671,8 +700,12 @@
             document.getElementById('db-eps').value = epsDisplay;
             
             document.getElementById('db-score').value = anime.score || anime.imdb || '';
-            document.getElementById('db-trend').value = anime.Trend || 'N';
+            document.getElementById('db-trendingOrder').value = anime.trendingOrder || '';
             document.getElementById('db-hero').value = anime.Hero || 'N';
+            document.getElementById('db-heroPCImg').value = anime.heroPCImg || '';
+            
+            togglePCBannerInput(); // Show PC banner input if Hero is Y
+
             document.getElementById('db-synopsis').value = anime.synopsis || '';
             
             document.getElementById('db-a1').value = anime.actor1 || '';
@@ -815,18 +848,26 @@
                     finalEps = finalSeasons.reduce((a, b) => a + b, 0);
                 }
 
+                // Capture numerical values and wide banner URL
+                const trendingOrderInput = document.getElementById('db-trendingOrder').value.trim();
+                const heroPCImgInput = document.getElementById('db-heroPCImg').value.trim();
+
                 const payload = {
                     title: document.getElementById('db-title').value.trim(),
                     imdbId: imdbId,
-                    img: document.getElementById('db-img').value.trim(),
+                    img: document.getElementById('db-img').value.trim(), // Acts as mobile banner
                     genre: document.getElementById('db-genre').value.trim(),
                     type: document.getElementById('db-type').value,
                     status: document.getElementById('db-status').value,
                     totalEps: finalEps,
                     score: document.getElementById('db-score').value.trim(),
                     imdb: document.getElementById('db-score').value.trim(),
-                    Trend: document.getElementById('db-trend').value,
+                    
+                    trendingOrder: trendingOrderInput ? parseInt(trendingOrderInput) : null, // Numerical for ordering
+                    
                     Hero: document.getElementById('db-hero').value,
+                    heroPCImg: (document.getElementById('db-hero').value === 'Y' && heroPCImgInput) ? heroPCImgInput : null, // Wide banner URL for desktop
+                    
                     synopsis: document.getElementById('db-synopsis').value.trim(),
                     actor1: document.getElementById('db-a1').value.trim(),
                     actor1Img: document.getElementById('db-a1img').value.trim(),
