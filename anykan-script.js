@@ -135,22 +135,25 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.setItem('Anykan_master_db', JSON.stringify(data));
             fuse = new Fuse(data, { keys: ['title'], threshold: 0.4 });
 
-            // --- 1. DYNAMIC HERO SLIDER ---
+            // --- 1. DYNAMIC HERO SLIDER W/ PC/MOBILE POSTERS ---
             const heroWrapper = document.getElementById('hero-slider-wrapper');
             if (heroWrapper) {
-                // Filter content marked as Hero in Admin Panel
                 let heroItems = data.filter(d => d.Hero === 'Y');
                 
-                // Fallback: If nothing is marked as Hero, use 3 trending items
+                // Fallback to top 3 trending if nothing is marked as Hero
                 if (heroItems.length === 0) {
-                    heroItems = data.slice(0, 3); 
+                    heroItems = data.filter(d => d.Trend === "T").slice(0, 3);
+                    if (heroItems.length === 0) heroItems = data.slice(0, 3); 
                 }
                 
                 heroWrapper.innerHTML = heroItems.map(item => {
                     const safeLink = item.link || `watch.html?id=${item.id}`;
+                    // Use wide PC banner if it exists, otherwise fall back to regular poster
+                    const pcBanner = item.heroPCImg ? item.heroPCImg : item.img; 
+                    
                     return `
                     <div class="slide" style="--mobile-poster: url('${item.img}');">
-                        <img class="slide-bg-image" src="${item.img}" alt="${item.title}">
+                        <img class="slide-bg-image" src="${pcBanner}" alt="${item.title}">
                         <div class="slide-content">
                             <h1 class="slide-title">${item.title}</h1>
                             <div class="slide-meta"><span>⭐ ${item.imdb || item.score || 'N/A'}</span><span>${item.type}</span></div>
@@ -164,7 +167,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>`;
                 }).join('');
                 
-                // Triggers the slider drag/swipe logic after rendering
                 initSlider(); 
             }
 
@@ -200,9 +202,9 @@ document.addEventListener('DOMContentLoaded', function () {
             renderContinueWatching(); 
             window.addEventListener('historySynced', renderContinueWatching);
 
-            // --- 2. ADVANCED TRENDING (Automated + Manual) ---
+            // --- 2. ADVANCED TRENDING (Automated + Ordered Manual) ---
             try {
-                // Get the organic most viewed stats
+                // Get organic most viewed stats
                 const fb = await getFirebase();
                 const q = fb.firestoreModule.query(fb.firestoreModule.collection(fb.db, "anime_stats"), fb.firestoreModule.orderBy("views", "desc"), fb.firestoreModule.limit(10));
                 const querySnapshot = await fb.firestoreModule.getDocs(q);
@@ -219,12 +221,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 const manualTrending = data.filter(d => d.Trend === "T");
                 
                 // Combine and deduplicate
-                const combinedTrending = [...dynamicTrending, ...manualTrending].filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+                let combinedTrending = [...dynamicTrending, ...manualTrending].filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+                
+                // Sort items mathematically based on trendingOrder input
+                combinedTrending.sort((a, b) => {
+                    const orderA = a.trendingOrder ? parseInt(a.trendingOrder) : 9999;
+                    const orderB = b.trendingOrder ? parseInt(b.trendingOrder) : 9999;
+                    return orderA - orderB;
+                });
                 
                 populateGrid('trending-grid', combinedTrending.slice(0, 15));
             } catch(e) { 
-                // Fallback to purely manual trending if Firebase organic check fails
-                populateGrid('trending-grid', data.filter(d => d.Trend === "T").slice(0, 15)); 
+                // Fallback sorting if Firebase stats fail
+                let manualTrending = data.filter(d => d.Trend === "T");
+                manualTrending.sort((a, b) => {
+                    const orderA = a.trendingOrder ? parseInt(a.trendingOrder) : 9999;
+                    const orderB = b.trendingOrder ? parseInt(b.trendingOrder) : 9999;
+                    return orderA - orderB;
+                });
+                populateGrid('trending-grid', manualTrending.slice(0, 15)); 
             }
 
             // --- 3. UNIVERSAL MEDIA GRID MAPPING ---
@@ -302,6 +317,7 @@ document.addEventListener('DOMContentLoaded', function () {
             
             currentSlides.forEach(slide => {
                 const img = slide.querySelector('.slide-bg-image');
+                // Uses the src of the slide-bg-image (which handles the PC fallback logic perfectly)
                 if (img) slide.style.backgroundImage = `url('${img.src}')`;
             });
 
@@ -438,8 +454,9 @@ document.addEventListener('DOMContentLoaded', function () {
             else if (mobileLink) window.location.href = mobileLink.getAttribute('href');
         });
 
-        // DO NOT call initSlider here anymore. It gets called dynamically inside initializeAnimeSite!
+        // initSlider() is called dynamically once JSON is fetched!
     }
+    
     const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
     const sectionObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
