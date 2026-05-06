@@ -207,6 +207,9 @@
             .form-grid { grid-template-columns: 1fr; gap: 0; }
             .widget-header { flex-direction: column; align-items: flex-start; }
             .widget-header .admin-btn { width: 100%; margin-top: 15px; }
+            /* Search input full width on mobile */
+            #db-search-container { width: 100%; margin-top: 10px; }
+            #db-search { width: 100% !important; }
             .modal-actions { flex-direction: column; }
         }
     </style>
@@ -242,7 +245,13 @@
             <div class="glass-widget">
                 <div class="widget-header">
                     <h2 class="widget-title"><i class="fas fa-database"></i> Database Content</h2>
-                    <button class="admin-btn" onclick="openMediaModal()"><i class="fas fa-plus"></i> Upload Content</button>
+                    <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                        <div id="db-search-container" style="position: relative;">
+                            <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                            <input type="text" id="db-search" class="admin-input" placeholder="Search by title..." style="margin-bottom: 0; padding-left: 40px; width: 250px;">
+                        </div>
+                        <button class="admin-btn" onclick="openMediaModal()"><i class="fas fa-plus"></i> Upload Content</button>
+                    </div>
                 </div>
                 <div class="table-responsive">
                     <table class="data-table">
@@ -664,6 +673,18 @@
                 tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--danger); padding: 30px;"><i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i> Error loading Database: ${e.message}</td></tr>`;
             }
         };
+
+        // Real-time Search Filter for CMS Table
+        document.getElementById('db-search').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#anime-tbody tr');
+            rows.forEach(row => {
+                if (row.cells.length > 1) { // Skip empty/loading rows
+                    const title = row.cells[1].textContent.toLowerCase();
+                    row.style.display = title.includes(searchTerm) ? '' : 'none';
+                }
+            });
+        });
 
         window.openMediaModal = function() {
             document.getElementById('anime-form').reset();

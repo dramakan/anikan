@@ -6,9 +6,11 @@
     <title>Watch - AnyKan</title>
     
     <meta http-equiv="x-dns-prefetch-control" content="off">
+    
      <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -74,7 +76,7 @@
             .main-header { top: 10px; width: 95%; padding: 12px 15px; border-radius: 24px; }
             .main-header .container { flex-direction: column; gap: 15px; align-items: stretch; }
             .header-top-row { width: 100%; }
-            .nav-links { display: none; } /* Hidden on mobile watch page for clean UI */
+            .nav-links { display: none; }
             .header-download-btn { display: none; }
         }
 
@@ -83,8 +85,18 @@
         .widget-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 20px; color: #fff; display: flex; align-items: center; gap: 8px;}
         .widget-title i { color: var(--primary); font-size: 1.1rem;}
 
-        .video-player-container { position: relative; background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 20px; padding: 12px; margin-bottom: 20px; box-shadow: var(--glass-shadow); aspect-ratio: 16/9; width: 100%; margin-top: 100px; /* Offset for floating header */ }
-        @media (max-width: 992px) { .video-player-container { margin-top: 80px; } }
+        /* FIX: Margin applied to the entire layout container, not just video player */
+        .watch-layout { display: grid; grid-template-columns: 1fr 360px; gap: 30px; margin-top: 100px; }
+        @media (max-width: 992px) {
+            .watch-layout { margin-top: 80px; }
+        }
+        @media (max-width: 1024px) {
+            .watch-layout { grid-template-columns: 1fr; }
+            .sidebar-col { display: flex; flex-direction: column; }
+            .drama-info-widget { order: -1; } 
+        }
+
+        .video-player-container { position: relative; background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 20px; padding: 12px; margin-bottom: 20px; box-shadow: var(--glass-shadow); aspect-ratio: 16/9; width: 100%; }
         .video-player-container iframe { width: 100%; height: 100%; border-radius: 12px; background: #000; border: none; }
         .click-shield { position: absolute; top: 12px; left: 12px; width: calc(100% - 24px); height: calc(100% - 24px); z-index: 10; cursor: pointer; background: transparent; border-radius: 12px; }
 
@@ -220,15 +232,8 @@
         .rec-meta i { color: #f5c518; }
 
         .container { max-width: 1400px; margin: 0 auto; padding: 30px 4%; }
-        .watch-layout { display: grid; grid-template-columns: 1fr 360px; gap: 30px; }
         .main-content-col, .sidebar-col { min-width: 0; width: 100%; } 
         
-        @media (max-width: 1024px) {
-            .watch-layout { grid-template-columns: 1fr; }
-            .sidebar-col { display: flex; flex-direction: column; }
-            .drama-info-widget { order: -1; } 
-        }
-
         /* Apple Liquid Glass Bottom Nav strictly for mobile */
         @media (max-width: 992px) {
             .bottom-nav { display: flex !important; position: fixed !important; bottom: 10px !important; left: 50% !important; transform: translateX(-50%) !important; width: 90% !important; max-width: 400px !important; background: rgba(20, 20, 25, 0.45) !important; backdrop-filter: blur(40px) saturate(180%) !important; -webkit-backdrop-filter: blur(40px) saturate(180%) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; border-top: 1px solid rgba(255, 255, 255, 0.25) !important; border-radius: 50px !important; z-index: 9999 !important; padding: 5px 10px !important; box-shadow: 0 25px 50px rgba(0,0,0,0.7), inset 0 1px 1px rgba(255,255,255,0.1) !important; }
