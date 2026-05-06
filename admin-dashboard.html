@@ -250,6 +250,7 @@
         <div class="brand">Any<span>Kan</span> OS</div>
         <nav class="nav-menu">
             <a class="nav-item active" data-tab="dashboard-tab"><i class="fas fa-chart-pie"></i> Overview</a>
+            <a class="nav-item" data-tab="features-tab"><i class="fas fa-star"></i> Feature Manager</a>
             <a class="nav-item" data-tab="cms-tab"><i class="fas fa-video"></i> Media CMS</a>
             <a class="nav-item" data-tab="mass-upload-tab"><i class="fas fa-layer-group"></i> Mass Import</a>
             <a class="nav-item" data-tab="requests-tab"><i class="fas fa-inbox"></i> Viewer Requests</a>
@@ -270,7 +271,7 @@
             <div class="admin-badge"><i class="fas fa-shield-alt"></i> System Administrator</div>
         </div>
 
-        <!-- NEW OVERVIEW DASHBOARD TAB -->
+        <!-- OVERVIEW DASHBOARD TAB -->
         <section id="dashboard-tab" class="tab-section active">
             <div class="dashboard-grid">
                 <div class="stat-card" style="animation-delay: 0.1s;">
@@ -309,6 +310,52 @@
                 </div>
                 <div class="dashboard-trending-list" id="dash-trending-container">
                     <div style="text-align:center; padding: 30px; color: var(--text-muted);"><i class="fas fa-circle-notch fa-spin"></i> Synchronizing Ranks...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW: FEATURE MANAGER TAB -->
+        <section id="features-tab" class="tab-section">
+            <div class="glass-widget">
+                <div class="widget-header">
+                    <h2 class="widget-title"><i class="fas fa-star"></i> Hero Banner Management</h2>
+                    <button class="admin-btn" onclick="fetchFeatureManager()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Poster</th>
+                                <th>Title</th>
+                                <th>PC Banner</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hero-manage-tbody">
+                            <tr><td colspan="4" style="text-align:center; padding: 20px;"><i class="fas fa-circle-notch fa-spin"></i></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="glass-widget">
+                <div class="widget-header">
+                    <h2 class="widget-title"><i class="fas fa-fire"></i> Trending Management</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Rank / Order</th>
+                                <th>Poster</th>
+                                <th>Title</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trending-manage-tbody">
+                            <tr><td colspan="4" style="text-align:center; padding: 20px;"><i class="fas fa-circle-notch fa-spin"></i></td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
@@ -749,6 +796,101 @@
             }
         };
 
+        // NEW: Fetch and Populate the Feature Manager Tab
+        window.fetchFeatureManager = async function() {
+            const heroTbody = document.getElementById('hero-manage-tbody');
+            const trendTbody = document.getElementById('trending-manage-tbody');
+            heroTbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px;"><i class="fas fa-circle-notch fa-spin"></i></td></tr>';
+            trendTbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px;"><i class="fas fa-circle-notch fa-spin"></i></td></tr>';
+
+            try {
+                const snap = await getDocs(collection(db, "anime"));
+                let heroItems = [];
+                let trendItems = [];
+
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    data.id = doc.id;
+                    if(data.Hero === 'Y') heroItems.push(data);
+                    if(data.Trend === 'T' || data.trendingOrder) trendItems.push(data);
+                });
+
+                // Render Hero Section
+                if(heroItems.length === 0) {
+                    heroTbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No Hero Banners active.</td></tr>';
+                } else {
+                    heroTbody.innerHTML = heroItems.map((item, i) => `
+                        <tr style="animation-delay: ${i * 0.05}s">
+                            <td class="poster-cell"><img src="${item.img}" loading="lazy"></td>
+                            <td style="font-weight:600; color: #fff;">${item.title}</td>
+                            <td>${item.heroPCImg ? `<a href="${item.heroPCImg}" target="_blank" style="color:var(--primary); text-decoration:none;"><i class="fas fa-image"></i> View Wide</a>` : '<span style="color:var(--text-muted);">No PC Banner</span>'}</td>
+                            <td>
+                                <button class="btn-icon btn-delete" onclick="removeHero('${item.id}')" title="Remove from Banner"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                // Render Trending Section
+                trendItems.sort((a, b) => {
+                    const orderA = a.trendingOrder ? parseInt(a.trendingOrder) : 9999;
+                    const orderB = b.trendingOrder ? parseInt(b.trendingOrder) : 9999;
+                    return orderA - orderB;
+                });
+
+                if(trendItems.length === 0) {
+                    trendTbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No Trending items active.</td></tr>';
+                } else {
+                    trendTbody.innerHTML = trendItems.map((item, i) => `
+                        <tr style="animation-delay: ${i * 0.05}s">
+                            <td style="width: 140px;">
+                                <div style="display:flex; gap:10px; align-items:center;">
+                                    <input type="number" id="trend-order-${item.id}" class="admin-input" style="padding: 8px; margin-bottom:0; width:60px; text-align:center;" value="${item.trendingOrder || ''}">
+                                    <button class="btn-icon btn-approve" onclick="updateTrendOrder('${item.id}')" title="Save Rank"><i class="fas fa-save"></i></button>
+                                </div>
+                            </td>
+                            <td class="poster-cell"><img src="${item.img}" loading="lazy"></td>
+                            <td style="font-weight:600; color: #fff;">${item.title}</td>
+                            <td>
+                                <button class="btn-icon btn-delete" onclick="removeTrending('${item.id}')" title="Remove from Trending"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        };
+
+        // Feature Manager Actions
+        window.removeHero = async function(id) {
+            if(confirm("Remove this content from the Hero Banner?")) {
+                await updateDoc(doc(db, "anime", id), { Hero: 'N' });
+                showToast("Removed from Banner.");
+                fetchFeatureManager();
+                fetchAnimeDB(); // Sync CMS table
+            }
+        };
+
+        window.removeTrending = async function(id) {
+            if(confirm("Remove this content from Trending?")) {
+                await updateDoc(doc(db, "anime", id), { Trend: 'N', trendingOrder: null });
+                showToast("Removed from Trending.");
+                fetchFeatureManager();
+                fetchAnimeDB();
+                fetchDashboardStats();
+            }
+        };
+
+        window.updateTrendOrder = async function(id) {
+            const val = document.getElementById('trend-order-' + id).value;
+            await updateDoc(doc(db, "anime", id), { trendingOrder: val ? parseInt(val) : null });
+            showToast("Trending rank updated successfully.");
+            fetchFeatureManager();
+            fetchAnimeDB();
+            fetchDashboardStats();
+        };
+
         // Sidebar Toggle for Mobile
         window.toggleSidebar = function() {
             document.querySelector('.sidebar').classList.toggle('active');
@@ -793,6 +935,7 @@
                 window.location.replace('login.html');
             } else {
                 fetchDashboardStats();
+                fetchFeatureManager();
                 fetchAnimeDB();
                 fetchRequests();
                 fetchUsers();
@@ -1079,6 +1222,8 @@
             
             showToast(`Batch Complete! ${successCount} titles imported.`);
             fetchAnimeDB(); // Refresh table
+            fetchFeatureManager(); // Refresh feature tab
+            fetchDashboardStats();
             
             if(successCount > 0) {
                  // Trigger build hook if at least one was added
@@ -1156,6 +1301,8 @@
                 
                 closeMediaModal();
                 fetchAnimeDB();
+                fetchFeatureManager(); // Refresh feature tab
+                fetchDashboardStats();
                 showToast("Deployed successfully! Site is updating the JSON file.");
 
                 // TRIGGER NETLIFY JSON BUILD HOOK
