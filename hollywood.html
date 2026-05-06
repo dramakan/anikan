@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hollywood Blockbusters - Anykan</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="Anykan-style.css">
+    
+    <style>
+        /* Cinematic Page Styling */
+        .page-spacer { height: 120px; }
+        
+        .cinematic-header {
+            position: relative;
+            padding: 40px 20px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(157, 78, 221, 0.05) 0%, transparent 100%);
+            border-radius: 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(157, 78, 221, 0.1);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .cinematic-header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 100px;
+            background: radial-gradient(ellipse, var(--primary-glow) 0%, transparent 70%);
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .cinematic-header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            color: #fff;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            margin-bottom: 10px;
+        }
+
+        .cinematic-header p {
+            color: var(--text-muted-color);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Movie Grid & Cards */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+            padding-bottom: 60px;
+        }
+
+        .movie-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 2/3;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            animation: cinematicPop 0.6s forwards;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            text-decoration: none;
+            display: block;
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s ease;
+        }
+
+        .movie-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(9, 9, 11, 0.95) 0%, rgba(9, 9, 11, 0.4) 50%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .movie-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 40px var(--primary-glow);
+            border-color: var(--primary-color);
+            z-index: 2;
+        }
+
+        .movie-card:hover .movie-poster {
+            transform: scale(1.1);
+        }
+
+        .movie-card:hover .movie-overlay {
+            opacity: 1;
+        }
+
+        .movie-title {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            transform: translateY(15px);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .movie-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--text-muted-color);
+            transform: translateY(15px);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            transition-delay: 0.05s;
+        }
+
+        .movie-card:hover .movie-title,
+        .movie-card:hover .movie-meta {
+            transform: translateY(0);
+        }
+
+        .quality-badge {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        @keyframes cinematicPop {
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .cinematic-header h1 { font-size: 2.5rem; }
+            .movie-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
+            .movie-title { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-top-row">
+                <div class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <a href="index.html" class="logo">Any<span>Kan</span></a>
+                <div class="header-actions-placeholder">
+                    <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                </div> 
+            </div>
+
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input id="searchInput" type="text" placeholder="Search Hollywood movies...">
+                <div id="searchResults" class="search-results"></div>
+            </div>
+
+            <nav class="nav-links" id="navLinks">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="community.html">Community</a></li>
+                    <li><a href="mylist.html">My List</a></li>
+                </ul>
+            </nav>
+
+            <a href="profile.html" class="header-download-btn" id="topAuthBtn">
+                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Anykan" alt="Profile" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.8);"> Profile
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-spacer"></div>
+
+        <div class="cinematic-header">
+            <h1>Hollywood <span style="color: var(--primary-color);">Blockbusters</span></h1>
+            <p>Experience the biggest global hits, award-winning cinema, and high-octane action in premium quality.</p>
+        </div>
+
+        <div class="movie-grid" id="hollywood-page-grid">
+            <!-- Hollywood content injected here -->
+        </div>
+    </main>
+
+    <!-- Bottom Nav - Pre-logged in configuration -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <i class="fa-solid fa-house nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="community.html" class="bottom-nav-item">
+            <i class="fa-solid fa-users nav-icon"></i>
+            <span class="nav-label">Community</span>
+        </a>
+        <a href="mylist.html" class="bottom-nav-item">
+            <i class="fa-solid fa-bookmark nav-icon"></i>
+            <span class="nav-label">My List</span>
+        </a>
+        <a href="profile.html" class="bottom-nav-item" id="bottomAuthBtn">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Anykan" alt="Profile" class="nav-icon" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-color); margin-bottom: 4px;">
+            <span class="nav-label">Profile</span>
+        </a>
+    </nav>
+
+    <script src="Anykan-script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('hollywood-page-grid');
+            
+            const dbData = localStorage.getItem('Anykan_master_db');
+            if (dbData) {
+                const data = JSON.parse(dbData);
+                
+                // Filter specifically for Hollywood Movies
+                const hollywoodItems = data.filter(d => d.type === "Hollywood Movie");
+                
+                // Optional: Shuffle them so it feels fresh on page load, or sort by date/score
+                hollywoodItems.sort((a, b) => b.createdAt - a.createdAt); // Newest first
+                
+                if (hollywoodItems.length === 0) {
+                    grid.innerHTML = '<p style="text-align: center; color: var(--text-muted-color); grid-column: 1/-1;">No Hollywood movies found in the database.</p>';
+                    return;
+                }
+
+                grid.innerHTML = hollywoodItems.map((media, index) => {
+                    const safeLink = media.link || `watch.html?id=${media.id}`;
+                    const delay = (index % 10) * 0.05; // Batch delay to prevent long waits on huge lists
+                    
+                    return `
+                        <a href="${safeLink}" class="movie-card" style="animation-delay: ${delay}s">
+                            <img src="${media.img}" alt="${media.title}" class="movie-poster" loading="lazy">
+                            <div class="movie-overlay">
+                                <h3 class="movie-title">${media.title}</h3>
+                                <div class="movie-meta">
+                                    <span><i class="fas fa-star" style="color:#f1c40f;"></i> ${media.score || media.imdb || 'N/A'}</span>
+                                    <span class="quality-badge">HD</span>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                }).join('');
+            } else {
+                grid.innerHTML = '<p style="text-align: center; color: var(--text-muted-color); grid-column: 1/-1;">Connecting to Database Engine...</p>';
+            }
+        });
+    </script>
+</body>
+</html>
