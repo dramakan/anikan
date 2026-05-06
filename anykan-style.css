@@ -1,5 +1,5 @@
 /* =====================================================
-   1. GLOBAL RESET & GLASS DESIGN SYSTEM
+   1. GLOBAL RESET & GLASS DESIGN SYSTEM (OPTIMIZED)
 ===================================================== */
 :root {
   /* Anykan Brand Colors */
@@ -56,6 +56,11 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* Smooth Scrolling & Typography Optimization */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Poppins', sans-serif;
   background-color: var(--background-color);
@@ -63,6 +68,8 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   transition: background-color 0.5s cubic-bezier(0.25, 1, 0.5, 1), color 0.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
@@ -90,8 +97,9 @@ img { max-width: 100%; height: auto; display: block; }
   height: 40px;
   border-radius: 50%;
   margin-left: 15px;
+  will-change: transform, background-color;
 }
-.theme-toggle-btn:hover { background: var(--glass-bg); color: var(--primary-color); }
+.theme-toggle-btn:hover { background: var(--glass-bg); color: var(--primary-color); transform: scale(1.05); }
 
 
 /* =====================================================
@@ -114,6 +122,8 @@ img { max-width: 100%; height: auto; display: block; }
   padding: 10px 25px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
   transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform, background-color;
+  transform: translateZ(0);
 }
 
 .main-header .container { display: flex; align-items: center; justify-content: space-between; padding: 0; max-width: 100%;}
@@ -232,6 +242,7 @@ img { max-width: 100%; height: auto; display: block; }
 .slider-nav button { width: 50px; height: 50px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); color: #fff; font-size: 1.2rem; cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
 .slider-nav button:hover { background: var(--primary-color); border-color: var(--primary-color); transform: scale(1.1); box-shadow: 0 10px 25px var(--primary-glow);}
 
+
 /* =====================================================
    4. PLATFORMS MARQUEE (GLASS PILLS)
 ===================================================== */
@@ -242,7 +253,7 @@ img { max-width: 100%; height: auto; display: block; }
     overflow: hidden; 
     white-space: nowrap; 
     position: relative; 
-    display: flex; /* NEW: Forces a rigid horizontal track */
+    display: flex; 
 }
 .marquee-container::before, .marquee-container::after { 
     content: ''; position: absolute; top: 0; width: 150px; height: 100%; z-index: 2; pointer-events: none; transition: background 0.5s cubic-bezier(0.25, 1, 0.5, 1);
@@ -252,16 +263,16 @@ img { max-width: 100%; height: auto; display: block; }
 
 .marquee-content { 
     display: flex; 
-    flex-shrink: 0; /* NEW: Prevents logos from squeezing on small screens */
+    flex-shrink: 0; 
     align-items: center;
     width: max-content; 
-    animation: scroll 30s linear infinite; /* Slightly smoothed out the speed */
+    animation: scroll 30s linear infinite; 
 }
 .marquee-content:hover { animation-play-state: paused; }
 
 @keyframes scroll { 
     0% { transform: translateX(0); } 
-    100% { transform: translateX(-100%); } /* NEW: Scrolls the entire track length */
+    100% { transform: translateX(-100%); } 
 }
 .platform-link {
   display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; margin: 0 8px;
@@ -332,7 +343,7 @@ img { max-width: 100%; height: auto; display: block; }
 .anime-grid.carousel-mode::-webkit-scrollbar-thumb { background: rgba(var(--text-rgb),0.2); border-radius: 10px; }
 .anime-grid.carousel-mode::-webkit-scrollbar-thumb:hover { background: var(--primary-color); box-shadow: 0 0 10px var(--primary-glow); }
 
-/* The Anime Card */
+/* The Anime Card (Hardware Accelerated for Smoothness) */
 .anime-card {
   background: var(--glass-bg);
   backdrop-filter: blur(8px);
@@ -340,13 +351,17 @@ img { max-width: 100%; height: auto; display: block; }
   border: 1px solid var(--glass-border);
   border-radius: 16px;
   overflow: hidden; 
-  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
   position: relative;
   
-  /* PERFORMANCE FIX: Hardware Acceleration for Glassmorphism */
-  transform: translateZ(0);
-  will-change: transform, opacity;
+  /* GPU Rendering Fixes */
+  will-change: transform, box-shadow, border-color, background-color;
+  transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
+  perspective: 1000px;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), 
+              box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              border-color 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              background-color 0.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
 .anime-grid.carousel-mode .anime-card {
@@ -357,7 +372,7 @@ img { max-width: 100%; height: auto; display: block; }
 @media (min-width: 1200px) { .anime-grid.carousel-mode .anime-card { min-width: 185px; max-width: 185px; } }
 
 .anime-card:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: translate3d(0, -8px, 0) scale(1.02) !important;
   background: var(--glass-bg-hover);
   border-color: rgba(157, 78, 221, 0.6);
   box-shadow: 0 15px 30px rgba(157, 78, 221, 0.25);
@@ -365,7 +380,12 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .anime-card-img { width: 100%; aspect-ratio: 4/5; overflow: hidden; }
-.anime-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
+.anime-card-img img { 
+    width: 100%; height: 100%; object-fit: cover; 
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+    transform: translateZ(0);
+}
 .anime-card:hover .anime-card-img img { transform: scale(1.05); }
 
 .anime-card-info { padding: 15px; }
@@ -439,7 +459,6 @@ img { max-width: 100%; height: auto; display: block; }
 ===================================================== */
 @media (max-width: 992px) {
   
-  /* Better Mobile Header Pill */
   .main-header { 
     top: 10px; 
     width: 95%; 
@@ -461,7 +480,6 @@ img { max-width: 100%; height: auto; display: block; }
   .search-bar { width: 100%; margin: 0; }
   .mobile-menu-toggle { display: block; z-index: 10005; font-size: 1.6rem; }
 
-  /* Premium Side Menu Override */
   .nav-links {
     position: fixed; top: 0; left: -110%; width: 280px; height: 100vh;
     background: rgba(var(--bg-rgb), 0.65);
@@ -486,12 +504,11 @@ img { max-width: 100%; height: auto; display: block; }
   .menu-overlay { position: fixed; inset: 0; background: transparent; backdrop-filter: blur(4px); z-index: 998; display: none; }
   .menu-overlay.active { display: block; }
 
-  /* Infinite Scroll Centered Banner Effect Fixes */
   .hero-slider { 
     height: 55vh; 
     min-height: 480px; 
     padding: 0; 
-    margin-top: 80px; /* Safe space for the floating pill header */
+    margin-top: 80px; 
     display: flex; 
     align-items: center; 
     background: transparent; 
@@ -499,7 +516,7 @@ img { max-width: 100%; height: auto; display: block; }
     position: relative; 
   }
   .slider-wrapper { 
-    width: 65%; /* Removed the hard margins, replaced with proper width */
+    width: 65%; 
     margin: 0 auto; 
     display: flex; 
     height: 95%; 
@@ -518,7 +535,6 @@ img { max-width: 100%; height: auto; display: block; }
   .slide-bg-image, .slide-content, .slider-nav { display: none !important; }
   .slide::after { background: linear-gradient(to top, rgba(var(--bg-rgb),0.95) 0%, rgba(var(--bg-rgb),0.2) 60%, transparent 100%); }
 
-  /* --- NEW: MOBILE POSTER OVERRIDE --- */
   .slide::before {
     content: '';
     position: absolute;
@@ -536,7 +552,7 @@ img { max-width: 100%; height: auto; display: block; }
     bottom: 0; 
     left: 0; 
     width: 100%; 
-    padding: 20px; /* Refined padding */
+    padding: 20px; 
     display: flex; 
     align-items: flex-end; 
     justify-content: space-between; 
@@ -547,12 +563,12 @@ img { max-width: 100%; height: auto; display: block; }
   }
   .slide.active .hero-mobile-bar { opacity: 1; pointer-events: auto; }
   .hero-mobile-title { 
-    font-size: 1.25rem; /* Slightly smaller to prevent text wrap issues */
+    font-size: 1.25rem; 
     font-weight: 700; 
     color: var(--text-color); 
     line-height: 1.2; 
     text-shadow: 0 2px 10px rgba(0,0,0,0.6); 
-    max-width: 65%; /* More space for the button */
+    max-width: 65%; 
     margin-bottom: 5px;
   }
   .hero-play-btn { 
@@ -569,7 +585,6 @@ img { max-width: 100%; height: auto; display: block; }
     box-shadow: 0 4px 15px var(--primary-glow); 
   }
 
-  /* Mobile Grid Formatting */
   .anime-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
   .anime-grid.carousel-mode .anime-card { min-width: 130px; max-width: 130px; border-radius: 12px; }
   .anime-card-info { padding: 12px; }
@@ -579,19 +594,14 @@ img { max-width: 100%; height: auto; display: block; }
   .section-title { font-size: 1.3rem; }
   .category-title { font-size: 1.8rem; }
 
-  /* Give the body more padding to clear the floating bottom navs */
   body { padding-bottom: 110px; } 
   
-  /* Moved the FAB up slightly to avoid hitting the bottom nav */
   .anime-fab { bottom: 100px; right: 20px; padding: 12px 18px; border-radius: 50px; }
 
-  /* =====================================================
-     APPLE LIQUID GLASS BOTTOM BAR
-  ===================================================== */
   .bottom-nav {
     display: flex !important; 
     position: fixed !important; 
-    bottom: 15px !important; /* Slightly more lift off the physical screen edge */
+    bottom: 15px !important; 
     left: 50% !important; 
     transform: translateX(-50%) !important; 
     width: 90% !important; 
@@ -620,7 +630,6 @@ img { max-width: 100%; height: auto; display: block; }
   .bottom-nav-item.active .nav-label { font-weight: 700; }
 } 
 
-/* Hide Bottom Nav on Desktop */
 @media (min-width: 993px) {
   .bottom-nav { display: none !important; }
 }
@@ -658,7 +667,6 @@ img { max-width: 100%; height: auto; display: block; }
 .btn-close-popup { background: transparent; border: none; color: var(--text-muted-color); font-size: 1.2rem; cursor: pointer; padding: 0 4px; margin-left: 5px; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
 .btn-close-popup:hover { color: var(--text-color); }
 
-/* Moved the install popup higher on mobile so it doesn't overlap the bottom nav */
 @media (max-width: 992px) { .app-install-popup { bottom: 105px; width: 92%; } }
 
 /* =====================================================
@@ -666,14 +674,14 @@ img { max-width: 100%; height: auto; display: block; }
 ===================================================== */
 .fade-in-section {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1);
-  will-change: opacity, visibility;
+  transform: translate3d(0, 30px, 0);
+  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  will-change: opacity, transform;
 }
 
 .fade-in-section.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
 
 @keyframes cardPopIn {
@@ -685,7 +693,6 @@ img { max-width: 100%; height: auto; display: block; }
    LITE MODE UI (Triggered automatically on budget phones)
 ===================================================== */
 .lite-mode {
-  /* Replace transparent variables with solid, fast-rendering colors */
   --glass-bg: var(--surface-color);
   --glass-bg-hover: rgba(var(--text-rgb), 0.05); 
   --glass-blur: blur(0px); 
@@ -693,7 +700,6 @@ img { max-width: 100%; height: auto; display: block; }
   --glass-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
 }
 
-/* Strip heavy effects from specific elements */
 .lite-mode .anime-card,
 .lite-mode .main-header,
 .lite-mode .community-sidebar,
@@ -705,13 +711,11 @@ img { max-width: 100%; height: auto; display: block; }
   background-color: var(--glass-bg) !important;
 }
 
-/* Simplify the Hero Slider background gradient */
 .lite-mode .slide::after {
   background: rgb(var(--bg-rgb)) !important; 
   opacity: 0.8; 
 }
 
-/* Disable heavy CSS animations on low-end devices */
 .lite-mode * {
   transition-duration: 0.1s !important; 
   animation-duration: 0.01ms !important; 

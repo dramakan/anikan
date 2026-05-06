@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,14 +11,14 @@
     <meta name="keywords" content="watch movies online, free anime streaming, bollywood hits, latest hollywood movies, hindi dubbed dramas, web series online, Anykan, stream HD shows">
     <meta name="author" content="Anykan">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <link rel="canonical" href="https://anykan.fun/"> <!-- CHANGE TO YOUR ACTUAL DOMAIN -->
+    <link rel="canonical" href="https://anykan.fun/">
 
     <!-- Open Graph / Facebook (For Social Media Sharing) -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://anykan.fun/">
     <meta property="og:title" content="Anykan - Watch High-Quality Movies, TV Shows & Anime">
     <meta property="og:description" content="Stream the latest Hollywood blockbusters, Bollywood hits, Hindi Dramas, and HD Anime online. Fast streaming and daily updates.">
-    <meta property="og:image" content="https://anykan.fun/assets/anykan-social-banner.jpg"> <!-- CREATE A 1200x630 BANNER -->
+    <meta property="og:image" content="https://anykan.fun/assets/anykan-social-banner.jpg">
     <meta property="og:site_name" content="Anykan">
 
     <!-- Twitter -->
@@ -39,7 +41,7 @@
     <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.gstatic.com"> <!-- For Firebase -->
+    <link rel="preconnect" href="https://www.gstatic.com">
 
     <!-- Styles & Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -65,6 +67,7 @@
     <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
     <script src="Anykan-script.js" defer></script>
     <script src="Anykan-bottom-bar.js" defer></script>
+    
     <style>
         /* --- NEW PC HEADER & SITE TOGGLE STYLES --- */
         .nav-links {
@@ -86,7 +89,6 @@
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
         }
         
-        /* Strict overrides to protect toggle from mobile-menu CSS conflicts */
         .nav-links .switcher-track .switch-btn {
             padding: 6px 18px !important;
             border-radius: 50px !important;
@@ -101,6 +103,7 @@
             background: transparent !important;
             display: inline-block;
             text-shadow: none !important;
+            will-change: background-color, transform;
         }
         .nav-links .switcher-track .switch-btn.active {
             background: linear-gradient(135deg, #9D4EDD 0%, #7b2cbf 100%) !important;

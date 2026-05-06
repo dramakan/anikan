@@ -106,12 +106,14 @@ document.addEventListener('DOMContentLoaded', function () {
     function populateGrid(elementId, items) {
         const grid = document.getElementById(elementId);
         if (!grid) return;
-        grid.innerHTML = items.map(media => {
+        grid.innerHTML = items.map((media, index) => {
             const safeTitle = encodeURIComponent(media.title);
             const safeImg = encodeURIComponent(media.img);
             const safeLink = encodeURIComponent(media.link || `watch.html?id=${media.id}`);
+            // Smooth stagger delay
+            const delay = (index % 15) * 0.05;
             return `
-            <a href="${media.link || `watch.html?id=${media.id}`}" class="anime-card">
+            <a href="${media.link || `watch.html?id=${media.id}`}" class="anime-card" style="animation-delay: ${delay}s">
                 <div class="anime-card-img"><img src="${media.img}" alt="${media.title}" loading="lazy" decoding="async"></div>
                 <div class="anime-card-info">
                     <h3 class="anime-card-title">${media.title}</h3>
@@ -187,8 +189,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (cwSection && cwGrid) {
                         if(historyArr.length > 0) {
                             cwSection.style.display = 'block';
-                            cwGrid.innerHTML = historyArr.map(item => `
-                                <a href="${item.link}" class="anime-card" style="border-color: rgba(157, 78, 221, 0.4);">
+                            cwGrid.innerHTML = historyArr.map((item, index) => `
+                                <a href="${item.link}" class="anime-card" style="border-color: rgba(157, 78, 221, 0.4); animation-delay: ${index * 0.05}s;">
                                     <div class="anime-card-img"><img src="${item.img}" alt="${item.title}" loading="lazy" decoding="async"></div>
                                     <div class="anime-card-info">
                                         <h3 class="anime-card-title">${item.title}</h3>
@@ -208,7 +210,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // --- 2. ADVANCED TRENDING (Automated + Ordered Manual) ---
             try {
-                // Get organic most viewed stats
                 const fb = await getFirebase();
                 const q = fb.firestoreModule.query(fb.firestoreModule.collection(fb.db, "anime_stats"), fb.firestoreModule.orderBy("views", "desc"), fb.firestoreModule.limit(10));
                 const querySnapshot = await fb.firestoreModule.getDocs(q);
@@ -221,13 +222,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                // Get manual trending from Admin panel
                 const manualTrending = data.filter(d => d.Trend === "T");
-                
-                // Combine and deduplicate
                 let combinedTrending = [...dynamicTrending, ...manualTrending].filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
                 
-                // Sort items mathematically based on trendingOrder input
                 combinedTrending.sort((a, b) => {
                     const orderA = a.trendingOrder ? parseInt(a.trendingOrder) : 9999;
                     const orderB = b.trendingOrder ? parseInt(b.trendingOrder) : 9999;
@@ -236,7 +233,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 populateGrid('trending-grid', combinedTrending.slice(0, 15));
             } catch(e) { 
-                // Fallback sorting if Firebase stats fail
                 let manualTrending = data.filter(d => d.Trend === "T");
                 manualTrending.sort((a, b) => {
                     const orderA = a.trendingOrder ? parseInt(a.trendingOrder) : 9999;
@@ -321,7 +317,6 @@ document.addEventListener('DOMContentLoaded', function () {
             
             currentSlides.forEach(slide => {
                 const img = slide.querySelector('.slide-bg-image');
-                // Uses the src of the slide-bg-image (which handles the PC fallback logic perfectly)
                 if (img) slide.style.backgroundImage = `url('${img.src}')`;
             });
 
@@ -342,12 +337,15 @@ document.addEventListener('DOMContentLoaded', function () {
             startAutoSlide();
         }
 
+        // Smoother cubic-bezier for sliding
+        const sliderBezier = 'transform 0.8s cubic-bezier(0.25, 1, 0.3, 1)';
+
         function moveNext() {
             if (isAnimating) return;
             isAnimating = true;
 
             if (window.innerWidth <= 992 && sliderWrapper.children.length > 1) {
-                sliderWrapper.style.transition = 'transform 0.7s cubic-bezier(0.25, 1, 0.5, 1)';
+                sliderWrapper.style.transition = sliderBezier;
                 sliderWrapper.style.transform = `translateX(-200%)`;
                 
                 if(sliderWrapper.children[1]) sliderWrapper.children[1].classList.remove('active');
@@ -358,13 +356,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     sliderWrapper.appendChild(sliderWrapper.firstElementChild);
                     sliderWrapper.style.transform = `translateX(-100%)`;
                     isAnimating = false;
-                }, 700);
+                }, 800);
             } else {
                 const totalPC = sliderWrapper.children.length;
                 slideIndex = (slideIndex + 1) % totalPC;
-                sliderWrapper.style.transition = 'transform 0.7s cubic-bezier(0.25, 1, 0.5, 1)';
+                sliderWrapper.style.transition = sliderBezier;
                 sliderWrapper.style.transform = `translateX(-${slideIndex * 100}%)`;
-                setTimeout(() => { isAnimating = false; }, 700);
+                setTimeout(() => { isAnimating = false; }, 800);
             }
         }
 
@@ -373,7 +371,7 @@ document.addEventListener('DOMContentLoaded', function () {
             isAnimating = true;
 
             if (window.innerWidth <= 992 && sliderWrapper.children.length > 1) {
-                sliderWrapper.style.transition = 'transform 0.7s cubic-bezier(0.25, 1, 0.5, 1)';
+                sliderWrapper.style.transition = sliderBezier;
                 sliderWrapper.style.transform = `translateX(0%)`;
                 
                 if(sliderWrapper.children[1]) sliderWrapper.children[1].classList.remove('active');
@@ -384,19 +382,19 @@ document.addEventListener('DOMContentLoaded', function () {
                     sliderWrapper.prepend(sliderWrapper.lastElementChild);
                     sliderWrapper.style.transform = `translateX(-100%)`;
                     isAnimating = false;
-                }, 700);
+                }, 800);
             } else {
                 const totalPC = sliderWrapper.children.length;
                 slideIndex = (slideIndex - 1 + totalPC) % totalPC;
-                sliderWrapper.style.transition = 'transform 0.7s cubic-bezier(0.25, 1, 0.5, 1)';
+                sliderWrapper.style.transition = sliderBezier;
                 sliderWrapper.style.transform = `translateX(-${slideIndex * 100}%)`;
-                setTimeout(() => { isAnimating = false; }, 700);
+                setTimeout(() => { isAnimating = false; }, 800);
             }
         }
 
         function startAutoSlide() {
             clearInterval(autoSlideInterval);
-            autoSlideInterval = setInterval(moveNext, window.innerWidth <= 992 ? 3500 : 5000);
+            autoSlideInterval = setInterval(moveNext, window.innerWidth <= 992 ? 4000 : 5500);
         }
 
         function resetAutoSlide() { startAutoSlide(); }
@@ -457,11 +455,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (btn) window.location.href = btn.getAttribute('href');
             else if (mobileLink) window.location.href = mobileLink.getAttribute('href');
         });
-
-        // initSlider() is called dynamically once JSON is fetched!
     }
     
-    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+    // Smoother intersection observer
+    const observerOptions = { root: null, rootMargin: '50px', threshold: 0.1 };
     const sectionObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -568,63 +565,34 @@ document.addEventListener("DOMContentLoaded", function() {
 // 🔥 ADMIN EASTER EGG (SECRET UNLOCK) 🔥
 // ==========================================
 (function initAdminEasterEgg() {
-    // --- 1. MOBILE TRIGGER: 5 Rapid Taps on Footer ---
     let tapCount = 0;
     let tapTimer;
-    
-    // Look for the main footer
     const footer = document.querySelector('.main-footer');
     if (footer) {
         footer.addEventListener('click', () => {
             tapCount++;
             clearTimeout(tapTimer);
-            
-            // If tapped 5 times, trigger unlock
             if (tapCount >= 5) {
                 triggerAdminUnlock();
-                tapCount = 0; // Reset
+                tapCount = 0; 
             }
-            
-            // Reset counter if they pause for more than 800ms
-            tapTimer = setTimeout(() => {
-                tapCount = 0;
-            }, 800);
+            tapTimer = setTimeout(() => { tapCount = 0; }, 800);
         });
     }
 
-    // --- 2. PC TRIGGER: Type "admin" ---
     let keyBuffer = '';
     const secretWord = 'admin';
-
     document.addEventListener('keydown', (e) => {
-        // Ignore if typing inside a search bar or comment box
         if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'textarea') return;
-        
-        // Add keystroke to buffer
         keyBuffer += e.key.toLowerCase();
-        
-        // Keep buffer size manageable
-        if (keyBuffer.length > secretWord.length) {
-            keyBuffer = keyBuffer.substring(1);
-        }
-        
-        // Check if buffer matches the secret word
-        if (keyBuffer === secretWord) {
-            triggerAdminUnlock();
-            keyBuffer = ''; // Reset
-        }
+        if (keyBuffer.length > secretWord.length) keyBuffer = keyBuffer.substring(1);
+        if (keyBuffer === secretWord) { triggerAdminUnlock(); keyBuffer = ''; }
     });
 
-    // --- 3. THE COOL ANIMATION & REDIRECT ---
     function triggerAdminUnlock() {
-        // Prevent multiple triggers running at once
         if (document.getElementById('anykan-override-overlay')) return;
-
-        // Create Fullscreen Overlay
         const overlay = document.createElement('div');
         overlay.id = 'anykan-override-overlay';
-        
-        // Inject Inline Styles & HTML for the animation
         overlay.innerHTML = `
             <div class="override-container">
                 <i class="fas fa-fingerprint scanner-icon"></i>
@@ -636,34 +604,15 @@ document.addEventListener("DOMContentLoaded", function() {
                     display: flex; flex-direction: column; justify-content: center; alignItems: center;
                     opacity: 0; transition: opacity 0.5s ease;
                 }
-                .override-container {
-                    text-align: center;
-                    display: flex; flex-direction: column; align-items: center;
-                }
-                .scanner-icon {
-                    font-size: 5rem; color: #9D4EDD; margin-bottom: 25px;
-                    text-shadow: 0 0 30px rgba(157, 78, 221, 0.8);
-                    animation: pulseScan 1s infinite alternate;
-                }
-                .override-text {
-                    color: #fff; font-family: monospace; font-size: 1.4rem; font-weight: 600;
-                    letter-spacing: 4px; text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
-                }
+                .override-container { text-align: center; display: flex; flex-direction: column; align-items: center; }
+                .scanner-icon { font-size: 5rem; color: #9D4EDD; margin-bottom: 25px; text-shadow: 0 0 30px rgba(157, 78, 221, 0.8); animation: pulseScan 1s infinite alternate; }
+                .override-text { color: #fff; font-family: monospace; font-size: 1.4rem; font-weight: 600; letter-spacing: 4px; text-shadow: 0 0 15px rgba(255, 255, 255, 0.4); }
                 .text-success { color: #10B981 !important; text-shadow: 0 0 20px rgba(16, 185, 129, 0.8) !important; }
-                
-                @keyframes pulseScan {
-                    0% { transform: scale(0.95); filter: brightness(0.8); }
-                    100% { transform: scale(1.05); filter: brightness(1.5); }
-                }
+                @keyframes pulseScan { 0% { transform: scale(0.95); filter: brightness(0.8); } 100% { transform: scale(1.05); filter: brightness(1.5); } }
             </style>
         `;
-
         document.body.appendChild(overlay);
-
-        // Sequence 1: Fade In Overlay
         setTimeout(() => overlay.style.opacity = '1', 50);
-
-        // Sequence 2: Access Granted (Green Success)
         setTimeout(() => {
             const textEl = document.getElementById('unlock-text');
             textEl.innerText = "ACCESS GRANTED";
@@ -671,15 +620,7 @@ document.addEventListener("DOMContentLoaded", function() {
             document.querySelector('.scanner-icon').style.color = '#10B981';
             document.querySelector('.scanner-icon').style.textShadow = '0 0 30px rgba(16, 185, 129, 0.8)';
         }, 1200);
-
-        // Sequence 3: Booting OS
-        setTimeout(() => {
-            document.getElementById('unlock-text').innerText = "BOOTING ANYKAN OS...";
-        }, 2000);
-        
-        // Sequence 4: Redirect to Dashboard
-        setTimeout(() => {
-            window.location.href = 'admin-dashboard.html'; // Ensure this matches your actual admin file name
-        }, 2800);
+        setTimeout(() => { document.getElementById('unlock-text').innerText = "BOOTING ANYKAN OS..."; }, 2000);
+        setTimeout(() => { window.location.href = 'admin-dashboard.html'; }, 2800);
     }
 })();
