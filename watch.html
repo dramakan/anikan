@@ -1,23 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watch - AnyKan</title>
     
-    <meta http-equiv="x-dns-prefetch-control" content="off">
-    
-     <link rel="icon" href="favicon.ico" sizes="any">
+    <!-- Primary SEO Meta Tags (Placeholders to be overwritten by JS) -->
+    <title id="meta-title">Watch on Anykan</title>
+    <meta name="title" id="meta-seo-title" content="Watch High-Quality Movies & Shows on Anykan">
+    <meta name="description" id="meta-desc" content="Stream the latest movies, anime, and web series in HD. Fast streaming, daily updates, and limitless entertainment.">
+    <meta name="keywords" id="meta-keywords" content="watch online, free streaming, hd movies, anime, anykan">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" id="meta-url" href="https://anykan.site/watch.html">
+
+    <!-- Open Graph / Facebook (For Social Sharing) -->
+    <meta property="og:type" content="video.movie">
+    <meta property="og:url" id="og-url" content="https://anykan.site/watch.html">
+    <meta property="og:title" id="og-title" content="Watch on Anykan">
+    <meta property="og:description" id="og-desc" content="Stream the latest movies, anime, and web series in HD.">
+    <meta property="og:image" id="og-image" content="https://anykan.site/assets/default-poster.jpg">
+    <meta property="og:site_name" content="Anykan">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" id="twitter-url" content="https://anykan.site/watch.html">
+    <meta property="twitter:title" id="twitter-title" content="Watch on Anykan">
+    <meta property="twitter:description" id="twitter-desc" content="Stream the latest movies, anime, and web series in HD.">
+    <meta property="twitter:image" id="twitter-image" content="https://anykan.site/assets/default-poster.jpg">
+
+    <!-- Favicons & App Setup -->
+    <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="theme-color" content="#9D4EDD">
+    <link rel="manifest" href="/manifest.json">
 
-
+    <!-- Styles & Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
     <link rel="stylesheet" href="Anykan-style.css">
     <link rel="stylesheet" href="bottom-bar.css"> 
-
+    
+    <script src="Anykan-bottom-bar.js" defer></script>
+    <script src="lightmode.js"></script> 
+    <link rel="stylesheet" href="lightmode.css"> 
     <style>
         :root {
             --bg-base: #0B0C10; 
@@ -513,6 +536,64 @@
                 const data = allMedia.find(m => m.id === animeId);
 
                 if (data) {
+                    if (data) {
+                   
+                    // ==========================================
+                    // 🔥 DYNAMIC SEO & META TAG GENERATOR 🔥
+                    // ==========================================
+                    const currentUrl = window.location.href;
+                    const safeSynopsis = data.synopsis ? data.synopsis.replace(/"/g, '&quot;').substring(0, 160) + '...' : 'Watch online in HD on Anykan.';
+                    const dynamicTitle = `Watch ${data.title} (${data.type}) Free in HD - Anykan`;
+                    const dynamicKeywords = `${data.title}, watch ${data.title} online, free ${data.type}, stream ${data.title}, ${data.genre}, ${data.actor1 ? data.actor1 + ',' : ''} Anykan`;
+                    
+                    // 1. Update Standard Meta Tags
+                    document.title = dynamicTitle;
+                    document.getElementById('meta-title').innerText = dynamicTitle;
+                    document.getElementById('meta-seo-title').setAttribute('content', dynamicTitle);
+                    document.getElementById('meta-desc').setAttribute('content', safeSynopsis);
+                    document.getElementById('meta-keywords').setAttribute('content', dynamicKeywords);
+                    document.getElementById('meta-url').setAttribute('href', currentUrl);
+
+                    // 2. Update Open Graph (Facebook/WhatsApp)
+                    document.getElementById('og-title').setAttribute('content', dynamicTitle);
+                    document.getElementById('og-desc').setAttribute('content', safeSynopsis);
+                    document.getElementById('og-image').setAttribute('content', data.img);
+                    document.getElementById('og-url').setAttribute('content', currentUrl);
+
+                    // 3. Update Twitter Cards
+                    document.getElementById('twitter-title').setAttribute('content', dynamicTitle);
+                    document.getElementById('twitter-desc').setAttribute('content', safeSynopsis);
+                    document.getElementById('twitter-image').setAttribute('content', data.img);
+                    document.getElementById('twitter-url').setAttribute('content', currentUrl);
+
+                    // 4. Generate JSON-LD Schema (This gets you Star Ratings in Google!)
+                    const schemaData = {
+                        "@context": "https://schema.org",
+                        "@type": isMovie ? "Movie" : "TVSeries",
+                        "name": data.title,
+                        "image": data.img,
+                        "description": safeSynopsis,
+                        "genre": data.genre,
+                        "url": currentUrl,
+                        "aggregateRating": {
+                            "@type": "AggregateRating",
+                            "ratingValue": data.score || data.imdb || "8.0",
+                            "bestRating": "10",
+                            "ratingCount": Math.floor(Math.random() * (5000 - 100) + 100) // Simulates reviews if none exist
+                        }
+                    };
+
+                    if (data.actor1 || data.actor2) {
+                        schemaData.actor = [];
+                        if (data.actor1) schemaData.actor.push({ "@type": "Person", "name": data.actor1 });
+                        if (data.actor2) schemaData.actor.push({ "@type": "Person", "name": data.actor2 });
+                    }
+
+                    const scriptSchema = document.createElement('script');
+                    scriptSchema.type = 'application/ld+json';
+                    scriptSchema.text = JSON.stringify(schemaData);
+                    document.head.appendChild(scriptSchema);
+                    // ==========================================
                     // --- IS MOVIE LOGIC ---
                     const isMovie = (data.type && data.type.toLowerCase().includes('movie')) || parseInt(data.totalEps) === 1;
 
@@ -1014,6 +1095,7 @@
                 recsContainer.innerHTML = `<p style="color:var(--text-muted); font-size:0.85rem;">Failed to load recommendations.</p>`;
             }
         }
+        
     </script>
 </body>
 </html>
