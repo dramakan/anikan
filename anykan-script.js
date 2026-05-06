@@ -135,6 +135,39 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.setItem('Anykan_master_db', JSON.stringify(data));
             fuse = new Fuse(data, { keys: ['title'], threshold: 0.4 });
 
+            // --- 1. DYNAMIC HERO SLIDER ---
+            const heroWrapper = document.getElementById('hero-slider-wrapper');
+            if (heroWrapper) {
+                // Filter content marked as Hero in Admin Panel
+                let heroItems = data.filter(d => d.Hero === 'Y');
+                
+                // Fallback: If nothing is marked as Hero, use 3 trending items
+                if (heroItems.length === 0) {
+                    heroItems = data.slice(0, 3); 
+                }
+                
+                heroWrapper.innerHTML = heroItems.map(item => {
+                    const safeLink = item.link || `watch.html?id=${item.id}`;
+                    return `
+                    <div class="slide" style="--mobile-poster: url('${item.img}');">
+                        <img class="slide-bg-image" src="${item.img}" alt="${item.title}">
+                        <div class="slide-content">
+                            <h1 class="slide-title">${item.title}</h1>
+                            <div class="slide-meta"><span>⭐ ${item.imdb || item.score || 'N/A'}</span><span>${item.type}</span></div>
+                            <p class="slide-desc">${item.synopsis}</p>
+                            <a href="${safeLink}" class="btn btn-primary">Watch Now</a>
+                        </div>
+                        <div class="hero-mobile-bar">
+                            <div class="hero-mobile-title">${item.title}</div>
+                            <a href="${safeLink}"><button class="hero-play-btn"><i class="fas fa-play"></i></button></a>
+                        </div>
+                    </div>`;
+                }).join('');
+                
+                // Triggers the slider drag/swipe logic after rendering
+                initSlider(); 
+            }
+
             function renderContinueWatching() {
                 try {
                     const historyObj = JSON.parse(localStorage.getItem('Anykan_history')) || {};
@@ -167,10 +200,34 @@ document.addEventListener('DOMContentLoaded', function () {
             renderContinueWatching(); 
             window.addEventListener('historySynced', renderContinueWatching);
 
-            // RENDER TRENDING
-            populateGrid('trending-grid', data.filter(d => d.Trend === "T").slice(0, 15));
+            // --- 2. ADVANCED TRENDING (Automated + Manual) ---
+            try {
+                // Get the organic most viewed stats
+                const fb = await getFirebase();
+                const q = fb.firestoreModule.query(fb.firestoreModule.collection(fb.db, "anime_stats"), fb.firestoreModule.orderBy("views", "desc"), fb.firestoreModule.limit(10));
+                const querySnapshot = await fb.firestoreModule.getDocs(q);
+                
+                let dynamicTrending = [];
+                querySnapshot.forEach((docStats) => {
+                    if(docStats.data().title) {
+                        const found = data.find(d => d.title && d.title.toLowerCase() === docStats.data().title.toLowerCase());
+                        if(found) dynamicTrending.push(found);
+                    }
+                });
 
-            // UNIVERSAL MEDIA GRID MAPPING
+                // Get manual trending from Admin panel
+                const manualTrending = data.filter(d => d.Trend === "T");
+                
+                // Combine and deduplicate
+                const combinedTrending = [...dynamicTrending, ...manualTrending].filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+                
+                populateGrid('trending-grid', combinedTrending.slice(0, 15));
+            } catch(e) { 
+                // Fallback to purely manual trending if Firebase organic check fails
+                populateGrid('trending-grid', data.filter(d => d.Trend === "T").slice(0, 15)); 
+            }
+
+            // --- 3. UNIVERSAL MEDIA GRID MAPPING ---
             const gridConfigs = [
                 { id: 'hollywood-grid', filterType: "Hollywood Movie" },
                 { id: 'bollywood-grid', filterType: "Bollywood Movie" },
@@ -381,7 +438,7 @@ document.addEventListener('DOMContentLoaded', function () {
             else if (mobileLink) window.location.href = mobileLink.getAttribute('href');
         });
 
-        initSlider();
+        // DO NOT call initSlider here anymore. It gets called dynamically inside initializeAnimeSite!
     }
     const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
     const sectionObserver = new IntersectionObserver((entries, observer) => {
