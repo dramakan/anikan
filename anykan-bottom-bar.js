@@ -98,7 +98,6 @@ Promise.all([
     const { getAuth, onAuthStateChanged } = authModule;
     const { getFirestore, doc, getDoc } = fsModule;
 
-    // --- FIXED CONFIG: Now matches bhx-beats ---
     const firebaseConfig = {
       apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
       authDomain: "bhx-beats.firebaseapp.com",
@@ -157,7 +156,6 @@ window.toggleMyList = async function(btn, title, img, link) {
         const { getAuth } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js");
         const { getFirestore, doc, setDoc, arrayUnion } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
         
-        // --- FIXED CONFIG: Now matches bhx-beats ---
         const firebaseConfig = {
           apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
           authDomain: "bhx-beats.firebaseapp.com",
@@ -193,67 +191,122 @@ window.toggleMyList = async function(btn, title, img, link) {
         alert("Error saving to My List.");
     }
 };
+
+// ==========================================
+// 5. GLOBAL PWA INSTALLATION SYSTEM
+// ==========================================
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Failed', err));
+    });
+}
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent Chrome from automatically showing the prompt
+    e.preventDefault();
+    // Stash the event so it can be triggered later
+    deferredPrompt = e;
+    
+    const installPopup = document.getElementById('appInstallPopup');
+    const isInstalled = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone || localStorage.getItem('Anykan_installed') === 'true';
+    
+    // Show the popup ONLY if it hasn't been dismissed or installed yet
+    if (installPopup && sessionStorage.getItem('hideInstallPopup') !== 'true' && !isInstalled) {
+        installPopup.classList.remove('hidden');
+    }
+});
+
+window.addEventListener('appinstalled', () => {
+    console.log('Anykan was installed.');
+    localStorage.setItem('Anykan_installed', 'true');
+    const installPopup = document.getElementById('appInstallPopup');
+    if (installPopup) installPopup.classList.add('hidden');
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const installPopup = document.getElementById('appInstallPopup');
+    const closeInstallBtn = document.getElementById('closeInstallPopup');
+    const installAppBtn = document.getElementById('installAppBtn');
+    
+    const isInstalled = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone || localStorage.getItem('Anykan_installed') === 'true';
+    
+    if (installPopup) {
+        // Keep it hidden if already installed or dismissed previously
+        if (sessionStorage.getItem('hideInstallPopup') === 'true' || isInstalled) {
+            installPopup.classList.add('hidden');
+        } else if (!deferredPrompt) {
+            // If the browser hasn't fired beforeinstallprompt yet, keep it hidden
+            installPopup.classList.add('hidden');
+        }
+
+        if (closeInstallBtn) {
+            closeInstallBtn.addEventListener('click', () => {
+                installPopup.classList.add('hidden');
+                sessionStorage.setItem('hideInstallPopup', 'true'); // Remembers dismissal for this session
+            });
+        }
+
+        // Logic for clicking the actual "Install" button
+        if (installAppBtn) {
+            installAppBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                if (deferredPrompt) {
+                    // Show the native browser install prompt
+                    deferredPrompt.prompt();
+                    // Wait for the user to respond
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        localStorage.setItem('Anykan_installed', 'true');
+                    }
+                    deferredPrompt = null;
+                    installPopup.classList.add('hidden');
+                } else {
+                    // Fallback for browsers like iOS Safari that don't support automated prompts
+                    alert("To install Anykan, tap the 'Share' icon in your browser and select 'Add to Home Screen'.");
+                    installPopup.classList.add('hidden');
+                }
+            });
+        }
+    }
+});
+
 // ==========================================
 // 🔥 ADMIN EASTER EGG (SECRET UNLOCK) 🔥
 // ==========================================
 (function initAdminEasterEgg() {
-    // --- 1. MOBILE TRIGGER: 5 Rapid Taps on Footer ---
     let tapCount = 0;
     let tapTimer;
     
-    // Look for the main footer
     const footer = document.querySelector('.main-footer');
     if (footer) {
         footer.addEventListener('click', () => {
             tapCount++;
             clearTimeout(tapTimer);
-            
-            // If tapped 5 times, trigger unlock
             if (tapCount >= 5) {
                 triggerAdminUnlock();
-                tapCount = 0; // Reset
+                tapCount = 0; 
             }
-            
-            // Reset counter if they pause for more than 800ms
-            tapTimer = setTimeout(() => {
-                tapCount = 0;
-            }, 800);
+            tapTimer = setTimeout(() => { tapCount = 0; }, 800);
         });
     }
 
-    // --- 2. PC TRIGGER: Type "admin" ---
     let keyBuffer = '';
     const secretWord = 'admin';
 
     document.addEventListener('keydown', (e) => {
-        // Ignore if typing inside a search bar or comment box
         if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'textarea') return;
-        
-        // Add keystroke to buffer
         keyBuffer += e.key.toLowerCase();
-        
-        // Keep buffer size manageable
-        if (keyBuffer.length > secretWord.length) {
-            keyBuffer = keyBuffer.substring(1);
-        }
-        
-        // Check if buffer matches the secret word
-        if (keyBuffer === secretWord) {
-            triggerAdminUnlock();
-            keyBuffer = ''; // Reset
-        }
+        if (keyBuffer.length > secretWord.length) keyBuffer = keyBuffer.substring(1);
+        if (keyBuffer === secretWord) { triggerAdminUnlock(); keyBuffer = ''; }
     });
 
-    // --- 3. THE COOL ANIMATION & REDIRECT ---
     function triggerAdminUnlock() {
-        // Prevent multiple triggers running at once
         if (document.getElementById('anykan-override-overlay')) return;
-
-        // Create Fullscreen Overlay
         const overlay = document.createElement('div');
         overlay.id = 'anykan-override-overlay';
         
-        // Inject Inline Styles & HTML for the animation
         overlay.innerHTML = `
             <div class="override-container">
                 <i class="fas fa-fingerprint scanner-icon"></i>
@@ -265,34 +318,17 @@ window.toggleMyList = async function(btn, title, img, link) {
                     display: flex; flex-direction: column; justify-content: center; alignItems: center;
                     opacity: 0; transition: opacity 0.5s ease;
                 }
-                .override-container {
-                    text-align: center;
-                    display: flex; flex-direction: column; align-items: center;
-                }
-                .scanner-icon {
-                    font-size: 5rem; color: #9D4EDD; margin-bottom: 25px;
-                    text-shadow: 0 0 30px rgba(157, 78, 221, 0.8);
-                    animation: pulseScan 1s infinite alternate;
-                }
-                .override-text {
-                    color: #fff; font-family: monospace; font-size: 1.4rem; font-weight: 600;
-                    letter-spacing: 4px; text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
-                }
+                .override-container { text-align: center; display: flex; flex-direction: column; align-items: center; }
+                .scanner-icon { font-size: 5rem; color: #9D4EDD; margin-bottom: 25px; text-shadow: 0 0 30px rgba(157, 78, 221, 0.8); animation: pulseScan 1s infinite alternate; }
+                .override-text { color: #fff; font-family: monospace; font-size: 1.4rem; font-weight: 600; letter-spacing: 4px; text-shadow: 0 0 15px rgba(255, 255, 255, 0.4); }
                 .text-success { color: #10B981 !important; text-shadow: 0 0 20px rgba(16, 185, 129, 0.8) !important; }
-                
-                @keyframes pulseScan {
-                    0% { transform: scale(0.95); filter: brightness(0.8); }
-                    100% { transform: scale(1.05); filter: brightness(1.5); }
-                }
+                @keyframes pulseScan { 0% { transform: scale(0.95); filter: brightness(0.8); } 100% { transform: scale(1.05); filter: brightness(1.5); } }
             </style>
         `;
 
         document.body.appendChild(overlay);
-
-        // Sequence 1: Fade In Overlay
         setTimeout(() => overlay.style.opacity = '1', 50);
 
-        // Sequence 2: Access Granted (Green Success)
         setTimeout(() => {
             const textEl = document.getElementById('unlock-text');
             textEl.innerText = "ACCESS GRANTED";
@@ -301,14 +337,7 @@ window.toggleMyList = async function(btn, title, img, link) {
             document.querySelector('.scanner-icon').style.textShadow = '0 0 30px rgba(16, 185, 129, 0.8)';
         }, 1200);
 
-        // Sequence 3: Booting OS
-        setTimeout(() => {
-            document.getElementById('unlock-text').innerText = "BOOTING ANYKAN OS...";
-        }, 2000);
-        
-        // Sequence 4: Redirect to Dashboard
-        setTimeout(() => {
-            window.location.href = 'admin-dashboard.html'; // Ensure this matches your actual admin file name
-        }, 2800);
+        setTimeout(() => { document.getElementById('unlock-text').innerText = "BOOTING ANYKAN OS..."; }, 2000);
+        setTimeout(() => { window.location.href = 'admin-dashboard.html'; }, 2800);
     }
 })();
