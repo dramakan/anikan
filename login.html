@@ -164,6 +164,30 @@
             border-radius: 10px;
             border: 1px solid rgba(255, 77, 77, 0.3);
         }
+        
+        .auth-success {
+            color: #10B981;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .forgot-link {
+            display: block;
+            text-align: right;
+            color: var(--text-muted-color);
+            font-size: 0.85rem;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .forgot-link:hover { color: var(--primary-color); }
 
         .back-home {
             position: absolute;
@@ -188,8 +212,8 @@
 
     <div class="auth-container">
         <div class="auth-header">
-            <a href="index.html" class="auth-logo">Ani<span>Kan</span></a>
-            <p style="color: var(--text-muted-color); font-size: 0.9rem; margin: 0;">Unlock your personal anime universe.</p>
+            <a href="index.html" class="auth-logo">Any<span>kan</span></a>
+            <p style="color: var(--text-muted-color); font-size: 0.9rem; margin: 0;">Unlock your personal universe.</p>
         </div>
 
         <div class="auth-tabs">
@@ -202,12 +226,15 @@
                 <input type="email" id="login-email" class="auth-input" placeholder="Email Address" required>
                 <i class="fas fa-envelope"></i>
             </div>
-            <div class="input-group">
+            <div class="input-group" style="margin-bottom: 10px;">
                 <input type="password" id="login-password" class="auth-input" placeholder="Password" required>
                 <i class="fas fa-lock"></i>
             </div>
+            <a href="#" class="forgot-link" id="forgot-password">Forgot Password?</a>
+            
             <button type="submit" class="auth-btn" id="btn-login-submit">Continue to Anykan <i class="fas fa-arrow-right"></i></button>
             <div id="login-error" class="auth-error"></div>
+            <div id="login-success" class="auth-success"></div>
         </form>
 
         <form id="register-form" class="auth-form">
@@ -230,19 +257,19 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        // Added sendPasswordResetEmail to the import list
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-              // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
-  authDomain: "bhx-beats.firebaseapp.com",
-  projectId: "bhx-beats",
-  storageBucket: "bhx-beats.firebasestorage.app",
-  messagingSenderId: "491393581039",
-  appId: "1:491393581039:web:8204fb8753094a64a9401a",
-  measurementId: "G-PCV97GFYQ7"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
+            authDomain: "bhx-beats.firebaseapp.com",
+            projectId: "bhx-beats",
+            storageBucket: "bhx-beats.firebasestorage.app",
+            messagingSenderId: "491393581039",
+            appId: "1:491393581039:web:8204fb8753094a64a9401a",
+            measurementId: "G-PCV97GFYQ7"
+        };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -255,6 +282,7 @@ const firebaseConfig = {
         const formRegister = document.getElementById('register-form');
         
         const loginError = document.getElementById('login-error');
+        const loginSuccess = document.getElementById('login-success');
         const registerError = document.getElementById('register-error');
 
         tabLogin.addEventListener('click', () => {
@@ -263,6 +291,7 @@ const firebaseConfig = {
             formLogin.classList.add('active');
             formRegister.classList.remove('active');
             loginError.style.display = 'none';
+            loginSuccess.style.display = 'none';
         });
 
         tabRegister.addEventListener('click', () => {
@@ -273,6 +302,62 @@ const firebaseConfig = {
             registerError.style.display = 'none';
         });
 
+        // ==========================================
+        // EMAIL DISPATCH SYSTEM
+        // ==========================================
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDC_CTLVc0S12-mcV_IVvvjMOfh-b-rJslYwxvyBCOF3S9HqX24RxBZjvse6IsLfcHoQ/exec";
+
+        async function sendWelcomeEmail(userEmail) {
+            const welcomeHtml = `<!DOCTYPE html><html><body style="background-color: #09090B; margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background-color: #09090B; padding: 40px 10px;"><tr><td align="center"><table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #121217; border-radius: 24px; border: 1px solid #27272A; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.8);"><tr><td style="background-color: #9D4EDD; height: 6px;"></td></tr><tr><td align="center" style="padding: 40px 20px 20px;"><h1 style="color: #FFFFFF; font-size: 28px; margin: 0; letter-spacing: -1px;">Any<span style="color: #c488ff;">kan</span></h1></td></tr><tr><td style="padding: 30px 40px;"><h2 style="color: #FFFFFF; margin: 0 0 10px 0; font-size: 24px;">Welcome to the Universe! 🚀</h2><p style="color: #A1A1AA; font-size: 15px; margin: 0 0 25px 0; line-height: 1.6;">Your ultimate gateway to endless entertainment is officially open. Movies, shows, anime, and more—everything you love, all in one place.</p><table width="100%" cellpadding="0" cellspacing="0" style="background-color: #1C1C24; border-radius: 12px; padding: 20px;"><tr><td style="color: #E4E4E7; font-size: 14px; padding-bottom: 10px;"><strong style="color: #c488ff;">&bull;</strong> Save your favorites</td></tr><tr><td style="color: #E4E4E7; font-size: 14px; padding-bottom: 10px;"><strong style="color: #c488ff;">&bull;</strong> Cross-device Cloud Sync</td></tr><tr><td style="color: #E4E4E7; font-size: 14px;"><strong style="color: #c488ff;">&bull;</strong> Ad-free experience</td></tr></table></td></tr><tr><td align="center" style="padding: 10px 40px 40px;"><a href="https://anykan.fun" style="display: inline-block; background-color: #9D4EDD; color: #FFFFFF; font-size: 16px; font-weight: bold; text-decoration: none; padding: 16px 40px; border-radius: 50px;">Start Exploring &rarr;</a></td></tr><tr><td align="center" style="padding: 25px; background-color: #0E0E11; border-top: 1px solid #27272A;"><p style="margin: 0; font-size: 12px; color: #71717A;">&copy; 2026 Anykan OS. All rights reserved.</p></td></tr></table></td></tr></table><\/body><\/html>`;
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ emails: [userEmail], subject: "Welcome to Anykan! 🚀", html: welcomeHtml })
+                });
+            } catch (e) { console.log("Email dispatch failed", e); }
+        }
+
+        async function sendWelcomeBackEmail(userEmail) {
+            const welcomeBackHtml = `<!DOCTYPE html><html><body style="background-color: #09090B; margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background-color: #09090B; padding: 40px 10px;"><tr><td align="center"><table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #121217; border-radius: 24px; border: 1px solid #27272A; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.8);"><tr><td style="background-color: #9D4EDD; height: 6px;"></td></tr><tr><td align="center" style="padding: 40px 20px 20px;"><h1 style="color: #FFFFFF; font-size: 28px; margin: 0; letter-spacing: -1px;">Any<span style="color: #c488ff;">kan</span></h1></td></tr><tr><td align="center" style="padding: 0 30px;"><table width="100%" cellpadding="0" cellspacing="0" style="background-color: #1C1C24; border-radius: 16px; border: 1px solid #333;"><tr><td align="center" style="padding: 30px;"><h2 style="color: #FFFFFF; margin: 0 0 10px 0; font-size: 22px;">Welcome back! ✨</h2><p style="color: #A1A1AA; font-size: 15px; margin: 0; line-height: 1.6;">We noticed you just logged back into your account. Dive right back into your favorites.</p></td></tr></table></td></tr><tr><td align="center" style="padding: 30px 40px 40px;"><a href="https://anykan.fun" style="display: inline-block; background-color: #9D4EDD; color: #FFFFFF; font-size: 16px; font-weight: bold; text-decoration: none; padding: 16px 40px; border-radius: 50px;">Jump Back In &rarr;</a></td></tr><tr><td align="center" style="padding: 25px; background-color: #0E0E11; border-top: 1px solid #27272A;"><p style="margin: 0; font-size: 12px; color: #71717A;">&copy; 2026 Anykan OS.<br>Login alert generated automatically.</p></td></tr></table></td></tr></table><\/body><\/html>`;
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ emails: [userEmail], subject: "Welcome back to Anykan! ✨", html: welcomeBackHtml })
+                });
+            } catch (e) { console.log("Email dispatch failed", e); }
+        }
+
+
+        // ==========================================
+        // FORGOT PASSWORD
+        // ==========================================
+        document.getElementById('forgot-password').addEventListener('click', async (e) => {
+            e.preventDefault();
+            loginError.style.display = 'none';
+            loginSuccess.style.display = 'none';
+            
+            const email = document.getElementById('login-email').value.trim();
+            if (!email) {
+                loginError.style.display = 'block';
+                loginError.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Please enter your email address first.`;
+                return;
+            }
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                loginSuccess.style.display = 'block';
+                loginSuccess.innerHTML = `<i class="fas fa-check-circle"></i> Password reset link sent to your email!`;
+            } catch (error) {
+                loginError.style.display = 'block';
+                loginError.innerHTML = `<i class="fas fa-exclamation-triangle"></i> We couldn't find an account with that email.`;
+            }
+        });
+
+
+        // ==========================================
+        // AUTH HANDLING
+        // ==========================================
+
         // Handle Login
         formLogin.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -280,13 +365,18 @@ const firebaseConfig = {
             btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Authenticating...';
             btn.style.pointerEvents = 'none';
             loginError.style.display = 'none';
+            loginSuccess.style.display = 'none';
 
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value;
 
             try {
-                await signInWithEmailAndPassword(auth, email, password);
-                // Success! Route back to the Anykan homepage
+                const cred = await signInWithEmailAndPassword(auth, email, password);
+                
+                // Wait for the Welcome Back email to dispatch successfully
+                await sendWelcomeBackEmail(cred.user.email);
+                
+                // Success! Route back to the profile page
                 window.location.replace('profile.html');
             } catch (error) {
                 loginError.style.display = 'block';
@@ -325,7 +415,10 @@ const firebaseConfig = {
                     avatar: `https://api.dicebear.com/7.x/adventurer/svg?seed=${name}`
                 });
 
-                // Success! Route back to the Anykan homepage
+                // Wait for the Welcome email to dispatch successfully
+                await sendWelcomeEmail(email);
+
+                // Success! Route back to the profile page
                 window.location.replace('profile.html');
 
             } catch (error) {
