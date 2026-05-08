@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Primary Meta Tags -->
     <title>Anykan - Watch High-Quality Movies, TV Shows & Anime Online Free</title>
     <meta name="title" content="Anykan - Stream High-Quality Movies, Shows & Anime Online">
     <meta name="description" content="Stream the latest Hollywood blockbusters, Bollywood hits, Hindi Dramas, English series, and HD Anime online. Fast streaming, daily updates, and limitless entertainment.">
@@ -13,7 +12,6 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <link rel="canonical" href="https://anykan.fun/">
 
-    <!-- Open Graph / Facebook (For Social Media Sharing) -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://anykan.fun/">
     <meta property="og:title" content="Anykan - Watch High-Quality Movies, TV Shows & Anime">
@@ -21,14 +19,12 @@
     <meta property="og:image" content="https://anykan.fun/assets/anykan-social-banner.jpg">
     <meta property="og:site_name" content="Anykan">
 
-    <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://anykan.fun/">
     <meta property="twitter:title" content="Anykan - Watch High-Quality Movies, TV Shows & Anime">
     <meta property="twitter:description" content="Stream the latest Hollywood blockbusters, Bollywood hits, Hindi Dramas, and HD Anime online. Fast streaming and daily updates.">
     <meta property="twitter:image" content="https://anykan.fun/assets/anykan-social-banner.jpg">
 
-    <!-- Icons & Manifest -->
     <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -38,17 +34,14 @@
     <meta name="theme-color" content="#9D4EDD">
     <link rel="manifest" href="/manifest.json">
 
-    <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://www.gstatic.com">
 
-    <!-- Styles & Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="Anykan-style.css">
 
-    <!-- Structured Data (JSON-LD) for Google -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -63,7 +56,6 @@
     }
     </script>
     
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
     <script src="Anykan-script.js" defer></script>
     <script src="Anykan-bottom-bar.js" defer></script>
@@ -171,7 +163,6 @@
                     <li><a href="mylist.html">My List</a></li>
                 </ul>
                 
-                <!-- Premium Anykan / Dramakan Toggle -->
                 <div class="site-switcher">
                     <div class="switcher-track">
                         <a href="https://dramakan.site" class="switch-btn">DramaKan</a>
@@ -188,8 +179,7 @@
     
     <section class="hero-slider">
         <div class="slider-wrapper" id="hero-slider-wrapper">
-            <!-- Dynamic slides will be injected here automatically by Anykan-script.js based on your Admin Panel selections -->
-        </div>
+            </div>
 
         <div class="slider-nav">
             <button id="prevSlide"><i class="fas fa-chevron-left"></i></button>
@@ -362,14 +352,14 @@
         </div>
     </footer>
 
-    <div id="appInstallPopup" class="app-install-popup">
+    <div id="appInstallPopup" class="app-install-popup hidden">
         <div class="popup-content">
             <img src="favicon.png" alt="App Icon" class="popup-icon" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/9D4EDD/FFFFFF?text=Anykan'">
             <div class="popup-text">
                 <h4>Anykan App</h4>
                 <p>Install the app now for the best experience!</p>
             </div>
-            <a href="app.html" class="btn-install">Install</a>
+            <button id="installAppBtn" class="btn-install" style="border:none; cursor:pointer;">Install</button>
             <button id="closeInstallPopup" class="btn-close-popup"><i class="fas fa-times"></i></button>
         </div>
     </div>

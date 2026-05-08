@@ -572,22 +572,83 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
+
+// ==========================================
+// 🔥 NEW: PWA INSTALLATION SYSTEM 🔥
+// ==========================================
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Failed', err));
   });
 }
 
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent Chrome from automatically showing the prompt
+    e.preventDefault();
+    // Stash the event so it can be triggered later
+    deferredPrompt = e;
+    
+    const installPopup = document.getElementById('appInstallPopup');
+    const isInstalled = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone || localStorage.getItem('Anykan_installed') === 'true';
+    
+    // Show the popup ONLY if it hasn't been dismissed or installed yet
+    if (installPopup && sessionStorage.getItem('hideInstallPopup') !== 'true' && !isInstalled) {
+        installPopup.classList.remove('hidden');
+    }
+});
+
+window.addEventListener('appinstalled', () => {
+    console.log('Anykan was installed.');
+    localStorage.setItem('Anykan_installed', 'true');
+    const installPopup = document.getElementById('appInstallPopup');
+    if (installPopup) installPopup.classList.add('hidden');
+});
+
 document.addEventListener("DOMContentLoaded", function() {
     const installPopup = document.getElementById('appInstallPopup');
     const closeInstallBtn = document.getElementById('closeInstallPopup');
+    const installAppBtn = document.getElementById('installAppBtn');
     
-    if (installPopup && closeInstallBtn) {
-        if (sessionStorage.getItem('hideInstallPopup') === 'true') installPopup.classList.add('hidden');
-        closeInstallBtn.addEventListener('click', () => {
+    const isInstalled = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone || localStorage.getItem('Anykan_installed') === 'true';
+    
+    if (installPopup) {
+        // Keep it hidden if already installed or dismissed previously
+        if (sessionStorage.getItem('hideInstallPopup') === 'true' || isInstalled) {
             installPopup.classList.add('hidden');
-            sessionStorage.setItem('hideInstallPopup', 'true');
-        });
+        } else if (!deferredPrompt) {
+             // If the browser hasn't fired beforeinstallprompt yet, keep it hidden
+             installPopup.classList.add('hidden');
+        }
+
+        if (closeInstallBtn) {
+            closeInstallBtn.addEventListener('click', () => {
+                installPopup.classList.add('hidden');
+                sessionStorage.setItem('hideInstallPopup', 'true');
+            });
+        }
+
+        // Logic for clicking the actual "Install" button
+        if (installAppBtn) {
+            installAppBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    // Show the native browser install prompt
+                    deferredPrompt.prompt();
+                    // Wait for the user to respond
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        localStorage.setItem('Anykan_installed', 'true');
+                    }
+                    deferredPrompt = null;
+                    installPopup.classList.add('hidden');
+                } else {
+                    // Fallback for browsers like iOS Safari that don't support automated prompts
+                    alert("To install Anykan, tap the 'Share' icon in your browser and select 'Add to Home Screen'.");
+                    installPopup.classList.add('hidden');
+                }
+            });
+        }
     }
 });
 
