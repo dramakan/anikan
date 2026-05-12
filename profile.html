@@ -88,8 +88,6 @@
         }
         .header-icons i:hover { color: #fff; background: var(--primary-color); border-color: var(--primary-color); transform: scale(1.05); box-shadow: 0 5px 15px var(--primary-glow); }
         
-        .header-icons i#mobileAffiliateBtn:hover { background: #d4af37; border-color: #d4af37; box-shadow: 0 5px 15px rgba(212,175,55,0.4); color: #000; }
-
         .notif-badge { position: relative; display: flex; align-items: center; justify-content: center;}
         .notif-badge::after { 
             content: ''; position: absolute; top: 0; right: 2px; 
@@ -122,11 +120,11 @@
         .page-container { max-width: 1400px; margin: 0 auto; padding-top: 100px; }
 
         .profile-hero-panel {
-            margin: 0 5% 50px 5%;
+            margin: 0 5% 30px 5%; /* Tightened gap */
             background: linear-gradient(145deg, rgba(20,20,25,0.5), rgba(5,5,7,0.7));
             backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--glass-border); border-radius: 28px;
-            padding: 40px; display: flex; align-items: center; gap: 40px;
+            padding: 35px 40px; display: flex; align-items: center; gap: 40px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
             position: relative; overflow: hidden;
             animation: fadeDown 1s cubic-bezier(0.25, 1, 0.5, 1);
@@ -179,48 +177,39 @@
             background: var(--primary-color); border-color: var(--primary-color);
             transform: translateY(-2px); box-shadow: 0 8px 25px var(--primary-glow);
         }
-        
-        .btn-switch-profile.affiliate-btn:hover {
-            background: #d4af37; border-color: #d4af37; color: #000 !important;
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-        }
-
-        .affiliate-btn-trigger { display: none !important; }
-        .is-affiliate .affiliate-btn-trigger.pc-only { display: flex !important; }
-        .is-affiliate .affiliate-btn-trigger.mobile-only { display: flex !important; }
 
         @keyframes fadeDown { 0% { opacity: 0; transform: translateY(-20px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* =========================================
-           4. SECTIONS & SCROLL
+           4. SECTIONS & SCROLL (TIGHTENED GAPS)
         ========================================= */
-        .section { margin-bottom: 45px; opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
+        .section { margin-bottom: 25px; opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
         .section.visible { opacity: 1; transform: translateY(0); }
 
-        .section-header { display: flex; justify-content: space-between; align-items: flex-end; padding: 0 5%; margin-bottom: 18px; }
+        .section-header { display: flex; justify-content: space-between; align-items: flex-end; padding: 0 5%; margin-bottom: 12px; }
         .section-title-wrap { display: flex; align-items: center; gap: 10px; }
         .title-accent { width: 4px; height: 20px; background: var(--primary-color); border-radius: 10px; box-shadow: 0 0 10px var(--primary-glow); }
         .section-header h2 { font-size: 1.3rem; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
         .section-header span { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 5px; }
         .section-header span:hover { color: var(--primary-color); transform: translateX(3px); }
 
-        .h-scroll { display: flex; gap: 16px; overflow-x: auto; padding: 5px 5% 30px 5%; scroll-behavior: smooth; scrollbar-width: none; }
+        .h-scroll { display: flex; gap: 16px; overflow-x: auto; padding: 5px 5% 15px 5%; scroll-behavior: smooth; scrollbar-width: none; }
         .h-scroll::-webkit-scrollbar { display: none; }
 
         .empty-text { font-size: 0.95rem; color: var(--text-muted); font-style: italic; opacity: 0.7; padding: 20px; background: var(--glass-bg); border-radius: 16px; border: 1px dashed var(--glass-border); width: 100%; text-align: center; }
 
         /* =========================================
-           5. PREMIUM CARDS W/ REMOVE BTN
+           5. PREMIUM CARDS W/ REMOVE BTN (INCREASED SIZES)
         ========================================= */
         .poster-card {
-            min-width: 130px; max-width: 130px; aspect-ratio: 2/3; flex-shrink: 0;
+            min-width: 155px; max-width: 155px; aspect-ratio: 2/3; flex-shrink: 0;
             position: relative; border-radius: 16px; overflow: hidden;
             background: var(--glass-bg); border: 1px solid var(--glass-border);
             transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
             box-shadow: 0 10px 25px rgba(0,0,0,0.5); transform: translateZ(0);
         }
-        @media(min-width: 768px) { .poster-card { min-width: 170px; max-width: 170px; } }
+        @media(min-width: 768px) { .poster-card { min-width: 210px; max-width: 210px; } }
         
         .poster-card:hover { 
             transform: translateY(-10px) scale(1.05); z-index: 10; 
@@ -350,9 +339,7 @@
            7. NETFLIX MOBILE IMPLEMENTATION 
         ========================================= */
         @media (max-width: 768px) {
-            .is-affiliate .affiliate-btn-trigger.pc-only { display: none !important; }
             .pc-only { display: none !important; }
-            .mobile-only { display: flex !important; }
             
             .profile-hero-panel { display: none !important; }
             .page-container { padding-top: 95px; }
@@ -373,9 +360,6 @@
                 position: fixed; top: 80px; right: 5%; width: 90%; max-width: none; transform-origin: top right;
             }
         }
-        @media (min-width: 769px) {
-            .is-affiliate .affiliate-btn-trigger.mobile-only { display: none !important; }
-        }
 
         @media (max-width: 992px) {
             .bottom-nav {
@@ -391,6 +375,19 @@
             .bottom-nav-item.active .nav-label { font-weight: 700; text-shadow: 0 0 10px rgba(255,255,255,0.5);}
         }
         @media (min-width: 993px) { .bottom-nav { display: none !important; } }
+
+        /* =========================================
+           8. AFFILIATE LOGIC (STRICT BOTTOM PLACEMENT)
+        ========================================= */
+        .affiliate-btn-trigger { display: none !important; }
+        body.is-affiliate .affiliate-btn-trigger.pc-only { display: flex !important; }
+        body.is-affiliate .affiliate-btn-trigger.mobile-only { display: flex !important; }
+        
+        /* Mobile-only fallback rules after media queries to ensure proper specificity */
+        .mobile-only { display: none !important; }
+        @media (max-width: 768px) {
+            .mobile-only:not(.affiliate-btn-trigger) { display: flex !important; }
+        }
     </style>
 </head>
 <body>
@@ -716,7 +713,6 @@
         
         document.querySelectorAll('.section').forEach(sec => observer.observe(sec));
 
-        // RENDER PROFILES (Desktop Grid & Mobile Header)
         function renderProfiles() {
             const grid = document.getElementById('profilesGrid');
             let html = '';
@@ -745,7 +741,6 @@
 
             const activeProf = userProfiles[activeProfileIndex];
             
-            // Sync PC Hero Avatar
             const headerAvatar = document.getElementById('headerAvatar');
             if (activeProf.avatar && activeProf.avatar.length <= 10 && !activeProf.avatar.includes('http') && !activeProf.avatar.includes('data:image')) {
                 headerAvatar.outerHTML = `<div class="hero-avatar" id="headerAvatar" style="display:flex; align-items:center; justify-content:center; font-size:3rem;">${activeProf.avatar}</div>`;
@@ -758,7 +753,6 @@
             }
             document.getElementById('headerName').textContent = activeProf.name || 'User';
             
-            // Sync Mobile Nav Header Avatar
             const mobileAvatar = document.getElementById('mobileHeaderAvatar');
             const mobileName = document.getElementById('mobileHeaderNameText');
             if (mobileAvatar) {
@@ -775,47 +769,27 @@
             if (mobileName) mobileName.textContent = activeProf.name || 'User';
         }
 
-        // ==========================================
-        // ISOLATED PROFILE DATA LOGIC
-        // ==========================================
         function refreshProfileData() {
             const activeProf = userProfiles[activeProfileIndex];
             
-            // 1. ROBUST MY LIST SYNC
-            let localMyList = JSON.parse(localStorage.getItem('dramakan_mylist')) || [];
-            let dbMyList = activeProf.myList || [];
-            
-            if (activeProfileIndex === 0 && localMyList.length > dbMyList.length) {
-                cachedMyList = localMyList;
-            } else {
-                cachedMyList = dbMyList;
-            }
-            
+            cachedMyList = activeProf.myList || [];
             renderPosterRow('mylist-container', cachedMyList, 'mylist');
             document.getElementById('stat-list-count').innerHTML = `<i class="fas fa-bookmark"></i> ${cachedMyList.length} in list`;
             
-            // 2. ROBUST CONTINUE WATCHING SYNC
-            let historyObj = {};
-            const specificHistoryKey = 'Anykan_history_' + activeProf.id;
-            const globalHistory = JSON.parse(localStorage.getItem('Anykan_history')) || {};
+            const historyKey = 'Anykan_history_' + activeProf.id;
+            let historyObj = JSON.parse(localStorage.getItem(historyKey));
             
-            if (activeProfileIndex === 0) {
-                historyObj = globalHistory;
-                localStorage.setItem(specificHistoryKey, JSON.stringify(historyObj)); 
-            } else {
-                historyObj = JSON.parse(localStorage.getItem(specificHistoryKey)) || {};
+            if (!historyObj && activeProf.id === 'prof_default') {
+                historyObj = JSON.parse(localStorage.getItem('Anykan_history')) || {};
+                localStorage.setItem(historyKey, JSON.stringify(historyObj));
+            } else if (!historyObj) {
+                historyObj = {};
             }
 
-            if(typeof historyObj !== 'object' || Array.isArray(historyObj)) historyObj = {};
-
             const historyArr = Object.entries(historyObj)
-                .filter(([key, item]) => item && item.link) 
-                .map(([key, item]) => ({ 
-                    ...item, 
-                    id: key, 
-                    title: item.title || "Continue Watching" 
-                }))
-                .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                .filter(([key, item]) => item && item.link && item.title)
+                .map(([key, item]) => ({ ...item, id: key }))
+                .sort((a, b) => b.timestamp - a.timestamp);
                 
             renderPosterRow('history-container', historyArr, 'history');
         }
@@ -862,7 +836,6 @@
             openModal('profilesModal');
         });
 
-        // AVATAR STUDIO LOGIC WITH AUTO COMPRESSOR
         const fileInput = document.getElementById('edit-avatar-upload');
         const previewImg = document.getElementById('edit-avatar-preview');
         
@@ -920,7 +893,6 @@
             });
         });
 
-        // RENDER POSTER CARDS W/ REMOVE BTN
         function renderPosterRow(containerId, arrayData, type) {
             const container = document.getElementById(containerId);
             if (!arrayData || arrayData.length === 0) {
@@ -951,44 +923,30 @@
             const activeProf = userProfiles[activeProfileIndex];
 
             if (type === 'history') {
-                const specificHistoryKey = 'Anykan_history_' + activeProf.id;
-                let historyObj = JSON.parse(localStorage.getItem(specificHistoryKey)) || {};
-                
-                if (activeProfileIndex === 0) {
-                    let globalHist = JSON.parse(localStorage.getItem('Anykan_history')) || {};
-                    delete globalHist[identifier];
-                    localStorage.setItem('Anykan_history', JSON.stringify(globalHist));
-                    historyObj = globalHist;
-                } else {
-                    delete historyObj[identifier]; 
-                    localStorage.setItem(specificHistoryKey, JSON.stringify(historyObj));
-                }
+                const historyKey = 'Anykan_history_' + activeProf.id;
+                let historyObj = JSON.parse(localStorage.getItem(historyKey)) || {};
+                delete historyObj[identifier]; 
+                localStorage.setItem(historyKey, JSON.stringify(historyObj));
                 
                 const historyArr = Object.entries(historyObj)
-                    .filter(([key, item]) => item && item.link)
-                    .map(([key, item]) => ({ ...item, id: key, title: item.title || "Continue Watching" }))
-                    .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                    .filter(([key, item]) => item && item.link && item.title)
+                    .map(([key, item]) => ({ ...item, id: key }))
+                    .sort((a, b) => b.timestamp - a.timestamp);
                 renderPosterRow('history-container', historyArr, 'history');
                 
             } else if (type === 'mylist') {
                 cachedMyList = cachedMyList.filter(item => item.link !== identifier && item.id !== identifier);
                 activeProf.myList = cachedMyList; 
                 
-                if (activeProfileIndex === 0) {
-                    localStorage.setItem('dramakan_mylist', JSON.stringify(cachedMyList));
-                }
-                
                 if (currentUserDocRef) {
                     try { await updateDoc(currentUserDocRef, { profiles: userProfiles }); } 
                     catch(e) { console.error("Error DB", e); }
                 }
-                
                 renderPosterRow('mylist-container', cachedMyList, 'mylist');
                 document.getElementById('stat-list-count').innerHTML = `<i class="fas fa-bookmark"></i> ${cachedMyList.length} in list`;
             }
         };
 
-        // RENDER REQUESTS 
         function renderRequestRow(containerId, arrayData) {
             const container = document.getElementById(containerId);
             if (!arrayData || arrayData.length === 0) return;
@@ -1018,7 +976,6 @@
             document.getElementById('stat-req-count').innerHTML = `<i class="fas fa-paper-plane"></i> ${pendingCount} pending`;
         }
 
-        // --- AUTH & DATA FETCHING ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
@@ -1029,7 +986,6 @@
                     if (docSnap.exists()) {
                         const data = docSnap.data();
                         
-                        // Setup Default Profiles Array
                         if(data.profiles && data.profiles.length > 0) {
                             userProfiles = data.profiles;
                         } else {
@@ -1042,7 +998,6 @@
                             updateDoc(currentUserDocRef, { profiles: userProfiles }).catch(()=>{});
                         }
 
-                        // Restore last active profile
                         const savedActiveId = localStorage.getItem('Anykan_active_profile_id');
                         if (savedActiveId) {
                             const foundIdx = userProfiles.findIndex(p => p.id === savedActiveId);
@@ -1053,7 +1008,6 @@
                         refreshProfileData();
                     }
 
-                    // Global Requests Log (Keep Global)
                     const reqSnap = await getDocs(query(collection(db, "requests"), where("userId", "==", user.uid)));
                     if (!reqSnap.empty) {
                         const sortedReqs = [];
@@ -1076,12 +1030,12 @@
                         }
                     }
 
-                    // Partner Dashboard Loader
                     const creatorSnap = await getDoc(doc(db, "creators", user.uid));
                     if (creatorSnap.exists()) {
                         const cData = creatorSnap.data();
+                        
                         document.body.classList.add('is-affiliate');
-                        document.getElementById('partner-dashboard').style.display = 'block';
+                        
                         document.getElementById('ui-total-clicks').textContent = cData.totalClicks || 0;
                         document.getElementById('ui-tracking-link').value = cData.trackingUrl || '';
                         document.getElementById('ui-earnings').textContent = "$" + ((cData.unpaidClicks || 0) * 0.05).toFixed(2);
@@ -1104,7 +1058,6 @@
             try {
                 const avatarToSave = pendingAvatarUrl || userProfiles[activeProfileIndex].avatar;
                 
-                // Only sync the primary active profile to global Auth for external systems
                 if (activeProfileIndex === 0 && avatarToSave.length < 500) {
                     await updateProfile(auth.currentUser, {
                         displayName: newName,
