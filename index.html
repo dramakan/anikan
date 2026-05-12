@@ -60,159 +60,71 @@
     <script src="Anykan-script.js" defer></script>
     <script src="Anykan-bottom-bar.js" defer></script>
     
-    <style>
-        /* --- NEW PC HEADER & SITE TOGGLE STYLES --- */
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        .site-switcher {
-            display: flex;
-            align-items: center;
-            margin-left: 10px;
-        }
-        .switcher-track {
-            display: flex;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50px;
-            padding: 4px;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
-        }
-        
-        .nav-links .switcher-track .switch-btn {
-            padding: 6px 18px !important;
-            border-radius: 50px !important;
-            font-size: 0.85rem !important;
-            font-weight: 600 !important;
-            color: #a1a1aa !important;
-            text-decoration: none !important;
-            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
-            opacity: 1 !important;
-            border: none !important;
-            width: auto !important;
-            background: transparent !important;
-            display: inline-block;
-            text-shadow: none !important;
-            will-change: background-color, transform;
-        }
-        .nav-links .switcher-track .switch-btn.active {
-            background: linear-gradient(135deg, #9D4EDD 0%, #7b2cbf 100%) !important;
-            color: #fff !important;
-            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.4) !important;
-        }
-        .nav-links .switcher-track .switch-btn:not(.active):hover {
-            color: #fff !important;
-            background: rgba(255,255,255,0.08) !important;
-        }
-
-        /* Responsive Mobile Side-Menu adjustments */
-        @media (max-width: 992px) {
-            .nav-links {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            .site-switcher {
-                margin-top: 10px;
-                width: 100%;
-                margin-left: 0;
-            }
-            .switcher-track {
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-            }
-            .nav-links .switcher-track .switch-btn {
-                text-align: center;
-                flex: 1;
-                padding: 10px 15px !important;
-            }
-        }
-    </style>
 </head>
 <body>
 
     <header class="main-header">
-        <div class="container">
-            <div class="header-top-row">
-                <div class="mobile-menu-toggle" id="mobileMenuToggle">
+        <div class="header-container">
+            <div class="header-left">
+                <div class="mobile-menu-toggle" id="mobileMenuToggle" style="margin-right: 15px; font-size: 1.4rem; cursor: pointer; display: none;">
                     <i class="fas fa-bars"></i>
                 </div>
                 <a href="index.html" class="logo">Any<span>Kan</span></a>
-                <div class="header-actions-placeholder">
-                    <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Theme">
-                        <i class="fas fa-sun"></i>
-                    </button>
-                </div> 
             </div>
 
-            <div class="search-bar">
-                <i class="fas fa-search"></i>
-                <input id="searchInput" type="text" placeholder="Search movies, shows, anime...">
-                <a href="filter.html" class="search-filter-link" title="Advanced Filter">
-                    <i class="fas fa-sliders-h"></i>
-                </a>
-                <div id="searchResults" class="search-results"></div>
-            </div>
-
-            <nav class="nav-links" id="navLinks">
+            <nav class="pc-nav" id="navLinks">
                 <ul>
+                    <li><a href="index.html" class="active">Home</a></li>
                     <li><a href="community.html">Community</a></li>
                     <li><a href="mylist.html">My List</a></li>
+                    <li>
+                        <div class="site-switcher" style="display: flex; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; padding: 3px;">
+                            <a href="https://dramakan.site" style="padding: 5px 15px; border-radius: 50px; font-size: 0.85rem;">DramaKan</a>
+                            <span style="background: var(--primary-color); color: #fff; padding: 5px 15px; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Anykan</span>
+                        </div>
+                    </li>
                 </ul>
-                
-                <div class="site-switcher">
-                    <div class="switcher-track">
-                        <a href="https://dramakan.site" class="switch-btn">DramaKan</a>
-                        <span class="switch-btn active">Anykan</span>
-                    </div>
-                </div>
             </nav>
 
-            <a href="login.html" class="header-download-btn" id="topAuthBtn">
-                <i class="fa-solid fa-user"></i> Profile
-            </a>
+            <div class="header-right">
+                <div class="search-bar pc-search-bar">
+                    <i class="fas fa-search"></i>
+                    <input class="search-input-field" type="text" placeholder="Search movies, shows, anime...">
+                    <a href="filter.html" class="search-filter-link"><i class="fas fa-sliders-h"></i></a>
+                    <div class="search-results"></div>
+                </div>
+                
+                <button id="themeToggle" class="theme-toggle-btn">
+                    <i class="fas fa-sun"></i>
+                </button>
+                
+                <a href="login.html" class="header-profile-btn" id="topAuthBtn" title="Profile/Login">
+                    <i class="fas fa-user"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="mobile-search-container">
+            <div class="mobile-glass-search">
+                <i class="fas fa-search"></i>
+                <input class="search-input-field" type="text" placeholder="Search movies, shows...">
+                <a href="filter.html" style="color: rgba(255,255,255,0.8); margin-left: 10px;"><i class="fas fa-sliders-h"></i></a>
+            </div>
+            <div class="search-results mobile-search-results-dropdown"></div>
         </div>
     </header>
     
-    <section class="hero-slider">
-        <div class="slider-wrapper" id="hero-slider-wrapper">
+    <section class="netflix-hero">
+        <div class="hero-card" id="hero-card">
             </div>
-
-        <div class="slider-nav">
-            <button id="prevSlide"><i class="fas fa-chevron-left"></i></button>
-            <button id="nextSlide"><i class="fas fa-chevron-right"></i></button>
-        </div>
     </section>
 
-    <section class="platforms-section">
-        <div class="container">
-            <h3 class="platforms-title">Available Content From Platforms</h3>
-        </div>
-        <div class="marquee-container">
-            <div class="marquee-content">
-                <a href="netflix.html" class="platform-link brand-netflix"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix"></a>
-                <a href="prime.html" class="platform-link brand-prime"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Amazon_Prime_Video_logo.svg/960px-Amazon_Prime_Video_logo.svg.png" alt="Prime Video"></a>
-                <a href="crunchyroll.html" class="platform-link brand-crunchyroll"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Crunchyroll_Logo.png/1200px-Crunchyroll_Logo.png" alt="Crunchyroll"></a>
-                <a href="disneyplus.html" class="platform-link brand-disney"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Disney%2B_logo.svg/1280px-Disney%2B_logo.svg.png" alt="Disney+"></a>
-                <a href="netflix.html" class="platform-link brand-netflix"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix"></a>
-                <a href="prime.html" class="platform-link brand-prime"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Amazon_Prime_Video_logo.svg/960px-Amazon_Prime_Video_logo.svg.png" alt="Prime Video"></a>
-                <a href="crunchyroll.html" class="platform-link brand-crunchyroll"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Crunchyroll_Logo.png/1200px-Crunchyroll_Logo.png" alt="Crunchyroll"></a>
-                <a href="disneyplus.html" class="platform-link brand-disney"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Disney%2B_logo.svg/1280px-Disney%2B_logo.svg.png" alt="Disney+"></a>
-                <a href="netflix.html" class="platform-link brand-netflix"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix"></a>
-                <a href="prime.html" class="platform-link brand-prime"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Amazon_Prime_Video_logo.svg/960px-Amazon_Prime_Video_logo.svg.png" alt="Prime Video"></a>
-                <a href="crunchyroll.html" class="platform-link brand-crunchyroll"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Crunchyroll_Logo.png/1200px-Crunchyroll_Logo.png" alt="Crunchyroll"></a>
-                <a href="disneyplus.html" class="platform-link brand-disney"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Disney%2B_logo.svg/1280px-Disney%2B_logo.svg.png" alt="Disney+"></a>
-            </div>
-        </div>
-    </section>
+    
 
     <main>
         <section class="latest-episodes" id="continue-watching-section" style="display: none;">
             <div class="container">
-                <div class="section-glass-box" style="background: rgba(var(--bg-rgb), 0.05); border-color: var(--primary-color);">
+                <div class="section-glass-box">
                     <div class="section-header">
                         <h2 class="section-title"><i class="fas fa-play-circle" style="color: var(--primary-color);"></i> Continue Watching</h2>
                     </div>
@@ -226,7 +138,7 @@
                 <div class="section-glass-box">
                     <div class="section-header">
                         <h2 class="section-title">Trending Now</h2>
-                        <a href="trending.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
+                        <a href="trending.html" class="view-all-link">View All</a>
                     </div>
                     <div id="trending-grid" class="anime-grid carousel-mode"></div>
                 </div>
@@ -238,20 +150,19 @@
                 <div class="section-glass-box">
                     <div class="section-header">
                         <h2 class="section-title">Hollywood Blockbusters</h2>
-                        <a href="hollywood.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
+                        <a href="hollywood.html" class="view-all-link">View All</a>
                     </div>
                     <div id="hollywood-grid" class="anime-grid carousel-mode"></div>
                 </div>
             </div>
         </section>
 
-
         <section class="latest-episodes">
             <div class="container">
                 <div class="section-glass-box">
                     <div class="section-header">
                         <h2 class="section-title">Bollywood Hits</h2>
-                        <a href="bollywood.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
+                        <a href="bollywood.html" class="view-all-link">View All</a>
                     </div>
                     <div id="bollywood-grid" class="anime-grid carousel-mode"></div>
                 </div>
@@ -263,7 +174,7 @@
                 <div class="section-glass-box">
                     <div class="section-header">
                         <h2 class="section-title">Anime Classics</h2>
-                        <a href="anime.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
+                        <a href="anime.html" class="view-all-link">View All</a>
                     </div>
                     <div id="anime-classic-grid" class="anime-grid carousel-mode"></div>
                 </div>
@@ -275,7 +186,7 @@
                 <div class="section-glass-box">
                     <div class="section-header">
                         <h2 class="section-title">Web Shows & English Series</h2>
-                        <a href="webshows.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
+                        <a href="webshows.html" class="view-all-link">View All</a>
                     </div>
                     <div id="web-shows-grid" class="anime-grid carousel-mode"></div>
                 </div>
@@ -287,7 +198,7 @@
                 <div class="section-glass-box">
                     <div class="section-header">
                         <h2 class="section-title">Hindi Dramas</h2>
-                        <a href="hindidramas.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
+                        <a href="hindidramas.html" class="view-all-link">View All</a>
                     </div>
                     <div id="hindi-dramas-grid" class="anime-grid carousel-mode"></div>
                 </div>
@@ -299,7 +210,7 @@
                 <div class="section-glass-box">
                     <div class="section-header">
                         <h2 class="section-title">Upcoming Releases</h2>
-                        <a href="upcoming.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
+                        <a href="upcoming.html" class="view-all-link">View All</a>
                     </div>
                     <div id="upcoming-grid" class="anime-grid carousel-mode"></div>
                 </div>
@@ -307,32 +218,18 @@
         </section>
 
         <button id="animeRequestBtn" class="anime-fab">
-            <span class="fab-text">Didn't find your movie or show?</span>
+            <i class="fas fa-comment-dots"></i> Request
         </button>
 
         <div id="animeModal" class="anime-modal-overlay">
             <div class="anime-modal-card">
                 <button class="anime-modal-close" id="closeAnimeModal">&times;</button>
-                
-                <div class="anime-section-highlight">
-                    <h4>Can't find what you're looking for?</h4>
-                    <p>Request it and we'll add it for you!</p>
-                </div>
-                
-                <div class="anime-section-main">
-                    <form id="animeRequestForm">
-                        <input type="text" id="animeName" placeholder="Enter Movie/Show/Anime Name..." required class="anime-input">
-                        <p class="anime-timer-text">Your request will be available <strong>the same day</strong> or within <strong>48 hours</strong>. We will notify you directly in your profile.</p>
-                        <button type="submit" class="anime-submit-btn" id="submitBtn">Send Request</button>
-                    </form>
-                   
-                    <div id="statusMessage" style="margin-top: 10px; font-size: 0.8rem; display: none;"></div>
-                </div>
-                
-                <div class="anime-modal-footer">
-                    <p style="font-size: 0.8rem; margin-bottom: 10px; opacity: 0.7;">Having issues with a broken link? Text us:</p>
-                    <a href="https://t.me/iamashish6700" target="_blank" class="anime-tg-link">On Telegram</a>
-                </div>
+                <h3 style="margin-bottom: 15px; color: var(--primary-color);">Request Content</h3>
+                <form id="animeRequestForm">
+                    <input type="text" id="animeName" placeholder="Enter Movie/Show Name..." required class="anime-input">
+                    <button type="submit" class="anime-submit-btn" id="submitBtn">Send Request</button>
+                </form>
+                <div id="statusMessage" style="margin-top: 15px; font-size: 0.9rem; display: none;"></div>
             </div>
         </div> 
     </main>
@@ -342,27 +239,12 @@
             <div class="footer-content">
                 <a href="#" class="logo">Any<span>Kan</span></a>
                 <div class="footer-socials">
-                    <a href="legal-center.html"><i class="fas fa-address-book"></i></a>
-                    <a href="legal-center.html"><i class="fas fa-file-alt"></i></a>
-                    <a href="legal-center.html"><i class="fas fa-file-contract"></i></a>
                     <a href="legal-center.html"><i class="fas fa-shield-alt"></i></a>
                 </div>
             </div>
             <div class="footer-bottom">&copy; 2026 Anykan. All rights reserved.</div>
         </div>
     </footer>
-
-    <div id="appInstallPopup" class="app-install-popup hidden">
-        <div class="popup-content">
-            <img src="applogoc:\Users\Ashish\Downloads\fd327c6b-bbf8-4c62-9ccd-c81d9957b987-Photoroom.png.png" alt="App Icon" class="popup-icon" onerror="this.onerror=null; this.src='applogo2.png'">
-            <div class="popup-text">
-                <h4>Anykan App</h4>
-                <p>Install the app now for the best experience!</p>
-            </div>
-            <button id="installAppBtn" class="btn-install" style="border:none; cursor:pointer;">Install</button>
-            <button id="closeInstallPopup" class="btn-close-popup"><i class="fas fa-times"></i></button>
-        </div>
-    </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="bottom-nav-item active">
@@ -382,6 +264,17 @@
             <span class="nav-label">Profile</span>
         </a>
     </nav>
-
+    
+    <div id="appInstallPopup" class="app-install-popup hidden">
+        <div class="popup-content">
+            <img src="applogo2.png" alt="App Icon" class="popup-icon">
+            <div class="popup-text">
+                <h4>Anykan App</h4>
+                <p>Install the app now for the best experience!</p>
+            </div>
+            <button id="installAppBtn" class="btn-install" style="border:none; cursor:pointer;">Install</button>
+            <button id="closeInstallPopup" class="btn-close-popup"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
 </body>
 </html>
