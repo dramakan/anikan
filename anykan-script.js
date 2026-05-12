@@ -1,21 +1,17 @@
-// --- 0. THEME & HARDWARE DETECTION ---
+// --- 0. HARDWARE DETECTION (RUNS IMMEDIATELY) ---
 (function initUI() {
-    const savedTheme = localStorage.getItem('Anykan_theme');
-    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-    if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
-        document.documentElement.classList.add('light-mode');
-    }
-
     let isLowEnd = false;
     if ('deviceMemory' in navigator && navigator.deviceMemory < 4) isLowEnd = true;
     if ('hardwareConcurrency' in navigator && navigator.hardwareConcurrency <= 4) isLowEnd = true;
+    if ('connection' in navigator && (navigator.connection.effectiveType === '3g' || navigator.connection.effectiveType === '2g')) isLowEnd = true;
+
     if (isLowEnd) {
         document.documentElement.classList.add('lite-mode');
         console.log("Budget device detected: Lite UI activated.");
     }
 })();
 
-// --- FIREBASE CONFIGURATION ---
+// --- UNIFIED MASTER FIREBASE CONFIGURATION ---
 const firebaseConfig = {
   apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
   authDomain: "bhx-beats.firebaseapp.com",
@@ -45,35 +41,101 @@ async function getFirebase() {
 
 document.addEventListener('DOMContentLoaded', async function () {
     
-    // --- 1. SAFELY HANDLE AUTH UI (Fixes Auto Logout UI Bug) ---
+    // --- 1. SAFELY HANDLE AUTH UI & GATEKEEPER MODAL ---
     try {
-        const { auth } = await getFirebase();
-        auth.onAuthStateChanged((user) => {
+        const { auth, db, firestoreModule } = await getFirebase();
+        auth.onAuthStateChanged(async (user) => {
             const bottomAuthBtn = document.getElementById('bottomAuthBtn');
-            // Simply update the text, DO NOT run window.location.href redirects here.
+            const topAuthBtn = document.getElementById('topAuthBtn');
+            
             if (user) {
-                if(bottomAuthBtn) bottomAuthBtn.querySelector('.nav-label').innerText = 'Profile';
+                if(bottomAuthBtn) {
+                    bottomAuthBtn.querySelector('.nav-label').innerText = 'Profile';
+                    bottomAuthBtn.href = 'profile.html';
+                }
+                if(topAuthBtn) {
+                    topAuthBtn.href = 'profile.html';
+                    topAuthBtn.classList.add('logged-in');
+                }
+
+                const userDocRef = firestoreModule.doc(db, "users", user.uid);
+                const docSnap = await firestoreModule.getDoc(userDocRef);
+                
+                let profiles = [];
+                if (docSnap.exists() && docSnap.data().profiles) {
+                    profiles = docSnap.data().profiles;
+                } else {
+                    profiles = [{
+                        id: 'prof_default',
+                        name: user.displayName || "User",
+                        avatar: user.photoURL || `https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png`
+                    }];
+                }
+
+                const sessionSelected = sessionStorage.getItem('Anykan_Session_Profile_Selected');
+                const savedActiveId = localStorage.getItem('Anykan_active_profile_id');
+                let activeProfile = profiles.find(p => p.id === savedActiveId) || profiles[0];
+
+                if (!sessionSelected) {
+                    const gatekeeperModal = document.getElementById('gatekeeperModal');
+                    const gatekeeperGrid = document.getElementById('gatekeeperProfilesGrid');
+                    
+                    if (gatekeeperModal && gatekeeperGrid) {
+                        gatekeeperGrid.innerHTML = profiles.map((prof) => {
+                            const isEmoji = prof.avatar && prof.avatar.length <= 10 && !prof.avatar.includes('http') && !prof.avatar.includes('data:image');
+                            return `
+                                <div class="profile-item" onclick="window.selectGatekeeperProfile('${prof.id}', '${encodeURIComponent(JSON.stringify(prof))}')">
+                                    ${isEmoji ? `<div class="avatar-placeholder">${prof.avatar}</div>` : `<img src="${prof.avatar}" alt="${prof.name}">`}
+                                    <span>${prof.name}</span>
+                                </div>
+                            `;
+                        }).join('');
+                        
+                        gatekeeperModal.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                } else {
+                    updateHeaderAvatar(activeProfile);
+                }
+
+                window.selectGatekeeperProfile = (id, profStr) => {
+                    const prof = JSON.parse(decodeURIComponent(profStr));
+                    localStorage.setItem('Anykan_active_profile_id', id);
+                    sessionStorage.setItem('Anykan_Session_Profile_Selected', 'true');
+                    
+                    document.getElementById('gatekeeperModal').classList.remove('active');
+                    document.body.style.overflow = '';
+                    
+                    updateHeaderAvatar(prof);
+                    window.dispatchEvent(new Event('profileSwitched'));
+                };
+
+                function updateHeaderAvatar(prof) {
+                    if(topAuthBtn) {
+                        const isEmoji = prof.avatar && prof.avatar.length <= 10 && !prof.avatar.includes('http') && !prof.avatar.includes('data:image');
+                        if (isEmoji) {
+                            topAuthBtn.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; font-size:1.4rem; background:rgba(255,255,255,0.1); border-radius:50%;">${prof.avatar}</div>`;
+                        } else {
+                            topAuthBtn.innerHTML = `<img src="${prof.avatar}" alt="Profile">`;
+                        }
+                    }
+                }
+
             } else {
-                if(bottomAuthBtn) bottomAuthBtn.querySelector('.nav-label').innerText = 'Login';
+                if(bottomAuthBtn) {
+                    bottomAuthBtn.querySelector('.nav-label').innerText = 'Login';
+                    bottomAuthBtn.href = 'login.html';
+                }
+                if(topAuthBtn) {
+                    topAuthBtn.innerHTML = '<i class="fas fa-user"></i>';
+                    topAuthBtn.href = 'login.html';
+                    topAuthBtn.classList.remove('logged-in');
+                }
             }
         });
     } catch(e) { console.error("Auth Init Error:", e); }
 
-    // --- 2. UI TOGGLES ---
-    const themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) {
-        const icon = themeToggle.querySelector('i');
-        if (document.documentElement.classList.contains('light-mode')) icon.className = 'fas fa-moon';
-        else icon.className = 'fas fa-sun';
-
-        themeToggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('light-mode');
-            const isLight = document.documentElement.classList.contains('light-mode');
-            localStorage.setItem('Anykan_theme', isLight ? 'light' : 'dark');
-            icon.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
-        });
-    }
-
+    // --- 2. MOBILE MENU TOGGLE ---
     const menuToggle = document.getElementById('mobileMenuToggle');
     const navLinks = document.getElementById('navLinks');
     const overlay = document.createElement('div');
@@ -111,7 +173,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 else if (optimizedImg.includes('m.media-amazon.com') && optimizedImg.includes('._V1_')) optimizedImg = optimizedImg.replace(/\._V1_.*\.jpg$/i, '._V1_SX250.jpg');
             }
 
-            // Dramakan Pure Poster HTML structure mapped to anime-card
             return `
             <a href="${media.link || `watch.html?id=${media.id}`}" class="anime-card">
                 <div class="anime-card-img"><img src="${optimizedImg}" alt="${media.title}" loading="lazy" decoding="async"></div>
@@ -137,14 +198,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             localStorage.setItem('Anykan_master_db', JSON.stringify(data));
             fuse = new Fuse(data, { keys: ['title'], threshold: 0.4 });
 
-            // --- 4. SINGLE STATIC HERO INJECTION (DRAMAKAN STYLE) ---
             const heroCard = document.getElementById('hero-card');
             if (heroCard) {
                 let heroItems = data.filter(d => d.Hero === 'Y');
                 if (heroItems.length === 0) heroItems = data.filter(d => d.Trend === "T").slice(0, 3);
                 if (heroItems.length === 0) heroItems = data.slice(0, 3); 
                 
-                const item = heroItems[0]; // ONLY ONE BANNER
+                const item = heroItems[0]; 
                 const safeLink = item.link || `watch.html?id=${item.id}`;
                 const pcBanner = item.heroPCImg ? item.heroPCImg : item.img; 
                 
@@ -170,11 +230,17 @@ document.addEventListener('DOMContentLoaded', async function () {
                 `;
             }
 
-            // Continue watching
             function renderContinueWatching() {
                 try {
-                    const historyObj = JSON.parse(localStorage.getItem('Anykan_history')) || {};
-                    const historyArr = Object.values(historyObj)
+                    const savedActiveId = localStorage.getItem('Anykan_active_profile_id') || 'prof_default';
+                    const historyKey = 'Anykan_history_' + savedActiveId;
+                    
+                    let historyObj = JSON.parse(localStorage.getItem(historyKey));
+                    if (!historyObj && savedActiveId === 'prof_default') {
+                        historyObj = JSON.parse(localStorage.getItem('Anykan_history')) || {};
+                    }
+
+                    const historyArr = Object.values(historyObj || {})
                         .filter(item => item && item.link && item.title && !item.link.toLowerCase().includes('index.html'))
                         .sort((a, b) => b.timestamp - a.timestamp).slice(0, 10);
                     
@@ -199,12 +265,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 } catch(e) {}
             }
             renderContinueWatching(); 
+            window.addEventListener('profileSwitched', renderContinueWatching);
 
-            // Trending
             let manualTrending = data.filter(d => d.Trend === "T");
             populateGrid('trending-grid', manualTrending.slice(0, 15)); 
 
-            // Grid Mappings
             const gridConfigs = [
                 { id: 'hollywood-grid', filterType: "Hollywood Movie" },
                 { id: 'bollywood-grid', filterType: "Bollywood Movie" },
@@ -244,7 +309,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         } catch (err) { console.error("AnyKan JSON Load Error:", err); }
     }
 
-    // Bind Search Logic to all search inputs (Mobile & PC)
     searchInputs.forEach((input, index) => {
         let debounceTimer; 
         input.addEventListener('input', () => {
@@ -286,7 +350,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     initializeAnimeSite();
 });
 
-// Modal Firebase Logic
 document.addEventListener("DOMContentLoaded", function() {
     const modal = document.getElementById("animeModal");
     const openBtn = document.getElementById("animeRequestBtn");
@@ -340,7 +403,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-// PWA Logic retained
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Failed', err));
