@@ -252,6 +252,7 @@
             <a class="nav-item active" data-tab="dashboard-tab"><i class="fas fa-chart-pie"></i> Overview</a>
             <a class="nav-item" data-tab="features-tab"><i class="fas fa-star"></i> Feature Manager</a>
             <a class="nav-item" data-tab="cms-tab"><i class="fas fa-video"></i> Media CMS</a>
+            <a class="nav-item" data-tab="audit-tab"><i class="fas fa-exclamation-triangle"></i> Missing Assets</a>
             <a class="nav-item" data-tab="mass-upload-tab"><i class="fas fa-layer-group"></i> Mass Import</a>
             <a class="nav-item" data-tab="requests-tab"><i class="fas fa-inbox"></i> Viewer Requests</a>
             <a class="nav-item" data-tab="users-tab"><i class="fas fa-users"></i> Database Users</a>
@@ -271,7 +272,6 @@
             <div class="admin-badge"><i class="fas fa-shield-alt"></i> System Administrator</div>
         </div>
 
-        <!-- OVERVIEW DASHBOARD TAB -->
         <section id="dashboard-tab" class="tab-section active">
             <div class="dashboard-grid">
                 <div class="stat-card" style="animation-delay: 0.1s;">
@@ -314,20 +314,31 @@
             </div>
         </section>
 
-        <!-- NEW: FEATURE MANAGER TAB -->
         <section id="features-tab" class="tab-section">
             <div class="glass-widget">
                 <div class="widget-header">
-                    <h2 class="widget-title"><i class="fas fa-star"></i> Hero Banner Management</h2>
+                    <h2 class="widget-title"><i class="fas fa-star"></i> Single Hero Banner Management</h2>
                     <button class="admin-btn" onclick="fetchFeatureManager()"><i class="fas fa-sync-alt"></i> Refresh</button>
                 </div>
+                
+                <div style="margin-bottom: 25px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; border: 1px solid var(--border-subtle);">
+                    <label style="display: block; font-size: 0.85rem; color: #D4D4D8; margin-bottom: 8px;">Select Content to use as Exclusive Hero Banner</label>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <select id="hero-select-dropdown" class="admin-select" style="flex-grow: 1;">
+                            <option value="">Loading content...</option>
+                        </select>
+                        <button class="admin-btn" onclick="setExclusiveHero()"><i class="fas fa-crown"></i> Set as Hero</button>
+                    </div>
+                    <small style="color: var(--text-muted); display: block; margin-top: 10px;">Only <strong>one</strong> title can be the Hero Banner. Setting a new one will automatically replace the old one.</small>
+                </div>
+
                 <div class="table-responsive">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Poster</th>
+                                <th>Mobile Poster</th>
                                 <th>Title</th>
-                                <th>PC Banner</th>
+                                <th>PC Banner Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -360,7 +371,31 @@
             </div>
         </section>
 
-        <!-- MEDIA CMS TAB -->
+        <section id="audit-tab" class="tab-section">
+            <div class="glass-widget">
+                <div class="widget-header">
+                    <h2 class="widget-title" style="color: var(--warning);"><i class="fas fa-exclamation-triangle"></i> Content Missing Posters</h2>
+                    <button class="admin-btn" onclick="fetchAudit()"><i class="fas fa-sync-alt"></i> Scan Database</button>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px;">The following items do not have an image URL assigned. They will appear broken on the live site until fixed.</p>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Content ID</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="audit-tbody">
+                            <tr><td colspan="4" style="text-align:center; padding: 20px;"><i class="fas fa-circle-notch fa-spin"></i></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
         <section id="cms-tab" class="tab-section">
             <div class="glass-widget">
                 <div class="widget-header">
@@ -393,7 +428,6 @@
             </div>
         </section>
 
-        <!-- MASS UPLOAD TAB -->
         <section id="mass-upload-tab" class="tab-section">
             <div class="glass-widget" style="max-width: 800px;">
                 <div class="widget-header">
@@ -410,10 +444,10 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>Apply to Entire Batch: Add to Hero Banner?</label>
+                        <label>Apply to Entire Batch: Set as Main Hero Banner?</label>
                         <select id="bulk-hero" class="admin-select">
                             <option value="N">No</option>
-                            <option value="Y">Yes (Display in Top Banner)</option>
+                            <option value="Y">Yes (Will replace current Hero)</option>
                         </select>
                     </div>
                 </div>
@@ -432,7 +466,6 @@
             </div>
         </section>
 
-        <!-- Requests, Users, Affiliate, and Broadcast sections -->
         <section id="requests-tab" class="tab-section">
             <div class="glass-widget">
                 <div class="widget-header">
@@ -533,10 +566,8 @@
         </section>
     </main>
 
-    <!-- TOAST NOTIFICATION -->
     <div id="toast" class="toast">Link Copied!</div>
 
-    <!-- UNIVERSAL MEDIA MODAL -->
     <div class="modal-overlay" id="anime-modal">
         <div class="modal-card" style="max-width: 800px;">
             <div class="modal-title">
@@ -615,10 +646,10 @@
                 
                 <div class="form-grid">
                     <div class="input-group">
-                        <label>Add to Main Banner (Hero Slider)?</label>
+                        <label>Set as Main Hero Banner?</label>
                         <select id="db-hero" class="admin-select" onchange="togglePCBannerInput()">
                             <option value="N">No</option>
-                            <option value="Y">Yes (Display in Top Banner)</option>
+                            <option value="Y">Yes (Will replace current Hero)</option>
                         </select>
                     </div>
                     <div class="input-group" id="pc-banner-group">
@@ -668,7 +699,6 @@
         </div>
     </div>
 
-    <!-- Resolve Request Modal -->
     <div class="modal-overlay" id="resolve-modal">
         <div class="modal-card">
             <div class="modal-title">
@@ -796,7 +826,7 @@
             }
         };
 
-        // NEW: Fetch and Populate the Feature Manager Tab
+        // Fetch and Populate the Feature Manager Tab
         window.fetchFeatureManager = async function() {
             const heroTbody = document.getElementById('hero-manage-tbody');
             const trendTbody = document.getElementById('trending-manage-tbody');
@@ -805,27 +835,37 @@
 
             try {
                 const snap = await getDocs(collection(db, "anime"));
+                let allItems = [];
                 let heroItems = [];
                 let trendItems = [];
 
                 snap.forEach(doc => {
                     const data = doc.data();
                     data.id = doc.id;
+                    allItems.push(data);
                     if(data.Hero === 'Y') heroItems.push(data);
                     if(data.Trend === 'T' || data.trendingOrder) trendItems.push(data);
                 });
 
-                // Render Hero Section
+                // Populate Hero Selector Dropdown
+                const heroSelect = document.getElementById('hero-select-dropdown');
+                heroSelect.innerHTML = '<option value="">-- Search or Select Content --</option>' + 
+                    allItems.sort((a,b) => a.title.localeCompare(b.title)).map(a => `<option value="${a.id}">${a.title} (${a.type})</option>`).join('');
+
+                // Render Hero Section (Expected to be only 1, but handles any currently set)
                 if(heroItems.length === 0) {
-                    heroTbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No Hero Banners active.</td></tr>';
+                    heroTbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No Hero Banner currently active. Select one above.</td></tr>';
                 } else {
                     heroTbody.innerHTML = heroItems.map((item, i) => `
                         <tr style="animation-delay: ${i * 0.05}s">
                             <td class="poster-cell"><img src="${item.img}" loading="lazy"></td>
-                            <td style="font-weight:600; color: #fff;">${item.title}</td>
-                            <td>${item.heroPCImg ? `<a href="${item.heroPCImg}" target="_blank" style="color:var(--primary); text-decoration:none;"><i class="fas fa-image"></i> View Wide</a>` : '<span style="color:var(--text-muted);">No PC Banner</span>'}</td>
+                            <td style="font-weight:600; color: #fff;">${item.title} <span class="status-pill status-hero" style="margin-left:8px; font-size: 0.65rem;">Active Hero</span></td>
+                            <td>${item.heroPCImg ? `<a href="${item.heroPCImg}" target="_blank" style="color:var(--primary); text-decoration:none;"><i class="fas fa-image"></i> View Wide Banner</a>` : '<span style="color:var(--danger); font-size:0.85rem;"><i class="fas fa-exclamation-triangle"></i> Missing PC Banner</span>'}</td>
                             <td>
-                                <button class="btn-icon btn-delete" onclick="removeHero('${item.id}')" title="Remove from Banner"><i class="fas fa-times"></i></button>
+                                <div class="action-btns">
+                                    <button class="btn-icon btn-edit" onclick="editAnime('${item.id}')" title="Edit Content to add PC Banner"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon btn-delete" onclick="removeHero('${item.id}')" title="Demote Banner"><i class="fas fa-times"></i></button>
+                                </div>
                             </td>
                         </tr>
                     `).join('');
@@ -863,12 +903,43 @@
         };
 
         // Feature Manager Actions
+        window.setExclusiveHero = async function() {
+            const newHeroId = document.getElementById('hero-select-dropdown').value;
+            if(!newHeroId) return alert("Please select a title from the dropdown.");
+
+            try {
+                // Find all current heroes to demote
+                const snap = await getDocs(collection(db, "anime"));
+                const batchUpdates = [];
+                snap.forEach(docSnap => {
+                    const data = docSnap.data();
+                    if(data.Hero === 'Y' && docSnap.id !== newHeroId) {
+                        batchUpdates.push(updateDoc(doc(db, "anime", docSnap.id), { Hero: 'N' }));
+                    }
+                });
+                await Promise.all(batchUpdates);
+
+                // Promote new hero
+                await updateDoc(doc(db, "anime", newHeroId), { Hero: 'Y' });
+                showToast("Exclusive Hero Banner updated!");
+                fetchFeatureManager();
+                fetchAnimeDB(); // Sync CMS table
+                
+                // Trigger Build hook for live site update
+                fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
+            } catch(e) {
+                alert("Failed to update Hero Banner.");
+                console.error(e);
+            }
+        };
+
         window.removeHero = async function(id) {
-            if(confirm("Remove this content from the Hero Banner?")) {
+            if(confirm("Demote this content from the Hero Banner? The site will fallback to trending items for the banner if none are set.")) {
                 await updateDoc(doc(db, "anime", id), { Hero: 'N' });
                 showToast("Removed from Banner.");
                 fetchFeatureManager();
-                fetchAnimeDB(); // Sync CMS table
+                fetchAnimeDB(); 
+                fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
             }
         };
 
@@ -879,6 +950,7 @@
                 fetchFeatureManager();
                 fetchAnimeDB();
                 fetchDashboardStats();
+                fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
             }
         };
 
@@ -889,6 +961,32 @@
             fetchFeatureManager();
             fetchAnimeDB();
             fetchDashboardStats();
+            fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
+        };
+
+        // NEW: Content Audit Function
+        window.fetchAudit = async function() {
+            const tbody = document.getElementById('audit-tbody');
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px;"><i class="fas fa-circle-notch fa-spin"></i> Scanning Database...</td></tr>';
+            try {
+                const snap = await getDocs(collection(db, "anime"));
+                let html = '';
+                snap.forEach(docSnap => {
+                    const data = docSnap.data();
+                    // Flag if missing the main image
+                    if(!data.img || data.img.trim() === '') {
+                        html += `<tr>
+                            <td><code style="color:var(--text-muted);">${docSnap.id}</code></td>
+                            <td style="font-weight:600; color:#fff;">${data.title}</td>
+                            <td><span class="status-pill status-pending">${data.type}</span></td>
+                            <td>
+                                <button class="admin-btn" style="padding: 6px 12px; font-size: 0.8rem;" onclick="editAnime('${docSnap.id}')"><i class="fas fa-edit"></i> Fix Asset</button>
+                            </td>
+                        </tr>`;
+                    }
+                });
+                tbody.innerHTML = html || '<tr><td colspan="4" style="text-align:center; color: var(--success); padding: 30px;"><i class="fas fa-check-circle" style="font-size:2rem; display:block; margin-bottom:10px;"></i> All database content has assigned posters!</td></tr>';
+            } catch(e) { console.error(e); }
         };
 
         // Sidebar Toggle for Mobile
@@ -937,6 +1035,7 @@
                 fetchDashboardStats();
                 fetchFeatureManager();
                 fetchAnimeDB();
+                fetchAudit();
                 fetchRequests();
                 fetchUsers();
                 fetchCreators();
@@ -987,7 +1086,7 @@
                     
                     html += `
                         <tr style="animation-delay: ${index * 0.05}s">
-                            <td class="poster-cell"><img src="${data.img}" alt="Poster" loading="lazy"></td>
+                            <td class="poster-cell"><img src="${data.img || 'https://via.placeholder.com/50x70/1a1a1d/a0a0a0?text=None'}" alt="Poster" loading="lazy"></td>
                             <td style="font-weight:600; color: #fff;">${data.title}</td>
                             <td><span class="admin-badge" style="display:inline-block; padding: 4px 12px; box-shadow: none;">${data.type}</span></td>
                             <td>${data.status}</td>
@@ -1014,7 +1113,7 @@
             const searchTerm = e.target.value.toLowerCase();
             const rows = document.querySelectorAll('#anime-tbody tr');
             rows.forEach(row => {
-                if (row.cells.length > 1) { // Skip empty/loading rows
+                if (row.cells.length > 1) { 
                     const title = row.cells[1].textContent.toLowerCase();
                     row.style.display = title.includes(searchTerm) ? '' : 'none';
                 }
@@ -1026,7 +1125,7 @@
             document.getElementById('edit-anime-id').value = '';
             document.getElementById('db-id').disabled = false;
             document.getElementById('anime-modal-title').innerHTML = '<i class="fas fa-upload"></i> Upload Content';
-            togglePCBannerInput(); // Hide PC banner group on new upload
+            togglePCBannerInput(); 
             
             const modal = document.getElementById('anime-modal');
             modal.classList.add('show');
@@ -1060,7 +1159,7 @@
             document.getElementById('db-hero').value = anime.Hero || 'N';
             document.getElementById('db-heroPCImg').value = anime.heroPCImg || '';
             
-            togglePCBannerInput(); // Show PC banner input if Hero is Y
+            togglePCBannerInput();
 
             document.getElementById('db-synopsis').value = anime.synopsis || '';
             
@@ -1100,6 +1199,16 @@
             const tmdbKey = "014fbdbe962cb38379e09e31d0652459"; 
 
             let successCount = 0;
+            
+            // If massive upload marks them as Hero, we clear the previous ones.
+            if(isHero === 'Y') {
+                const snap = await getDocs(collection(db, "anime"));
+                const batchUpdates = [];
+                snap.forEach(d => {
+                    if (d.data().Hero === 'Y') batchUpdates.push(updateDoc(doc(db, "anime", d.id), { Hero: 'N' }));
+                });
+                await Promise.all(batchUpdates);
+            }
 
             for (let i = 0; i < ids.length; i++) {
                 let imdbId = ids[i];
@@ -1135,10 +1244,8 @@
                     }
 
                     let title = data.Title || "";
-                    // Create unique slug
                     let docId = title.toLowerCase().replace(/[^a-z0-9]/g, '') + "-" + Math.floor(Math.random() * 1000); 
 
-                    // Smart Classification
                     let detectedType = "Hollywood Movie";
                     const isSeries = data.Type === "series";
                     const country = data.Country || "";
@@ -1212,7 +1319,6 @@
                     logMsg(`Skipped ${imdbId}: Unknown error - ${e.message}`, 'var(--danger)');
                 }
                 
-                // Add a small delay to prevent API rate limiting
                 await new Promise(r => setTimeout(r, 600));
             }
 
@@ -1221,12 +1327,12 @@
             btn.disabled = false;
             
             showToast(`Batch Complete! ${successCount} titles imported.`);
-            fetchAnimeDB(); // Refresh table
-            fetchFeatureManager(); // Refresh feature tab
+            fetchAnimeDB(); 
+            fetchFeatureManager(); 
+            fetchAudit();
             fetchDashboardStats();
             
             if(successCount > 0) {
-                 // Trigger build hook if at least one was added
                  fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
             }
         });
@@ -1240,6 +1346,7 @@
             const isEdit = document.getElementById('edit-anime-id').value;
             const docId = document.getElementById('db-id').value.trim();
             const imdbId = document.getElementById('db-imdb-id').value.trim();
+            const isHero = document.getElementById('db-hero').value;
             
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deploying...';
             btn.disabled = true;
@@ -1254,6 +1361,18 @@
                     }
                 }
 
+                // If marked as Exclusive Hero, demote all others
+                if (isHero === 'Y') {
+                    const snap = await getDocs(collection(db, "anime"));
+                    const batchUpdates = [];
+                    snap.forEach(d => {
+                        if (d.data().Hero === 'Y' && d.id !== docId) {
+                            batchUpdates.push(updateDoc(doc(db, "anime", d.id), { Hero: 'N' }));
+                        }
+                    });
+                    await Promise.all(batchUpdates);
+                }
+
                 let epsInput = document.getElementById('db-eps').value.trim();
                 let finalEps = epsInput;
                 let finalSeasons = null;
@@ -1263,14 +1382,13 @@
                     finalEps = finalSeasons.reduce((a, b) => a + b, 0);
                 }
 
-                // Capture numerical values and wide banner URL
                 const trendingOrderInput = document.getElementById('db-trendingOrder').value.trim();
                 const heroPCImgInput = document.getElementById('db-heroPCImg').value.trim();
 
                 const payload = {
                     title: document.getElementById('db-title').value.trim(),
                     imdbId: imdbId,
-                    img: document.getElementById('db-img').value.trim(), // Acts as mobile banner
+                    img: document.getElementById('db-img').value.trim(), 
                     genre: document.getElementById('db-genre').value.trim(),
                     type: document.getElementById('db-type').value,
                     status: document.getElementById('db-status').value,
@@ -1278,10 +1396,10 @@
                     score: document.getElementById('db-score').value.trim(),
                     imdb: document.getElementById('db-score').value.trim(),
                     
-                    trendingOrder: trendingOrderInput ? parseInt(trendingOrderInput) : null, // Numerical for ordering
+                    trendingOrder: trendingOrderInput ? parseInt(trendingOrderInput) : null,
                     
-                    Hero: document.getElementById('db-hero').value,
-                    heroPCImg: (document.getElementById('db-hero').value === 'Y' && heroPCImgInput) ? heroPCImgInput : null, // Wide banner URL for desktop
+                    Hero: isHero,
+                    heroPCImg: (isHero === 'Y' && heroPCImgInput) ? heroPCImgInput : null, 
                     
                     synopsis: document.getElementById('db-synopsis').value.trim(),
                     actor1: document.getElementById('db-a1').value.trim(),
@@ -1301,17 +1419,111 @@
                 
                 closeMediaModal();
                 fetchAnimeDB();
-                fetchFeatureManager(); // Refresh feature tab
+                fetchFeatureManager(); 
+                fetchAudit();
                 fetchDashboardStats();
                 showToast("Deployed successfully! Site is updating the JSON file.");
 
-                // TRIGGER NETLIFY JSON BUILD HOOK
                 fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
 
             } catch (err) { alert("Save Failed: " + err.message); }
             finally { 
                 btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Deploy Content';
                 btn.disabled = false; 
+            }
+        });
+
+        // =====================================
+        // AUTO-FILL SYSTEM (OMDB + TMDB)
+        // =====================================
+        document.getElementById('auto-fill-btn').addEventListener('click', async () => {
+            const imdbId = document.getElementById('db-imdb-id').value.trim();
+            if (!imdbId) return alert("Please enter an IMDb ID first.");
+
+            const btn = document.getElementById('auto-fill-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching...';
+            btn.disabled = true;
+
+            const omdbKey = "7739fdec"; 
+            const tmdbKey = "014fbdbe962cb38379e09e31d0652459";
+
+            try {
+                // 1. Fetch OMDB Data
+                const res = await fetch(`https://www.omdbapi.com/?i=${imdbId}&plot=full&apikey=${omdbKey}`);
+                const data = await res.json();
+                
+                if (data.Response === "False") throw new Error(data.Error);
+
+                document.getElementById('db-title').value = data.Title || "";
+                document.getElementById('db-id').value = (data.Title || "").toLowerCase().replace(/[^a-z0-9]/g, '');
+                if (data.Poster !== "N/A") document.getElementById('db-img').value = data.Poster;
+                document.getElementById('db-genre').value = data.Genre || "";
+                document.getElementById('db-score').value = data.imdbRating || "";
+                document.getElementById('db-synopsis').value = data.Plot || "";
+
+                const isSeries = data.Type === "series";
+                document.getElementById('db-status').value = isSeries ? "Ongoing" : "Completed";
+
+                let detectedType = "Hollywood Movie";
+                const country = data.Country || "";
+                if (data.Genre && data.Genre.includes("Animation") && country.includes("Japan")) detectedType = "Anime";
+                else if (country.includes("India")) detectedType = isSeries ? "Hindi Drama" : "Bollywood Movie";
+                else detectedType = isSeries ? "English Series" : "Hollywood Movie";
+                document.getElementById('db-type').value = detectedType;
+
+                if (data.Actors && data.Actors !== "N/A") {
+                    const actors = data.Actors.split(',');
+                    if (actors[0]) document.getElementById('db-a1').value = actors[0].trim();
+                    if (actors[1]) document.getElementById('db-a2').value = actors[1].trim();
+                }
+
+                // 2. Fetch TMDB Data for Images & Episodes
+                const findRes = await fetch(`https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`);
+                const findData = await findRes.json();
+                
+                let mediaType = '';
+                let tmdbId = null;
+
+                if (findData.tv_results && findData.tv_results.length > 0) {
+                    tmdbId = findData.tv_results[0].id;
+                    mediaType = 'tv';
+                } else if (findData.movie_results && findData.movie_results.length > 0) {
+                    tmdbId = findData.movie_results[0].id;
+                    mediaType = 'movie';
+                }
+
+                if (tmdbId) {
+                    const credRes = await fetch(`https://api.themoviedb.org/3/${mediaType}/${tmdbId}/credits?api_key=${tmdbKey}`);
+                    const credData = await credRes.json();
+                    
+                    if (credData.cast && credData.cast.length > 0) {
+                        if (credData.cast[0] && credData.cast[0].profile_path) {
+                            document.getElementById('db-a1img').value = `https://image.tmdb.org/t/p/w500${credData.cast[0].profile_path}`;
+                        }
+                        if (credData.cast[1] && credData.cast[1].profile_path) {
+                            document.getElementById('db-a2img').value = `https://image.tmdb.org/t/p/w500${credData.cast[1].profile_path}`;
+                        }
+                    }
+
+                    if (mediaType === 'tv') {
+                        const detailRes = await fetch(`https://api.themoviedb.org/3/tv/${tmdbId}?api_key=${tmdbKey}`);
+                        const detailData = await detailRes.json();
+                        
+                        if (detailData.seasons) {
+                            const seasons = detailData.seasons.filter(s => s.season_number > 0);
+                            const epsArray = seasons.map(s => s.episode_count);
+                            document.getElementById('db-eps').value = `[${epsArray.join(', ')}]`;
+                        }
+                    } else {
+                        document.getElementById('db-eps').value = "1";
+                    }
+                }
+
+            } catch (err) {
+                alert("Auto-Fill Failed: " + err.message);
+            } finally {
+                btn.innerHTML = '<i class="fas fa-magic"></i> Auto-Fill';
+                btn.disabled = false;
             }
         });
 
@@ -1340,7 +1552,7 @@
                     html += `
                         <tr style="animation-delay: ${index * 0.05}s">
                             <td>${date}</td>
-                            <td><span style="font-family:monospace; color:#d8b4fe;">${req.userEmail}</span></td>
+                            <td><span style="font-family:monospace; color:#d8b4fe;">${req.userEmail || req.userId}</span></td>
                             <td style="font-weight:600; color: #fff;">${req.animeName}</td>
                             <td><span class="status-pill ${statusClass}"><i class="fas ${isPending ? 'fa-clock' : 'fa-check'}"></i> ${req.status}</span></td>
                             <td>
@@ -1400,7 +1612,7 @@
             }
         };
 
-        // All User, Affiliate, and Broadcast functions remain intact
+        // Users, Affiliate, and Broadcast functions
         window.fetchUsers = async function() {
             const tbody = document.getElementById('users-tbody');
             tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 40px;"><i class="fas fa-circle-notch fa-spin" style="font-size: 2rem; color: var(--primary);"></i></td></tr>';

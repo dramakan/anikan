@@ -39,7 +39,7 @@ async function getFirebase() {
     return firebaseInstance;
 }
 
-// --- GLOBAL ADD TO MY LIST FUNCTION ---
+// --- GLOBAL ADD TO MY LIST FUNCTION (FIXES HERO BANNER BUTTON) ---
 window.toggleMyList = async function(btnElement, title, img, link) {
     title = decodeURIComponent(title);
     img = decodeURIComponent(img);
@@ -178,13 +178,28 @@ document.addEventListener('DOMContentLoaded', async function () {
                     window.dispatchEvent(new Event('profileSwitched'));
                 };
 
+                // DYNAMICALLY UPDATES BOTH PC AND BOTTOM BAR PROFILE AVATARS
                 function updateHeaderAvatar(prof) {
+                    const isEmoji = prof.avatar && prof.avatar.length <= 10 && !prof.avatar.includes('http') && !prof.avatar.includes('data:image');
+                    
+                    // Update PC Top Nav
                     if(topAuthBtn) {
-                        const isEmoji = prof.avatar && prof.avatar.length <= 10 && !prof.avatar.includes('http') && !prof.avatar.includes('data:image');
                         if (isEmoji) {
                             topAuthBtn.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; font-size:1.4rem; background:rgba(255,255,255,0.1); border-radius:50%;">${prof.avatar}</div>`;
                         } else {
-                            topAuthBtn.innerHTML = `<img src="${prof.avatar}" alt="Profile">`;
+                            topAuthBtn.innerHTML = `<img src="${prof.avatar}" alt="Profile" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
+                        }
+                    }
+                    
+                    // Update Mobile Bottom Nav (Fixes the missing circle issue)
+                    if(bottomAuthBtn) {
+                        const existingIcon = bottomAuthBtn.querySelector('.nav-icon');
+                        if (existingIcon) {
+                            if (isEmoji) {
+                                existingIcon.outerHTML = `<div class="nav-icon avatar-icon" style="display:flex; align-items:center; justify-content:center; width:26px; height:26px; font-size:1.2rem; background:rgba(255,255,255,0.1); border-radius:50%; margin-bottom:4px;">${prof.avatar}</div>`;
+                            } else {
+                                existingIcon.outerHTML = `<img src="${prof.avatar}" class="nav-icon avatar-icon" alt="Profile" style="width:26px; height:26px; object-fit:cover; border-radius:50%; margin-bottom:4px; border:2px solid transparent; transition:all 0.4s ease;">`;
+                            }
                         }
                     }
                 }
@@ -276,7 +291,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const item = heroItems[0]; 
                 const safeLink = item.link || `watch.html?id=${item.id}`;
                 
-                // Fetch dual images
                 const pcBanner = item.heroPCImg ? item.heroPCImg : item.img; 
                 const mobileBanner = item.img;
                 
@@ -323,7 +337,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     if (cwSection && cwGrid) {
                         if(historyArr.length > 0) {
                             cwSection.style.display = 'block';
-                            cwSection.classList.add('is-visible'); // Force intersection observer
+                            cwSection.classList.add('is-visible'); 
                             cwGrid.innerHTML = historyArr.map((item) => {
                                 return `
                                 <a href="${item.link}" class="anime-card" style="border-color: rgba(157, 78, 221, 0.4);">

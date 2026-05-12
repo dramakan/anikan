@@ -69,6 +69,7 @@ function showPopup(title, body) {
 
 // 2. HISTORY HUB LOGIC
 let notifHistory = JSON.parse(localStorage.getItem('Anykan_Notif_History')) || [];
+let deletedNotifs = JSON.parse(localStorage.getItem('Anykan_Deleted_Notifs')) || []; // Track deleted IDs
 
 function renderHistory() {
     const list = document.getElementById('globalNotifList');
@@ -96,12 +97,20 @@ function renderHistory() {
     const unread = notifHistory.some(n => !n.read);
     if (badge && unread) {
         badge.style.display = 'block';
+    } else if (badge) {
+        badge.style.display = 'none';
     }
 }
 
 window.deleteGlobalNotif = (id) => {
     notifHistory = notifHistory.filter(n => n.id !== id);
+    deletedNotifs.push(id);
+    
+    // Clean up blocklist so it doesn't grow infinitely large over time
+    if (deletedNotifs.length > 100) deletedNotifs = deletedNotifs.slice(-50);
+    
     localStorage.setItem('Anykan_Notif_History', JSON.stringify(notifHistory));
+    localStorage.setItem('Anykan_Deleted_Notifs', JSON.stringify(deletedNotifs));
     renderHistory();
 };
 
@@ -113,8 +122,11 @@ onSnapshot(q, (snapshot) => {
             const data = change.doc.data();
             const notifId = change.doc.id;
             
+            // Check if already in history OR if user previously deleted it permanently
             const exists = notifHistory.find(n => n.id === notifId);
-            if (!exists) {
+            const isDeleted = deletedNotifs.includes(notifId);
+
+            if (!exists && !isDeleted) {
                 const newNotif = {
                     id: notifId,
                     title: data.title || "Admin Broadcast",
@@ -124,7 +136,7 @@ onSnapshot(q, (snapshot) => {
                 };
                 
                 notifHistory.unshift(newNotif);
-                if (notifHistory.length > 30) notifHistory.pop(); // Max 30 saved
+                if (notifHistory.length > 30) notifHistory.pop(); // Max 30 saved in dropdown history
                 localStorage.setItem('Anykan_Notif_History', JSON.stringify(notifHistory));
                 
                 renderHistory();
@@ -167,6 +179,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (clearBtn) {
         clearBtn.addEventListener('click', () => {
+            // Add all current notifs to deleted blocklist array so they don't come back
+            notifHistory.forEach(n => deletedNotifs.push(n.id));
+            if (deletedNotifs.length > 100) deletedNotifs = deletedNotifs.slice(-50);
+            localStorage.setItem('Anykan_Deleted_Notifs', JSON.stringify(deletedNotifs));
+
+            // Clear history visually
             notifHistory = [];
             localStorage.setItem('Anykan_Notif_History', JSON.stringify([]));
             renderHistory();
