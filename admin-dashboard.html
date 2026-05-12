@@ -87,11 +87,14 @@
         /* MAIN CONTENT AREA */
         .main-content { flex-grow: 1; padding: 40px 50px; overflow-y: auto; height: 100vh; position: relative;}
         
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px; }
         .header-left { display: flex; align-items: center; gap: 15px; }
         .mobile-toggle { display: none; font-size: 1.5rem; color: #fff; background: none; border: none; cursor: pointer; transition: var(--transition-smooth); }
         .mobile-toggle:hover { color: var(--primary); transform: scale(1.1); }
         .page-title { font-size: 1.8rem; font-weight: 600; color: #fff; }
+        
+        /* UPDATED: HEADER RIGHT WRAPPER */
+        .header-right { display: flex; align-items: center; gap: 15px; flex-wrap: wrap;}
         .admin-badge { background: rgba(157, 78, 221, 0.15); border: 1px solid rgba(157, 78, 221, 0.4); color: #d8b4fe; padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 0 15px var(--primary-glow); }
 
         /* TAB SYSTEM */
@@ -269,7 +272,13 @@
                 <button class="mobile-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
                 <h1 class="page-title" id="page-title-display">Overview</h1>
             </div>
-            <div class="admin-badge"><i class="fas fa-shield-alt"></i> System Administrator</div>
+            
+            <div class="header-right">
+                <button class="admin-btn" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); box-shadow: 0 4px 15px rgba(16,185,129,0.4);" onclick="triggerNetlifyBuild()" id="manual-build-btn">
+                    <i class="fas fa-rocket"></i> Publish Changes to Live Site
+                </button>
+                <div class="admin-badge"><i class="fas fa-shield-alt"></i> System Administrator</div>
+            </div>
         </div>
 
         <section id="dashboard-tab" class="tab-section active">
@@ -747,6 +756,23 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // MANUAL NETLIFY BUILD TRIGGER
+        window.triggerNetlifyBuild = async function() {
+            const btn = document.getElementById('manual-build-btn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Triggering Build...';
+            btn.disabled = true;
+            try {
+                await fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
+                showToast("Build triggered! The live site will update in 1-2 minutes.");
+            } catch(e) {
+                alert("Failed to trigger build.");
+            } finally {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }
+        };
+
         // Subtly animate number counting
         function animateValue(id, start, end, duration) {
             let obj = document.getElementById(id);
@@ -925,8 +951,6 @@
                 fetchFeatureManager();
                 fetchAnimeDB(); // Sync CMS table
                 
-                // Trigger Build hook for live site update
-                fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
             } catch(e) {
                 alert("Failed to update Hero Banner.");
                 console.error(e);
@@ -939,7 +963,6 @@
                 showToast("Removed from Banner.");
                 fetchFeatureManager();
                 fetchAnimeDB(); 
-                fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
             }
         };
 
@@ -950,7 +973,6 @@
                 fetchFeatureManager();
                 fetchAnimeDB();
                 fetchDashboardStats();
-                fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
             }
         };
 
@@ -961,7 +983,6 @@
             fetchFeatureManager();
             fetchAnimeDB();
             fetchDashboardStats();
-            fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
         };
 
         // NEW: Content Audit Function
@@ -1331,10 +1352,6 @@
             fetchFeatureManager(); 
             fetchAudit();
             fetchDashboardStats();
-            
-            if(successCount > 0) {
-                 fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
-            }
         });
 
         // =====================================
@@ -1422,9 +1439,7 @@
                 fetchFeatureManager(); 
                 fetchAudit();
                 fetchDashboardStats();
-                showToast("Deployed successfully! Site is updating the JSON file.");
-
-                fetch('https://api.netlify.com/build_hooks/69fab6736e16da602e206e1b', { method: 'POST' });
+                showToast("Deployed successfully! Database updated.");
 
             } catch (err) { alert("Save Failed: " + err.message); }
             finally { 
