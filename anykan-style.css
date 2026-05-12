@@ -283,3 +283,13 @@ img { max-width: 100%; height: auto; display: block; }
 .profile-item:hover img, .profile-item:hover .avatar-placeholder { border-color: var(--primary-color); box-shadow: 0 0 30px var(--primary-glow); }
 .profile-item span { font-size: 1.1rem; font-weight: 500; color: var(--text-muted-color); text-align: center; white-space: normal; line-height: 1.2; width: 100%; transition: color 0.3s;}
 .profile-item:hover span { color: #fff; font-weight: 600; }
+/* =====================================================
+   HERO BANNER DUAL IMAGE LOGIC
+===================================================== */
+.pc-banner { display: block; }
+.mobile-banner { display: none; }
+
+@media (max-width: 992px) {
+    .pc-banner { display: none !important; }
+    .mobile-banner { display: block !important; }
+}

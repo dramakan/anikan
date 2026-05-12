@@ -257,9 +257,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        // Added sendPasswordResetEmail to the import list
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
@@ -318,11 +317,11 @@
         }
 
         async function sendWelcomeBackEmail(userEmail) {
-            const welcomeBackHtml = `<!DOCTYPE html><html><body style="background-color: #09090B; margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background-color: #09090B; padding: 40px 10px;"><tr><td align="center"><table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #121217; border-radius: 24px; border: 1px solid #27272A; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.8);"><tr><td style="background-color: #9D4EDD; height: 6px;"></td></tr><tr><td align="center" style="padding: 40px 20px 20px;"><h1 style="color: #FFFFFF; font-size: 28px; margin: 0; letter-spacing: -1px;">Any<span style="color: #c488ff;">kan</span></h1></td></tr><tr><td align="center" style="padding: 0 30px;"><table width="100%" cellpadding="0" cellspacing="0" style="background-color: #1C1C24; border-radius: 16px; border: 1px solid #333;"><tr><td align="center" style="padding: 30px;"><h2 style="color: #FFFFFF; margin: 0 0 10px 0; font-size: 22px;">Welcome back! ✨</h2><p style="color: #A1A1AA; font-size: 15px; margin: 0; line-height: 1.6;">We noticed you just logged back into your account. Dive right back into your favorites.</p></td></tr></table></td></tr><tr><td align="center" style="padding: 30px 40px 40px;"><a href="https://anykan.fun" style="display: inline-block; background-color: #9D4EDD; color: #FFFFFF; font-size: 16px; font-weight: bold; text-decoration: none; padding: 16px 40px; border-radius: 50px;">Jump Back In &rarr;</a></td></tr><tr><td align="center" style="padding: 25px; background-color: #0E0E11; border-top: 1px solid #27272A;"><p style="margin: 0; font-size: 12px; color: #71717A;">&copy; 2026 Anykan OS.<br>Login alert generated automatically.</p></td></tr></table></td></tr></table><\/body><\/html>`;
+            const welcomeBackHtml = `<!DOCTYPE html><html><body style="background-color: #09090B; margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background-color: #09090B; padding: 40px 10px;"><tr><td align="center"><table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #121217; border-radius: 24px; border: 1px solid #27272A; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.8);"><tr><td style="background-color: #9D4EDD; height: 6px;"></td></tr><tr><td align="center" style="padding: 40px 20px 20px;"><h1 style="color: #FFFFFF; font-size: 28px; margin: 0; letter-spacing: -1px;">Any<span style="color: #c488ff;">kan</span></h1></td></tr><tr><td align="center" style="padding: 0 30px;"><table width="100%" cellpadding="0" cellspacing="0" style="background-color: #1C1C24; border-radius: 16px; border: 1px solid #333;"><tr><td align="center" style="padding: 30px;"><h2 style="color: #FFFFFF; margin: 0 0 10px 0; font-size: 22px;">New Sign-In Detected ✨</h2><p style="color: #A1A1AA; font-size: 15px; margin: 0; line-height: 1.6;">We noticed a login to your Anykan account from a new device or IP address. If this was you, dive right back into your favorites.</p></td></tr></table></td></tr><tr><td align="center" style="padding: 30px 40px 40px;"><a href="https://anykan.fun" style="display: inline-block; background-color: #9D4EDD; color: #FFFFFF; font-size: 16px; font-weight: bold; text-decoration: none; padding: 16px 40px; border-radius: 50px;">Jump Back In &rarr;</a></td></tr><tr><td align="center" style="padding: 25px; background-color: #0E0E11; border-top: 1px solid #27272A;"><p style="margin: 0; font-size: 12px; color: #71717A;">&copy; 2026 Anykan OS.<br>Login alert generated automatically.</p></td></tr></table></td></tr></table><\/body><\/html>`;
             try {
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ emails: [userEmail], subject: "Welcome back to Anykan! ✨", html: welcomeBackHtml })
+                    body: JSON.stringify({ emails: [userEmail], subject: "New Login Detected on Anykan ✨", html: welcomeBackHtml })
                 });
             } catch (e) { console.log("Email dispatch failed", e); }
         }
@@ -372,9 +371,49 @@
 
             try {
                 const cred = await signInWithEmailAndPassword(auth, email, password);
+                const user = cred.user;
                 
-                // Wait for the Welcome Back email to dispatch successfully
-                await sendWelcomeBackEmail(cred.user.email);
+                // Track Device & IP Logic
+                let isNewDeviceOrIp = false;
+                const deviceKey = `anykan_device_${user.uid}`;
+                const isKnownDevice = localStorage.getItem(deviceKey);
+
+                if (!isKnownDevice) {
+                    isNewDeviceOrIp = true;
+                    localStorage.setItem(deviceKey, 'true');
+                }
+
+                // Fetch Current IP
+                let currentIp = null;
+                try {
+                    const ipRes = await fetch('https://api.ipify.org?format=json');
+                    const ipData = await ipRes.json();
+                    currentIp = ipData.ip;
+                } catch(err) {
+                    console.warn("Could not fetch IP address for tracking.");
+                }
+
+                // Check and Update Known IPs in Firestore
+                if (currentIp) {
+                    const userRef = doc(db, "users", user.uid);
+                    const userSnap = await getDoc(userRef);
+                    if (userSnap.exists()) {
+                        const userData = userSnap.data();
+                        const knownIps = userData.knownIps || [];
+                        
+                        if (!knownIps.includes(currentIp)) {
+                            isNewDeviceOrIp = true;
+                            await updateDoc(userRef, {
+                                knownIps: [...knownIps, currentIp]
+                            });
+                        }
+                    }
+                }
+
+                // Dispatch Email ONLY if a new IP or Device is detected
+                if (isNewDeviceOrIp) {
+                    await sendWelcomeBackEmail(cred.user.email);
+                }
                 
                 // Success! Route back to the profile page
                 window.location.replace('profile.html');
@@ -399,6 +438,14 @@
             const password = document.getElementById('register-password').value;
 
             try {
+                // Fetch Current IP during registration to seed the array
+                let currentIp = null;
+                try {
+                    const ipRes = await fetch('https://api.ipify.org?format=json');
+                    const ipData = await ipRes.json();
+                    currentIp = ipData.ip;
+                } catch(err) {}
+
                 // 1. Create the Auth User
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
@@ -406,14 +453,18 @@
                 // 2. Update their display name
                 await updateProfile(user, { displayName: name });
 
-                // 3. Create a profile document in Firestore
+                // 3. Create a profile document in Firestore (with knownIps initialized)
                 await setDoc(doc(db, "users", user.uid), {
                     username: name,
                     email: email,
                     role: "user",
                     createdAt: new Date().getTime(),
-                    avatar: `https://api.dicebear.com/7.x/adventurer/svg?seed=${name}`
+                    avatar: `https://api.dicebear.com/7.x/adventurer/svg?seed=${name}`,
+                    knownIps: currentIp ? [currentIp] : []
                 });
+
+                // Tag this device as known so they don't get a new login alert immediately on next sign-in
+                localStorage.setItem(`anykan_device_${user.uid}`, 'true');
 
                 // Wait for the Welcome email to dispatch successfully
                 await sendWelcomeEmail(email);

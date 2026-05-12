@@ -7,7 +7,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <script src="anykan-notifier.js" type="module"></script>
+    
     <style>
         /* =========================================
            1. LIQUID GLASS & PREMIUM VARIABLES
@@ -44,7 +44,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Ambient Liquid Orbs */
         .liquid-orb {
             position: fixed; border-radius: 50%; filter: blur(100px);
             z-index: -1; pointer-events: none;
@@ -329,7 +328,6 @@
         .upload-label { position: absolute; bottom: -5px; right: -5px; background: var(--primary-color); color: #fff; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid var(--bg-base); font-size: 0.9rem; transition: all 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .upload-label:hover { transform: scale(1.1); background: #c77dff; }
         
-        /* Streaming Avatar Presets Grid */
         .preset-avatars { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 10px; width: 100%; }
         .preset-avatar { width: 100%; aspect-ratio: 1; border-radius: 12px; cursor: pointer; border: 3px solid transparent; transition: all 0.3s; background: rgba(255,255,255,0.05); overflow: hidden;}
         .preset-avatar:hover { transform: translateY(-3px) scale(1.1); border-color: rgba(157, 78, 221, 0.5); }
@@ -718,6 +716,7 @@
         
         document.querySelectorAll('.section').forEach(sec => observer.observe(sec));
 
+        // RENDER PROFILES (Desktop Grid & Mobile Header)
         function renderProfiles() {
             const grid = document.getElementById('profilesGrid');
             let html = '';
@@ -746,6 +745,7 @@
 
             const activeProf = userProfiles[activeProfileIndex];
             
+            // Sync PC Hero Avatar
             const headerAvatar = document.getElementById('headerAvatar');
             if (activeProf.avatar && activeProf.avatar.length <= 10 && !activeProf.avatar.includes('http') && !activeProf.avatar.includes('data:image')) {
                 headerAvatar.outerHTML = `<div class="hero-avatar" id="headerAvatar" style="display:flex; align-items:center; justify-content:center; font-size:3rem;">${activeProf.avatar}</div>`;
@@ -758,6 +758,7 @@
             }
             document.getElementById('headerName').textContent = activeProf.name || 'User';
             
+            // Sync Mobile Nav Header Avatar
             const mobileAvatar = document.getElementById('mobileHeaderAvatar');
             const mobileName = document.getElementById('mobileHeaderNameText');
             if (mobileAvatar) {
@@ -774,27 +775,47 @@
             if (mobileName) mobileName.textContent = activeProf.name || 'User';
         }
 
+        // ==========================================
+        // ISOLATED PROFILE DATA LOGIC
+        // ==========================================
         function refreshProfileData() {
             const activeProf = userProfiles[activeProfileIndex];
             
-            cachedMyList = activeProf.myList || [];
+            // 1. ROBUST MY LIST SYNC
+            let localMyList = JSON.parse(localStorage.getItem('dramakan_mylist')) || [];
+            let dbMyList = activeProf.myList || [];
+            
+            if (activeProfileIndex === 0 && localMyList.length > dbMyList.length) {
+                cachedMyList = localMyList;
+            } else {
+                cachedMyList = dbMyList;
+            }
+            
             renderPosterRow('mylist-container', cachedMyList, 'mylist');
             document.getElementById('stat-list-count').innerHTML = `<i class="fas fa-bookmark"></i> ${cachedMyList.length} in list`;
             
-            const historyKey = 'Anykan_history_' + activeProf.id;
-            let historyObj = JSON.parse(localStorage.getItem(historyKey));
+            // 2. ROBUST CONTINUE WATCHING SYNC
+            let historyObj = {};
+            const specificHistoryKey = 'Anykan_history_' + activeProf.id;
+            const globalHistory = JSON.parse(localStorage.getItem('Anykan_history')) || {};
             
-            if (!historyObj && activeProf.id === 'prof_default') {
-                historyObj = JSON.parse(localStorage.getItem('Anykan_history')) || {};
-                localStorage.setItem(historyKey, JSON.stringify(historyObj));
-            } else if (!historyObj) {
-                historyObj = {};
+            if (activeProfileIndex === 0) {
+                historyObj = globalHistory;
+                localStorage.setItem(specificHistoryKey, JSON.stringify(historyObj)); 
+            } else {
+                historyObj = JSON.parse(localStorage.getItem(specificHistoryKey)) || {};
             }
 
+            if(typeof historyObj !== 'object' || Array.isArray(historyObj)) historyObj = {};
+
             const historyArr = Object.entries(historyObj)
-                .filter(([key, item]) => item && item.link && item.title)
-                .map(([key, item]) => ({ ...item, id: key }))
-                .sort((a, b) => b.timestamp - a.timestamp);
+                .filter(([key, item]) => item && item.link) 
+                .map(([key, item]) => ({ 
+                    ...item, 
+                    id: key, 
+                    title: item.title || "Continue Watching" 
+                }))
+                .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
                 
             renderPosterRow('history-container', historyArr, 'history');
         }
@@ -841,6 +862,7 @@
             openModal('profilesModal');
         });
 
+        // AVATAR STUDIO LOGIC WITH AUTO COMPRESSOR
         const fileInput = document.getElementById('edit-avatar-upload');
         const previewImg = document.getElementById('edit-avatar-preview');
         
@@ -898,6 +920,7 @@
             });
         });
 
+        // RENDER POSTER CARDS W/ REMOVE BTN
         function renderPosterRow(containerId, arrayData, type) {
             const container = document.getElementById(containerId);
             if (!arrayData || arrayData.length === 0) {
@@ -928,30 +951,44 @@
             const activeProf = userProfiles[activeProfileIndex];
 
             if (type === 'history') {
-                const historyKey = 'Anykan_history_' + activeProf.id;
-                let historyObj = JSON.parse(localStorage.getItem(historyKey)) || {};
-                delete historyObj[identifier]; 
-                localStorage.setItem(historyKey, JSON.stringify(historyObj));
+                const specificHistoryKey = 'Anykan_history_' + activeProf.id;
+                let historyObj = JSON.parse(localStorage.getItem(specificHistoryKey)) || {};
+                
+                if (activeProfileIndex === 0) {
+                    let globalHist = JSON.parse(localStorage.getItem('Anykan_history')) || {};
+                    delete globalHist[identifier];
+                    localStorage.setItem('Anykan_history', JSON.stringify(globalHist));
+                    historyObj = globalHist;
+                } else {
+                    delete historyObj[identifier]; 
+                    localStorage.setItem(specificHistoryKey, JSON.stringify(historyObj));
+                }
                 
                 const historyArr = Object.entries(historyObj)
-                    .filter(([key, item]) => item && item.link && item.title)
-                    .map(([key, item]) => ({ ...item, id: key }))
-                    .sort((a, b) => b.timestamp - a.timestamp);
+                    .filter(([key, item]) => item && item.link)
+                    .map(([key, item]) => ({ ...item, id: key, title: item.title || "Continue Watching" }))
+                    .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
                 renderPosterRow('history-container', historyArr, 'history');
                 
             } else if (type === 'mylist') {
                 cachedMyList = cachedMyList.filter(item => item.link !== identifier && item.id !== identifier);
                 activeProf.myList = cachedMyList; 
                 
+                if (activeProfileIndex === 0) {
+                    localStorage.setItem('dramakan_mylist', JSON.stringify(cachedMyList));
+                }
+                
                 if (currentUserDocRef) {
                     try { await updateDoc(currentUserDocRef, { profiles: userProfiles }); } 
                     catch(e) { console.error("Error DB", e); }
                 }
+                
                 renderPosterRow('mylist-container', cachedMyList, 'mylist');
                 document.getElementById('stat-list-count').innerHTML = `<i class="fas fa-bookmark"></i> ${cachedMyList.length} in list`;
             }
         };
 
+        // RENDER REQUESTS 
         function renderRequestRow(containerId, arrayData) {
             const container = document.getElementById(containerId);
             if (!arrayData || arrayData.length === 0) return;
@@ -981,6 +1018,7 @@
             document.getElementById('stat-req-count').innerHTML = `<i class="fas fa-paper-plane"></i> ${pendingCount} pending`;
         }
 
+        // --- AUTH & DATA FETCHING ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
@@ -991,6 +1029,7 @@
                     if (docSnap.exists()) {
                         const data = docSnap.data();
                         
+                        // Setup Default Profiles Array
                         if(data.profiles && data.profiles.length > 0) {
                             userProfiles = data.profiles;
                         } else {
@@ -1003,6 +1042,7 @@
                             updateDoc(currentUserDocRef, { profiles: userProfiles }).catch(()=>{});
                         }
 
+                        // Restore last active profile
                         const savedActiveId = localStorage.getItem('Anykan_active_profile_id');
                         if (savedActiveId) {
                             const foundIdx = userProfiles.findIndex(p => p.id === savedActiveId);
@@ -1013,6 +1053,7 @@
                         refreshProfileData();
                     }
 
+                    // Global Requests Log (Keep Global)
                     const reqSnap = await getDocs(query(collection(db, "requests"), where("userId", "==", user.uid)));
                     if (!reqSnap.empty) {
                         const sortedReqs = [];
@@ -1035,12 +1076,12 @@
                         }
                     }
 
+                    // Partner Dashboard Loader
                     const creatorSnap = await getDoc(doc(db, "creators", user.uid));
                     if (creatorSnap.exists()) {
                         const cData = creatorSnap.data();
-                        
                         document.body.classList.add('is-affiliate');
-                        
+                        document.getElementById('partner-dashboard').style.display = 'block';
                         document.getElementById('ui-total-clicks').textContent = cData.totalClicks || 0;
                         document.getElementById('ui-tracking-link').value = cData.trackingUrl || '';
                         document.getElementById('ui-earnings').textContent = "$" + ((cData.unpaidClicks || 0) * 0.05).toFixed(2);
@@ -1063,6 +1104,7 @@
             try {
                 const avatarToSave = pendingAvatarUrl || userProfiles[activeProfileIndex].avatar;
                 
+                // Only sync the primary active profile to global Auth for external systems
                 if (activeProfileIndex === 0 && avatarToSave.length < 500) {
                     await updateProfile(auth.currentUser, {
                         displayName: newName,

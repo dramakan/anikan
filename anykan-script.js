@@ -39,6 +39,74 @@ async function getFirebase() {
     return firebaseInstance;
 }
 
+// --- GLOBAL ADD TO MY LIST FUNCTION ---
+window.toggleMyList = async function(btnElement, title, img, link) {
+    title = decodeURIComponent(title);
+    img = decodeURIComponent(img);
+    link = decodeURIComponent(link);
+    const itemId = link; 
+
+    try {
+        const { auth, db, firestoreModule } = await getFirebase();
+        const user = auth?.currentUser;
+
+        let localList = JSON.parse(localStorage.getItem('dramakan_mylist')) || [];
+        const existsLocally = localList.findIndex(i => i.link === link);
+
+        const updateBtnUI = (isAdded) => {
+            if(isAdded) {
+                btnElement.style.color = "#10b981";
+                if(btnElement.innerText.includes('My List')) btnElement.innerHTML = '<i class="fas fa-check"></i> Added';
+                else btnElement.innerHTML = '<i class="fas fa-check"></i>';
+            } else {
+                btnElement.style.color = "";
+                if(btnElement.innerText.includes('Added')) btnElement.innerHTML = '<i class="fas fa-plus"></i> My List';
+                else btnElement.innerHTML = '<i class="fas fa-plus"></i>';
+            }
+        };
+
+        if (user) {
+            const userRef = firestoreModule.doc(db, "users", user.uid);
+            const docSnap = await firestoreModule.getDoc(userRef);
+            
+            if (docSnap.exists()) {
+                let data = docSnap.data();
+                let profiles = data.profiles || [];
+                const activeProfId = localStorage.getItem('Anykan_active_profile_id') || 'prof_default';
+                let profIndex = profiles.findIndex(p => p.id === activeProfId);
+                if(profIndex === -1) profIndex = 0;
+                
+                let profMyList = profiles[profIndex].myList || [];
+                const existsDbIndex = profMyList.findIndex(i => i.link === link);
+                
+                if (existsDbIndex > -1) {
+                    profMyList.splice(existsDbIndex, 1);
+                    updateBtnUI(false);
+                } else {
+                    profMyList.push({ title, img, link, id: itemId });
+                    updateBtnUI(true);
+                }
+                
+                profiles[profIndex].myList = profMyList;
+                await firestoreModule.updateDoc(userRef, { profiles: profiles });
+                localStorage.setItem('dramakan_mylist', JSON.stringify(profMyList));
+            }
+        } else {
+            if (existsLocally > -1) {
+                localList.splice(existsLocally, 1);
+                updateBtnUI(false);
+            } else {
+                localList.push({ title, img, link, id: itemId });
+                updateBtnUI(true);
+            }
+            localStorage.setItem('dramakan_mylist', JSON.stringify(localList));
+        }
+    } catch(e) {
+        console.error("Error updating My List", e);
+        alert("Please log in to manage your list.");
+    }
+};
+
 document.addEventListener('DOMContentLoaded', async function () {
     
     // --- 1. SAFELY HANDLE AUTH UI & GATEKEEPER MODAL ---
@@ -198,6 +266,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             localStorage.setItem('Anykan_master_db', JSON.stringify(data));
             fuse = new Fuse(data, { keys: ['title'], threshold: 0.4 });
 
+            // --- 4. HERO BANNER WITH DUAL IMAGES ---
             const heroCard = document.getElementById('hero-card');
             if (heroCard) {
                 let heroItems = data.filter(d => d.Hero === 'Y');
@@ -206,11 +275,15 @@ document.addEventListener('DOMContentLoaded', async function () {
                 
                 const item = heroItems[0]; 
                 const safeLink = item.link || `watch.html?id=${item.id}`;
+                
+                // Fetch dual images
                 const pcBanner = item.heroPCImg ? item.heroPCImg : item.img; 
+                const mobileBanner = item.img;
                 
                 heroCard.innerHTML = `
                     <div class="hero-image-wrapper">
-                        <img class="hero-image" src="${pcBanner}" alt="${item.title}">
+                        <img class="hero-image pc-banner" src="${pcBanner}" alt="${item.title}">
+                        <img class="hero-image mobile-banner" src="${mobileBanner}" alt="${item.title}">
                     </div>
                     <div class="hero-depth-shadow"></div>
                     <div class="hero-vignette"></div>
@@ -250,6 +323,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     if (cwSection && cwGrid) {
                         if(historyArr.length > 0) {
                             cwSection.style.display = 'block';
+                            cwSection.classList.add('is-visible'); // Force intersection observer
                             cwGrid.innerHTML = historyArr.map((item) => {
                                 return `
                                 <a href="${item.link}" class="anime-card" style="border-color: rgba(157, 78, 221, 0.4);">
@@ -260,7 +334,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                                     </div>
                                 </a>`
                             }).join('');
-                        } else { cwSection.style.display = 'none'; }
+                        } else { 
+                            cwSection.style.display = 'none'; 
+                        }
                     }
                 } catch(e) {}
             }
