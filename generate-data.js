@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 const fs = require('fs');
 
+// 1. Grab the secret key from Netlify's secure vault
 const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT;
 
 if (!serviceAccountKey) {
@@ -8,49 +9,36 @@ if (!serviceAccountKey) {
   process.exit(1);
 }
 
+// 2. Convert the text back into a JSON object
 const serviceAccount = JSON.parse(serviceAccountKey);
 
+// 3. Connect to your specific Firebase project
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://bhx-beats.firebaseio.com" 
+  databaseURL: "https://dramakan007.firebaseio.com" 
 });
 
 const db = admin.firestore();
 
 async function generateJson() {
   try {
-    console.log("Connecting to AnyKan Firestore...");
-    const snapshot = await db.collection('anime').get();
-    let media = [];
+    console.log("Connecting to Firestore...");
+    const snapshot = await db.collection('dramas').get();
+    const dramas = [];
     
     snapshot.forEach(doc => {
-      media.push({ id: doc.id, ...doc.data() });
+      dramas.push({ id: doc.id, ...doc.data() });
     });
-    console.log(`Successfully fetched ${media.length} titles from AnyKan DB.`);
 
-    // --- NEW: MERGE DRAMAKAN DATA ---
-    console.log("Fetching external data from Dramakan...");
-    try {
-        const dramaRes = await fetch('https://dramakan.site/dramas.json');
-        
-        if (dramaRes.ok) {
-            const dramaData = await dramaRes.json();
-            media = media.concat(dramaData); // Combine arrays
-            console.log(`Successfully imported and merged ${dramaData.length} dramas!`);
-        } else {
-            console.log("Failed to reach Dramakan JSON. Proceeding with AnyKan data only.");
-        }
-    } catch (importError) {
-        console.log("Network error while fetching Dramakan data:", importError);
-    }
-    // --------------------------------
-
-    fs.writeFileSync('./anykan.json', JSON.stringify(media));
-    console.log('Combined anykan.json file successfully generated!');
+    console.log(`Successfully fetched ${dramas.length} dramas.`);
+    
+    // 4. Save the data to a static file right next to your index.html
+    fs.writeFileSync('./dramas.json', JSON.stringify(dramas));
+    console.log('dramas.json file successfully generated!');
     
   } catch (error) {
     console.error("Error generating JSON: ", error);
-    process.exit(1); 
+    process.exit(1); // Tell Netlify to fail the build if it crashes
   }
 }
 

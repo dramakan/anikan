@@ -1,14 +1,14 @@
 /* =====================================================
-   1. GLOBAL RESET & GLASS DESIGN SYSTEM (OPTIMIZED)
+   1. GLOBAL RESET & GLASS DESIGN SYSTEM
 ===================================================== */
 :root {
-  /* Anykan Brand Colors */
-  --primary-color: #9D4EDD;
-  --primary-glow: rgba(157, 78, 221, 0.4);
+  /* Brand Colors */
+  --primary-color: #8A2BE2;
+  --primary-glow: rgba(138, 43, 226, 0.4);
   --secondary-color: #E50914;
   
   /* Dynamic RGB definitions for transparent gradients */
-  --bg-rgb: 16, 15, 20;
+  --bg-rgb: 11, 12, 16;
   --text-rgb: 245, 245, 245;
 
   /* Deep Dark Theme (Default) */
@@ -56,11 +56,6 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* Smooth Scrolling & Typography Optimization */
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   font-family: 'Poppins', sans-serif;
   background-color: var(--background-color);
@@ -68,8 +63,6 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
   transition: background-color 0.5s cubic-bezier(0.25, 1, 0.5, 1), color 0.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
@@ -97,9 +90,8 @@ img { max-width: 100%; height: auto; display: block; }
   height: 40px;
   border-radius: 50%;
   margin-left: 15px;
-  will-change: transform, background-color;
 }
-.theme-toggle-btn:hover { background: var(--glass-bg); color: var(--primary-color); transform: scale(1.05); }
+.theme-toggle-btn:hover { background: var(--glass-bg); color: var(--primary-color); }
 
 
 /* =====================================================
@@ -122,8 +114,6 @@ img { max-width: 100%; height: auto; display: block; }
   padding: 10px 25px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
   transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-  will-change: transform, background-color;
-  transform: translateZ(0);
 }
 
 .main-header .container { display: flex; align-items: center; justify-content: space-between; padding: 0; max-width: 100%;}
@@ -183,7 +173,7 @@ img { max-width: 100%; height: auto; display: block; }
 .search-results::-webkit-scrollbar { width: 6px; }
 .search-results::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
 .search-result-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-bottom: 1px solid var(--glass-border); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
-.search-result-item:hover { background: rgba(157, 78, 221, 0.15); }
+.search-result-item:hover { background: rgba(138, 43, 226, 0.15); }
 
 /* Force search title to adapt */
 .search-result-title { color: var(--text-color); font-weight: 600; font-size: 0.95rem; }
@@ -242,38 +232,20 @@ img { max-width: 100%; height: auto; display: block; }
 .slider-nav button { width: 50px; height: 50px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); color: #fff; font-size: 1.2rem; cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
 .slider-nav button:hover { background: var(--primary-color); border-color: var(--primary-color); transform: scale(1.1); box-shadow: 0 10px 25px var(--primary-glow);}
 
-
 /* =====================================================
    4. PLATFORMS MARQUEE (GLASS PILLS)
 ===================================================== */
 .platforms-section { background: var(--background-color); padding: 20px 0; border-bottom: 1px solid var(--glass-border); position: relative; z-index: 2; margin: 0; transition: background-color 0.5s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.5s cubic-bezier(0.25, 1, 0.5, 1);}
 .platforms-title { text-align: center; font-size: 0.85rem; color: var(--text-muted-color); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
-.marquee-container { 
-    width: 100%; 
-    overflow: hidden; 
-    white-space: nowrap; 
-    position: relative; 
-    display: flex; 
-}
-.marquee-container::before, .marquee-container::after { 
-    content: ''; position: absolute; top: 0; width: 150px; height: 100%; z-index: 2; pointer-events: none; transition: background 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-}
+.marquee-container { width: 100%; overflow: hidden; white-space: nowrap; position: relative; }
+.marquee-container::before, .marquee-container::after { content: ''; position: absolute; top: 0; width: 150px; height: 100%; z-index: 2; pointer-events: none; transition: background 0.5s cubic-bezier(0.25, 1, 0.5, 1);}
 .marquee-container::before { left: 0; background: linear-gradient(to right, var(--background-color), transparent); }
 .marquee-container::after { right: 0; background: linear-gradient(to left, var(--background-color), transparent); }
 
-.marquee-content { 
-    display: flex; 
-    flex-shrink: 0; 
-    align-items: center;
-    width: max-content; 
-    animation: scroll 30s linear infinite; 
-}
+.marquee-content { display: inline-block; animation: scroll 25s linear infinite; }
 .marquee-content:hover { animation-play-state: paused; }
+@keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-@keyframes scroll { 
-    0% { transform: translateX(0); } 
-    100% { transform: translateX(-100%); } 
-}
 .platform-link {
   display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; margin: 0 8px;
   background: var(--glass-bg); backdrop-filter: var(--glass-blur); border-radius: 50px;
@@ -295,7 +267,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 
 /* =====================================================
-   5. ANIME SECTIONS, CAROUSELS, AND CATEGORY GRIDS
+   5. DRAMA SECTIONS, CAROUSELS, AND CATEGORY GRIDS
 ===================================================== */
 .category-header { padding: 40px 0 20px 0; text-align: center; }
 .category-title { font-size: 2.5rem; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
@@ -326,10 +298,10 @@ img { max-width: 100%; height: auto; display: block; }
 .view-all-link:hover { background: var(--primary-color); border-color: var(--primary-color); box-shadow: 0 4px 15px var(--primary-glow); color: white; }
 
 /* Universal Grid System (Used by Categories and Carousel) */
-.anime-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+.drama-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
 
 /* Carousel Override for Homepage */
-.anime-grid.carousel-mode { 
+.drama-grid.carousel-mode { 
   display: flex; 
   overflow-x: auto; 
   overflow-y: hidden; 
@@ -337,60 +309,51 @@ img { max-width: 100%; height: auto; display: block; }
   scroll-behavior: smooth; 
   min-height: 260px; 
 }
-.anime-grid.carousel-mode::-webkit-scrollbar { height: 6px; opacity: 0; transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
-.anime-grid.carousel-mode:hover::-webkit-scrollbar { opacity: 1; }
-.anime-grid.carousel-mode::-webkit-scrollbar-track { background: rgba(var(--text-rgb),0.03); border-radius: 10px; margin: 0 4%; }
-.anime-grid.carousel-mode::-webkit-scrollbar-thumb { background: rgba(var(--text-rgb),0.2); border-radius: 10px; }
-.anime-grid.carousel-mode::-webkit-scrollbar-thumb:hover { background: var(--primary-color); box-shadow: 0 0 10px var(--primary-glow); }
+.drama-grid.carousel-mode::-webkit-scrollbar { height: 6px; opacity: 0; transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+.drama-grid.carousel-mode:hover::-webkit-scrollbar { opacity: 1; }
+.drama-grid.carousel-mode::-webkit-scrollbar-track { background: rgba(var(--text-rgb),0.03); border-radius: 10px; margin: 0 4%; }
+.drama-grid.carousel-mode::-webkit-scrollbar-thumb { background: rgba(var(--text-rgb),0.2); border-radius: 10px; }
+.drama-grid.carousel-mode::-webkit-scrollbar-thumb:hover { background: var(--primary-color); box-shadow: 0 0 10px var(--primary-glow); }
 
-/* The Anime Card (Hardware Accelerated for Smoothness) */
-.anime-card {
+/* The Drama Card */
+.drama-card {
   background: var(--glass-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--glass-border);
   border-radius: 16px;
   overflow: hidden; 
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
   position: relative;
   
-  /* GPU Rendering Fixes */
-  will-change: transform, box-shadow, border-color, background-color;
-  transform: translate3d(0, 0, 0);
+  /* PERFORMANCE FIX: Hardware Acceleration for Glassmorphism */
+  transform: translateZ(0);
+  will-change: transform, opacity;
   backface-visibility: hidden;
-  perspective: 1000px;
-  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), 
-              box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-              border-color 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-              background-color 0.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
-.anime-grid.carousel-mode .anime-card {
+.drama-grid.carousel-mode .drama-card {
   min-width: 160px; max-width: 160px; flex-shrink: 0;
   animation: cardPopIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
 }
 
-@media (min-width: 1200px) { .anime-grid.carousel-mode .anime-card { min-width: 185px; max-width: 185px; } }
+@media (min-width: 1200px) { .drama-grid.carousel-mode .drama-card { min-width: 185px; max-width: 185px; } }
 
-.anime-card:hover {
-  transform: translate3d(0, -8px, 0) scale(1.02) !important;
+.drama-card:hover {
+  transform: translateY(-8px) scale(1.02);
   background: var(--glass-bg-hover);
-  border-color: rgba(157, 78, 221, 0.6);
-  box-shadow: 0 15px 30px rgba(157, 78, 221, 0.25);
+  border-color: rgba(138, 43, 226, 0.6);
+  box-shadow: 0 15px 30px rgba(138, 43, 226, 0.25);
   z-index: 2;
 }
 
-.anime-card-img { width: 100%; aspect-ratio: 4/5; overflow: hidden; }
-.anime-card-img img { 
-    width: 100%; height: 100%; object-fit: cover; 
-    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-    will-change: transform;
-    transform: translateZ(0);
-}
-.anime-card:hover .anime-card-img img { transform: scale(1.05); }
+.drama-card-img { width: 100%; aspect-ratio: 4/5; overflow: hidden; }
+.drama-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
+.drama-card:hover .drama-card-img img { transform: scale(1.05); }
 
-.anime-card-info { padding: 15px; }
-.anime-card-title { font-size: 0.95rem; color: var(--text-color); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
-.anime-card-meta { font-size: 0.8rem; color: var(--primary-color); font-weight: 600; }
+.drama-card-info { padding: 15px; }
+.drama-card-title { font-size: 0.95rem; color: var(--text-color); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+.drama-card-meta { font-size: 0.8rem; color: var(--primary-color); font-weight: 600; }
 
 .bookmark-btn {
     position: absolute; top: 10px; right: 10px; z-index: 10;
@@ -424,41 +387,42 @@ img { max-width: 100%; height: auto; display: block; }
 /* =====================================================
    7. FAB & MODAL (RICH GLASS)
 ===================================================== */
-.anime-fab {
+.drama-fab {
   position: fixed; bottom: 30px; right: 30px;
   background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border-light); color: var(--text-color); border-radius: 50px; padding: 14px 26px; 
   cursor: pointer; display: flex; align-items: center; gap: 10px; z-index: 999;
   box-shadow: var(--glass-shadow); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); font-weight: 500;
 }
-.anime-fab:hover { background: var(--primary-color); border-color: var(--primary-color); transform: scale(1.05); box-shadow: 0 10px 25px var(--primary-glow); color: white;}
+.drama-fab:hover { background: var(--primary-color); border-color: var(--primary-color); transform: scale(1.05); box-shadow: 0 10px 25px var(--primary-glow); color: white;}
 
-.anime-modal-overlay {
+.drama-modal-overlay {
   display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   z-index: 10000; justify-content: center; align-items: center; padding: 20px;
 }
-.anime-modal-card {
+.drama-modal-card {
   background: rgba(var(--bg-rgb), 0.85); backdrop-filter: blur(24px); border: 1px solid var(--glass-border-light);
   border-radius: 24px; padding: 40px 30px 30px; max-width: 420px; width: 100%;
   position: relative; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.6);
 }
-.anime-section-highlight { background: rgba(157, 78, 221, 0.1); border: 1px solid rgba(157, 78, 221, 0.25); border-radius: 16px; padding: 18px; margin-bottom: 20px; }
-.anime-section-highlight h4 { color: var(--primary-color); margin-bottom: 5px; font-weight: 600;}
-.anime-input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--glass-border); background: rgba(var(--text-rgb), 0.04); color: var(--text-color); margin-bottom: 12px; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
-.anime-input:focus { outline: none; border-color: var(--primary-color); background: rgba(var(--text-rgb), 0.08); box-shadow: inset 0 0 10px rgba(157,78,221,0.1); }
-.anime-timer-text { font-size: 0.8rem; color: var(--text-muted-color); margin-bottom: 15px; text-align: left; padding-left: 5px; }
-.anime-submit-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--primary-color); color: white; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 4px 15px var(--primary-glow); }
-.anime-submit-btn:hover { background: #c77dff; transform: translateY(-2px); }
-.anime-modal-close { position: absolute; top: 15px; right: 20px; background: none; border: none; color: var(--text-muted-color); font-size: 24px; cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
-.anime-modal-close:hover { color: var(--text-color); transform: rotate(90deg); }
-.anime-tg-link { color: #c488ff; font-weight: 600; }
-:root.light-mode .anime-tg-link { color: var(--primary-color); }
+.drama-section-highlight { background: rgba(138, 43, 226, 0.1); border: 1px solid rgba(138, 43, 226, 0.25); border-radius: 16px; padding: 18px; margin-bottom: 20px; }
+.drama-section-highlight h4 { color: var(--primary-color); margin-bottom: 5px; font-weight: 600;}
+.drama-input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--glass-border); background: rgba(var(--text-rgb), 0.04); color: var(--text-color); margin-bottom: 12px; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+.drama-input:focus { outline: none; border-color: var(--primary-color); background: rgba(var(--text-rgb), 0.08); box-shadow: inset 0 0 10px rgba(138,43,226,0.1); }
+.drama-timer-text { font-size: 0.8rem; color: var(--text-muted-color); margin-bottom: 15px; text-align: left; padding-left: 5px; }
+.drama-submit-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--primary-color); color: white; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 4px 15px var(--primary-glow); }
+.drama-submit-btn:hover { background: #9d4edd; transform: translateY(-2px); }
+.drama-modal-close { position: absolute; top: 15px; right: 20px; background: none; border: none; color: var(--text-muted-color); font-size: 24px; cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+.drama-modal-close:hover { color: var(--text-color); transform: rotate(90deg); }
+.drama-tg-link { color: #c488ff; font-weight: 600; }
+:root.light-mode .drama-tg-link { color: var(--primary-color); }
 
 /* =====================================================
    8. MOBILE APP VIEW & LIQUID GLASS BAR (FIXED ALIGNMENTS)
 ===================================================== */
 @media (max-width: 992px) {
   
+  /* Better Mobile Header Pill */
   .main-header { 
     top: 10px; 
     width: 95%; 
@@ -480,6 +444,7 @@ img { max-width: 100%; height: auto; display: block; }
   .search-bar { width: 100%; margin: 0; }
   .mobile-menu-toggle { display: block; z-index: 10005; font-size: 1.6rem; }
 
+  /* Premium Side Menu Override */
   .nav-links {
     position: fixed; top: 0; left: -110%; width: 280px; height: 100vh;
     background: rgba(var(--bg-rgb), 0.65);
@@ -495,7 +460,7 @@ img { max-width: 100%; height: auto; display: block; }
     font-size: 1.05rem; font-weight: 500; text-align: left;
     color: var(--text-color); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   }
-  .nav-links a:hover, .nav-links a:active { background: rgba(157, 78, 221, 0.15); border-color: var(--primary-color); color: var(--primary-color);}
+  .nav-links a:hover, .nav-links a:active { background: rgba(138, 43, 226, 0.15); border-color: var(--primary-color); color: var(--primary-color);}
   
   .earn-nav-link { color: #d4af37 !important; font-weight: 700 !important; border: 1px solid rgba(212, 175, 55, 0.3) !important; padding: 6px 14px !important; border-radius: 8px; background: rgba(212, 175, 55, 0.05); }
   .earn-nav-link:hover { color: #f1c40f !important; background: rgba(212, 175, 55, 0.15); border-color: #f1c40f !important; }
@@ -504,11 +469,12 @@ img { max-width: 100%; height: auto; display: block; }
   .menu-overlay { position: fixed; inset: 0; background: transparent; backdrop-filter: blur(4px); z-index: 998; display: none; }
   .menu-overlay.active { display: block; }
 
+  /* Infinite Scroll Centered Banner Effect Fixes */
   .hero-slider { 
     height: 55vh; 
     min-height: 480px; 
     padding: 0; 
-    margin-top: 80px; 
+    margin-top: 80px; /* Safe space for the floating pill header */
     display: flex; 
     align-items: center; 
     background: transparent; 
@@ -516,7 +482,7 @@ img { max-width: 100%; height: auto; display: block; }
     position: relative; 
   }
   .slider-wrapper { 
-    width: 65%; 
+    width: 65%; /* Removed the hard margins, replaced with proper width */
     margin: 0 auto; 
     display: flex; 
     height: 95%; 
@@ -525,6 +491,7 @@ img { max-width: 100%; height: auto; display: block; }
     padding-top: 11%;
   }
 
+
   .slide { 
     min-width: 100%; height: 100%; position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.6); 
     background-size: cover; background-position: center; border: 1px solid rgba(255,255,255,0.1);
@@ -532,27 +499,19 @@ img { max-width: 100%; height: auto; display: block; }
   }
   .slide.active { transform: scale(1); opacity: 1; z-index: 2; }
   
+  .slider-wrapper .slide-1 { background-image: url('https://asianwiki.com/images/f/fe/Boyfriend_on_Demand-p2.jpeg'); }
+  .slider-wrapper .slide-2 { background-image: url('https://m.media-amazon.com/images/M/MV5BMTQyYWJlYjgtMzJjZC00YmU0LTk1ODUtOTdhNWRmOTFlMzMzXkEyXkFqcGc@._V1_.jpg'); }
+  .slider-wrapper .slide-3 { background-image: url('https://i0.wp.com/blog.kocowa.com/wp-content/uploads/2025/12/idol-12.jpg?resize=719%2C1024&ssl=1'); }
+  .slider-wrapper .slide-4 { background-image: url('https://preview.redd.it/perfect-crown-episodes-1-2-v0-rccoh9yt38ug1.jpg?width=900&format=pjpg&auto=webp&s=24e40adff47b98c1d5c82ae86124e87269ca5ba9'); }
   .slide-bg-image, .slide-content, .slider-nav { display: none !important; }
   .slide::after { background: linear-gradient(to top, rgba(var(--bg-rgb),0.95) 0%, rgba(var(--bg-rgb),0.2) 60%, transparent 100%); }
-
-  .slide::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: var(--mobile-poster);
-    background-size: cover;
-    background-position: center;
-    z-index: 0;
-    border-radius: inherit;
-    pointer-events: none;
-  }
 
   .hero-mobile-bar { 
     position: absolute; 
     bottom: 0; 
     left: 0; 
     width: 100%; 
-    padding: 20px; 
+    padding: 20px; /* Refined padding */
     display: flex; 
     align-items: flex-end; 
     justify-content: space-between; 
@@ -563,12 +522,12 @@ img { max-width: 100%; height: auto; display: block; }
   }
   .slide.active .hero-mobile-bar { opacity: 1; pointer-events: auto; }
   .hero-mobile-title { 
-    font-size: 1.25rem; 
+    font-size: 1.25rem; /* Slightly smaller to prevent text wrap issues */
     font-weight: 700; 
     color: var(--text-color); 
     line-height: 1.2; 
     text-shadow: 0 2px 10px rgba(0,0,0,0.6); 
-    max-width: 65%; 
+    max-width: 65%; /* More space for the button */
     margin-bottom: 5px;
   }
   .hero-play-btn { 
@@ -585,23 +544,29 @@ img { max-width: 100%; height: auto; display: block; }
     box-shadow: 0 4px 15px var(--primary-glow); 
   }
 
-  .anime-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
-  .anime-grid.carousel-mode .anime-card { min-width: 130px; max-width: 130px; border-radius: 12px; }
-  .anime-card-info { padding: 12px; }
-  .anime-card-title { font-size: 0.85rem; }
-  .anime-card-meta { font-size: 0.75rem; }
+  /* Mobile Grid Formatting */
+  .drama-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
+  .drama-grid.carousel-mode .drama-card { min-width: 130px; max-width: 130px; border-radius: 12px; }
+  .drama-card-info { padding: 12px; }
+  .drama-card-title { font-size: 0.85rem; }
+  .drama-card-meta { font-size: 0.75rem; }
   .section-glass-box { padding: 25px 0 10px 0; }
   .section-title { font-size: 1.3rem; }
   .category-title { font-size: 1.8rem; }
 
+  /* Give the body more padding to clear the floating bottom navs */
   body { padding-bottom: 110px; } 
   
-  .anime-fab { bottom: 100px; right: 20px; padding: 12px 18px; border-radius: 50px; }
+  /* Moved the FAB up slightly to avoid hitting the bottom nav */
+  .drama-fab { bottom: 100px; right: 20px; padding: 12px 18px; border-radius: 50px; }
 
+  /* =====================================================
+     APPLE LIQUID GLASS BOTTOM BAR
+  ===================================================== */
   .bottom-nav {
     display: flex !important; 
     position: fixed !important; 
-    bottom: 15px !important; 
+    bottom: 15px !important; /* Slightly more lift off the physical screen edge */
     left: 50% !important; 
     transform: translateX(-50%) !important; 
     width: 90% !important; 
@@ -630,6 +595,7 @@ img { max-width: 100%; height: auto; display: block; }
   .bottom-nav-item.active .nav-label { font-weight: 700; }
 } 
 
+/* Hide Bottom Nav on Desktop */
 @media (min-width: 993px) {
   .bottom-nav { display: none !important; }
 }
@@ -641,10 +607,10 @@ img { max-width: 100%; height: auto; display: block; }
   display: none; 
   align-items: center; gap: 8px; background: var(--primary-color); color: white;
   padding: 10px 18px; border-radius: 20px; font-weight: 600; font-size: 0.9rem;
-  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 4px 15px var(--primary-glow); margin-left: 20px;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 4px 15px var(--primary-glow); text-decoration: none; margin-left: 20px;
 }
 
-.header-download-btn:hover { background: #c77dff; transform: translateY(-2px); color: white; box-shadow: 0 6px 20px rgba(157, 78, 221, 0.6); }
+.header-download-btn:hover { background: #9d4edd; transform: translateY(-2px); color: white; box-shadow: 0 6px 20px rgba(157, 78, 221, 0.6); }
 
 @media (min-width: 993px) { .header-download-btn { display: inline-flex; } }
 
@@ -663,10 +629,11 @@ img { max-width: 100%; height: auto; display: block; }
 .popup-text h4 { margin: 0 0 2px 0; font-size: 0.95rem; color: var(--text-color); line-height: 1.2; }
 .popup-text p { margin: 0; font-size: 0.75rem; color: var(--text-muted-color); }
 .btn-install { background: var(--primary-color); color: white; padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 2px 10px var(--primary-glow); }
-.btn-install:hover { background: #c77dff; color: white; }
+.btn-install:hover { background: #9d4edd; color: white; }
 .btn-close-popup { background: transparent; border: none; color: var(--text-muted-color); font-size: 1.2rem; cursor: pointer; padding: 0 4px; margin-left: 5px; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
 .btn-close-popup:hover { color: var(--text-color); }
 
+/* Moved the install popup higher on mobile so it doesn't overlap the bottom nav */
 @media (max-width: 992px) { .app-install-popup { bottom: 105px; width: 92%; } }
 
 /* =====================================================
@@ -674,14 +641,14 @@ img { max-width: 100%; height: auto; display: block; }
 ===================================================== */
 .fade-in-section {
   opacity: 0;
-  transform: translate3d(0, 30px, 0);
-  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1) !important;
-  will-change: opacity, transform;
+  transform: translateY(30px);
+  transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: opacity, visibility;
 }
 
 .fade-in-section.is-visible {
   opacity: 1;
-  transform: translate3d(0, 0, 0);
+  transform: translateY(0);
 }
 
 @keyframes cardPopIn {
@@ -693,6 +660,7 @@ img { max-width: 100%; height: auto; display: block; }
    LITE MODE UI (Triggered automatically on budget phones)
 ===================================================== */
 .lite-mode {
+  /* Replace transparent variables with solid, fast-rendering colors */
   --glass-bg: var(--surface-color);
   --glass-bg-hover: rgba(var(--text-rgb), 0.05); 
   --glass-blur: blur(0px); 
@@ -700,7 +668,8 @@ img { max-width: 100%; height: auto; display: block; }
   --glass-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
 }
 
-.lite-mode .anime-card,
+/* Strip heavy effects from specific elements */
+.lite-mode .drama-card,
 .lite-mode .main-header,
 .lite-mode .community-sidebar,
 .lite-mode .chat-area,
@@ -711,11 +680,13 @@ img { max-width: 100%; height: auto; display: block; }
   background-color: var(--glass-bg) !important;
 }
 
+/* Simplify the Hero Slider background gradient */
 .lite-mode .slide::after {
   background: rgb(var(--bg-rgb)) !important; 
   opacity: 0.8; 
 }
 
+/* Disable heavy CSS animations on low-end devices */
 .lite-mode * {
   transition-duration: 0.1s !important; 
   animation-duration: 0.01ms !important; 

@@ -4,124 +4,450 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Anykan - Watch High-Quality Movies, TV Shows & Anime Online Free</title>
-    <meta name="title" content="Anykan - Stream High-Quality Movies, Shows & Anime Online">
-    <meta name="description" content="Stream the latest Hollywood blockbusters, Bollywood hits, Hindi Dramas, English series, and HD Anime online. Fast streaming, daily updates, and limitless entertainment.">
-    <meta name="keywords" content="watch movies online, free anime streaming, bollywood hits, latest hollywood movies, hindi dubbed dramas, web series online, Anykan, stream HD shows">
-    <meta name="author" content="Anykan">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <title>Anykan - Stream Movies, TV Shows, Anime & Asian Dramas Online</title>
+    <meta name="title" content="Anykan - Stream Movies, TV Shows, Anime & Asian Dramas Online">
+    <meta name="description" content="Stream the latest movies, TV shows, anime, and premium Asian dramas online. Your ultimate multi-genre entertainment hub with daily updates.">
+    <meta name="keywords" content="movies, tv shows, anime, watch online, kdrama, cdrama, streaming, Anykan, Anykan.fun">
+    <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://anykan.fun/">
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://anykan.fun/">
-    <meta property="og:title" content="Anykan - Watch High-Quality Movies, TV Shows & Anime">
-    <meta property="og:description" content="Stream the latest Hollywood blockbusters, Bollywood hits, Hindi Dramas, and HD Anime online. Fast streaming and daily updates.">
-    <meta property="og:image" content="https://anykan.fun/assets/anykan-social-banner.jpg">
+    <meta property="og:title" content="Anykan - The Ultimate Entertainment Hub">
+    <meta property="og:description" content="Watch high-quality movies, TV shows, anime, and global dramas for free. New titles added daily!">
+    <meta property="og:image" content="https://anykan.fun/og-image.jpg"> 
     <meta property="og:site_name" content="Anykan">
 
-    <link rel="icon" href="favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Anykan">
-    <meta name="theme-color" content="#9D4EDD">
-    <link rel="manifest" href="/manifest.json">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://anykan.fun/">
+    <meta name="twitter:title" content="Anykan - The Ultimate Entertainment Hub">
+    <meta name="twitter:description" content="Your home for the latest global entertainment. Stream movies, anime, and shows now for free!">
+    <meta name="twitter:image" content="https://anykan.fun/og-image.jpg">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="anykan-style.css">
     
+    <link rel="stylesheet" href="indexstyle.css">
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3854581977852778" crossorigin="anonymous"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
-    <script src="index.js" defer></script>
-    <script type="module" src="anykan-notifier.js" defer></script>
+    <script src="bottom-bar.js" defer></script>
+    <script src="feedback-popup.js" defer></script>
+    <script src="admin_easter_egg.js" defer></script>
+    <script type="module" src="promo-banner.js"></script>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Anykan">
+    <meta name="theme-color" content="#8A2BE2">
+    <link rel="manifest" href="/manifest.json">
+    
+    <meta name="profiton-domain-verification" content="83bbf89227b6b4d5007751c1c041b086e38fad700c9540a23062dc09dcfe1856" />
+    <style>
+        /* --- PC HEADER & AnyKan TOGGLE STYLES --- */
+        .site-switcher {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+        .switcher-track {
+            display: flex;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 4px;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
+        }
+        
+        .nav-links .switcher-track .switch-btn {
+            padding: 6px 14px !important;
+            border-radius: 50px !important;
+            font-size: 0.85rem !important;
+            font-weight: 600 !important;
+            color: #a1a1aa !important;
+            text-decoration: none !important;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+            opacity: 1 !important;
+            border: none !important;
+            width: auto !important;
+            background: transparent !important;
+            display: inline-block;
+            text-shadow: none !important;
+        }
+        .nav-links .switcher-track .switch-btn.active {
+            background: linear-gradient(135deg, #8A2BE2 0%, #6a1b9a 100%) !important;
+            color: #fff !important;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4) !important;
+        }
+        .nav-links .switcher-track .switch-btn:not(.active):hover {
+            color: #fff !important;
+            background: rgba(255,255,255,0.08) !important;
+        }
+
+        /* --- PREMIUM HERO SLIDER CONTROLS --- */
+        .hero-slider-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+        .hero-slider-wrapper {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .hero-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .dk-slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            z-index: 50;
+        }
+        .dk-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .dk-dot.active {
+            background: var(--primary-color, #8A2BE2);
+            width: 24px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
+        }
+        
+        .btn-n.active {
+            background: rgba(138, 43, 226, 0.15) !important; 
+            border: 1px solid var(--primary-color) !important; 
+            color: var(--primary-color) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        /* --- CONTINUE WATCHING LANDSCAPE CARDS --- */
+        .cw-landscape-card {
+            display: flex; flex-direction: column; width: 300px; min-width: 300px;
+            background: rgba(20, 20, 28, 0.8); border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 12px; overflow: hidden; transition: transform 0.3s ease, border-color 0.3s ease;
+            text-decoration: none; flex-shrink: 0; position: relative;
+        }
+        .cw-landscape-card:hover { 
+            transform: translateY(-5px); 
+            border-color: rgba(138, 43, 226, 0.8); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
+        }
+        .cw-landscape-img { 
+            width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #111; 
+        }
+        .cw-progress-container { 
+            width: 100%; height: 4px; background: rgba(255,255,255,0.1); 
+        }
+        .cw-progress-bar { 
+            height: 100%; background: var(--primary-color, #8A2BE2); 
+            box-shadow: 0 0 10px var(--primary-color, #8A2BE2); border-radius: 0 2px 2px 0; 
+        }
+        .cw-landscape-info { 
+            padding: 12px; display: flex; flex-direction: column; gap: 6px; 
+        }
+        .cw-landscape-title { 
+            font-size: 0.95rem; font-weight: 600; color: #fff; margin: 0; 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+        }
+        .cw-landscape-meta { 
+            font-size: 0.8rem; color: #9CA3AF; display: flex; justify-content: space-between; align-items: center; 
+        }
+        .cw-play-badge { 
+            color: var(--primary-color); font-weight: 500; display: flex; align-items: center; gap: 5px; 
+        }
+
+        /* --- SCHEDULE SECTION STYLES (UPDATED DYNAMIC GRID) --- */
+        .schedule-section { margin-bottom: 40px; }
+        .day-toggle-container { 
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; 
+            margin-bottom: 20px; scrollbar-width: none; 
+        }
+        .day-toggle-container::-webkit-scrollbar { display: none; }
+        .day-btn { 
+            flex: 1; min-width: 65px; padding: 10px 0; background: rgba(255,255,255,0.03); 
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08)); border-radius: 12px; 
+            color: var(--text-muted, #9CA3AF); font-weight: 600; font-size: 0.9rem; text-align: center; 
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); 
+        }
+        .day-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .day-btn.active { 
+            background: var(--primary-color, #8A2BE2); color: #fff; 
+            border-color: var(--primary-color, #8A2BE2); box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4); 
+        }
+        
+        /* Grid specifically to prevent wasted space */
+        .schedule-list { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); 
+            gap: 20px; 
+        }
+        .schedule-item { 
+            display: flex; gap: 18px; background: rgba(20, 20, 28, 0.6); 
+            border: 1px solid rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 16px; 
+            align-items: center; transition: transform 0.3s ease, border-color 0.3s ease; 
+            text-decoration: none; 
+        }
+        .schedule-item:hover { transform: translateY(-3px); border-color: rgba(138, 43, 226, 0.5); box-shadow: 0 10px 25px rgba(0,0,0,0.4);}
+        .schedule-item img { 
+            width: 85px; height: 125px; border-radius: 10px; object-fit: cover; background: #111; flex-shrink: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .schedule-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+        .schedule-title { font-size: 1.15rem; color: #fff; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0; }
+        
+        .schedule-meta { display: flex; align-items: center; gap: 10px; margin: 0; }
+        .schedule-meta span { font-size: 0.75rem; color: #fff; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 8px; font-weight: 500;}
+        .schedule-meta span.rating-badge { background: rgba(241, 196, 15, 0.15); color: var(--vip-gold); }
+        
+        .schedule-ep-details { display: flex; flex-direction: column; gap: 5px; margin-top: 2px;}
+        .schedule-ep-details span.ep-text { font-size: 0.9rem; color: #fff; font-weight: 600; display: flex; align-items: center; gap: 8px;}
+        .schedule-ep-details span.ep-text i { color: var(--primary-color, #8A2BE2); }
+        .schedule-ep-details span.date-text { font-size: 0.8rem; color: var(--text-muted, #9CA3AF); display: flex; align-items: center; gap: 8px;}
+
+        .schedule-play-icon { 
+            width: 45px; height: 45px; border-radius: 50%; background: rgba(138, 43, 226, 0.1);
+            color: var(--primary-color, #8A2BE2); display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; flex-shrink: 0; transition: 0.3s; border: 1px solid rgba(138, 43, 226, 0.3); margin-left: 5px;
+        }
+        .schedule-item:hover .schedule-play-icon { 
+            background: var(--primary-color, #8A2BE2); color: #fff; transform: scale(1.1); box-shadow: 0 4px 15px rgba(138,43,226,0.4);
+        }
+
+        /* --- MOBILE RESPONSIVE TWEAKS & BOTTOM BAR --- */
+        @media (max-width: 992px) {
+            .site-switcher {
+                margin-top: 10px;
+                width: 100%;
+                margin-left: 0;
+            }
+            .switcher-track {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
+            .nav-links .switcher-track .switch-btn {
+                text-align: center;
+                flex: 1;
+                padding: 10px 15px !important;
+            }
+            .header-right { gap: 10px; }
+
+            .cw-landscape-card { width: 260px; min-width: 260px; }
+
+            .hero-content h1,
+            .hero-content .series-badge,
+            .hero-content .hero-meta-tags,
+            .hero-vignette,
+            .hero-depth-shadow {
+                display: none !important;
+            }
+
+            .hero-card {
+                display: flex !important;
+                flex-direction: column !important;
+                height: 90% !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                border-radius: 12px !important;
+            }
+            .hero-image-wrapper {
+                position: relative !important;
+                height: 85.5% !important; 
+                width: 100% !important;
+                display: block !important;
+            }
+            .hero-image {
+                height: auto !important;
+                width: 100% !important;
+                object-fit: cover !important;
+                display: block !important;
+            }
+            .hero-content {
+                position: relative !important;
+                width: 100% !important;
+                padding: 0 !important;
+                background: transparent !important;
+                bottom: auto !important;
+                left: auto !important;
+            }
+            .hero-actions {
+                position: relative !important;
+                display: flex !important;
+                justify-content: center !important;
+                gap: 15px !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 10px 15px 10px 10px !important;
+                background: rgba(0, 0, 0, 0);
+                backdrop-filter: blur(85px) saturate(250%) !important;
+                -webkit-backdrop-filter: blur(85px) saturate(250%) !important;
+                border-top: none !important;
+                z-index: 10 !important;
+                box-sizing: border-box !important;
+            }
+            .hero-actions .btn-n {
+                flex: 1 !important;
+                justify-content: center !important;
+                padding: 12px 0 !important;
+            }
+            .dk-slider-dots {
+                bottom: 30px !important; 
+                z-index: 20 !important;
+            }
+            
+            /* Responsive Grid Fallback for Mobile Schedule */
+            .schedule-list { grid-template-columns: 1fr; }
+            .schedule-item { padding: 12px; gap: 12px;}
+            .schedule-item img { width: 75px; height: 110px; }
+            .schedule-title { font-size: 1rem; }
+            .schedule-meta span { font-size: 0.7rem; padding: 2px 8px; }
+            .schedule-play-icon { width: 36px; height: 36px; font-size: 1.1rem; }
+
+            .bottom-nav {
+                display: flex !important; 
+                position: fixed !important; 
+                bottom: 15px !important; 
+                left: 50% !important; 
+                transform: translateX(-50%) !important;
+                width: 90% !important; 
+                max-width: 400px !important; 
+                background: rgba(20, 20, 25, 0.65) !important; 
+                backdrop-filter: blur(40px) saturate(180%) !important;
+                -webkit-backdrop-filter: blur(40px) saturate(180%) !important; 
+                border: 1px solid rgba(255, 255, 255, 0.08) !important; 
+                border-radius: 50px !important;
+                z-index: 999999 !important; 
+                padding: 5px 10px !important; 
+                box-shadow: 0 25px 50px rgba(0,0,0,0.5) !important;
+            }
+            .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 0; color: rgba(255, 255, 255, 0.5); text-decoration: none; transition: all 0.4s ease; }
+            .bottom-nav-item.active { color: #fff; }
+            .bottom-nav-item .nav-icon { font-size: 1.35rem; margin-bottom: 4px; transition: transform 0.4s ease; }
+            .bottom-nav-item:hover .nav-icon, .bottom-nav-item.active .nav-icon { transform: translateY(-4px) scale(1.15); color: var(--primary-color, #8A2BE2); }
+            .bottom-nav-item .nav-label { font-size: 0.65rem; font-weight: 500; }
+            body { padding-bottom: 100px; }
+        }
+        @media (min-width: 993px) { .bottom-nav { display: none !important; } }
+    </style>
 </head>
 <body>
-
-    <div class="full-modal gatekeeper-modal" id="gatekeeperModal">
-        <div class="modal-content-wrap">
-            <h2 class="modal-title">Who's Watching?</h2>
-            <div class="profiles-grid" id="gatekeeperProfilesGrid"></div>
-        </div>
-    </div>
 
     <header class="main-header">
         <div class="header-container">
             <div class="header-left">
-                <div class="mobile-menu-toggle" id="mobileMenuToggle" style="margin-right: 15px; font-size: 1.4rem; cursor: pointer; display: none;">
-                    <i class="fas fa-bars"></i>
-                </div>
                 <a href="index.html" class="logo">Any<span>Kan</span></a>
             </div>
 
-            <nav class="pc-nav" id="navLinks">
+            <nav class="nav-links pc-nav" id="navLinks">
                 <ul>
                     <li><a href="index.html" class="active">Home</a></li>
-                    <li><a href="community.html">Community</a></li>
+                    <li><a href="community.html">Updates</a></li>
                     <li><a href="mylist.html">My List</a></li>
-                    <li>
-                        <div class="site-switcher" style="display: flex; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; padding: 3px;">
-                            <a href="https://dramakan.site" style="padding: 5px 15px; border-radius: 50px; font-size: 0.85rem;">DramaKan</a>
-                            <span style="background: var(--primary-color); color: #fff; padding: 5px 15px; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Anykan</span>
+                    <li class="site-switcher">
+                        <div class="switcher-track">
+                            <a href="https://dramakan.site" class="switch-btn">Dramakan</a>
+                            <span class="switch-btn active">Anykan</span>
                         </div>
                     </li>
                 </ul>
             </nav>
 
-            <div class="header-right">
+            <div class="header-right" style="display: flex; align-items: center;">
                 <div class="search-bar pc-search-bar">
                     <i class="fas fa-search"></i>
-                    <input class="search-input-field" type="text" placeholder="Search movies, shows, anime...">
-                    <a href="filter.html" class="search-filter-link"><i class="fas fa-sliders-h"></i></a>
-                    <div class="search-results"></div>
+                    <input id="searchInput" type="text" placeholder="Search movies, TV shows, anime...">
+                    <a href="filter.html" class="search-filter-link" title="Advanced Filter">
+                        <i class="fas fa-sliders-h"></i>
+                    </a>
+                    <div id="searchResults" class="search-results"></div>
                 </div>
+
+                <a href="subscription.html" id="headerVipBtn" class="vip-header-btn status-basic">
+                    <i class="fas fa-bolt"></i> Upgrade VIP
+                </a>
                 
-                <div class="global-notif-wrapper" style="position: relative; display: flex; align-items: center;">
-                    <button id="globalNotifBtn" class="header-profile-btn" title="Notifications" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
-                        <i class="fas fa-bell"></i>
-                        <span id="globalNotifBadge" class="notif-badge-dot" style="display:none;"></span>
-                    </button>
-                    
-                    <div class="global-notif-dropdown" id="globalNotifDropdown">
-                        <div class="notif-header">
-                            <span>Notifications</span>
-                            <button id="clearNotifsBtn">Clear All</button>
-                        </div>
-                        <div id="globalNotifList" class="notif-list"></div>
-                    </div>
-                </div>
-                
-                <a href="login.html" class="header-profile-btn" id="topAuthBtn" title="Profile/Login">
-                    <i class="fas fa-user"></i>
+                <a href="login.html" class="header-profile-btn" id="topAuthBtn">
+                    <i class="fa-solid fa-user"></i> <span>Login / Sign Up</span>
                 </a>
             </div>
         </div>
-        
+
         <div class="mobile-search-container">
             <div class="mobile-glass-search">
                 <i class="fas fa-search"></i>
-                <input class="search-input-field" type="text" placeholder="Search movies, shows...">
-                <a href="filter.html" style="color: rgba(255,255,255,0.8); margin-left: 10px;"><i class="fas fa-sliders-h"></i></a>
+                <input id="mobileSearchInput" type="text" placeholder="Search movies, shows, anime...">
+                <a href="filter.html" class="search-filter-link"><i class="fas fa-sliders-h"></i></a>
             </div>
-            <div class="search-results mobile-search-results-dropdown"></div>
+            <div id="mobileSearchResults" class="search-results mobile-search-results-dropdown"></div>
         </div>
     </header>
     
     <section class="netflix-hero">
-        <div class="hero-card" id="hero-card"></div>
+        <div class="hero-slider-container">
+            <div class="hero-slider-wrapper" id="hero-slider-wrapper">
+                <div class="hero-slide">
+                    <div class="hero-card" style="display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.02);">
+                        <i class="fas fa-spinner fa-spin fa-3x" style="color: var(--primary-color, #8A2BE2);"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="dk-slider-dots" id="hero-slider-dots"></div>
+        </div>
+    </section>
+
+    <section class="platforms-section">
+        <div class="container">
+            <h3 class="platforms-title">Available Content From Platforms</h3>
+            
+            <div class="platforms-marquee-wrapper">
+                <div class="platforms-marquee-track">
+                    <a href="netflix.html" class="platform-link brand-netflix"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix"></a>
+                    <a href="prime.html" class="platform-link brand-prime"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Amazon_Prime_Video_logo.svg/960px-Amazon_Prime_Video_logo.svg.png" alt="Prime Video"></a>
+                    <a href="viki.html" class="platform-link brand-viki"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Rakuten_Viki_Logo_2019.svg/1200px-Rakuten_Viki_Logo_2019.svg.png?20190811183059" alt="Viki"></a>
+                    <a href="viu.html" class="platform-link brand-viu"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Viu_logo.svg/3840px-Viu_logo.svg.png" alt="Viu"></a>
+                    <a href="iqiyi.html" class="platform-link brand-iqiyi"><img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Iqiyi_Logo_Baru.png" alt="iQIYI"></a>
+                    <a href="wetv.html" class="platform-link brand-wetv"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/WeTV_logo.svg/1280px-WeTV_logo.svg.png" alt="WeTV"></a>
+                    <a href="crunchyroll.html" class="platform-link brand-crunchyroll"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Crunchyroll_Logo.svg/1280px-Crunchyroll_Logo.svg.png" alt="Crunchyroll"></a>
+                    <a href="disneyplus.html" class="platform-link brand-disney"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Disney%2B_logo.svg/1280px-Disney%2B_logo.svg.png" alt="Disney+"></a>
+
+                    <a href="netflix.html" class="platform-link brand-netflix" aria-hidden="true"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix"></a>
+                    <a href="prime.html" class="platform-link brand-prime" aria-hidden="true"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Amazon_Prime_Video_logo.svg/960px-Amazon_Prime_Video_logo.svg.png" alt="Prime Video"></a>
+                    <a href="viki.html" class="platform-link brand-viki" aria-hidden="true"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Rakuten_Viki_Logo_2019.svg/1200px-Rakuten_Viki_Logo_2019.svg.png?20190811183059" alt="Viki"></a>
+                    <a href="viu.html" class="platform-link brand-viu" aria-hidden="true"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Viu_logo.svg/3840px-Viu_logo.svg.png" alt="Viu"></a>
+                    <a href="iqiyi.html" class="platform-link brand-iqiyi" aria-hidden="true"><img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Iqiyi_Logo_Baru.png" alt="iQIYI"></a>
+                    <a href="wetv.html" class="platform-link brand-wetv" aria-hidden="true"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/WeTV_logo.svg/1280px-WeTV_logo.svg.png" alt="WeTV"></a>
+                    <a href="crunchyroll.html" class="platform-link brand-crunchyroll" aria-hidden="true"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Crunchyroll_Logo.svg/1280px-Crunchyroll_Logo.svg.png" alt="Crunchyroll"></a>
+                    <a href="disneyplus.html" class="platform-link brand-disney" aria-hidden="true"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Disney%2B_logo.svg/1280px-Disney%2B_logo.svg.png" alt="Disney+"></a>
+                </div>
+            </div>
+        </div>
     </section>
 
     <main>
         <section class="latest-episodes" id="continue-watching-section" style="display: none;">
             <div class="container">
-                <div class="section-glass-box">
+                <div class="section-glass-box" style="background: rgba(var(--bg-rgb), 0.05); border-color: var(--primary-color);">
                     <div class="section-header">
                         <h2 class="section-title"><i class="fas fa-play-circle" style="color: var(--primary-color);"></i> Continue Watching</h2>
                     </div>
-                    <div id="continue-watching-grid" class="anime-grid carousel-mode"></div>
+                    <div id="continue-watching-grid" class="drama-grid carousel-mode"></div>
                 </div>
             </div>
         </section>
@@ -130,10 +456,10 @@
             <div class="container">
                 <div class="section-glass-box">
                     <div class="section-header">
-                        <h2 class="section-title"><i class="fas fa-fire" style="color: #ff4d4d; margin-right: 8px;"></i>Trending Anime</h2>
-                        <a href="trending-anime.html" class="view-all-link">View All</a>
+                        <h2 class="section-title">Trending Globally</h2>
+                        <a href="trending.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
                     </div>
-                    <div id="trending-anime-grid" class="anime-grid carousel-mode"></div>
+                    <div id="trending-grid" class="drama-grid carousel-mode"></div>
                 </div>
             </div>
         </section>
@@ -142,10 +468,10 @@
             <div class="container">
                 <div class="section-glass-box">
                     <div class="section-header">
-                        <h2 class="section-title"><i class="fas fa-star" style="color: #f5c518; margin-right: 8px;"></i>Popular Anime</h2>
-                        <a href="popular.html" class="view-all-link">View All</a>
+                        <h2 class="section-title">Top Movies</h2>
+                        <a href="movies.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
                     </div>
-                    <div id="popular-anime-grid" class="anime-grid carousel-mode"></div>
+                    <div id="movie-grid" class="drama-grid carousel-mode"></div>
                 </div>
             </div>
         </section>
@@ -154,10 +480,10 @@
             <div class="container">
                 <div class="section-glass-box">
                     <div class="section-header">
-                        <h2 class="section-title"><i class="fas fa-calendar-alt" style="color: #60a5fa; margin-right: 8px;"></i>Upcoming Releases</h2>
-                        <a href="upcoming.html" class="view-all-link">View All</a>
+                        <h2 class="section-title">Popular TV Shows</h2>
+                        <a href="tvshows.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
                     </div>
-                    <div id="upcoming-anime-grid" class="anime-grid carousel-mode"></div>
+                    <div id="tv-grid" class="drama-grid carousel-mode"></div>
                 </div>
             </div>
         </section>
@@ -166,10 +492,10 @@
             <div class="container">
                 <div class="section-glass-box">
                     <div class="section-header">
-                        <h2 class="section-title"><i class="fas fa-clock" style="color: #34d399; margin-right: 8px;"></i>Airing Schedule</h2>
-                        <a href="schedule.html" class="view-all-link">View All</a>
+                        <h2 class="section-title">Trending Anime</h2>
+                        <a href="anime.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
                     </div>
-                    <div id="schedule-anime-grid" class="anime-grid carousel-mode"></div>
+                    <div id="anime-grid" class="drama-grid carousel-mode"></div>
                 </div>
             </div>
         </section>
@@ -178,75 +504,64 @@
             <div class="container">
                 <div class="section-glass-box">
                     <div class="section-header">
-                        <h2 class="section-title">Trending (All Content)</h2>
-                        <a href="trending.html" class="view-all-link">View All</a>
+                        <h2 class="section-title">Asian Dramas</h2>
+                        <a href="asian.html" class="view-all-link">View All <i class="fas fa-chevron-right"></i></a>
                     </div>
-                    <div id="trending-grid" class="anime-grid carousel-mode"></div>
+                    <div id="asian-grid" class="drama-grid carousel-mode"></div>
                 </div>
             </div>
         </section>
 
-        <section class="latest-episodes">
+        <section class="latest-episodes schedule-section">
             <div class="container">
                 <div class="section-glass-box">
                     <div class="section-header">
-                        <h2 class="section-title">Hollywood Blockbusters</h2>
-                        <a href="hollywood.html" class="view-all-link">View All</a>
+                        <h2 class="section-title"><i class="fas fa-calendar-alt" style="color: var(--primary-color);"></i> Release Schedule</h2>
                     </div>
-                    <div id="hollywood-grid" class="anime-grid carousel-mode"></div>
+                    
+                    <div class="day-toggle-container">
+                        <button class="day-btn" data-day="1">Mon</button>
+                        <button class="day-btn" data-day="2">Tue</button>
+                        <button class="day-btn" data-day="3">Wed</button>
+                        <button class="day-btn" data-day="4">Thu</button>
+                        <button class="day-btn" data-day="5">Fri</button>
+                        <button class="day-btn" data-day="6">Sat</button>
+                        <button class="day-btn" data-day="0">Sun</button>
+                    </div>
+
+                    <div id="schedule-list-container" class="schedule-list">
+                        </div>
                 </div>
             </div>
         </section>
 
-        <section class="latest-episodes">
-            <div class="container">
-                <div class="section-glass-box">
-                    <div class="section-header">
-                        <h2 class="section-title">Bollywood Hits</h2>
-                        <a href="bollywood.html" class="view-all-link">View All</a>
-                    </div>
-                    <div id="bollywood-grid" class="anime-grid carousel-mode"></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="latest-episodes">
-            <div class="container">
-                <div class="section-glass-box">
-                    <div class="section-header">
-                        <h2 class="section-title">Web Shows & English Series</h2>
-                        <a href="webshows.html" class="view-all-link">View All</a>
-                    </div>
-                    <div id="web-shows-grid" class="anime-grid carousel-mode"></div>
-                </div>
-            </div>
-        </section>
-        
-        <section class="latest-episodes">
-            <div class="container">
-                <div class="section-glass-box">
-                    <div class="section-header">
-                        <h2 class="section-title">Hindi Dramas</h2>
-                        <a href="hindidramas.html" class="view-all-link">View All</a>
-                    </div>
-                    <div id="hindi-dramas-grid" class="anime-grid carousel-mode"></div>
-                </div>
-            </div>
-        </section>
-
-        <button id="animeRequestBtn" class="anime-fab">
-            <i class="fas fa-comment-dots"></i> Request
+        <button id="dramaRequestBtn" class="drama-fab">
+            <span class="fab-text">Didn't find your show?</span>
         </button>
 
-        <div id="animeModal" class="anime-modal-overlay">
-            <div class="anime-modal-card">
-                <button class="anime-modal-close" id="closeAnimeModal">&times;</button>
-                <h3 style="margin-bottom: 15px; color: var(--primary-color);">Request Content</h3>
-                <form id="animeRequestForm">
-                    <input type="text" id="animeName" placeholder="Enter Movie/Show Name..." required class="anime-input">
-                    <button type="submit" class="anime-submit-btn" id="submitBtn">Send Request</button>
-                </form>
-                <div id="statusMessage" style="margin-top: 15px; font-size: 0.9rem; display: none;"></div>
+        <div id="dramaModal" class="drama-modal-overlay">
+            <div class="drama-modal-card">
+                <button class="drama-modal-close" id="closeDramaModal">&times;</button>
+                
+                <div class="drama-section-highlight">
+                    <h4>Can't find what you're looking for?</h4>
+                    <p>Request it and we'll add it for you!</p>
+                </div>
+                
+                <div class="drama-section-main">
+                    <form id="dramaRequestForm">
+                        <input type="text" id="dramaName" placeholder="Enter Movie/Show/Anime Name..." required class="drama-input">
+                        <p class="drama-timer-text">Your request will be available <strong>the same day</strong> or within <strong>48 hours</strong>. We will notify you directly in your profile.</p>
+                        <button type="submit" class="drama-submit-btn" id="submitBtn">Send Request</button>
+                    </form>
+                   
+                    <div id="statusMessage" style="margin-top: 10px; font-size: 0.8rem; display: none;"></div>
+                </div>
+                
+                <div class="drama-modal-footer">
+                    <p style="font-size: 0.8rem; margin-bottom: 10px; opacity: 0.7;">Having issues with a broken link? Text us:</p>
+                    <a href="https://t.me/iamashish6700" target="_blank" class="drama-tg-link">On Telegram</a>
+                </div>
             </div>
         </div> 
     </main>
@@ -256,7 +571,10 @@
             <div class="footer-content">
                 <a href="#" class="logo">Any<span>Kan</span></a>
                 <div class="footer-socials">
-                    <a href="legal-center.html"><i class="fas fa-shield-alt"></i></a>
+                    <a href="contact.html"><i class="fas fa-address-book"></i></a>
+                    <a href="privacy.html"><i class="fas fa-file-alt"></i></a>
+                    <a href="terms.html"><i class="fas fa-file-contract"></i></a>
+                    <a href="disclaimer.html"><i class="fas fa-shield-alt"></i></a>
                 </div>
             </div>
             <div class="footer-bottom">&copy; 2026 Anykan. All rights reserved.</div>
@@ -268,9 +586,9 @@
             <i class="fa-solid fa-house nav-icon"></i>
             <span class="nav-label">Home</span>
         </a>
-        <a href="community.html" class="bottom-nav-item">
-            <i class="fa-solid fa-users nav-icon"></i>
-            <span class="nav-label">Community</span>
+       <a href="community.html" class="bottom-nav-item">
+            <i class="fa-solid fa-bell nav-icon"></i>
+            <span class="nav-label">Updates</span>
         </a>
         <a href="mylist.html" class="bottom-nav-item">
             <i class="fa-solid fa-bookmark nav-icon"></i>
@@ -278,20 +596,776 @@
         </a>
         <a href="login.html" class="bottom-nav-item" id="bottomAuthBtn">
             <i class="fa-solid fa-user nav-icon"></i>
-            <span class="nav-label">Profile</span>
         </a>
     </nav>
-    
-    <div id="appInstallPopup" class="app-install-popup hidden">
-        <div class="popup-content">
-            <img src="applogo2.png" alt="App Icon" class="popup-icon">
-            <div class="popup-text">
-                <h4>Anykan App</h4>
-                <p>Install the app now for the best experience!</p>
-            </div>
-            <button id="installAppBtn" class="btn-install" style="border:none; cursor:pointer;">Install</button>
-            <button id="closeInstallPopup" class="btn-close-popup"><i class="fas fa-times"></i></button>
-        </div>
-    </div>
+
+    <script type="module">
+        // --- 0. THEME, HARDWARE & CSS FIXES ---
+        (function initUI() {
+            const injectedStyles = document.createElement('style');
+            injectedStyles.innerHTML = `
+                /* CSS pointer-events fix to allow Filter link to be clickable */
+                #searchInput { padding: 10px 40px 10px 40px !important; }
+                .search-bar i.fa-search { pointer-events: none; z-index: 2; }
+                .search-filter-link { pointer-events: auto; z-index: 2; cursor: pointer; }
+                
+                #home-profile-switcher-overlay {
+                    position: fixed; inset: 0; background: var(--bg-base, #050507); z-index: 999999;
+                    display: flex; flex-direction: column; justify-content: center; align-items: center;
+                    transition: transform 0.8s cubic-bezier(0.85, 0, 0.15, 1), opacity 0.8s ease;
+                    font-family: 'Poppins', sans-serif;
+                }
+                #home-profile-switcher-overlay.hidden { transform: scale(1.1); opacity: 0; pointer-events: none; }
+                .switcher-title { font-size: 2.5rem; font-weight: 500; margin-bottom: 40px; letter-spacing: 1px; color: #fff; text-shadow: 0 4px 20px rgba(0,0,0,0.5); text-align: center;}
+                .profiles-list { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; max-width: 800px;}
+                .profile-select-card { display: flex; flex-direction: column; align-items: center; gap: 15px; cursor: pointer; transition: all 0.3s ease; opacity: 0; transform: translateY(20px); animation: fadeUp 0.6s ease forwards 0.2s; }
+                .profile-select-card:hover .switcher-avatar-img { border-color: #fff; transform: scale(1.05); }
+                .profile-select-card:hover .switcher-name { color: #fff; }
+                .switcher-avatar-img { width: 140px; height: 140px; border-radius: 16px; object-fit: cover; border: 3px solid transparent; transition: all 0.3s ease; box-shadow: 0 10px 25px rgba(0,0,0,0.5); background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 4rem; color: #fff;}
+                .switcher-name { color: #9CA3AF; font-size: 1.1rem; transition: color 0.3s ease; font-weight: 500;}
+                
+                @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+                @media (max-width: 768px) {
+                    .switcher-title { font-size: 1.8rem; }
+                    .switcher-avatar-img { width: 100px; height: 100px; font-size: 3rem; }
+                }
+            `;
+            document.head.appendChild(injectedStyles);
+
+            let isLowEnd = false;
+            if ('deviceMemory' in navigator && navigator.deviceMemory < 4) isLowEnd = true;
+            if ('hardwareConcurrency' in navigator && navigator.hardwareConcurrency <= 4) isLowEnd = true;
+            if ('connection' in navigator && (navigator.connection.effectiveType === '3g' || navigator.connection.effectiveType === '2g')) isLowEnd = true;
+
+            if (isLowEnd) {
+                document.documentElement.classList.add('lite-mode');
+            }
+        })();
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB7i67_T7fs87BHIY2Pxs6KRAknhXrowIA",
+            authDomain: "dramakan007.firebaseapp.com",
+            projectId: "dramakan007"
+        };
+
+        let firebaseInstance = null;
+        let unsubscribeHistory = null; 
+
+        async function getFirebase() {
+            if (firebaseInstance) return firebaseInstance;
+            const [appModule, authModule, firestoreModule] = await Promise.all([
+                import("https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"),
+                import("https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"),
+                import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js")
+            ]);
+            const app = !appModule.getApps().length ? appModule.initializeApp(firebaseConfig) : appModule.getApp();
+            const auth = authModule.getAuth(app);
+            const db = firestoreModule.getFirestore(app);
+            firebaseInstance = { app, auth, db, appModule, authModule, firestoreModule };
+            return firebaseInstance;
+        }
+
+        const tmdbKey = "014fbdbe962cb38379e09e31d0652459";
+        let fuse;
+
+        function populateGrid(elementId, items) {
+            const grid = document.getElementById(elementId);
+            if (!grid) return;
+            
+            let htmlContent = '';
+            
+            items.forEach((drama) => {
+                const safeTitle = encodeURIComponent(drama.title);
+                const safeImg = encodeURIComponent(drama.img);
+                const safeLink = encodeURIComponent(drama.link);
+                
+                htmlContent += `
+                <a href="${drama.link}" class="drama-card">
+                    <div class="drama-card-img"><img src="${drama.img}" alt="${drama.title}" loading="lazy" decoding="async"></div>
+                    <div class="drama-card-info">
+                        <h3 class="drama-card-title">${drama.title}</h3>
+                        <p class="drama-card-meta">${drama.type}</p>
+                    </div>
+                    <button class="bookmark-btn" onclick="event.preventDefault(); window.toggleMyList(this, '${safeTitle}', '${safeImg}', '${safeLink}', '${drama.id || ''}')" title="Add to My List">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </a>
+                `;
+            });
+
+            grid.innerHTML = htmlContent;
+        }
+
+        // --- NEW CLOUD-FIRST CONTINUE WATCHING RENDERER WITH DYNAMIC TMDB BACKDROP FETCH ---
+        async function renderContinueWatching(cloudHistoryArr = null) {
+            try {
+                let historyArr = cloudHistoryArr;
+                
+                if (!historyArr) {
+                    const historyObj = JSON.parse(localStorage.getItem('dramakan_history')) || {};
+                    historyArr = Object.values(historyObj)
+                        .filter(item => item && item.link && item.title && !item.link.toLowerCase().includes('index.html'))
+                        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)).slice(0, 10);
+                }
+                
+                const cwSection = document.getElementById('continue-watching-section');
+                const cwGrid = document.getElementById('continue-watching-grid');
+                
+                if (cwSection && cwGrid) {
+                    if (historyArr.length > 0) {
+                        cwSection.style.display = 'block';
+
+                        const updatedItems = await Promise.all(historyArr.map(async (item) => {
+                            let imgUrl = item.backdrop_path ? `https://image.tmdb.org/t/p/w780${item.backdrop_path}` : (item.backdrop || item.bgImg);
+                            
+                            if (!imgUrl) {
+                                try {
+                                    if (item.id) {
+                                        let tmdbRes = await fetch(`https://api.themoviedb.org/3/tv/${item.id}?api_key=${tmdbKey}`);
+                                        if (!tmdbRes.ok) tmdbRes = await fetch(`https://api.themoviedb.org/3/movie/${item.id}?api_key=${tmdbKey}`);
+                                        
+                                        if (tmdbRes.ok) {
+                                            const tmdbData = await tmdbRes.json();
+                                            if (tmdbData.backdrop_path) {
+                                                imgUrl = `https://image.tmdb.org/t/p/w780${tmdbData.backdrop_path}`;
+                                            }
+                                        }
+                                    }
+                                    
+                                    if (!imgUrl && item.title) {
+                                        const searchRes = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbKey}&query=${encodeURIComponent(item.title)}`);
+                                        if (searchRes.ok) {
+                                            const searchData = await searchRes.json();
+                                            if (searchData.results && searchData.results.length > 0 && searchData.results[0].backdrop_path) {
+                                                imgUrl = `https://image.tmdb.org/t/p/w780${searchData.results[0].backdrop_path}`;
+                                            }
+                                        }
+                                    }
+                                    
+                                    if (imgUrl) {
+                                        item.backdrop_path = imgUrl.replace('https://image.tmdb.org/t/p/w780', '');
+                                        let localHistory = JSON.parse(localStorage.getItem('dramakan_history')) || {};
+                                        if(localHistory[item.id]) {
+                                            localHistory[item.id].backdrop_path = item.backdrop_path;
+                                            localStorage.setItem('dramakan_history', JSON.stringify(localHistory));
+                                        }
+                                    }
+                                } catch(err) { console.warn("Backdrop fetch failed", err); }
+                            }
+                            
+                            item.finalImgUrl = imgUrl || item.img;
+                            return item;
+                        }));
+
+                        cwGrid.innerHTML = updatedItems.map(item => {
+                            const progress = item.progress || Math.floor(Math.random() * 50 + 20); 
+                            const season = item.season || 1;
+                            const episode = item.episode || 1;
+                            const epTag = item.link.includes('movie') ? 'Movie' : `S${season} • E${episode}`;
+
+                            return `
+                            <a href="${item.link}" class="cw-landscape-card">
+                                <img src="${item.finalImgUrl}" alt="${item.title}" class="cw-landscape-img" loading="lazy" decoding="async" onerror="this.src='${item.img}'">
+                                <div class="cw-progress-container">
+                                    <div class="cw-progress-bar" style="width: ${progress}%;"></div>
+                                </div>
+                                <div class="cw-landscape-info">
+                                    <h3 class="cw-landscape-title">${item.title}</h3>
+                                    <div class="cw-landscape-meta">
+                                        <span class="cw-play-badge"><i class="fas fa-play"></i> ${epTag}</span>
+                                        <span>${item.timeLeft ? item.timeLeft + 'm left' : ''}</span>
+                                    </div>
+                                </div>
+                            </a>
+                            `;
+                        }).join('');
+                    } else { cwSection.style.display = 'none'; }
+                }
+            } catch(e) { console.error("CW Engine exception", e); }
+        }
+
+        async function initializeDramaSite() {
+            try {
+                // Fetch globally trending Movie, TV, and Anime
+                const [movieRes, tvRes, animeRes] = await Promise.all([
+                    fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=${tmdbKey}`),
+                    fetch(`https://api.themoviedb.org/3/trending/tv/week?api_key=${tmdbKey}`),
+                    fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${tmdbKey}&with_genres=16&sort_by=popularity.desc`)
+                ]);
+
+                const movieData = await movieRes.json();
+                const tvData = await tvRes.json();
+                const animeData = await animeRes.json();
+
+                let bannerItems = [
+                    { data: movieData.results[0], label: "FEATURED MOVIE" },
+                    { data: tvData.results[0], label: "TRENDING SHOW" },
+                    { data: animeData.results[0], label: "POPULAR ANIME" }
+                ].filter(item => item.data); 
+
+                bannerItems.sort(() => Math.random() - 0.5);
+
+                const wrapper = document.getElementById('hero-slider-wrapper');
+                const dotsContainer = document.getElementById('hero-slider-dots');
+                const profileMyList = JSON.parse(localStorage.getItem('dramakan_mylist')) || [];
+                
+                wrapper.innerHTML = '';
+                dotsContainer.innerHTML = '';
+
+                bannerItems.forEach((item, index) => {
+                    const d = item.data;
+                    const bgImg = `https://image.tmdb.org/t/p/original${d.backdrop_path || d.poster_path}`;
+                    const mobileImg = `https://image.tmdb.org/t/p/w780${d.poster_path || d.backdrop_path}`;
+                    const titleText = d.name || d.title || "Featured Title";
+                    const releaseYear = (d.first_air_date || d.release_date || "2026").substring(0, 4);
+                    
+                    const inList = profileMyList.some(listObj => String(listObj.id) === String(d.id));
+                    const listBtnClass = inList ? "btn-n btn-mylist active" : "btn-n btn-mylist";
+                    const listBtnIcon = inList ? "fa-check" : "fa-plus";
+                    const listBtnText = inList ? "In List" : "My List";
+
+                    wrapper.innerHTML += `
+                        <div class="hero-slide">
+                            <div class="hero-card">
+                                <picture class="hero-image-wrapper">
+                                    <source media="(max-width: 992px)" srcset="${mobileImg}">
+                                    <img class="hero-image" src="${bgImg}" alt="${titleText}">
+                                </picture>
+                                <div class="hero-depth-shadow"></div>
+                                <div class="hero-vignette"></div>
+                                <div class="hero-content">
+                                    <div class="series-badge"><i class="fas fa-play" style="color: var(--primary-color);"></i> ${item.label}</div>
+                                    <h1 style="font-size: 2.8rem; font-weight: 800; margin-bottom: 10px; color: #fff; text-shadow: 0 4px 12px rgba(0,0,0,0.5); text-align: center;">${titleText}</h1>
+                                    <div class="hero-meta-tags">
+                                        <span>Trending</span><span class="meta-dot">•</span>
+                                        <span>Rating: ${d.vote_average ? d.vote_average.toFixed(1) : 'NR'}</span><span class="meta-dot">•</span>
+                                        <span>${releaseYear}</span>
+                                    </div>
+                                    <div class="hero-actions">
+                                        <a href="watch.html?id=${d.id}" class="btn-n btn-play"><i class="fas fa-play"></i> Play</a>
+                                        <button class="${listBtnClass}" id="hero-list-btn-${d.id}" onclick="event.preventDefault(); window.toggleMyList(this, '${encodeURIComponent(titleText)}', '${encodeURIComponent(mobileImg)}', 'watch.html?id=${d.id}', '${d.id}')">
+                                            <i class="fas ${listBtnIcon}"></i> <span>${listBtnText}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    dotsContainer.innerHTML += `<div class="dk-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></div>`;
+                });
+
+                // --- CLOUD-FIRST GLOBAL MY LIST TOGGLE ---
+                window.toggleMyList = async function(btnElement, titleSafe, imgSafe, linkSafe, rawId) {
+                    if(!rawId) return; 
+                    
+                    let profileMyList = JSON.parse(localStorage.getItem('dramakan_mylist')) || [];
+                    let watchlistObj = JSON.parse(localStorage.getItem('dramakan_watchlist')) || {};
+
+                    const title = decodeURIComponent(titleSafe);
+                    const img = decodeURIComponent(imgSafe);
+                    const link = decodeURIComponent(linkSafe);
+                    
+                    let inListIdx = profileMyList.findIndex(item => String(item.id) === String(rawId));
+                    
+                    if (inListIdx > -1) {
+                        profileMyList.splice(inListIdx, 1);
+                        delete watchlistObj[rawId];
+                        btnElement.classList.remove('active');
+                        btnElement.innerHTML = `<i class="fas fa-plus"></i> <span>My List</span>`;
+                    } else {
+                        const itemData = {
+                            id: String(rawId), title: title, img: img, link: link, timestamp: Date.now()
+                        };
+                        profileMyList.push(itemData);
+                        watchlistObj[rawId] = itemData;
+                        btnElement.classList.add('active');
+                        btnElement.innerHTML = `<i class="fas fa-check"></i> <span>In List</span>`;
+                    }
+                    localStorage.setItem('dramakan_mylist', JSON.stringify(profileMyList));
+                    localStorage.setItem('dramakan_watchlist', JSON.stringify(watchlistObj));
+                    
+                    if (firebaseInstance && firebaseInstance.auth.currentUser) {
+                        try {
+                            const user = firebaseInstance.auth.currentUser;
+                            const { doc, getDoc, updateDoc } = firebaseInstance.firestoreModule;
+                            const userRef = doc(firebaseInstance.db, "users", user.uid);
+                            
+                            const snap = await getDoc(userRef);
+                            if(snap.exists()) {
+                                let data = snap.data();
+                                if(data.profiles && data.profiles.length > 0) {
+                                    let activeId = localStorage.getItem('dramakan_active_profile_id');
+                                    let pIdx = data.profiles.findIndex(p => p.id === activeId);
+                                    if(pIdx === -1) pIdx = 0;
+                                    data.profiles[pIdx].myList = profileMyList;
+                                    await updateDoc(userRef, { profiles: data.profiles });
+                                } else {
+                                    await updateDoc(userRef, { myList: profileMyList });
+                                }
+                            }
+                        } catch(err) { console.error("Cloud list sync failed", err); }
+                    }
+                };
+
+                let currentSlide = 0;
+                const totalSlides = bannerItems.length;
+                let slideInterval;
+
+                function goToSlide(n) {
+                    currentSlide = (n + totalSlides) % totalSlides;
+                    wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+                    document.querySelectorAll('.dk-dot').forEach((dot, idx) => {
+                        dot.classList.toggle('active', idx === currentSlide);
+                    });
+                }
+
+                function nextSlide() { goToSlide(currentSlide + 1); }
+                function startSlideShow() { clearInterval(slideInterval); slideInterval = setInterval(nextSlide, 5000); }
+
+                document.querySelectorAll('.dk-dot').forEach(dot => {
+                    dot.addEventListener('click', (e) => {
+                        goToSlide(parseInt(e.target.getAttribute('data-index')));
+                        startSlideShow();
+                    });
+                });
+
+                let startX = 0;
+                let isDragging = false;
+                
+                wrapper.addEventListener('touchstart', e => {
+                    startX = e.touches[0].clientX;
+                    isDragging = true;
+                    clearInterval(slideInterval);
+                }, {passive: true});
+                
+                wrapper.addEventListener('touchmove', e => {
+                    if(!isDragging) return;
+                }, {passive: true});
+                
+                wrapper.addEventListener('touchend', e => {
+                    if(!isDragging) return;
+                    isDragging = false;
+                    let diffX = startX - e.changedTouches[0].clientX;
+                    if(diffX > 50) nextSlide();
+                    else if(diffX < -50) goToSlide(currentSlide - 1);
+                    startSlideShow();
+                });
+
+                startSlideShow();
+
+                // Fetch Universal Trending
+                const trendRes = await fetch(`https://api.themoviedb.org/3/trending/all/week?api_key=${tmdbKey}`);
+                if (trendRes.ok) {
+                    const dataTrend = await trendRes.json();
+                    const items = (dataTrend.results || [])
+                        .slice(0, 15).map(i => ({
+                        id: String(i.id),
+                        title: i.name || i.title,
+                        img: i.poster_path ? `https://image.tmdb.org/t/p/w500${i.poster_path}` : 'default-poster.jpg',
+                        link: `watch.html?id=${i.id}`,
+                        type: i.media_type === 'movie' ? 'Movie' : 'TV Show'
+                    }));
+                    populateGrid('trending-grid', items);
+                    fuse = new Fuse(items, { keys: ['title'], threshold: 0.4 });
+                }
+
+                // Grid Configurations for All Mediums
+                const gridConfigs = [
+                    { id: 'movie-grid', url: `https://api.themoviedb.org/3/trending/movie/week?api_key=${tmdbKey}`, label: "Movie" },
+                    { id: 'tv-grid', url: `https://api.themoviedb.org/3/trending/tv/week?api_key=${tmdbKey}&without_genres=16`, label: "TV Show" },
+                    { id: 'anime-grid', url: `https://api.themoviedb.org/3/discover/tv?api_key=${tmdbKey}&with_genres=16&with_original_language=ja&sort_by=popularity.desc`, label: "Anime" },
+                    { id: 'asian-grid', url: `https://api.themoviedb.org/3/discover/tv?api_key=${tmdbKey}&with_original_language=ko|zh|ja|th&sort_by=popularity.desc&without_genres=16`, label: "Asian Drama" }
+                ];
+
+                const gridObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(async entry => {
+                        if (entry.isIntersecting) {
+                            const config = gridConfigs.find(c => c.id === entry.target.id);
+                            if (config) {
+                                try {
+                                    const sectionRes = await fetch(config.url);
+                                    if (sectionRes.ok) {
+                                        const resData = await sectionRes.json();
+                                        const cleanMapped = (resData.results || []).slice(0, 15).map(i => ({
+                                            id: String(i.id),
+                                            title: i.name || i.title,
+                                            img: i.poster_path ? `https://image.tmdb.org/t/p/w500${i.poster_path}` : 'default-poster.jpg',
+                                            link: `watch.html?id=${i.id}`,
+                                            type: config.label
+                                        }));
+                                        populateGrid(config.id, cleanMapped);
+                                    }
+                                } catch (e) { console.warn("Section load error", e); }
+                                observer.unobserve(entry.target);
+                            }
+                        }
+                    });
+                }, { rootMargin: '300px' });
+
+                gridConfigs.forEach(config => {
+                    const el = document.getElementById(config.id);
+                    if (el) gridObserver.observe(el);
+                });
+
+                // Call the Universal Schedule setup
+                initSchedule();
+
+            } catch (err) { console.error("Database connection exception", err); }
+        }
+
+        // --- NEW RELEASE SCHEDULE ENGINE (Universal) ---
+        function initSchedule() {
+            const listContainer = document.getElementById('schedule-list-container');
+            if(!listContainer) return;
+            
+            async function loadScheduleForDay(dayOffset) {
+                listContainer.innerHTML = '<div style="text-align:center; padding: 30px; color: var(--text-muted);"><i class="fas fa-spinner fa-spin fa-2x"></i></div>';
+
+                const today = new Date();
+                const currentDay = today.getDay(); // 0 = Sun
+                const diff = dayOffset - currentDay;
+                const targetDate = new Date(today);
+                targetDate.setDate(today.getDate() + diff);
+                
+                const dateStr = targetDate.toISOString().split('T')[0];
+                const displayDateStr = targetDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+                try {
+                    // Fetch any TV show airing on this day globally
+                    const res = await fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${tmdbKey}&air_date.gte=${dateStr}&air_date.lte=${dateStr}&sort_by=popularity.desc`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        let items = data.results || [];
+                        if (items.length > 6) items = items.slice(0, 6); 
+                        
+                        if (items.length === 0) {
+                            listContainer.innerHTML = `<div class="empty-state" style="padding: 20px; font-size: 0.9rem; color: var(--text-muted); font-style: italic; background: rgba(255,255,255,0.02); border-radius: 12px; text-align: center; border: 1px dashed rgba(255,255,255,0.05);">No major releases scheduled on this day.</div>`;
+                            return;
+                        }
+
+                        const detailedItems = await Promise.all(items.map(async (item) => {
+                            try {
+                                const detailRes = await fetch(`https://api.themoviedb.org/3/tv/${item.id}?api_key=${tmdbKey}`);
+                                if(detailRes.ok) {
+                                    const detailData = await detailRes.json();
+                                    
+                                    let epData = detailData.next_episode_to_air;
+                                    if (!epData || epData.air_date !== dateStr) {
+                                        epData = detailData.last_episode_to_air;
+                                    }
+                                    
+                                    if (epData && epData.air_date === dateStr) {
+                                        item.season = epData.season_number;
+                                        item.episode = epData.episode_number;
+                                    } else {
+                                        item.season = detailData.number_of_seasons || 1;
+                                        item.episode = "New";
+                                    }
+                                }
+                            } catch(e) {
+                                item.season = 1;
+                                item.episode = "New";
+                            }
+                            return item;
+                        }));
+
+                        listContainer.innerHTML = detailedItems.map(item => {
+                            const imgUrl = item.poster_path ? `https://image.tmdb.org/t/p/w200${item.poster_path}` : 'default-poster.jpg';
+                            const title = item.name || item.original_name;
+                            const lang = item.original_language.toUpperCase();
+                            const sNum = item.season !== undefined ? item.season : 1;
+                            const eNum = item.episode !== undefined ? item.episode : "New";
+                            
+                            return `
+                                <a href="watch.html?id=${item.id}" class="schedule-item">
+                                    <img src="${imgUrl}" alt="${title}">
+                                    <div class="schedule-info">
+                                        <h4 class="schedule-title">${title}</h4>
+                                        <div class="schedule-meta" style="margin-bottom: 5px;">
+                                            <span><i class="far fa-clock"></i> ${lang}</span>
+                                            <span><i class="fas fa-star"></i> ${item.vote_average ? item.vote_average.toFixed(1) : 'NR'}</span>
+                                        </div>
+                                        <div class="schedule-desc" style="display: block; white-space: normal;">
+                                            <span style="color: #fff; font-weight: 600;"><i class="fas fa-play" style="color: var(--primary-color);"></i> Season ${sNum} • Episode ${eNum}</span>
+                                            <br>
+                                            <span style="font-size: 0.7rem; color: var(--text-muted);"><i class="far fa-calendar-alt"></i> Airing: ${displayDateStr}</span>
+                                        </div>
+                                    </div>
+                                    <div class="schedule-play-icon">
+                                        <i class="fas fa-play-circle"></i>
+                                    </div>
+                                </a>
+                            `;
+                        }).join('');
+                    }
+                } catch (e) {
+                    console.error("Schedule fetch error", e);
+                    listContainer.innerHTML = `<div class="empty-state">Failed to load schedule.</div>`;
+                }
+            }
+
+            document.querySelectorAll('.day-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    loadScheduleForDay(parseInt(e.target.getAttribute('data-day')));
+                });
+            });
+
+            const currentDay = new Date().getDay();
+            const activeBtn = document.querySelector(`.day-btn[data-day="${currentDay}"]`);
+            if(activeBtn) {
+                document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+                activeBtn.classList.add('active');
+                loadScheduleForDay(currentDay);
+            }
+        }
+        const bindDynamicSearch = (inputId, resultsId) => {
+            const searchInput = document.getElementById(inputId);
+            const searchResults = document.getElementById(resultsId);
+
+            if (searchInput && searchResults) {
+                let debounceTimer; 
+                searchInput.addEventListener('input', () => {
+                    clearTimeout(debounceTimer); 
+                    debounceTimer = setTimeout(async () => {
+                        const queryStr = searchInput.value.trim();
+                        if (queryStr.length < 1) { searchResults.style.display = 'none'; return; }
+                        
+                        try {
+                            const searchRes = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbKey}&query=${encodeURIComponent(queryStr)}`);
+                            if (searchRes.ok) {
+                                const searchData = await searchRes.json();
+                                // Removed the genre 16 filter so Anime shows up
+                                const resultsMapped = (searchData.results || [])
+                                    .filter(i => (i.media_type === 'tv' || i.media_type === 'movie'))
+                                    .slice(0, 8);
+                                
+                                searchResults.innerHTML = resultsMapped.map(item => {
+                                    const title = item.name || item.title;
+                                    const poster = item.poster_path ? `https://image.tmdb.org/t/p/w92${item.poster_path}` : 'default-poster.jpg';
+                                    return `
+                                    <a href="watch.html?id=${item.id}" class="search-result-item">
+                                        <img src="${poster}" width="45" height="60" loading="lazy" decoding="async">
+                                        <div><div class="search-result-title">${title}</div><small style="color:var(--primary-color);">${item.media_type.toUpperCase()}</small></div>
+                                    </a>`;
+                                }).join('');
+                                searchResults.style.display = 'block';
+                            }
+                        } catch (e) { console.error("Search API crash", e); }
+                    }, 300); 
+                });
+            }
+        };
+
+        bindDynamicSearch('searchInput', 'searchResults');
+        bindDynamicSearch('mobileSearchInput', 'mobileSearchResults');
+
+        function createProfileSwitcher(profiles) {
+            if (document.getElementById('home-profile-switcher-overlay')) return;
+            const overlayContainer = document.createElement('div');
+            overlayContainer.id = 'home-profile-switcher-overlay';
+            
+            let profilesHtml = '';
+            profiles.forEach((prof) => {
+                const isEmoji = prof.avatar && prof.avatar.length <= 10 && !prof.avatar.includes('http') && !prof.avatar.includes('data:image');
+                const avatarHtml = isEmoji ? `<div class="switcher-avatar-img">${prof.avatar}</div>` : `<img class="switcher-avatar-img" src="${prof.avatar}" alt="${prof.name}">`;
+                profilesHtml += `<div class="profile-select-card" data-id="${prof.id}">${avatarHtml}<span class="switcher-name">${prof.name}</span></div>`;
+            });
+
+            overlayContainer.innerHTML = `<h2 class="switcher-title">Who's watching?</h2><div class="profiles-list">${profilesHtml}</div>`;
+            document.body.appendChild(overlayContainer);
+
+            overlayContainer.querySelectorAll('.profile-select-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    localStorage.setItem('dramakan_profile_prompt_date', new Date().toDateString());
+                    localStorage.setItem('dramakan_active_profile_id', card.getAttribute('data-id'));
+                    overlayContainer.classList.add('hidden');
+                    setTimeout(() => overlayContainer.remove(), 800);
+                    window.dispatchEvent(new CustomEvent('profileSelected'));
+                });
+            });
+        }
+
+        function updateHeaderAvatar(profiles) {
+            const activeId = localStorage.getItem('dramakan_active_profile_id');
+            let activeProf = profiles[0]; 
+            if (activeId) { const found = profiles.find(p => p.id === activeId); if (found) activeProf = found; }
+
+            const avatarUrl = activeProf.avatar;
+            const authBtn = document.getElementById('topAuthBtn'); 
+            const bottomAuthBtn = document.getElementById('bottomAuthBtn');
+
+            let avatarHtml = (avatarUrl && avatarUrl.length <= 10 && !avatarUrl.includes('http') && !avatarUrl.includes('data:image'))
+                ? `<div style="width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 2px solid var(--primary-color); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #fff;">${avatarUrl}</div>`
+                : `<img src="${avatarUrl}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-color);">`;
+
+            if (authBtn) {
+                authBtn.href = "profile.html"; authBtn.innerHTML = avatarHtml; 
+                authBtn.style.padding = "0"; authBtn.style.background = "transparent"; authBtn.style.border = "none";
+            }
+            if (bottomAuthBtn) {
+                const navIcon = bottomAuthBtn.querySelector('.nav-icon');
+                if (navIcon) {
+                    navIcon.outerHTML = (avatarUrl && avatarUrl.length <= 10 && !avatarUrl.includes('http') && !avatarUrl.includes('data:image'))
+                        ? `<div class="nav-icon" style="width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-bottom: 4px; border: 1px solid var(--primary-color); color: #fff;">${avatarUrl}</div>`
+                        : `<img src="${avatarUrl}" class="nav-icon" style="width: 26px; height: 26px; border-radius: 50%; object-fit: cover; margin-bottom: 4px; border: 1px solid var(--primary-color);">`;
+                }
+                bottomAuthBtn.href = "profile.html";
+            }
+        }
+
+        async function initAuthSync() {
+            try {
+                const { auth, db, firestoreModule, authModule } = await getFirebase();
+                const { doc, getDoc, collection, onSnapshot } = firestoreModule;
+                const { onAuthStateChanged } = authModule;
+
+                onAuthStateChanged(auth, async (user) => {
+                    const headerVipBtn = document.getElementById('headerVipBtn');
+                    
+                    if (user) {
+                        const docSnap = await getDoc(doc(db, "users", user.uid));
+                        let userProfiles = [];
+                        let legacyAvatar = `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(user.displayName || user.email || "User")}`;
+                        
+                        if (docSnap.exists()) {
+                            const data = docSnap.data();
+                            if (data.avatarUrl) legacyAvatar = data.avatarUrl;
+                            userProfiles = data.profiles && data.profiles.length > 0 ? data.profiles : [{ id: 'prof_default', name: data.username || "User", avatar: legacyAvatar }];
+                            
+                            const now = Date.now();
+                            let activePlan = "Basic";
+                            if (data.isPremium && data.premiumExpiry > now) {
+                                activePlan = data.premiumPlan || "";
+                            }
+                            if (headerVipBtn) {
+                                if (activePlan.includes('Crown')) {
+                                    headerVipBtn.style.display = 'none';
+                                } else {
+                                    headerVipBtn.style.display = 'inline-flex';
+                                }
+                            }
+                        }
+
+                        if (localStorage.getItem('dramakan_profile_prompt_date') !== new Date().toDateString() && userProfiles.length > 0) {
+                            createProfileSwitcher(userProfiles);
+                        } else { updateHeaderAvatar(userProfiles); }
+
+                        window.addEventListener('profileSelected', () => { updateHeaderAvatar(userProfiles); });
+
+                        // --- REAL-TIME CLOUD HISTORY SYNC ---
+                        const historyRef = collection(db, "users", user.uid, "history");
+                        if(unsubscribeHistory) unsubscribeHistory(); 
+                        
+                        unsubscribeHistory = onSnapshot(historyRef, (snapshot) => {
+                            let cloudHistory = {};
+                            snapshot.forEach(doc => {
+                                const histData = doc.data();
+                                if(histData && histData.dramaId) {
+                                    histData.id = String(histData.dramaId);
+                                    cloudHistory[histData.id] = histData;
+                                }
+                            });
+                            
+                            localStorage.setItem('dramakan_history', JSON.stringify(cloudHistory));
+                            
+                            const historyArr = Object.values(cloudHistory)
+                                .filter(item => item && item.link && item.title && !item.link.toLowerCase().includes('index.html'))
+                                .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)).slice(0, 10);
+                            
+                            renderContinueWatching(historyArr);
+                        });
+
+                    } else {
+                        if (headerVipBtn) headerVipBtn.style.display = 'inline-flex';
+                        if (unsubscribeHistory) {
+                            unsubscribeHistory();
+                            unsubscribeHistory = null;
+                        }
+                        renderContinueWatching();
+                    }
+                });
+            } catch (e) { console.warn("Authentication configuration sync failed", e); }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const modal = document.getElementById("dramaModal");
+            const openBtn = document.getElementById("dramaRequestBtn");
+            const closeBtn = document.getElementById("closeDramaModal");
+            const form = document.getElementById("dramaRequestForm");
+
+            if(openBtn && modal) {
+                openBtn.onclick = async () => {
+                    const { auth } = await getFirebase();
+                    if (!auth.currentUser) {
+                        alert("Please log in to request a movie or show. Redirecting to Login panel...");
+                        window.location.href = "login.html";
+                    } else { modal.style.display = "flex"; }
+                };
+                closeBtn.onclick = () => modal.style.display = "none";
+                window.onclick = (e) => { if(e.target === modal) modal.style.display = "none"; }
+            }
+
+            if(form) {
+                form.onsubmit = async (e) => {
+                    e.preventDefault();
+                    const submitBtn = document.getElementById("submitBtn");
+                    const status = document.getElementById("statusMessage");
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                    submitBtn.disabled = true;
+
+                    try {
+                        const { auth, db, firestoreModule } = await getFirebase();
+                        const { collection, addDoc } = firestoreModule;
+                        const user = auth.currentUser;
+                        
+                        if (!user) throw new Error("Session expired. Authenticate to proceed.");
+                        
+                        const dramaName = document.getElementById("dramaName").value.trim();
+                        await addDoc(collection(db, "requests"), {
+                            userId: user.uid,
+                            userEmail: user.email || "Anonymous profile", 
+                            dramaName: dramaName,
+                            status: "Pending",
+                            notified: false, 
+                            createdAt: Date.now()
+                        });
+
+                        status.style.display = "block";
+                        status.style.color = "#10b981";
+                        status.innerHTML = "<i class='fas fa-check-circle'></i> Dispatched safely to Dashboard! Track progress on profile page.";
+                        form.reset();
+                        setTimeout(() => { modal.style.display = "none"; status.style.display = "none"; }, 2000);
+
+                    } catch (err) {
+                        status.style.display = "block";
+                        status.style.color = "#ef4444";
+                        status.innerHTML = "<i class='fas fa-exclamation-circle'></i> Error: " + err.message;
+                    } finally {
+                        submitBtn.innerText = "Send Request";
+                        submitBtn.disabled = false;
+                    }
+                };
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeDramaSite();
+            initAuthSync();
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mSearch = document.getElementById('mobileSearchInput');
+            const pcSearch = document.getElementById('searchInput');
+            if(mSearch && pcSearch) {
+                mSearch.addEventListener('input', (e) => {
+                    pcSearch.value = e.target.value;
+                    pcSearch.dispatchEvent(new Event('input')); 
+                });
+            }
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - AnyKan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="global.css">
+    <style>
+        body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background-image: radial-gradient(circle at 50% 0%, rgba(138, 43, 226, 0.15) 0%, var(--background-color) 70%); }
+        .btn-back { position: absolute; top: 30px; left: 4%; color: var(--text-muted-color); font-size: 1.1rem; transition: 0.3s; }
+        .btn-back:hover { color: var(--primary-color); transform: translateX(-5px); }
+        .auth-box { width: 100%; max-width: 420px; background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 20px; padding: 40px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(138, 43, 226, 0.1); margin: 20px; }
+        .auth-header { text-align: center; margin-bottom: 30px; }
+        .auth-header .logo { font-size: 2.2rem; display: block; margin-bottom: 5px; }
+        .auth-header p { color: var(--text-muted-color); font-size: 0.95rem; }
+        .input-group { margin-bottom: 20px; position: relative; }
+        .input-group i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted-color); }
+        .auth-input { width: 100%; padding: 14px 16px 14px 45px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--glass-border); border-radius: 12px; color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; }
+        .auth-input:focus { outline: none; border-color: var(--primary-color); background: rgba(0, 0, 0, 0.5); box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.15); }
+        .btn-auth { width: 100%; padding: 14px; border: none; border-radius: 12px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-main { background: var(--primary-color); color: white; box-shadow: 0 4px 15px var(--primary-glow); }
+        .btn-main:hover { background: #9d4edd; transform: translateY(-2px); }
+        .btn-google { background: white; color: #000; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
+        .btn-google:hover { background: #f0f0f0; transform: translateY(-2px); }
+        .btn-google img { width: 20px; }
+        .divider { display: flex; align-items: center; text-align: center; margin: 25px 0; color: var(--text-muted-color); font-size: 0.85rem; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--glass-border); }
+        .divider::before { margin-right: 10px; } .divider::after { margin-left: 10px; }
+        .auth-footer { text-align: center; margin-top: 25px; font-size: 0.9rem; color: var(--text-muted-color); }
+        .auth-footer a { color: var(--primary-color); font-weight: 600; transition: 0.2s; }
+        .auth-footer a:hover { color: #b366ff; }
+        #msg-box { font-size: 0.85rem; text-align: center; margin-top: 15px; display: none; padding: 10px; border-radius: 8px; color: #ff4d4d; background: rgba(255, 77, 77, 0.1); border: 1px solid rgba(255, 77, 77, 0.3); }
+    </style>
+    <script src="bottom-bar.js" defer></script>
+<script src="feedback-popup.js" defer></script><script src="lightmode.js"></script> 
+    <link rel="stylesheet" href="lightmode.css"> 
+</head>
+<body>
+    <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    <div class="auth-box">
+        <div class="auth-header"><a href="index.html" class="logo">Any<span>Kan</span></a><p>Create an account to save your watchlist.</p></div>
+        <form id="register-form">
+            <div class="input-group"><i class="fas fa-user"></i><input type="text" id="username" class="auth-input" placeholder="Choose a Username" required maxlength="20"></div>
+            <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="email" class="auth-input" placeholder="Email Address" required></div>
+            <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="password" class="auth-input" placeholder="Password (Min. 6 chars)" required></div>
+            <button type="submit" class="btn-auth btn-main" id="submit-btn">Create Account</button>
+            <div class="divider">OR</div>
+            <button type="button" class="btn-auth btn-google" id="google-btn"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Sign up with Google</button>
+            <div id="msg-box"></div>
+        </form>
+        <div class="auth-footer">Already have an account? <a href="login.html">Sign in here.</a></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyB7i67_T7fs87BHIY2Pxs6KRAknhXrowIA", authDomain: "dramakan007.firebaseapp.com", projectId: "dramakan007", storageBucket: "dramakan007.firebasestorage.app", messagingSenderId: "1069933586213", appId: "1:1069933586213:web:b28ab37436679a4906dccc" };
+        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app); const googleProvider = new GoogleAuthProvider();
+        const msgBox = document.getElementById('msg-box'); const submitBtn = document.getElementById('submit-btn'); let isActivelyRegistering = false;
+
+        // IMPORTANT: Ensure this matches your newly deployed web app URL exactly
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyl9a-pUQBTzhT4_8rBXubs-u_IOE9Qkp-opjzarIiwufT2ooGaq2ohPS2ctg1FTIm9/exec";
+
+        // 🔥 EYE-CATCHY "WELCOME" EMAIL 🔥
+        async function sendWelcomeEmail(userEmail) {
+            const welcomeHtml = `<!DOCTYPE html><html><body style="background-color: #09090B; margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background-color: #09090B; padding: 40px 10px;"><tr><td align="center"><table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #121217; border-radius: 24px; border: 1px solid #27272A; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.8);"><tr><td style="background-color: #8A2BE2; height: 6px;"></td></tr><tr><td align="center" style="padding: 40px 20px 20px;"><h1 style="color: #FFFFFF; font-size: 28px; margin: 0; letter-spacing: -1px;">Drama<span style="color: #c488ff;">Kan</span></h1></td></tr><tr><td align="center" style="padding: 0 20px;"><img src="https://i.ibb.co/RGCtVJjq/banneremail.png" alt="banneremail" border="0"> style="width: 100%; border-radius: 16px; display: block;" alt="Welcome"></td></tr><tr><td style="padding: 30px 40px;"><h2 style="color: #FFFFFF; margin: 0 0 10px 0; font-size: 24px;">You're in! 🎉</h2><p style="color: #A1A1AA; font-size: 15px; margin: 0 0 25px 0; line-height: 1.6;">Your premium gateway to the best Asian Dramas, Movies, and Anime is officially open. No ads. No interruptions. Just pure HD streaming.</p><table width="100%" cellpadding="0" cellspacing="0" style="background-color: #1C1C24; border-radius: 12px; padding: 20px;"><tr><td style="color: #E4E4E7; font-size: 14px; padding-bottom: 10px;"><strong style="color: #c488ff;">&bull;</strong> Save your Watchlist</td></tr><tr><td style="color: #E4E4E7; font-size: 14px; padding-bottom: 10px;"><strong style="color: #c488ff;">&bull;</strong> Cross-device Cloud Sync</td></tr><tr><td style="color: #E4E4E7; font-size: 14px;"><strong style="color: #c488ff;">&bull;</strong> Daily Episode Updates</td></tr></table></td></tr><tr><td align="center" style="padding: 10px 40px 40px;"><a href="https://anykan.fun" style="display: inline-block; background-color: #8A2BE2; color: #FFFFFF; font-size: 16px; font-weight: bold; text-decoration: none; padding: 16px 40px; border-radius: 50px;">Start Streaming &rarr;</a></td></tr><tr><td align="center" style="padding: 25px; background-color: #0E0E11; border-top: 1px solid #27272A;"><p style="margin: 0; font-size: 12px; color: #71717A;">&copy; 2026 AnyKan OS. All rights reserved.</p></td></tr></table></td></tr></table><\/body><\/html>`;
+            try {
+                // By removing no-cors, the browser fully awaits the transaction!
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ emails: [userEmail], subject: "Welcome to AnyKan! 🎉", html: welcomeHtml })
+                });
+            } catch (e) { console.log(e); }
+        }
+
+        // 🔥 EYE-CATCHY "WELCOME BACK" EMAIL 🔥
+        async function sendWelcomeBackEmail(userEmail) {
+            const welcomeBackHtml = `<!DOCTYPE html><html><body style="background-color: #09090B; margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background-color: #09090B; padding: 40px 10px;"><tr><td align="center"><table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #121217; border-radius: 24px; border: 1px solid #27272A; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.8);"><tr><td style="background-color: #8A2BE2; height: 6px;"></td></tr><tr><td align="center" style="padding: 40px 20px 20px;"><h1 style="color: #FFFFFF; font-size: 28px; margin: 0; letter-spacing: -1px;">Drama<span style="color: #c488ff;">Kan</span></h1></td></tr><tr><td align="center" style="padding: 0 30px;"><table width="100%" cellpadding="0" cellspacing="0" style="background-color: #1C1C24; border-radius: 16px; border: 1px solid #333;"><tr><td align="center" style="padding: 30px;"><img src="https://img.icons8.com/fluency/96/popcorn.png" alt="Popcorn" width="60" style="display:block; margin-bottom:15px;"><h2 style="color: #FFFFFF; margin: 0 0 10px 0; font-size: 22px;">Welcome back, Streamer!</h2><p style="color: #A1A1AA; font-size: 15px; margin: 0; line-height: 1.6;">We noticed you just logged back into your account. Your watchlist missed you, and we've got fresh episodes waiting in HD.</p></td></tr></table></td></tr><tr><td align="center" style="padding: 30px 40px 40px;"><a href="https://anykan.fun" style="display: inline-block; background-color: #8A2BE2; color: #FFFFFF; font-size: 16px; font-weight: bold; text-decoration: none; padding: 16px 40px; border-radius: 50px;">Jump Back In &rarr;</a></td></tr><tr><td align="center" style="padding: 25px; background-color: #0E0E11; border-top: 1px solid #27272A;"><p style="margin: 0; font-size: 12px; color: #71717A;">&copy; 2026 AnyKan OS.<br>Login alert generated automatically.</p></td></tr></table></td></tr></table><\/body><\/html>`;
+            try {
+                // By removing no-cors, the browser fully awaits the transaction!
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ emails: [userEmail], subject: "Welcome back to AnyKan! 🍿", html: welcomeBackHtml })
+                });
+            } catch (e) { console.log(e); }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (isActivelyRegistering) return; // Hold the door!
+                document.querySelector('.auth-box').innerHTML = `
+                    <div style="text-align:center;">
+                        <i class="fas fa-check-circle" style="font-size: 3.5rem; color: #10b981; margin-bottom: 15px; text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);"></i>
+                        <h2 style="margin-bottom: 10px; color: #fff;">Already Logged In!</h2>
+                        <p style="color: var(--text-muted-color); margin-bottom: 25px; font-size: 0.9rem;">You are currently signed in as:<br><strong style="color: #fff;">${user.email}</strong></p>
+                        <a href="profile.html" class="btn-auth btn-main" style="display:block; text-decoration:none; margin-bottom: 15px;"><i class="fas fa-user"></i> Go to Profile</a>
+                        <button id="force-logout" class="btn-auth" style="background: rgba(255,0,0,0.1); color: #ff4d4d; border: 1px solid rgba(255,0,0,0.3);"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+                    </div>`;
+                document.getElementById('force-logout').addEventListener('click', () => { signOut(auth).then(() => window.location.reload()); });
+            }
+        });
+
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); isActivelyRegistering = true; submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...'; msgBox.style.display = 'none';
+            const username = document.getElementById('username').value.trim(); const email = document.getElementById('email').value.trim(); const password = document.getElementById('password').value;
+
+            try {
+                const q = query(collection(db, "users"), where("username", "==", username));
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) { msgBox.textContent = "That Username is already taken!"; msgBox.style.display = 'block'; submitBtn.innerHTML = 'Create Account'; isActivelyRegistering = false; return; }
+
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(db, "users", userCredential.user.uid), { username: username, email: email, role: "viewer", createdAt: new Date() });
+                
+                // Program pauses here until the email is confirmed sent by Google
+                await sendWelcomeEmail(email);
+                
+                window.location.replace('profile.html');
+            } catch (error) { msgBox.textContent = error.message.replace('Firebase: ', ''); msgBox.style.display = 'block'; submitBtn.innerHTML = 'Create Account'; isActivelyRegistering = false; }
+        });
+
+        document.getElementById('google-btn').addEventListener('click', async () => {
+            isActivelyRegistering = true;
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                const docRef = doc(db, "users", result.user.uid);
+                const docSnap = await getDoc(docRef);
+                if (!docSnap.exists()) {
+                    let baseName = result.user.displayName || "DramaFan";
+                    let uniqueName = baseName; let counter = 1;
+                    while (true) {
+                        const q = query(collection(db, "users"), where("username", "==", uniqueName));
+                        const snap = await getDocs(q);
+                        if (snap.empty) break; 
+                        uniqueName = baseName + counter; counter++;
+                    }
+                    await setDoc(docRef, { username: uniqueName, email: result.user.email, role: "viewer", createdAt: new Date() });
+                    await sendWelcomeEmail(result.user.email);
+                } else {
+                    await sendWelcomeBackEmail(result.user.email);
+                }
+                window.location.replace('profile.html');
+            } catch (error) { msgBox.textContent = "Google Sign-Up failed or was cancelled."; msgBox.style.display = 'block'; isActivelyRegistering = false; }
+        });
+    </script>
+</body>
+</html>

@@ -8,29 +8,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
+    <script src="bottom-bar.js" defer></script>
+    <script src="feedback-popup.js" defer></script>
+    <script src="admin_easter_egg.js" defer></script>
+    <script src="premium-manager.js" defer></script>
+    
     <style>
         /* =========================================
-           1. LIQUID GLASS & PREMIUM VARIABLES
+           1. PREMIUM VARIABLES & RESET
         ========================================= */
         :root {
             --primary-color: #9D4EDD;
             --primary-rich: #7b2cbf;
             --primary-glow: rgba(157, 78, 221, 0.4);
             
-            --bg-base: #050507; 
+            --bg-base: #0a0a0f; 
+            --bg-card: rgba(20, 20, 28, 0.6);
+            --bg-sidebar: #0f0f15;
+            
             --text-color: #FFFFFF;
             --text-muted: #9CA3AF;
             
-            --glass-bg: rgba(20, 20, 25, 0.3);
-            --glass-bg-hover: rgba(157, 78, 221, 0.15);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-border-light: rgba(255, 255, 255, 0.15);
-            --glass-blur: blur(30px) saturate(150%);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --glass-border-light: rgba(255, 255, 255, 0.1);
+            --glass-blur: blur(20px);
             
-            --bottom-nav-bg: rgba(20, 20, 25, 0.45);
-            --bottom-nav-border: rgba(255, 255, 255, 0.08);
-            --bottom-nav-item: rgba(255, 255, 255, 0.5);
-            --bottom-nav-item-active: #fff;
+            --vip-gold: #f1c40f;
+            --vip-gradient: linear-gradient(135deg, #f1c40f, #d4af37);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -39,656 +43,468 @@
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-base); 
             color: var(--text-color);
-            padding-bottom: 120px;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
-        .liquid-orb {
-            position: fixed; border-radius: 50%; filter: blur(100px);
-            z-index: -1; pointer-events: none;
-            animation: floatOrb 25s infinite ease-in-out alternate;
-        }
-        .orb-1 { width: 50vw; height: 50vw; background: rgba(157, 78, 221, 0.15); top: -10%; left: -10%; }
-        .orb-2 { width: 40vw; height: 40vw; background: rgba(123, 44, 191, 0.15); bottom: 10%; right: -10%; animation-delay: -10s; }
-        
-        @keyframes floatOrb {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(5%, 10%) scale(1.1); }
-            100% { transform: translate(-5%, -5%) scale(0.95); }
-        }
-
-        a { text-decoration: none; color: inherit; }
+        a { text-decoration: none; color: inherit; outline: none; }
         button { border: none; background: transparent; font-family: inherit; cursor: pointer; outline: none; }
 
         /* =========================================
-           2. FLOATING HEADER & NOTIFICATIONS
+           2. LAYOUT STRUCTURE
         ========================================= */
-        .app-header {
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: 20px 5%;
-            display: flex; align-items: center; justify-content: space-between;
-            background: linear-gradient(to bottom, rgba(5,5,7,0.9) 0%, transparent 100%);
-            transition: all 0.3s ease;
+        .app-layout { display: flex; min-height: 100vh; }
+
+        .main-content {
+            flex: 1; margin-left: 0; padding: 30px 5% 120px 5%; min-height: 100vh;
+            display: flex; flex-direction: column; overflow-x: hidden; position: relative;
         }
 
-        .header-logo { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .header-logo span { color: var(--primary-color); }
-
-        .mobile-only { display: none; }
-        .mobile-profile-header { align-items: center; gap: 12px; cursor: pointer; }
-        .mobile-header-avatar { width: 36px; height: 36px; border-radius: 6px; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); }
-        .mobile-header-name { font-size: 1.15rem; font-weight: 700; color: #fff; display: flex; align-items: center; letter-spacing: -0.3px;}
-
-        .header-icons { display: flex; align-items: center; gap: 20px; position: relative; }
-        .header-icons i { 
-            font-size: 1.3rem; color: var(--text-color); cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); 
-            background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-            width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; border: 1px solid var(--glass-border);
-        }
-        .header-icons i:hover { color: #fff; background: var(--primary-color); border-color: var(--primary-color); transform: scale(1.05); box-shadow: 0 5px 15px var(--primary-glow); }
+        /* =========================================
+           3. TOP HEADER
+        ========================================= */
+        .top-header { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 30px; width: 100%; position: relative; }
         
-        .header-icons i#mobileAffiliateBtn:hover { background: #d4af37; border-color: #d4af37; box-shadow: 0 5px 15px rgba(212,175,55,0.4); color: #000; }
+        .site-logo { display: block; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; color: #fff; transition: opacity 0.3s; }
+        .site-logo:hover { opacity: 0.8; }
+        .site-logo span { color: var(--primary-color); }
 
-        .notif-badge { position: relative; display: flex; align-items: center; justify-content: center;}
-        .notif-badge::after { 
-            content: ''; position: absolute; top: 0; right: 2px; 
-            width: 10px; height: 10px; background: #e50914; 
-            border-radius: 50%; border: 2px solid var(--bg-base); box-shadow: 0 0 8px rgba(229, 9, 20, 0.8); display: none; 
+        .header-icon-btn {
+            width: 40px; height: 40px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--glass-border); color: var(--text-color);
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; position: relative;
         }
-        .notif-badge.has-new::after { display: block; }
+        .header-icon-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--glass-border-light); transform: translateY(-2px);}
+        .notif-badge-dot {
+            position: absolute; top: 0; right: 0; width: 14px; height: 14px; background: #e50914; border-radius: 50%; border: 2px solid var(--bg-base);
+            color: #fff; font-size: 0.5rem; display: flex; align-items: center; justify-content: center; font-weight: bold;
+        }
 
+        /* Notifications Dropdown Container */
         .notif-dropdown {
-            position: absolute; top: calc(100% + 15px); right: -10px; width: 340px; max-height: 400px; overflow-y: auto;
-            background: rgba(15, 15, 20, 0.85); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border-light); border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(157, 78, 221, 0.1);
-            transform-origin: top right; transform: scale(0.95); opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 15px;
+            position: absolute; top: 50px; right: 0; width: 360px; max-height: 480px; 
+            background: rgba(15, 15, 22, 0.95); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(157, 78, 221, 0.25); border-radius: 16px; display: none; flex-direction: column;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6), 0 0 20px rgba(157, 78, 221, 0.15); z-index: 1500; overflow: hidden;
         }
-        .notif-dropdown.active { transform: scale(1); opacity: 1; pointer-events: auto; }
-        .notif-dropdown::-webkit-scrollbar { width: 4px; }
-        .notif-dropdown::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
-        
-        .notif-header { font-size: 1rem; font-weight: 600; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between;}
-        .notif-header button { background: transparent; border: none; color: var(--primary-color); cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: color 0.2s;}
-        .notif-header button:hover { color: #fff; }
-        
-        .notif-list { display: flex; flex-direction: column; gap: 8px; }
-        .global-notif-item { display: flex; gap: 12px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid transparent; transition: all 0.2s; position: relative;}
-        .global-notif-item:hover { background: rgba(157, 78, 221, 0.15); border-color: rgba(157, 78, 221, 0.3); transform: translateX(5px);}
-        .global-notif-icon { width: 35px; height: 35px; border-radius: 50%; background: rgba(157,78,221,0.2); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
-        .global-notif-content { display: flex; flex-direction: column; gap: 4px; flex-grow: 1; padding-right: 20px;}
-        .global-notif-title { font-size: 0.85rem; font-weight: 600; color: #fff; line-height: 1.2; }
-        .global-notif-body { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .global-notif-time { font-size: 0.65rem; color: #666; margin-top: 2px;}
-        .global-notif-delete { position: absolute; top: 12px; right: 10px; color: #ef4444; background: transparent; border: none; cursor: pointer; opacity: 0; transition: opacity 0.2s; }
-        .global-notif-item:hover .global-notif-delete { opacity: 1; }
-        .empty-notifs { text-align: center; padding: 25px 10px; color: var(--text-muted); font-size: 0.85rem; font-style: italic;}
+        .notif-dropdown.active { display: flex; }
+        .notif-dropdown-header { padding: 15px 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
+        .notif-dropdown-header h3 { font-size: 0.95rem; font-weight: 600; }
+        .notif-dropdown-header button { font-size: 0.75rem; color: #ef4444; font-weight: 600; }
+        .notif-dropdown-list { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+
+        .global-notif-item { display: flex; gap: 12px; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); position: relative; transition: 0.2s; }
+        .global-notif-icon { width: 32px; height: 32px; border-radius: 50%; background: rgba(157, 78, 221, 0.1); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; }
+        .global-notif-content { flex: 1; min-width: 0; }
+        .global-notif-title { font-size: 0.85rem; font-weight: 600; color: #fff; margin-bottom: 2px; }
+        .global-notif-body { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
+        .global-notif-time { font-size: 0.65rem; color: #555; margin-top: 4px; }
+        .global-notif-delete { background: none; border: none; color: rgba(255,255,255,0.2); cursor: pointer; font-size: 0.8rem; height: fit-content; transition: color 0.2s; padding: 2px; }
+        .global-notif-delete:hover { color: #ef4444; }
+
+        .btn-vip { background: rgba(241, 196, 15, 0.1); border: 1px solid rgba(241, 196, 15, 0.3); color: var(--vip-gold); padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+        .btn-switch { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #fff; padding: 8px 16px; border-radius: 8px; font-weight: 500; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; transition: background 0.3s; }
+        .btn-switch:hover { background: rgba(255,255,255,0.1); }
 
         /* =========================================
-           3. PROFILE DASHBOARD HERO 
+           4. DASHBOARD HERO SECTION
         ========================================= */
-        .page-container { max-width: 1400px; margin: 0 auto; padding-top: 100px; }
-
-        .profile-hero-panel {
-            margin: 0 5% 30px 5%;
-            background: linear-gradient(145deg, rgba(20,20,25,0.5), rgba(5,5,7,0.7));
-            backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border); border-radius: 28px;
-            padding: 35px 40px; display: flex; align-items: center; gap: 40px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
-            position: relative; overflow: hidden;
-            animation: fadeDown 1s cubic-bezier(0.25, 1, 0.5, 1);
+        .hero-card {
+            background: var(--bg-card); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border); border-radius: 24px; padding: 30px 40px; 
+            display: flex; align-items: center; justify-content: space-between; gap: 30px;
+            position: relative; overflow: hidden; margin-bottom: 40px; flex-wrap: wrap; width: 100%;
         }
 
-        .hero-bg-effect {
-            position: absolute; right: -10%; top: -50%; width: 50%; height: 200%;
-            background: radial-gradient(ellipse at center, rgba(157, 78, 221, 0.15) 0%, transparent 70%);
-            transform: rotate(-45deg); pointer-events: none; z-index: 0;
-        }
+        .hero-bg-crown { position: absolute; right: 5%; top: -20%; font-size: 15rem; color: rgba(255,255,255,0.02); pointer-events: none; transform: rotate(15deg); z-index: 0; }
 
-        .hero-left { position: relative; z-index: 1; }
-        .avatar-container { position: relative; }
-        .avatar-container::before {
-            content: ''; position: absolute; inset: -8px;
-            border-radius: 50%; background: conic-gradient(from 0deg, var(--primary-color), var(--primary-rich), var(--primary-color));
-            animation: spin 4s linear infinite; z-index: 0; opacity: 0.7;
+        .hero-profile-wrap { display: flex; align-items: center; gap: 25px; z-index: 1; flex: 1; min-width: 300px;}
+        .hero-avatar-container { position: relative; flex-shrink: 0;}
+        .hero-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-color); background: #121216; }
+        .hero-edit-btn {
+            position: absolute; bottom: 0; right: 0; width: 32px; height: 32px; background: var(--primary-color); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid var(--bg-base); font-size: 0.8rem; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: transform 0.3s; z-index: 5;
         }
-        .hero-avatar {
-            width: 140px; height: 140px; border-radius: 50%; object-fit: cover;
-            position: relative; z-index: 1; border: 4px solid var(--bg-base);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8); background: #121216;
-        }
+        .hero-edit-btn:hover { transform: scale(1.1); }
 
-        .hero-right { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: center; flex: 1; }
-        .hero-greeting { font-size: 1.2rem; color: var(--text-muted); font-weight: 500; margin-bottom: 0; }
-        .gradient-text { 
-            font-size: 3rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 20px; line-height: 1.1;
-            background: linear-gradient(135deg, #fff 0%, #d8b4fe 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-            text-shadow: 0 4px 20px rgba(157, 78, 221, 0.3);
-        }
+        .hero-user-info { display: flex; flex-direction: column; }
+        .hero-greeting { font-size: 1rem; color: var(--text-muted); font-weight: 500; margin-bottom: 2px; }
+        .hero-name { font-size: 2.2rem; font-weight: 700; color: #fff; line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.5px;}
+        .hero-actions { display: flex; gap: 10px; flex-wrap: wrap;}
         
-        .hero-action-row { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-        
-        .hero-stats { display: flex; gap: 15px; flex-wrap: wrap; }
-        .stat-pill { 
-            background: rgba(0,0,0,0.4); padding: 10px 20px; border-radius: 12px; 
-            border: 1px solid var(--glass-border); font-size: 0.9rem; font-weight: 600; color: #fff;
-            display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        .stat-pill i { color: var(--primary-color); font-size: 1.1rem; }
-
-        .btn-switch-profile {
-            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border-light);
-            color: #fff; padding: 10px 24px; border-radius: 12px; font-weight: 600; font-size: 0.95rem;
-            display: flex; align-items: center; gap: 10px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        .btn-switch-profile:hover {
-            background: var(--primary-color); border-color: var(--primary-color);
-            transform: translateY(-2px); box-shadow: 0 8px 25px var(--primary-glow);
-        }
-        
-        .btn-switch-profile.affiliate-btn:hover {
-            background: #d4af37; border-color: #d4af37; color: #000 !important;
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-        }
-
-        .affiliate-btn-trigger { display: none !important; }
-        body.is-affiliate .affiliate-btn-trigger.pc-only { display: flex !important; }
-        body.is-affiliate .affiliate-btn-trigger.mobile-only { display: flex !important; }
-
-        @keyframes fadeDown { 0% { opacity: 0; transform: translateY(-20px); } 100% { opacity: 1; transform: translateY(0); } }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .hero-stats-wrap { display: flex; gap: 40px; z-index: 1; padding-left: 30px; border-left: 1px solid var(--glass-border); align-items: center; flex-shrink: 0;}
+        .stat-item { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .stat-value { display: flex; align-items: center; gap: 8px; font-size: 1.5rem; font-weight: 700; color: #fff; }
+        .stat-value i { font-size: 1.1rem; }
+        .stat-item:nth-child(1) i { color: var(--primary-color); }
+        .stat-item:nth-child(2) i { color: #8b5cf6; }
+        .stat-item:nth-child(3) i { color: #d8b4fe; }
+        .stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
 
         /* =========================================
-           4. CREATOR DASHBOARD SPECIFIC STYLES
+           5. SECTION TITLES & SCROLLERS
         ========================================= */
-        #creator-sections { animation: fadeDown 0.5s ease forwards; padding: 0 5%; }
-        
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card {
-            background: linear-gradient(145deg, rgba(212, 175, 55, 0.05) 0%, rgba(0,0,0,0.4) 100%);
-            backdrop-filter: var(--glass-blur); border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 20px; padding: 25px; display: flex; align-items: center; justify-content: space-between;
-            position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        .stat-info { z-index: 2; position: relative; }
-        .stat-value { font-size: 2.2rem; font-weight: 700; color: #fff; margin-bottom: 5px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-icon { font-size: 3.5rem; color: rgba(212, 175, 55, 0.1); position: absolute; right: -5px; bottom: -15px; z-index: 1; }
-        
-        .glass-widget {
-            background: rgba(20, 20, 25, 0.4); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border); border-radius: 20px; padding: 30px; margin-bottom: 30px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.02);
-        }
-        .widget-title { font-size: 1.25rem; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
-        .widget-title i { color: #d4af37; font-size: 1.4rem; }
+        .section { margin-bottom: 40px; width: 100%;}
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; width: 100%;}
+        .section-title { font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 10px; border-left: 3px solid var(--primary-color); padding-left: 12px; line-height: 1;}
+        .see-all { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; transition: color 0.3s; display: flex; align-items: center; gap: 4px; white-space: nowrap; cursor: pointer;}
+        .see-all:hover { color: var(--primary-color); }
 
-        /* =========================================
-           5. VIEWER SECTIONS & CARDS
-        ========================================= */
-        #viewer-sections { animation: fadeDown 0.5s ease forwards; }
-
-        .section { margin-bottom: 25px; opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
-        .section.visible { opacity: 1; transform: translateY(0); }
-
-        .section-header { display: flex; justify-content: space-between; align-items: flex-end; padding: 0 5%; margin-bottom: 12px; }
-        .section-title-wrap { display: flex; align-items: center; gap: 10px; }
-        .title-accent { width: 4px; height: 20px; background: var(--primary-color); border-radius: 10px; box-shadow: 0 0 10px var(--primary-glow); }
-        .section-header h2 { font-size: 1.3rem; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
-        .section-header span { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 5px; }
-        .section-header span:hover { color: var(--primary-color); transform: translateX(3px); }
-
-        .h-scroll { display: flex; gap: 16px; overflow-x: auto; padding: 5px 5% 15px 5%; scroll-behavior: smooth; scrollbar-width: none; }
+        .h-scroll { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; width: 100%; min-width: 0; }
         .h-scroll::-webkit-scrollbar { display: none; }
 
-        .empty-text { font-size: 0.95rem; color: var(--text-muted); font-style: italic; opacity: 0.7; padding: 20px; background: var(--glass-bg); border-radius: 16px; border: 1px dashed var(--glass-border); width: 100%; text-align: center; }
-
-        .poster-card {
-            min-width: 155px; max-width: 155px; aspect-ratio: 2/3; flex-shrink: 0;
-            position: relative; border-radius: 16px; overflow: hidden;
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5); transform: translateZ(0);
+        /* =========================================
+           6. CARD DESIGNS
+        ========================================= */
+        .cw-landscape-card {
+            display: flex; flex-direction: column; width: 340px; min-width: 340px; max-width: 340px;
+            background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 12px; 
+            overflow: hidden; transition: transform 0.3s ease, border-color 0.3s ease;
+            text-decoration: none; flex-shrink: 0; position: relative;
         }
-        @media(min-width: 768px) { .poster-card { min-width: 210px; max-width: 210px; } }
+        .cw-landscape-card:hover { 
+            transform: translateY(-5px); 
+            border-color: rgba(157, 78, 221, 0.4); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
+        }
+        .cw-landscape-img-wrap { position: relative; width: 100%; aspect-ratio: 16/9; background: #111; overflow: hidden; }
+        .cw-landscape-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .cw-landscape-card:hover .cw-landscape-img { transform: scale(1.05); }
+
+        .cw-remove-btn {
+            position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; 
+            background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; 
+            color: #fff; display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; opacity: 0; transition: 0.3s; z-index: 10;
+        }
+        .cw-landscape-card:hover .cw-remove-btn { opacity: 1; }
+        .cw-remove-btn:hover { background: #ef4444; border-color: #ef4444; }
+
+        .cw-progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.1); position: relative; z-index: 2; }
+        .cw-progress-bar { height: 100%; background: var(--primary-color); box-shadow: 0 0 10px var(--primary-glow); border-radius: 0 2px 2px 0; }
         
-        .poster-card:hover { 
-            transform: translateY(-10px) scale(1.05); z-index: 10; 
-            border-color: rgba(157, 78, 221, 0.5); box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 25px rgba(157, 78, 221, 0.3); 
-        }
+        .cw-landscape-info { padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+        .cw-landscape-title { font-size: 0.95rem; font-weight: 600; color: #fff; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; white-space: normal; line-height: 1.3; }
+        .cw-landscape-meta { font-size: 0.8rem; color: #9CA3AF; display: flex; justify-content: space-between; align-items: center; }
+        .cw-play-badge { color: var(--primary-color); font-weight: 600; display: flex; align-items: center; gap: 5px; }
+
+        /* My List & Favorites (Vertical Poster) */
+        .list-card { min-width: 160px; max-width: 160px; flex-shrink: 0; display: flex; flex-direction: column; gap: 10px; position: relative;}
+        .list-poster-wrap { width: 100%; aspect-ratio: 2/3; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid transparent; transition: border-color 0.3s, transform 0.3s;}
+        .list-card:hover .list-poster-wrap { border-color: var(--primary-color); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5);}
+        .list-poster-wrap img { width: 100%; height: 100%; object-fit: cover; }
         
-        .poster-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1); }
-        .poster-card:hover img { transform: scale(1.1); }
-        
-        .card-gradient-overlay {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 70%;
-            background: linear-gradient(to top, rgba(5,5,7,0.95), transparent);
-            z-index: 1; pointer-events: none; display: flex; flex-direction: column; justify-content: flex-end; padding: 15px 12px;
+        .remove-list-btn {
+            position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: 0.3s; z-index: 10;
         }
+        .list-card:hover .remove-list-btn { opacity: 1; }
+        .remove-list-btn:hover { background: #ef4444; border-color: #ef4444; }
 
-        .card-title { color: #fff; font-size: 0.85rem; font-weight: 600; z-index: 2; position: relative; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; opacity: 0; transition: opacity 0.3s; transform: translateY(10px);}
-        .poster-card:hover .card-title { opacity: 1; transform: translateY(0); }
+        .list-info { display: flex; flex-direction: column; padding: 0 5px; }
+        .list-title { font-size: 0.9rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px;}
+        .list-meta { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px; }
+        .list-date { font-size: 0.7rem; color: #666; display: flex; align-items: center; gap: 5px; }
 
-        .progress-bar { position: absolute; bottom: 0; left: 0; height: 5px; background: rgba(255,255,255,0.15); width: 100%; z-index: 3;}
-        .progress-fill { height: 100%; background: var(--primary-color); width: 60%; box-shadow: 0 0 10px var(--primary-glow); border-radius: 0 5px 5px 0;}
-
-        .remove-card-btn {
-            position: absolute; top: 8px; right: 8px; z-index: 20;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
-            border: 1px solid rgba(255,255,255,0.2); border-radius: 50%;
-            width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
-            color: white; cursor: pointer; transition: all 0.3s; opacity: 0;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        /* Requested Content (Cloud Cards) */
+        .req-card {
+            min-width: 280px; max-width: 280px; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 16px; padding: 15px; 
+            display: flex; gap: 15px; align-items: center; flex-shrink: 0; transition: transform 0.3s;
         }
-        .poster-card:hover .remove-card-btn { opacity: 1; }
-        .remove-card-btn:hover { background: #ef4444; border-color: #ef4444; transform: scale(1.15); box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); }
+        .req-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.15); }
+        .req-icon { width: 45px; height: 45px; border-radius: 50%; background: rgba(157, 78, 221, 0.1); border: 1px solid rgba(157, 78, 221, 0.3); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+        .req-info { display: flex; flex-direction: column; flex: 1; min-width: 0;}
+        .req-header-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+        .req-title { font-size: 0.95rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .req-badge { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981; }
+        .req-badge.pending { border-color: rgba(239, 68, 68, 0.3); color: #ef4444; }
+        .req-date { font-size: 0.75rem; color: var(--text-muted); }
 
-        .fallback-card {
-            background: linear-gradient(145deg, rgba(20,20,25,0.6) 0%, rgba(5,5,7,0.8) 100%);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 15px; text-align: center; position: absolute; inset: 0; z-index: 1;
-        }
-        .fallback-icon {
-            width: 50px; height: 50px; border-radius: 50%; background: rgba(157, 78, 221, 0.15); border: 1px solid rgba(157, 78, 221, 0.4); display: flex; align-items: center; justify-content: center; color: var(--primary-color); font-size: 1.3rem; margin-bottom: 15px; box-shadow: 0 0 20px var(--primary-glow); transition: all 0.4s ease;
-        }
-        .poster-card:hover .fallback-icon { transform: scale(1.1) rotate(5deg); background: var(--primary-color); color: #fff;}
-        .fallback-title { font-size: 0.9rem; font-weight: 600; color: #fff; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
-        .status-badge { padding: 5px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .status-pending { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; }
-        .status-ready { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #6ee7b7; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
+        .empty-state { padding: 20px; font-size: 0.9rem; color: var(--text-muted); font-style: italic; background: rgba(255,255,255,0.02); border-radius: 12px; width: 100%; text-align: center; border: 1px dashed var(--glass-border); }
 
         /* =========================================
-           6. LIQUID MODALS & SETTINGS
+           7. MODALS & POPUPS (GRID LAYOUT FIXES)
         ========================================= */
         .full-modal {
-            position: fixed; inset: 0; background: rgba(5, 5, 7, 0.85); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            z-index: 2000; display: flex; flex-direction: column; align-items: center; padding: 60px 20px;
-            opacity: 0; pointer-events: none; transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); overflow-y: auto;
+            position: fixed; inset: 0; background: rgba(10, 10, 15, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            z-index: 2000; display: flex; flex-direction: column; align-items: center; padding: 60px 20px; opacity: 0; pointer-events: none; transition: all 0.4s ease; overflow-y: auto;
         }
         .full-modal.active { opacity: 1; pointer-events: auto; }
-        
-        .modal-content-wrap { transform: translateY(40px) scale(0.95); transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); width: 100%; display: flex; flex-direction: column; align-items: center; position: relative; max-width: 600px; margin: 0 auto; }
+        .modal-content-wrap { transform: translateY(30px) scale(0.95); transition: all 0.4s ease; width: 100%; max-width: 600px; display: flex; flex-direction: column; align-items: center; }
         .full-modal.active .modal-content-wrap { transform: translateY(0) scale(1); }
-
-        .close-modal-btn { 
-            position: fixed; top: 25px; right: 25px; font-size: 1.5rem; color: var(--text-muted); transition: all 0.3s; z-index: 2100;
-            background: rgba(255,255,255,0.05); width: 45px; height: 45px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border);
+        .close-modal-btn { position: fixed; top: 25px; right: 25px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #fff; width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; z-index: 2100; transition: 0.3s; }
+        .close-modal-btn:hover { background: var(--primary-color); border-color: var(--primary-color); transform: rotate(90deg); }
+        .modal-title { font-size: 2rem; font-weight: 700; margin-bottom: 30px; text-align: center; }
+        .settings-card { background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 20px; width: 100%; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        
+        .modal-list-item { 
+            display: grid; 
+            grid-template-columns: auto 1fr auto; 
+            gap: 15px; 
+            align-items: center; 
+            padding: 12px; 
+            background: rgba(255,255,255,0.02); 
+            border: 1px solid var(--glass-border); 
+            border-radius: 12px; 
+            transition: 0.3s; 
+            margin-bottom: 10px;
         }
-        .close-modal-btn:hover { color: #fff; transform: rotate(90deg) scale(1.1); background: var(--primary-color); border-color: var(--primary-color); }
-
-        .modal-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 30px; text-align: center; color: #fff; text-shadow: 0 2px 15px rgba(0,0,0,0.5); letter-spacing: -0.5px;}
-
-        .profiles-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 35px; width: 100%; }
-        .profile-item { display: flex; flex-direction: column; align-items: center; gap: 15px; cursor: pointer; transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); width: 110px;}
-        .profile-item:hover { transform: translateY(-8px) scale(1.05); }
-        .profile-item img, .profile-item .avatar-placeholder { width: 100px; height: 100px; border-radius: 20px; object-fit: cover; border: 3px solid transparent; box-shadow: 0 15px 30px rgba(0,0,0,0.6); transition: all 0.4s; background: var(--glass-bg); display: flex; align-items: center; justify-content: center; font-size: 3rem;}
-        .profile-item.active img, .profile-item.active .avatar-placeholder { border-color: var(--primary-color); box-shadow: 0 0 30px var(--primary-glow); }
-        .profile-item span { font-size: 1rem; font-weight: 500; color: var(--text-muted); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; transition: color 0.3s;}
-        .profile-item.active span, .profile-item:hover span { color: #fff; font-weight: 600; }
+        .modal-list-item:hover { background: rgba(157, 78, 221, 0.1); border-color: rgba(157, 78, 221, 0.3); }
+        .modal-img-landscape { width: 130px; aspect-ratio: 16/9; border-radius: 8px; object-fit: cover; background: #111;}
+        .modal-img-portrait { width: 70px; aspect-ratio: 2/3; border-radius: 8px; object-fit: cover; background: #111;}
         
-        .add-profile-btn { width: 100px; height: 100px; border-radius: 20px; border: 2px dashed rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: rgba(255,255,255,0.4); transition: all 0.4s; background: rgba(255,255,255,0.02);}
-        .profile-item:hover .add-profile-btn { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.5); }
-
-        .settings-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 30px; border-radius: 24px; width: 100%; max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: var(--glass-blur);}
+        .modal-list-info { min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+        .modal-list-title { font-size: 0.95rem; font-weight: 600; color: #fff; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; white-space: normal; line-height: 1.3; }
+        .modal-list-meta { font-size: 0.75rem; color: var(--text-muted); }
         
-        @media (min-width: 993px) {
-            .full-modal .modal-content-wrap { max-width: 850px; }
-            .settings-card { max-width: 100%; padding: 40px; }
-            .settings-layout { display: grid; grid-template-columns: 280px 1fr; gap: 50px; align-items: start; text-align: left;}
-            .settings-divider { display: none; }
-            .avatar-studio { align-items: flex-start; margin-bottom: 0;}
-            .preset-avatars { justify-content: flex-start; }
-            .avatar-preview-wrap { margin: 0 auto 20px 0; }
+        .modal-list-actions { display: flex; gap: 10px; align-items: center; justify-content: flex-end; }
+        .modal-action-btn { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: 0.3s; color: #fff;}
+        .btn-play-action { background: var(--primary-color); }
+        .btn-play-action:hover { transform: scale(1.1); box-shadow: 0 4px 10px var(--primary-glow);}
+        .btn-del-action { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .btn-del-action:hover { background: #ef4444; color: #fff; transform: scale(1.1); box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);}
+        
+        .form-group { width: 100%; margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; font-weight: 500; }
+        .form-input { width: 100%; padding: 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #fff; font-family: inherit; font-size: 0.95rem; }
+        .form-input:focus { outline: none; border-color: var(--primary-color); }
+        
+        .btn-primary { width: 100%; padding: 14px; background: var(--primary-color); color: #fff; border-radius: 10px; font-weight: 600; margin-bottom: 15px; display: flex; justify-content: center; gap: 8px; align-items: center; transition: 0.3s; cursor: pointer; border: none;}
+        .btn-primary:hover { background: var(--primary-rich); }
+        .btn-danger { width: 100%; padding: 14px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 10px; font-weight: 600; display: flex; justify-content: center; gap: 8px; align-items: center; transition: 0.3s; cursor: pointer;}
+        
+        /* Custom Settings Tabs (Cute & Segregated) */
+        .settings-tabs {
+            display: flex; gap: 10px; margin-bottom: 25px; background: rgba(157, 78, 221, 0.05); padding: 8px; border-radius: 16px; border: 1px solid var(--glass-border);
         }
-        @media (max-width: 992px) {
-            .settings-layout { display: flex; flex-direction: column; }
-            .settings-divider { border-top: 1px solid var(--glass-border); margin: 25px 0; width: 100%; }
-            .avatar-studio { display: flex; flex-direction: column; align-items: center; margin-bottom: 25px; gap: 15px; }
-            .preset-avatars { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
-            .avatar-preview-wrap { margin: 0 auto; position: relative; width: 100px; height: 100px;}
+        .tab-btn {
+            flex: 1; padding: 12px; border-radius: 10px; color: var(--text-muted); font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.9rem; border: none; background: transparent;
         }
+        .tab-btn.active { background: var(--primary-color); color: #fff; box-shadow: 0 4px 15px var(--primary-glow); }
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .avatar-preview-wrap { position: relative; width: 100px; height: 100px; }
-        .avatar-preview-wrap img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-color); box-shadow: 0 0 20px var(--primary-glow); background: #121216;}
-        .upload-label { position: absolute; bottom: -5px; right: -5px; background: var(--primary-color); color: #fff; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid var(--bg-base); font-size: 0.9rem; transition: all 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .upload-label:hover { transform: scale(1.1); background: #c77dff; }
-        
-        .preset-avatars { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 10px; width: 100%; }
-        .preset-avatar { width: 100%; aspect-ratio: 1; border-radius: 12px; cursor: pointer; border: 3px solid transparent; transition: all 0.3s; background: rgba(255,255,255,0.05); overflow: hidden;}
-        .preset-avatar:hover { transform: translateY(-3px) scale(1.1); border-color: rgba(157, 78, 221, 0.5); }
-        .preset-avatar.selected { border-color: var(--primary-color); box-shadow: 0 0 15px var(--primary-glow); transform: scale(1.1); }
-        .preset-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .profiles-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; }
+        .profile-item { display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; transition: 0.3s; }
+        .profile-item:hover { transform: translateY(-5px); }
+        .profile-item img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid transparent; transition: 0.2s;}
+        .profile-item.active img { border-color: var(--primary-color); transform: scale(1.05); box-shadow: 0 10px 20px var(--primary-glow);}
+        .profile-item span { font-size: 0.9rem; color: var(--text-muted); transition: 0.2s; }
+        .profile-item.active span { color: #fff; font-weight: 600; }
 
-        .form-group { width: 100%; margin-bottom: 25px; position: relative; }
-        .form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; font-weight: 500; letter-spacing: 0.5px;}
-        .form-input { width: 100%; padding: 16px 20px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; color: #fff; font-family: inherit; font-size: 1rem; transition: all 0.3s; box-shadow: inset 0 2px 5px rgba(0,0,0,0.3); }
-        .form-input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(157, 78, 221, 0.2); background: rgba(0,0,0,0.6); }
-        
-        .btn-primary { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-rich) 100%); color: #fff; border-radius: 14px; font-weight: 600; font-size: 1.05rem; margin-bottom: 20px; transition: all 0.4s ease; box-shadow: 0 8px 25px rgba(157, 78, 221, 0.4); display: flex; align-items: center; justify-content: center; gap: 8px;}
-        .btn-primary:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(157, 78, 221, 0.6); }
-        
-        .btn-gold { background: linear-gradient(135deg, #d4af37 0%, #b5952f 100%); color: #000; box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4); }
-        .btn-gold:hover { box-shadow: 0 12px 30px rgba(212, 175, 55, 0.6); }
+        /* Custom Streaming Avatar Selectors */
+        .avatar-selection-row { display: flex; gap: 12px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; width: 100%; }
+        .avatar-selection-row::-webkit-scrollbar { display: none; }
+        .selectable-avatar-option { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 3px solid transparent; transition: 0.2s; flex-shrink: 0; }
+        .selectable-avatar-option:hover { transform: scale(1.05); }
+        .selectable-avatar-option.selected-choice { border-color: var(--primary-color); transform: scale(1.1); box-shadow: 0 4px 15px var(--primary-glow);}
 
-        .btn-danger { width: 100%; padding: 16px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; border-radius: 14px; font-weight: 600; font-size: 1.05rem; transition: all 0.4s ease; display: flex; align-items: center; justify-content: center; gap: 8px;}
-        .btn-danger:hover { background: rgba(239, 68, 68, 0.2); box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2); transform: translateY(-3px); }
+        /* File Upload Inputs */
+        input[type="file"].form-input {
+            padding: 10px 14px;
+            cursor: pointer;
+            color: #9CA3AF;
+            background: rgba(0,0,0,0.3);
+        }
+        input[type="file"].form-input::-webkit-file-upload-button {
+            visibility: hidden;
+            display: none;
+        }
+        input[type="file"].form-input::before {
+            content: 'Browse Files';
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
 
         /* =========================================
-           7. NETFLIX MOBILE IMPLEMENTATION 
+           8. RESPONSIVE DESIGN (MOBILE OVERRIDES)
         ========================================= */
-        @media (max-width: 768px) {
-            .pc-only { display: none !important; }
-            
-            .profile-hero-panel { display: none !important; }
-            .page-container { padding-top: 95px; }
-            
-            .app-header { 
-                padding: 15px 5%; 
-                background: rgba(5,5,7,0.95); 
-                backdrop-filter: blur(20px); 
-                -webkit-backdrop-filter: blur(20px);
-                border-bottom: 1px solid var(--glass-border);
-            }
-            .header-icons i { width: 38px; height: 38px; font-size: 1.15rem; }
-
-            .close-modal-btn { top: 15px; right: 15px; width: 40px; height: 40px; font-size: 1.2rem; }
-            .full-modal { padding: 80px 15px 40px 15px; } 
-
-            .notif-dropdown {
-                position: fixed; top: 80px; right: 5%; width: 90%; max-width: none; transform-origin: top right;
-            }
-        }
-
         @media (max-width: 992px) {
+            .main-content { padding: 20px 5% 100px 5%; width: 100%;}
+            
+            /* Bottom Navigation synced perfectly with index.html */
             .bottom-nav {
-                display: flex !important; position: fixed !important; bottom: 15px !important; left: 50% !important; transform: translateX(-50%) !important; width: 90% !important; max-width: 400px !important; background: var(--bottom-nav-bg) !important; backdrop-filter: blur(40px) saturate(180%) !important; -webkit-backdrop-filter: blur(40px) saturate(180%) !important; border: 1px solid var(--bottom-nav-border) !important; border-radius: 50px !important; z-index: 9999 !important; padding: 5px 10px !important; box-shadow: 0 25px 50px rgba(0,0,0,0.5) !important; transition: background 0.5s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+                display: flex !important; position: fixed !important; bottom: 15px !important; left: 50% !important; 
+                transform: translateX(-50%) !important; width: 90% !important; max-width: 400px !important; 
+                background: rgba(20, 20, 25, 0.65) !important; backdrop-filter: blur(40px) saturate(180%) !important;
+                -webkit-backdrop-filter: blur(40px) saturate(180%) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; 
+                border-radius: 50px !important; z-index: 999999 !important; padding: 5px 10px !important; box-shadow: 0 25px 50px rgba(0,0,0,0.5) !important;
             }
-            .bottom-nav-item {
-                flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 0; color: var(--bottom-nav-item); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); position: relative;
-            }
-            .bottom-nav-item.active { color: var(--bottom-nav-item-active); }
-            .nav-icon { font-size: 1.35rem; margin-bottom: 4px; transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
-            .bottom-nav-item.active .nav-icon { transform: translateY(-4px) scale(1.15); color: var(--primary-color); filter: drop-shadow(0 0 10px var(--primary-glow));}
-            .nav-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.3px; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
-            .bottom-nav-item.active .nav-label { font-weight: 700; text-shadow: 0 0 10px rgba(255,255,255,0.5);}
-            
-            body.is-creator-view .bottom-nav-item.active .nav-icon { color: var(--gold-accent); filter: drop-shadow(0 0 10px var(--gold-glow));}
-        }
-        @media (min-width: 993px) { .bottom-nav { display: none !important; } }
+            .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 0; color: rgba(255, 255, 255, 0.5); text-decoration: none; transition: all 0.4s ease; }
+            .bottom-nav-item.active { color: #fff; }
+            .bottom-nav-item .nav-icon { font-size: 1.35rem; margin-bottom: 4px; transition: transform 0.4s ease; }
+            .bottom-nav-item:hover .nav-icon, .bottom-nav-item.active .nav-icon { transform: translateY(-4px) scale(1.15); color: var(--primary-color, #8A2BE2); }
+            .bottom-nav-item .nav-label { font-size: 0.65rem; font-weight: 500; }
+            body { padding-bottom: 100px; }
 
-        /* =========================================
-           8. AFFILIATE LOGIC (STRICT BOTTOM PLACEMENT)
-        ========================================= */
-        .affiliate-btn-trigger { display: none !important; }
-        body.is-affiliate .affiliate-btn-trigger.pc-only { display: flex !important; }
-        body.is-affiliate .affiliate-btn-trigger.mobile-only { display: flex !important; }
-        
-        .mobile-only { display: none !important; }
-        @media (max-width: 768px) {
-            .mobile-only:not(.affiliate-btn-trigger) { display: flex !important; }
+            /* Mobile Hero Layout Fixes (CENTERED FOR PREMIUM FEEL) */
+            .hero-card { flex-direction: column; align-items: center; text-align: center; gap: 20px; padding: 25px 20px; }
+            .hero-profile-wrap { flex-direction: column; align-items: center; gap: 15px; width: 100%; min-width: unset;}
+            .hero-avatar { width: 85px; height: 85px; }
+            .hero-actions { justify-content: center; width: 100%; }
+            .hero-stats-wrap { justify-content: space-around; width: 100%; border-top: 1px solid var(--glass-border); padding-top: 20px; border-left: none; padding-left: 0; flex-direction: row; }
+            
+            .h-scroll { padding-bottom: 25px; margin-bottom: -10px; }
+            .cw-landscape-card { width: 260px !important; min-width: 260px !important; max-width: 260px !important; }
+            
+            .cw-remove-btn, .remove-list-btn { 
+                opacity: 1; 
+                background: rgba(239, 68, 68, 0.8); 
+                border-color: rgba(239, 68, 68, 1); 
+            }
+            .notif-dropdown { width: 290px; right: -10px; }
+
+            /* Hide Desktop Home Button on Mobile */
+            #home-nav-btn { display: none !important; }
         }
+        
+        /* Extreme Mobile Adjustments for Popups */
+        @media (max-width: 576px) {
+            .full-modal { padding: 40px 10px; }
+            .settings-card { padding: 15px; }
+            
+            /* Tighter Grid & Stacked Buttons for very small screens */
+            .modal-list-item { grid-template-columns: 100px 1fr auto; gap: 10px; padding: 10px; }
+            .modal-img-landscape { width: 100px; }
+            .modal-img-portrait { width: 55px; }
+            .modal-list-actions { flex-direction: column; gap: 6px; } 
+            .modal-action-btn { width: 32px; height: 32px; font-size: 0.8rem; }
+            .modal-list-title { font-size: 0.85rem; }
+            .modal-title { font-size: 1.5rem; margin-bottom: 20px;}
+        }
+
+        @media (min-width: 993px) { .bottom-nav { display: none !important; } }
     </style>
 </head>
 <body>
 
-    <div class="liquid-orb orb-1"></div>
-    <div class="liquid-orb orb-2"></div>
-
-    <header class="app-header">
-        <div class="header-logo pc-only">Any<span>Kan</span></div>
-        
-        <div class="mobile-profile-header mobile-only" onclick="openModal('profilesModal')" title="Switch Profile">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" class="mobile-header-avatar" id="mobileHeaderAvatar" alt="Profile">
-            <span class="mobile-header-name"><span id="mobileHeaderNameText">Karash</span> <i class="fas fa-caret-down" style="font-size: 0.8rem; color: var(--text-muted); margin-left: 4px;"></i></span>
-        </div>
-
-        <div class="header-icons">
-            <i class="fas fa-chart-line mobile-only affiliate-btn-trigger" id="mobileAffiliateBtn" style="color: #d4af37; border-color: rgba(212,175,55,0.3);" title="Creator Dashboard" onclick="toggleCreatorView()"></i>
+    <div class="app-layout">
+        <main class="main-content">
             
-            <i class="fas fa-cog" id="settingsBtn" title="Settings"></i>
-            <div class="notif-badge" id="notifBadge">
-                <i class="fas fa-bell" id="notifBtn" title="Notifications"></i>
-                <div class="notif-dropdown" id="notifDropdown">
-                    <div class="notif-header">
-                        <span>Notifications</span>
-                        <button id="clearNotifsBtn">Clear All</button>
-                    </div>
-                    <div id="dropdown-notif-list" class="notif-list">
-                        <div class="empty-notifs">No notifications yet.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main class="page-container">
-        
-        <div class="profile-hero-panel pc-only">
-            <div class="hero-bg-effect"></div>
-            
-            <div class="hero-left">
-                <div class="avatar-container">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" class="hero-avatar" id="headerAvatar" alt="Profile">
-                </div>
-            </div>
-            
-            <div class="hero-right">
-                <h2 class="hero-greeting">Welcome back,</h2>
-                <h1 class="gradient-text" id="headerName">Karash</h1>
+            <div class="top-header">
+                <!-- Homepage Link -->
+                <a href="index.html" class="site-logo">Any<span>Kan</span></a>
                 
-                <div class="hero-action-row">
-                    <div class="hero-stats" id="pc-viewer-stats">
-                        <span class="stat-pill" id="stat-list-count"><i class="fas fa-bookmark"></i> 0 in list</span>
-                        <span class="stat-pill" id="stat-req-count"><i class="fas fa-paper-plane"></i> 0 pending</span>
+                <div style="display:flex; gap: 15px; position: relative; align-items: center;">
+                    
+                    <!-- Desktop Explicit Home Button -->
+                    <a href="index.html" class="btn-switch" id="home-nav-btn"><i class="fas fa-home"></i> Home</a>
+
+                    <div class="header-icon-btn" id="settingsBtn">
+                        <i class="fas fa-cog"></i>
                     </div>
-                    
-                    <button class="btn-switch-profile" id="profileSelectorBtn" title="Switch Profile">
-                        <i class="fas fa-users"></i> Switch Profile
-                    </button>
-                    
-                    <button class="btn-switch-profile affiliate-btn affiliate-btn-trigger pc-only" id="pcAffiliateBtn" style="border-color: rgba(212,175,55,0.4); color: #d4af37;" title="Creator Dashboard" onclick="toggleCreatorView()">
-                        <i class="fas fa-chart-line"></i> Affiliate Panel
-                    </button>
+                    <div class="header-icon-btn" id="globalNotifBtn">
+                        <i class="fas fa-bell"></i>
+                        <div class="notif-badge-dot" id="globalNotifBadge" style="display:none;">3</div>
+                    </div>
+
+                    <!-- Real-time Notifications Feed Dropdown Panel -->
+                    <div id="globalNotifDropdown" class="notif-dropdown">
+                        <div class="notif-dropdown-header">
+                            <h3>Notifications</h3>
+                            <button id="clearNotifsBtn" style="background: none; border: none; cursor: pointer;">Clear All</button>
+                        </div>
+                        <div id="globalNotifList" class="notif-dropdown-list">
+                            <!-- Injected dynamically via anykan-notifier.js -->
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="viewer-sections">
-            <div class="section">
-                <div class="section-header">
-                    <div class="section-title-wrap">
-                        <div class="title-accent"></div>
-                        <h2>Continue Watching</h2>
+            <div class="hero-card">
+                <i class="fas fa-crown hero-bg-crown"></i>
+                
+                <div class="hero-profile-wrap">
+                    <div class="hero-avatar-container">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" class="hero-avatar" id="headerAvatar" alt="Avatar">
+                        <div class="hero-edit-btn" onclick="document.getElementById('settingsBtn').click()"><i class="fas fa-pencil-alt"></i></div>
                     </div>
-                    <span>See All <i class="fas fa-chevron-right" style="font-size:0.7rem;"></i></span>
+                    
+                    <div class="hero-user-info">
+                        <span class="hero-greeting">Welcome back,</span>
+                        <h1 class="hero-name" id="headerName">Loading...</h1>
+                        <div class="hero-actions">
+                            <button class="btn-vip" id="heroVipBtn"><i class="fas fa-crown"></i> Crown VIP</button>
+                            <button class="btn-switch" onclick="openModal('profilesModal')"><i class="fas fa-users"></i> Switch Profile</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-stats-wrap">
+                    <div class="stat-item">
+                        <div class="stat-value"><i class="fas fa-play"></i> <span id="stat-watching">0</span></div>
+                        <div class="stat-label">Watching</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value"><i class="fas fa-bookmark"></i> <span id="stat-completed">0</span></div>
+                        <div class="stat-label">In List</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value"><i class="far fa-clock"></i> <span id="stat-hours">0</span></div>
+                        <div class="stat-label">Watch Hours</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="continue-watching-section">
+                <div class="section-header">
+                    <h2 class="section-title">Continue Watching</h2>
+                    <a href="#" onclick="openHistoryModal(); return false;" class="see-all">See All <i class="fas fa-chevron-right"></i></a>
                 </div>
                 <div class="h-scroll" id="history-container">
-                    <p class="empty-text">Your watch history is empty.</p>
+                    <div class="empty-state">Your watch history is empty.</div>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-header">
-                    <div class="section-title-wrap">
-                        <div class="title-accent" style="background: #10b981; box-shadow: 0 0 10px rgba(16,185,129,0.4);"></div>
-                        <h2>My List</h2>
-                    </div>
-                    <span>See All <i class="fas fa-chevron-right" style="font-size:0.7rem;"></i></span>
+                    <h2 class="section-title" style="border-color: #8b5cf6;">My List</h2>
+                    <a href="#" onclick="openMylistModal(); return false;" class="see-all">See All <i class="fas fa-chevron-right"></i></a>
                 </div>
                 <div class="h-scroll" id="mylist-container">
-                    <p class="empty-text">Your list is empty.</p>
+                    <div class="empty-state">Your list is empty.</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title" style="border-color: #ec4899;">Favorites</h2>
+                    <a href="#" onclick="openFavoritesModal(); return false;" class="see-all">See All <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="h-scroll" id="favorites-container">
+                    <div class="empty-state">Your favorites list is empty.</div>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-header">
-                    <div class="section-title-wrap">
-                        <div class="title-accent" style="background: #f59e0b; box-shadow: 0 0 10px rgba(245,158,11,0.4);"></div>
-                        <h2>Requested Content</h2>
-                    </div>
-                    <span>See All <i class="fas fa-chevron-right" style="font-size:0.7rem;"></i></span>
+                    <h2 class="section-title" style="border-color: #d8b4fe;">Requested Content</h2>
+                    <a href="#" onclick="openRequestsModal(); return false;" class="see-all">See All <i class="fas fa-chevron-right"></i></a>
                 </div>
                 <div class="h-scroll" id="requests-container">
-                    <p class="empty-text">You haven't requested any content yet.</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="creator-sections" style="display: none;">
-            
-            <div id="creator-warning-banner" style="display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #EF4444; padding: 20px; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);">
-                </div>
-
-            <div class="dashboard-grid">
-                <div class="stat-card">
-                    <div class="stat-info">
-                        <div class="stat-value" id="ui-total-clicks">0</div>
-                        <div class="stat-label">Total Valid Clicks</div>
-                    </div>
-                    <i class="fas fa-mouse-pointer stat-icon"></i>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-info">
-                        <div class="stat-value" id="ui-earnings" style="color: #10B981;">$0.00</div>
-                        <div class="stat-label">Unpaid Earnings ($0.05/click)</div>
-                    </div>
-                    <i class="fas fa-wallet stat-icon"></i>
+                    <div class="empty-state">You haven't requested any content yet.</div>
                 </div>
             </div>
 
-            <div class="glass-widget">
-                <h2 class="widget-title"><i class="fas fa-link"></i> Your Unique Tracking Link</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Share this link to earn revenue. All traffic is monitored by our anti-fraud system.</p>
-                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                    <input type="text" id="ui-tracking-link" class="form-input" readonly style="color: #d4af37; font-family: monospace; border-color: rgba(212, 175, 55, 0.3); background: rgba(212, 175, 55, 0.05); flex-grow: 1; margin-bottom: 0;">
-                    <button class="btn-primary btn-gold" id="copy-aff-btn" style="width: auto; margin-bottom: 0; padding: 16px 30px;"><i class="fas fa-copy"></i> Copy Link</button>
-                </div>
-            </div>
-
-            <div class="glass-widget">
-                <h2 class="widget-title"><i class="fas fa-money-bill-wave"></i> Request Payout</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Minimum payout threshold is $100. Enter your UPI ID below to receive funds directly to your bank account.</p>
-                
-                <div id="payout-progress-container" style="margin-bottom: 25px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">
-                        <span>Current: $<span id="payout-current-val">0.00</span></span>
-                        <span>Goal: $100.00</span>
-                    </div>
-                    <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden;">
-                        <div id="payout-progress-bar" style="height: 100%; width: 0%; background: #10B981; transition: width 0.4s ease; box-shadow: 0 0 10px rgba(16,185,129,0.5);"></div>
-                    </div>
-                </div>
-
-                <div id="payout-ui-container">
-                    <div class="form-group">
-                        <input type="text" id="payout-details" class="form-input" placeholder="e.g., yourname@upi or 9876543210@ybl" required>
-                    </div>
-                    <button class="btn-primary" id="btn-request-payout" style="max-width: 300px; opacity: 0.5; cursor: not-allowed;" disabled><i class="fas fa-lock"></i> Threshold Not Met ($100)</button>
-                </div>
-                <div id="payout-status-msg" style="margin-top: 15px; font-size: 0.95rem; font-weight: 500;"></div>
-            </div>
-            
-        </div>
-
-    </main>
-
-    <div class="full-modal" id="profilesModal">
-        <button class="close-modal-btn" onclick="closeModal('profilesModal')"><i class="fas fa-times"></i></button>
-        <div class="modal-content-wrap">
-            <h2 class="modal-title">Who's Watching?</h2>
-            <div class="profiles-grid" id="profilesGrid">
-                </div>
-        </div>
+        </main>
     </div>
 
-    <div class="full-modal" id="addProfileModal">
-        <button class="close-modal-btn" onclick="closeModal('addProfileModal')"><i class="fas fa-times"></i></button>
-        <div class="modal-content-wrap">
-            <h2 class="modal-title">Create Profile</h2>
-            <div class="settings-card">
-                <div class="form-group">
-                    <label>Profile Name</label>
-                    <input type="text" id="new-profile-name" class="form-input" placeholder="Name">
-                </div>
-                <button class="btn-primary" id="btn-create-profile"><i class="fas fa-plus"></i> Create Profile</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="full-modal" id="settingsModal">
-        <button class="close-modal-btn" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button>
-        <div class="modal-content-wrap">
-            <h2 class="modal-title">Account Settings</h2>
-            
-            <div class="settings-card">
-                <div class="settings-layout">
-                    
-                    <div class="settings-left">
-                        <div class="avatar-studio">
-                            <div class="avatar-preview-wrap">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" id="edit-avatar-preview" alt="Avatar">
-                                <label for="edit-avatar-upload" class="upload-label" title="Upload Image"><i class="fas fa-camera"></i></label>
-                                <input type="file" id="edit-avatar-upload" accept="image/*" style="display:none;">
-                            </div>
-                            
-                            <div class="preset-avatars" id="preset-avatars">
-                                <div class="preset-avatar" title="Blue Classic"><img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" alt="preset"></div>
-                                <div class="preset-avatar" title="Red Classic"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/84c20033850498.56ba69ac290ea.png" alt="preset"></div>
-                                <div class="preset-avatar" title="Yellow Classic"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/1bdc9c33850498.56ba69ac2ba5b.png" alt="preset"></div>
-                                <div class="preset-avatar" title="Green Classic"><img src="https://pro2-bar-s3-cdn-cf.myportfolio.com/project_modules/disp/e70b1333850498.56ba69ac32ae3.png" alt="preset"></div>
-                                <div class="preset-avatar" title="Penguin"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/f9fa8a33850498.56ba69ac2cc3a.png" alt="preset"></div>
-                                <div class="preset-avatar" title="Mummy"><img src="https://pro2-bar-s3-cdn-cf4.myportfolio.com/project_modules/disp/bf6e4a33850498.56ba69ac3064f.png" alt="preset"></div>
-                                <div class="preset-avatar" title="Dog Bear"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/366be133850498.56ba69ac36858.png" alt="preset"></div>
-                                <div class="preset-avatar" title="Yellow Angry"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/fd69a733850498.56ba69ac2f221.png" alt="preset"></div>
-                                <div class="preset-avatar" title="Robot"><img src="https://pro2-bar-s3-cdn-cf.myportfolio.com/project_modules/disp/c7906d33850498.56ba69ac353e1.png" alt="preset"></div>
-                                <div class="preset-avatar" title="Blue Hair"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/64623a33850498.56ba69ac2a6f7.png" alt="preset"></div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Profile Name</label>
-                            <input type="text" id="edit-username" class="form-input" placeholder="Enter your display name">
-                        </div>
-                        
-                        <button class="btn-primary" id="btn-save-profile" style="margin-bottom: 20px;"><i class="fas fa-user-edit"></i> Save Profile</button>
-                    </div>
-                    
-                    <div class="settings-divider"></div>
-                    
-                    <div class="settings-right">
-                        <div class="form-group">
-                            <label>Registered Email</label>
-                            <input type="email" id="edit-email" class="form-input" disabled style="opacity:0.6; cursor:not-allowed;">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Security</label>
-                            <input type="password" id="new-password" class="form-input" placeholder="Enter new password to change">
-                        </div>
-                        <button class="btn-primary" id="btn-update-pwd"><i class="fas fa-lock"></i> Update Password</button>
-
-                        <div style="margin-top: 25px;">
-                            <button class="btn-danger" id="logout-btn"><i class="fas fa-power-off"></i> Sign Out</button>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <!-- Match index.html Bottom Bar Precisely -->
     <nav class="bottom-nav">
         <a href="index.html" class="bottom-nav-item">
             <i class="fa-solid fa-house nav-icon"></i>
             <span class="nav-label">Home</span>
         </a>
-        <a href="community.html" class="bottom-nav-item">
-            <i class="fa-solid fa-users nav-icon"></i>
-            <span class="nav-label">Community</span>
+       <a href="community.html" class="bottom-nav-item">
+            <i class="fa-solid fa-bell nav-icon"></i>
+            <span class="nav-label">Updates</span>
         </a>
         <a href="mylist.html" class="bottom-nav-item">
             <i class="fa-solid fa-bookmark nav-icon"></i>
@@ -700,755 +516,846 @@
         </a>
     </nav>
 
+    <!-- Modals -->
+    <div class="full-modal" id="historyModal">
+        <button class="close-modal-btn" onclick="closeModal('historyModal')"><i class="fas fa-times"></i></button>
+        <div class="modal-content-wrap">
+            <h2 class="modal-title">Watch History</h2>
+            <div class="settings-card" style="max-height: 70vh; overflow-y: auto;">
+                <div style="display:flex; justify-content: flex-end; margin-bottom: 15px;">
+                    <button id="clear-history-btn" onclick="clearHistory()" style="background:none; border:none; color:#ef4444; font-size:0.85rem; font-weight:600; cursor:pointer;"><i class="fas fa-trash-alt"></i> Clear All</button>
+                </div>
+                <div id="historyModalList" style="display: flex; flex-direction: column; width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="full-modal" id="mylistModal">
+        <button class="close-modal-btn" onclick="closeModal('mylistModal')"><i class="fas fa-times"></i></button>
+        <div class="modal-content-wrap">
+            <h2 class="modal-title" style="color: #8b5cf6;">My List</h2>
+            <div class="settings-card" style="max-height: 70vh; overflow-y: auto;">
+                <div id="mylistModalList" style="display: flex; flex-direction: column; width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="full-modal" id="favoritesModal">
+        <button class="close-modal-btn" onclick="closeModal('favoritesModal')"><i class="fas fa-times"></i></button>
+        <div class="modal-content-wrap">
+            <h2 class="modal-title" style="color: #ec4899;">Favorites</h2>
+            <div class="settings-card" style="max-height: 70vh; overflow-y: auto;">
+                <div id="favoritesModalList" style="display: flex; flex-direction: column; width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="full-modal" id="requestsModal">
+        <button class="close-modal-btn" onclick="closeModal('requestsModal')"><i class="fas fa-times"></i></button>
+        <div class="modal-content-wrap">
+            <h2 class="modal-title" style="color: #d8b4fe;">Requested Content</h2>
+            <div class="settings-card" style="max-height: 70vh; overflow-y: auto;">
+                <div id="requestsModalList" style="display: flex; flex-direction: column; width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="full-modal" id="profilesModal">
+        <button class="close-modal-btn" onclick="closeModal('profilesModal')"><i class="fas fa-times"></i></button>
+        <div class="modal-content-wrap">
+            <h2 class="modal-title">Who's Watching?</h2>
+            <div class="settings-card">
+                <div class="profiles-grid" id="profilesGrid"></div>
+                
+                <!-- Advanced Multi-Profile Creation Panel for Premium VIP Subscriptions -->
+                <div id="vip-profile-creation-zone" style="margin-top: 30px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 20px; display: none;">
+                    <h3 style="font-size: 1rem; margin-bottom: 12px; font-weight: 600; color: var(--vip-gold); text-align: center;"><i class="fas fa-plus-circle"></i> Add Crown VIP Sub-Profile</h3>
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <input type="text" id="new-profile-name" class="form-input" placeholder="Enter profile name...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="margin-bottom: 5px; display: block; text-align: center;">Select Preset Avatar</label>
+                        <div class="avatar-selection-row" id="new-profile-avatar-row" style="justify-content: center;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" class="selectable-avatar-option selected-choice" onclick="selectCreationAvatar(this)">
+                            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Karash" class="selectable-avatar-option" onclick="selectCreationAvatar(this)">
+                            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=Anykan" class="selectable-avatar-option" onclick="selectCreationAvatar(this)">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ashish" class="selectable-avatar-option" onclick="selectCreationAvatar(this)">
+                            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Cloud" class="selectable-avatar-option" onclick="selectCreationAvatar(this)">
+                        </div>
+                    </div>
+
+                    <!-- Direct Image File Upload Feature -->
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="text-align: center;">Or Upload Custom Image</label>
+                        <input type="file" id="create-custom-avatar-file" class="form-input" accept="image/*">
+                    </div>
+
+                    <button class="btn-primary" id="btn-add-new-profile" style="margin-top: 5px; font-size: 0.85rem; padding: 12px;"><i class="fas fa-user-plus"></i> Create Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Improved Settings Modal (Tabs for Profile & Security) -->
+    <div class="full-modal" id="settingsModal">
+        <button class="close-modal-btn" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button>
+        <div class="modal-content-wrap">
+            <h2 class="modal-title">Settings</h2>
+            <div class="settings-card">
+                
+                <!-- Navigation Tabs -->
+                <div class="settings-tabs">
+                    <button class="tab-btn active" onclick="window.switchTab('profile-tab')"><i class="fas fa-user-edit"></i> Profile</button>
+                    <button class="tab-btn" onclick="window.switchTab('security-tab')"><i class="fas fa-shield-alt"></i> Security</button>
+                </div>
+
+                <!-- 1. Profile Tab Content -->
+                <div id="profile-tab" class="tab-content active">
+                    <div style="display:flex; justify-content:center; margin-bottom: 15px;">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" id="edit-avatar-preview" style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:3px solid var(--primary-color); box-shadow: 0 5px 15px var(--primary-glow);">
+                    </div>
+
+                    <!-- Custom Avatar Gallery Selector -->
+                    <div class="form-group">
+                        <label style="text-align: center;">Choose Preset Avatar</label>
+                        <div class="avatar-selection-row" id="edit-profile-avatar-row" style="justify-content: center;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" class="selectable-avatar-option" onclick="selectEditAvatar(this)">
+                            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Karash" class="selectable-avatar-option" onclick="selectEditAvatar(this)">
+                            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=Anykan" class="selectable-avatar-option" onclick="selectEditAvatar(this)">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ashish" class="selectable-avatar-option" onclick="selectEditAvatar(this)">
+                            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Cloud" class="selectable-avatar-option" onclick="selectEditAvatar(this)">
+                        </div>
+                    </div>
+
+                    <!-- Direct Image File Upload Feature -->
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label style="text-align: center;">Or Upload Custom Image</label>
+                        <input type="file" id="edit-custom-avatar-file" class="form-input" accept="image/*">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Profile Name</label>
+                        <input type="text" id="edit-username" class="form-input">
+                    </div>
+
+                    <button class="btn-primary" id="btn-save-profile"><i class="fas fa-save"></i> Save Profile</button>
+                </div>
+
+                <!-- 2. Security Tab Content -->
+                <div id="security-tab" class="tab-content">
+                    <div class="form-group" style="padding-top: 10px;">
+                        <label>Update Secure Account Password</label>
+                        <input type="password" id="edit-password" class="form-input" placeholder="Enter new password (min 6 chars)">
+                        <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 8px; display: block;">You may be asked to re-login if your session is old to perform this action securely.</small>
+                    </div>
+
+                    <button class="btn-primary" id="btn-update-password" style="background: var(--vip-gold); color: #000; box-shadow: 0 4px 15px rgba(241, 196, 15, 0.3);"><i class="fas fa-key"></i> Update Password</button>
+                    
+                    <div style="margin-top: 25px; border-top: 1px solid var(--glass-border); padding-top: 20px;">
+                        <button class="btn-danger" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Sign Out Completely</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Ensure external scripts run -->
+    <script type="module" src="anykan-notifier.js"></script>
+
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut, updatePassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs, setDoc, onSnapshot, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut, updateProfile, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyB8GlFBy3boBwqEDWA625MkWKNM1M7w0O0",
-            authDomain: "bhx-beats.firebaseapp.com",
-            projectId: "bhx-beats",
-            storageBucket: "bhx-beats.firebasestorage.app",
-            messagingSenderId: "491393581039",
-            appId: "1:491393581039:web:8204fb8753094a64a9401a"
+            apiKey: "AIzaSyB7i67_T7fs87BHIY2Pxs6KRAknhXrowIA",
+            authDomain: "dramakan007.firebaseapp.com",
+            projectId: "dramakan007"
         };
         
-        const app = initializeApp(firebaseConfig); 
+        const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
         const auth = getAuth(app); 
         const db = getFirestore(app);
+        const tmdbKey = "014fbdbe962cb38379e09e31d0652459";
 
         let currentUserDocRef = null; 
-        let creatorDocRef = null;
         let userProfiles = [];
         let activeProfileIndex = 0; 
-        let cachedMyList = [];
-        let pendingAvatarUrl = null; 
+        let unsubscribeUser = null;
+        let unsubscribeHistory = null; 
 
-        // =====================================
-        // UI MODAL TOGGLES
-        // =====================================
+        // Active Choices Memory
+        let temporarySelectedEditAvatar = "";
+        let temporarySelectedCreationAvatar = "https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png";
+
+        // Guaranteed Notification Dropdown Toggle (Failsafe)
+        document.getElementById('globalNotifBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.getElementById('globalNotifDropdown').classList.toggle('active');
+        });
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('globalNotifDropdown');
+            const btn = document.getElementById('globalNotifBtn');
+            if (!dropdown.contains(e.target) && e.target !== btn) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        // Tabs Logic for Settings Modal
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        };
+
+        // Base Modals
         window.openModal = (id) => document.getElementById(id).classList.add('active');
         window.closeModal = (id) => document.getElementById(id).classList.remove('active');
         
-        document.getElementById('profileSelectorBtn').addEventListener('click', () => openModal('profilesModal'));
-        
+        // Manual Toggle Trigger for settings icon button
         document.getElementById('settingsBtn').addEventListener('click', () => {
-            if(userProfiles[activeProfileIndex]) {
-                document.getElementById('edit-username').value = userProfiles[activeProfileIndex].name || '';
-                
-                const currentAvatar = userProfiles[activeProfileIndex].avatar || '';
-                const previewImg = document.getElementById('edit-avatar-preview');
-                
-                if (currentAvatar.length <= 10 && !currentAvatar.includes('http') && !currentAvatar.includes('data:image')) {
-                    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">${currentAvatar}</text></svg>`;
-                    previewImg.src = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-                } else {
-                    previewImg.src = currentAvatar;
-                }
-                
-                pendingAvatarUrl = currentAvatar;
-                document.querySelectorAll('.preset-avatar').forEach(p => p.classList.remove('selected'));
-            }
             openModal('settingsModal');
         });
 
-        // =====================================
-        // VIEW TOGGLE (VIEWER <-> CREATOR)
-        // =====================================
-        let isCreatorView = false;
-        window.toggleCreatorView = function() {
-            isCreatorView = !isCreatorView;
-            
-            const viewerSec = document.getElementById('viewer-sections');
-            const creatorSec = document.getElementById('creator-sections');
-            const pcBtn = document.getElementById('pcAffiliateBtn');
-            const mobBtn = document.getElementById('mobileAffiliateBtn');
-            const pcViewerStats = document.getElementById('pc-viewer-stats');
-
-            if(isCreatorView) {
-                viewerSec.style.display = 'none';
-                creatorSec.style.display = 'block';
-                if(pcViewerStats) pcViewerStats.style.display = 'none';
-                document.body.classList.add('is-creator-view');
-                
-                if(pcBtn) {
-                    pcBtn.innerHTML = '<i class="fas fa-tv"></i> Viewer Mode';
-                    pcBtn.style.borderColor = "rgba(255,255,255,0.2)";
-                    pcBtn.style.color = "#fff";
-                }
-                if(mobBtn) { 
-                    mobBtn.classList.remove('fa-chart-line'); 
-                    mobBtn.classList.add('fa-tv'); 
-                }
-            } else {
-                viewerSec.style.display = 'block';
-                creatorSec.style.display = 'none';
-                if(pcViewerStats) pcViewerStats.style.display = 'flex';
-                document.body.classList.remove('is-creator-view');
-                
-                if(pcBtn) {
-                    pcBtn.innerHTML = '<i class="fas fa-chart-line"></i> Affiliate Panel';
-                    pcBtn.style.borderColor = "rgba(212,175,55,0.4)";
-                    pcBtn.style.color = "#d4af37";
-                }
-                if(mobBtn) { 
-                    mobBtn.classList.remove('fa-tv'); 
-                    mobBtn.classList.add('fa-chart-line'); 
-                }
-            }
+        // Custom Avatar Interactive Choice Updates
+        window.selectEditAvatar = (imgElement) => {
+            document.querySelectorAll('#edit-profile-avatar-row .selectable-avatar-option').forEach(el => el.classList.remove('selected-choice'));
+            imgElement.classList.add('selected-choice');
+            temporarySelectedEditAvatar = imgElement.src;
+            document.getElementById('edit-avatar-preview').src = imgElement.src;
+            document.getElementById('edit-custom-avatar-file').value = ""; // Clear file input if preset chosen
         };
 
-        // =====================================
-        // REAL-TIME NOTIFICATION SYSTEM
-        // =====================================
-        const notifBtn = document.getElementById('notifBtn');
-        const notifDropdown = document.getElementById('notifDropdown');
-        const notifBadge = document.getElementById('notifBadge');
-        
-        notifBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            notifDropdown.classList.toggle('active');
-            
-            // Mark read on open
-            notifHistory.forEach(n => n.read = true);
-            localStorage.setItem('Anykan_Notif_History', JSON.stringify(notifHistory));
-            notifBadge.classList.remove('has-new');
-        });
-        
-        document.addEventListener('click', (e) => {
-            if(!notifDropdown.contains(e.target) && e.target !== notifBtn) {
-                notifDropdown.classList.remove('active');
-            }
-        });
-
-        let notifHistory = JSON.parse(localStorage.getItem('Anykan_Notif_History')) || [];
-        let deletedNotifs = JSON.parse(localStorage.getItem('Anykan_Deleted_Notifs')) || []; 
-
-        function renderHistory() {
-            const list = document.getElementById('dropdown-notif-list');
-            if (!list) return;
-
-            if (notifHistory.length === 0) {
-                list.innerHTML = `<div class="empty-notifs">No notifications yet.</div>`;
-                notifBadge.classList.remove('has-new');
-                return;
-            }
-
-            list.innerHTML = notifHistory.map(n => `
-                <div class="global-notif-item">
-                    <div class="global-notif-icon"><i class="fas fa-bullhorn"></i></div>
-                    <div class="global-notif-content">
-                        <div class="global-notif-title">${n.title}</div>
-                        <div class="global-notif-body">${n.body}</div>
-                        <div class="global-notif-time">${new Date(n.timestamp).toLocaleString()}</div>
-                    </div>
-                    <button class="global-notif-delete" onclick="window.deleteGlobalNotif('${n.id}')"><i class="fas fa-trash-alt"></i></button>
-                </div>
-            `).join('');
-
-            const unread = notifHistory.some(n => !n.read);
-            if (unread) notifBadge.classList.add('has-new');
-            else notifBadge.classList.remove('has-new');
-        }
-
-        window.deleteGlobalNotif = (id) => {
-            notifHistory = notifHistory.filter(n => n.id !== id);
-            deletedNotifs.push(id);
-            if (deletedNotifs.length > 100) deletedNotifs = deletedNotifs.slice(-50);
-            
-            localStorage.setItem('Anykan_Notif_History', JSON.stringify(notifHistory));
-            localStorage.setItem('Anykan_Deleted_Notifs', JSON.stringify(deletedNotifs));
-            renderHistory();
+        window.selectCreationAvatar = (imgElement) => {
+            document.querySelectorAll('#new-profile-avatar-row .selectable-avatar-option').forEach(el => el.classList.remove('selected-choice'));
+            imgElement.classList.add('selected-choice');
+            temporarySelectedCreationAvatar = imgElement.src;
+            document.getElementById('create-custom-avatar-file').value = ""; // Clear file input if preset chosen
         };
 
-        document.getElementById('clearNotifsBtn').addEventListener('click', () => {
-            notifHistory.forEach(n => deletedNotifs.push(n.id));
-            if (deletedNotifs.length > 100) deletedNotifs = deletedNotifs.slice(-50);
-            localStorage.setItem('Anykan_Deleted_Notifs', JSON.stringify(deletedNotifs));
+        // File Upload Processing (Compress to Base64 to bypass Firestore 1MB limits safely)
+        function processImageUpload(file, previewImgElementId, isEdit) {
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 250;
+                    const MAX_HEIGHT = 250;
+                    let width = img.width;
+                    let height = img.height;
 
-            notifHistory = [];
-            localStorage.setItem('Anykan_Notif_History', JSON.stringify([]));
-            renderHistory();
-        });
-
-        function setupRealTimeNotifications(userId) {
-            const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"), limit(20));
-            onSnapshot(q, (snapshot) => {
-                snapshot.docChanges().forEach((change) => {
-                    if (change.type === "added") {
-                        const data = change.doc.data();
-                        const notifId = change.doc.id;
-                        
-                        if (data.target === "all" || data.target === "viewers" || data.target === userId) {
-                            
-                            const exists = notifHistory.find(n => n.id === notifId);
-                            const isDeleted = deletedNotifs.includes(notifId);
-
-                            if (!exists && !isDeleted) {
-                                const newNotif = {
-                                    id: notifId,
-                                    title: data.title || "Admin Broadcast",
-                                    body: data.message || data.body || "",
-                                    timestamp: data.createdAt ? (data.createdAt.toMillis ? data.createdAt.toMillis() : data.createdAt) : Date.now(),
-                                    read: false
-                                };
-                                
-                                notifHistory.unshift(newNotif);
-                                if (notifHistory.length > 30) notifHistory.pop(); 
-                                localStorage.setItem('Anykan_Notif_History', JSON.stringify(notifHistory));
-                                
-                                renderHistory();
-                            }
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
                         }
                     }
-                });
-            });
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Compress to JPEG Base64
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+
+                    if (isEdit) {
+                        document.getElementById(previewImgElementId).src = dataUrl;
+                        temporarySelectedEditAvatar = dataUrl;
+                        document.querySelectorAll('#edit-profile-avatar-row .selectable-avatar-option').forEach(el => el.classList.remove('selected-choice'));
+                    } else {
+                        temporarySelectedCreationAvatar = dataUrl;
+                        document.querySelectorAll('#new-profile-avatar-row .selectable-avatar-option').forEach(el => el.classList.remove('selected-choice'));
+                    }
+                }
+                img.src = event.target.result;
+            }
+            reader.readAsDataURL(file);
         }
 
-        // =====================================
-        // PROFILE RENDER & SYNC LOGIC
-        // =====================================
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        // Attach File Input Listeners
+        document.getElementById('edit-custom-avatar-file').addEventListener('change', function(e) {
+            if(e.target.files && e.target.files[0]) {
+                processImageUpload(e.target.files[0], 'edit-avatar-preview', true);
+            }
+        });
+
+        document.getElementById('create-custom-avatar-file').addEventListener('change', function(e) {
+            if(e.target.files && e.target.files[0]) {
+                processImageUpload(e.target.files[0], null, false);
+            }
+        });
+
+        // --- POPUP LOGIC (Strictly Local Storage Powered) ---
+        window.openHistoryModal = () => {
+            openModal('historyModal');
+            let dataToRender = null;
+            try {
+                const localData = JSON.parse(localStorage.getItem('dramakan_history')) || {};
+                dataToRender = Object.values(localData).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            } catch(e) {}
+            if (window.renderHistoryModalList) window.renderHistoryModalList(dataToRender);
+        };
+
+        window.openMylistModal = () => {
+            openModal('mylistModal');
+            let dataToRender = JSON.parse(localStorage.getItem('dramakan_mylist_cache')) || [];
+            if (window.renderMylistModalList) window.renderMylistModalList(dataToRender);
+        };
+
+        window.openFavoritesModal = () => {
+            openModal('favoritesModal');
+            let dataToRender = JSON.parse(localStorage.getItem('dramakan_favorites_cache')) || [];
+            if (window.renderFavoritesModalList) window.renderFavoritesModalList(dataToRender);
+        };
+
+        window.openRequestsModal = () => {
+            openModal('requestsModal');
+            let dataToRender = JSON.parse(localStorage.getItem('dramakan_requests_cache')) || [];
+            if (window.renderRequestsModalList) window.renderRequestsModalList(dataToRender);
+        };
         
-        document.querySelectorAll('.section').forEach(sec => observer.observe(sec));
+        // --- RENDER LOGIC ---
 
         function renderProfiles() {
             const grid = document.getElementById('profilesGrid');
             let html = '';
-            
             userProfiles.forEach((prof, idx) => {
                 const isActive = idx === activeProfileIndex ? 'active' : '';
-                const isEmoji = prof.avatar && prof.avatar.length <= 10 && !prof.avatar.includes('http') && !prof.avatar.includes('data:image');
-                
                 html += `
                     <div class="profile-item ${isActive}" onclick="switchProfile(${idx})">
-                        ${isEmoji ? `<div class="avatar-placeholder">${prof.avatar}</div>` : `<img src="${prof.avatar}" alt="${prof.name}">`}
+                        <img src="${prof.avatar}" alt="${prof.name}">
                         <span>${prof.name}</span>
                     </div>
                 `;
             });
-
-            if(userProfiles.length < 4) {
-                html += `
-                    <div class="profile-item" onclick="openAddProfileModal()">
-                        <div class="add-profile-btn"><i class="fas fa-plus"></i></div>
-                        <span>Add Profile</span>
-                    </div>
-                `;
-            }
             grid.innerHTML = html;
 
             const activeProf = userProfiles[activeProfileIndex];
-            
-            // Sync PC Hero Avatar
-            const headerAvatar = document.getElementById('headerAvatar');
-            if (activeProf.avatar && activeProf.avatar.length <= 10 && !activeProf.avatar.includes('http') && !activeProf.avatar.includes('data:image')) {
-                headerAvatar.outerHTML = `<div class="hero-avatar" id="headerAvatar" style="display:flex; align-items:center; justify-content:center; font-size:3rem;">${activeProf.avatar}</div>`;
-            } else {
-                if(headerAvatar.tagName === 'DIV') {
-                    headerAvatar.outerHTML = `<img src="${activeProf.avatar}" class="hero-avatar" id="headerAvatar" alt="Profile">`;
-                } else {
-                    headerAvatar.src = activeProf.avatar;
-                }
-            }
+            document.getElementById('headerAvatar').src = activeProf.avatar;
             document.getElementById('headerName').textContent = activeProf.name || 'User';
-            
-            // Sync Mobile Nav Header Avatar
-            const mobileAvatar = document.getElementById('mobileHeaderAvatar');
-            const mobileName = document.getElementById('mobileHeaderNameText');
-            if (mobileAvatar) {
-                if (activeProf.avatar && activeProf.avatar.length <= 10 && !activeProf.avatar.includes('http') && !activeProf.avatar.includes('data:image')) {
-                    mobileAvatar.outerHTML = `<div class="mobile-header-avatar" id="mobileHeaderAvatar" style="display:flex; align-items:center; justify-content:center; font-size:1.2rem; background: var(--glass-bg);">${activeProf.avatar}</div>`;
+            document.getElementById('edit-username').value = activeProf.name || '';
+            document.getElementById('edit-avatar-preview').src = activeProf.avatar;
+            temporarySelectedEditAvatar = activeProf.avatar;
+
+            // Highlight choice item in settings
+            let presetFound = false;
+            document.querySelectorAll('#edit-profile-avatar-row .selectable-avatar-option').forEach(el => {
+                if (el.src === activeProf.avatar) {
+                    el.classList.add('selected-choice');
+                    presetFound = true;
                 } else {
-                    if(mobileAvatar.tagName === 'DIV') {
-                        mobileAvatar.outerHTML = `<img src="${activeProf.avatar}" class="mobile-header-avatar" id="mobileHeaderAvatar" alt="Profile">`;
-                    } else {
-                        mobileAvatar.src = activeProf.avatar;
-                    }
+                    el.classList.remove('selected-choice');
                 }
-            }
-            if (mobileName) mobileName.textContent = activeProf.name || 'User';
-        }
-
-        function refreshProfileData() {
-            const activeProf = userProfiles[activeProfileIndex];
+            });
             
-            let localMyList = JSON.parse(localStorage.getItem('dramakan_mylist')) || [];
-            let dbMyList = activeProf.myList || [];
-            
-            if (activeProfileIndex === 0 && localMyList.length > dbMyList.length) {
-                cachedMyList = localMyList;
-            } else {
-                cachedMyList = dbMyList;
-            }
-            
-            renderPosterRow('mylist-container', cachedMyList, 'mylist');
-            document.getElementById('stat-list-count').innerHTML = `<i class="fas fa-bookmark"></i> ${cachedMyList.length} in list`;
-            
-            let historyObj = {};
-            const specificHistoryKey = 'Anykan_history_' + activeProf.id;
-            const globalHistory = JSON.parse(localStorage.getItem('Anykan_history')) || {};
-            
-            if (activeProfileIndex === 0) {
-                historyObj = globalHistory;
-                localStorage.setItem(specificHistoryKey, JSON.stringify(historyObj)); 
-            } else {
-                historyObj = JSON.parse(localStorage.getItem(specificHistoryKey)) || {};
-            }
-
-            if(typeof historyObj !== 'object' || Array.isArray(historyObj)) historyObj = {};
-
-            const historyArr = Object.entries(historyObj)
-                .filter(([key, item]) => item && item.link) 
-                .map(([key, item]) => ({ 
-                    ...item, 
-                    id: key, 
-                    title: item.title || "Continue Watching" 
-                }))
-                .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                
-            renderPosterRow('history-container', historyArr, 'history');
+            document.getElementById('edit-custom-avatar-file').value = ""; // Always reset the file input visually
         }
 
         window.switchProfile = (idx) => {
             activeProfileIndex = idx;
-            const activeProf = userProfiles[activeProfileIndex];
-            localStorage.setItem('Anykan_active_profile_id', activeProf.id);
+            localStorage.setItem('dramakan_active_profile_id', userProfiles[idx].id);
             renderProfiles();
-            refreshProfileData();
+            
+            const currentList = userProfiles[idx].myList || [];
+            const currentFavs = userProfiles[idx].favorites || [];
+            renderPosterList(currentList, 'mylist-container', 'mylist');
+            renderPosterList(currentFavs, 'favorites-container', 'favorites');
+            
+            document.getElementById('stat-completed').textContent = currentList.length;
+            
             closeModal('profilesModal');
         };
 
-        window.openAddProfileModal = () => {
-            if(userProfiles.length >= 4) {
-                alert("Maximum limit of 4 profiles reached.");
-                return;
-            }
-            closeModal('profilesModal');
-            document.getElementById('new-profile-name').value = '';
-            openModal('addProfileModal');
-        };
-
-        document.getElementById('btn-create-profile').addEventListener('click', async () => {
-            if(userProfiles.length >= 4) {
-                alert("Maximum limit of 4 profiles reached.");
-                return;
-            }
-            const name = document.getElementById('new-profile-name').value.trim();
-            if(!name) return alert("Please enter a name.");
-            
-            const newProf = {
-                id: 'prof_' + Date.now(),
-                name: name,
-                avatar: `https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png`,
-                myList: []
-            };
-            userProfiles.push(newProf);
-            
-            if(currentUserDocRef) { await updateDoc(currentUserDocRef, { profiles: userProfiles }); }
-            
-            renderProfiles();
-            closeModal('addProfileModal');
-            openModal('profilesModal');
-        });
-
-        // =====================================
-        // AVATAR STUDIO
-        // =====================================
-        const fileInput = document.getElementById('edit-avatar-upload');
-        const previewImg = document.getElementById('edit-avatar-preview');
-        
-        fileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const img = new Image();
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 300;
-                        const MAX_HEIGHT = 300;
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (width > height) {
-                            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-                        } else {
-                            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
-                        }
-                        
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-                        
-                        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-                        
-                        previewImg.src = dataUrl;
-                        pendingAvatarUrl = dataUrl; 
-                        document.querySelectorAll('.preset-avatar').forEach(p => p.classList.remove('selected'));
-                    }
-                    img.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        document.querySelectorAll('.preset-avatar').forEach(preset => {
-            preset.addEventListener('click', function() {
-                document.querySelectorAll('.preset-avatar').forEach(p => p.classList.remove('selected'));
-                this.classList.add('selected');
-                
-                const imgNode = this.querySelector('img');
-                if(imgNode) {
-                    pendingAvatarUrl = imgNode.src;
-                    previewImg.src = imgNode.src;
-                } else {
-                    const emoji = this.textContent.trim();
-                    pendingAvatarUrl = emoji;
-                    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">${emoji}</text></svg>`;
-                    previewImg.src = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+        // DYNAMIC TMDB ASYNC CONTINUE WATCHING RENDERER 
+        async function renderContinueWatching(cloudHistoryArr = null) {
+            try {
+                let historyArr = cloudHistoryArr;
+                if (!historyArr) {
+                    const historyObj = JSON.parse(localStorage.getItem('dramakan_history')) || {};
+                    historyArr = Object.values(historyObj)
+                        .filter(item => item && item.link && item.title && !item.link.toLowerCase().includes('index.html'))
+                        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
                 }
-            });
-        });
+                
+                const cwSection = document.getElementById('continue-watching-section');
+                const cwGrid = document.getElementById('history-container');
+                
+                if (cwGrid) {
+                    if (historyArr.length > 0) {
+                        const limitedData = historyArr.slice(0, 4);
 
-        function renderPosterRow(containerId, arrayData, type) {
+                        const updatedItems = await Promise.all(limitedData.map(async (item) => {
+                            let imgUrl = item.backdrop_path ? `https://image.tmdb.org/t/p/w780${item.backdrop_path}` : (item.backdrop || item.bgImg);
+                            
+                            if (!imgUrl) {
+                                try {
+                                    if (item.id) {
+                                        let tmdbRes = await fetch(`https://api.themoviedb.org/3/tv/${item.id}?api_key=${tmdbKey}`);
+                                        if (!tmdbRes.ok) tmdbRes = await fetch(`https://api.themoviedb.org/3/movie/${item.id}?api_key=${tmdbKey}`);
+                                        if (tmdbRes.ok) {
+                                            const tmdbData = await tmdbRes.json();
+                                            if (tmdbData.backdrop_path) imgUrl = `https://image.tmdb.org/t/p/w780${tmdbData.backdrop_path}`;
+                                        }
+                                    }
+                                    if (!imgUrl && item.title) {
+                                        const searchRes = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbKey}&query=${encodeURIComponent(item.title)}`);
+                                        if (searchRes.ok) {
+                                            const searchData = await searchRes.json();
+                                            if (searchData.results && searchData.results.length > 0 && searchData.results[0].backdrop_path) {
+                                                imgUrl = `https://image.tmdb.org/t/p/w780${searchData.results[0].backdrop_path}`;
+                                            }
+                                        }
+                                    }
+                                    if (imgUrl) {
+                                        item.backdrop_path = imgUrl.replace('https://image.tmdb.org/t/p/w780', '');
+                                        let localHistory = JSON.parse(localStorage.getItem('dramakan_history')) || {};
+                                        if(localHistory[item.id]) {
+                                            localHistory[item.id].backdrop_path = item.backdrop_path;
+                                            localStorage.setItem('dramakan_history', JSON.stringify(localHistory));
+                                        }
+                                    }
+                                } catch(err) { console.warn("Backdrop fetch failed", err); }
+                            }
+                            
+                            item.finalImgUrl = imgUrl || item.img;
+                            return item;
+                        }));
+
+                        cwGrid.innerHTML = updatedItems.map(item => {
+                            const progress = item.progress || Math.floor(Math.random() * 50 + 20);
+                            const season = item.season || 1;
+                            const episode = item.episode || 1;
+
+                            return `
+                            <a href="${item.link}" class="cw-landscape-card">
+                                <div class="cw-landscape-img-wrap">
+                                    <img src="${item.finalImgUrl}" alt="${item.title}" class="cw-landscape-img" loading="lazy" decoding="async" onerror="this.src='${item.img}'">
+                                    <button class="cw-remove-btn" onclick="event.preventDefault(); window.removeCard('history', '${item.id}')" title="Remove">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                                <div class="cw-progress-container">
+                                    <div class="cw-progress-bar" style="width: ${progress}%;"></div>
+                                </div>
+                                <div class="cw-landscape-info">
+                                    <h3 class="cw-landscape-title">${item.title}</h3>
+                                    <div class="cw-landscape-meta">
+                                        <span class="cw-play-badge"><i class="fas fa-play"></i> S${season} • E${episode}</span>
+                                        <span>${item.timeLeft ? item.timeLeft + 'm left' : ''}</span>
+                                    </div>
+                                </div>
+                            </a>
+                            `;
+                        }).join('');
+                        
+                        document.getElementById('stat-watching').textContent = historyArr.length;
+                        document.getElementById('stat-hours').textContent = (historyArr.length * 3) + 12; 
+                    } else { 
+                        cwGrid.innerHTML = `<div class="empty-state">Your watch history is empty.</div>`;
+                    }
+                }
+            } catch(e) { console.error("CW Engine exception", e); }
+        }
+
+        function renderPosterList(arrayData, containerId, listType) {
             const container = document.getElementById(containerId);
             if (!arrayData || arrayData.length === 0) {
-                container.innerHTML = `<p class="empty-text">Your list is empty.</p>`;
+                container.innerHTML = `<div class="empty-state">Your list is empty.</div>`;
                 return;
             }
-
             container.innerHTML = arrayData.map(item => {
-                const identifier = type === 'history' ? item.id : (item.link || item.id);
+                const d = new Date(item.timestamp || Date.now());
+                const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+                
                 return `
-                <a href="${item.link}" class="poster-card">
-                    <button class="remove-card-btn" onclick="event.preventDefault(); event.stopPropagation(); window.removeCard('${type}', '${identifier}')" title="Remove">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                    <img src="${item.img}" alt="${item.title}">
-                    <div class="card-gradient-overlay">
-                        <span class="card-title">${item.title}</span>
-                    </div>
-                    ${type === 'history' ? `
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${Math.floor(Math.random() * 80 + 10)}%;"></div>
-                    </div>` : ''}
+                <a href="${item.link}" class="list-card">
+                   <div class="list-poster-wrap">
+                      <img src="${item.img}" alt="${item.title}">
+                      <button class="remove-list-btn" onclick="event.preventDefault(); event.stopPropagation(); window.removeCard('${listType}', '${item.id || item.link}')" title="Remove">
+                          <i class="fas fa-trash-alt"></i>
+                      </button>
+                   </div>
+                   <div class="list-info">
+                      <div class="list-title">${item.title}</div>
+                      <div class="list-meta">S1 • E1</div>
+                      <div class="list-date"><i class="far fa-calendar"></i> Added on ${dateStr}</div>
+                   </div>
                 </a>
             `}).join('');
         }
 
-        window.removeCard = async (type, identifier) => {
-            const activeProf = userProfiles[activeProfileIndex];
-
-            if (type === 'history') {
-                const specificHistoryKey = 'Anykan_history_' + activeProf.id;
-                let historyObj = JSON.parse(localStorage.getItem(specificHistoryKey)) || {};
-                
-                if (activeProfileIndex === 0) {
-                    let globalHist = JSON.parse(localStorage.getItem('Anykan_history')) || {};
-                    delete globalHist[identifier];
-                    localStorage.setItem('Anykan_history', JSON.stringify(globalHist));
-                    historyObj = globalHist;
-                } else {
-                    delete historyObj[identifier]; 
-                    localStorage.setItem(specificHistoryKey, JSON.stringify(historyObj));
-                }
-                
-                const historyArr = Object.entries(historyObj)
-                    .filter(([key, item]) => item && item.link)
-                    .map(([key, item]) => ({ ...item, id: key, title: item.title || "Continue Watching" }))
-                    .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                renderPosterRow('history-container', historyArr, 'history');
-                
-            } else if (type === 'mylist') {
-                cachedMyList = cachedMyList.filter(item => item.link !== identifier && item.id !== identifier);
-                activeProf.myList = cachedMyList; 
-                
-                if (activeProfileIndex === 0) {
-                    localStorage.setItem('dramakan_mylist', JSON.stringify(cachedMyList));
-                }
-                
-                if (currentUserDocRef) {
-                    try { await updateDoc(currentUserDocRef, { profiles: userProfiles }); } 
-                    catch(e) { console.error("Error DB", e); }
-                }
-                
-                renderPosterRow('mylist-container', cachedMyList, 'mylist');
-                document.getElementById('stat-list-count').innerHTML = `<i class="fas fa-bookmark"></i> ${cachedMyList.length} in list`;
+        function renderRequests(arrayData) {
+            const container = document.getElementById('requests-container');
+            if (!arrayData || arrayData.length === 0) {
+                container.innerHTML = `<div class="empty-state">You haven't requested any content yet.</div>`;
+                return;
             }
-        };
-
-        function renderRequestRow(containerId, arrayData) {
-            const container = document.getElementById(containerId);
-            if (!arrayData || arrayData.length === 0) return;
-
-            let pendingCount = 0;
 
             container.innerHTML = arrayData.map(item => {
                 const isReady = item.status === "Uploaded";
-                if(!isReady) pendingCount++;
-                
-                const statClass = isReady ? 'status-ready' : 'status-pending';
-                const icon = isReady ? 'fa-play' : 'fa-hourglass-half';
-                const linkWrap = (isReady && item.link) ? `href="${item.link}"` : `href="#"`;
+                const badgeClass = isReady ? 'req-badge' : 'req-badge pending';
+                const d = new Date(item.createdAt || Date.now());
+                const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
                 return `
-                <a ${linkWrap} class="poster-card" style="border-color: ${isReady ? 'rgba(16,185,129,0.3)' : 'var(--glass-border)'};">
-                    <div class="fallback-card">
-                        <div class="fallback-icon" style="color: ${isReady ? '#10b981' : 'var(--primary-color)'}; border-color: ${isReady ? 'rgba(16,185,129,0.3)' : 'rgba(157,78,221,0.3)'};">
-                            <i class="fas ${icon}"></i>
+                <div class="req-card">
+                    <div class="req-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                    <div class="req-info">
+                        <div class="req-header-row">
+                            <div class="req-title">${item.dramaName || item.animeName}</div>
+                            <span class="${badgeClass}">${isReady ? 'UPLOADED' : 'PENDING'}</span>
                         </div>
-                        <h4 class="fallback-title">${item.animeName}</h4>
-                        <span class="status-badge ${statClass}">${item.status}</span>
+                        <div class="req-date">Requested on ${dateStr}</div>
                     </div>
-                </a>`;
+                </div>`;
             }).join('');
-            
-            document.getElementById('stat-req-count').innerHTML = `<i class="fas fa-paper-plane"></i> ${pendingCount} pending`;
         }
 
-        // =====================================
-        // AUTH INIT & REALTIME SYNC
-        // =====================================
+        // --- POPUP LIST RENDERERS ---
+        window.renderHistoryModalList = function(arrayData) {
+            const listContainer = document.getElementById('historyModalList');
+            if(!listContainer) return;
+            if(!arrayData) {
+                listContainer.innerHTML = `<div style="text-align:center; padding:20px; color:#aaa;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>`;
+                return;
+            }
+            if(arrayData.length === 0) {
+                listContainer.innerHTML = '<div class="empty-state">Your watch history is empty.</div>';
+                return;
+            }
+            listContainer.innerHTML = arrayData.map(item => {
+                const imgUrl = item.backdrop_path ? `https://image.tmdb.org/t/p/w780${item.backdrop_path}` : (item.backdrop || item.bgImg || item.img);
+                return `
+                <div class="modal-list-item">
+                    <img src="${imgUrl}" class="modal-img-landscape" alt="${item.title}" onerror="this.src='${item.img}'">
+                    <div class="modal-list-info">
+                        <div class="modal-list-title">${item.title}</div>
+                        <div class="modal-list-meta">S${item.season || 1} • E${item.episode || 1}</div>
+                    </div>
+                    <div class="modal-list-actions">
+                        <button class="modal-action-btn btn-del-action" onclick="window.removeCard('history', '${item.id}')"><i class="fas fa-trash"></i></button>
+                        <a href="${item.link}" class="modal-action-btn btn-play-action"><i class="fas fa-play"></i></a>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        };
+
+        window.renderMylistModalList = function(arrayData) {
+            const listContainer = document.getElementById('mylistModalList');
+            if(!listContainer) return;
+            if(!arrayData || arrayData.length === 0) {
+                listContainer.innerHTML = '<div class="empty-state">Your list is empty.</div>';
+                return;
+            }
+            listContainer.innerHTML = arrayData.map(item => `
+                <div class="modal-list-item">
+                    <img src="${item.img}" class="modal-img-portrait" alt="${item.title}">
+                    <div class="modal-list-info">
+                        <div class="modal-list-title">${item.title}</div>
+                        <div class="modal-list-meta">Added to List</div>
+                    </div>
+                    <div class="modal-list-actions">
+                        <button class="modal-action-btn btn-del-action" onclick="window.removeCard('mylist', '${item.id || item.link}')"><i class="fas fa-trash"></i></button>
+                        <a href="${item.link}" class="modal-action-btn btn-play-action"><i class="fas fa-play"></i></a>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        window.renderFavoritesModalList = function(arrayData) {
+            const listContainer = document.getElementById('favoritesModalList');
+            if(!listContainer) return;
+            if(!arrayData || arrayData.length === 0) {
+                listContainer.innerHTML = '<div class="empty-state">Your favorites list is empty.</div>';
+                return;
+            }
+            listContainer.innerHTML = arrayData.map(item => `
+                <div class="modal-list-item">
+                    <img src="${item.img}" class="modal-img-portrait" alt="${item.title}">
+                    <div class="modal-list-info">
+                        <div class="modal-list-title">${item.title}</div>
+                        <div class="modal-list-meta">Favorited</div>
+                    </div>
+                    <div class="modal-list-actions">
+                        <button class="modal-action-btn btn-del-action" onclick="window.removeCard('favorites', '${item.id || item.link}')"><i class="fas fa-trash"></i></button>
+                        <a href="${item.link}" class="modal-action-btn btn-play-action"><i class="fas fa-play"></i></a>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        window.renderRequestsModalList = function(arrayData) {
+            const listContainer = document.getElementById('requestsModalList');
+            if(!listContainer) return;
+            if(!arrayData || arrayData.length === 0) {
+                listContainer.innerHTML = '<div class="empty-state">No requests found.</div>';
+                return;
+            }
+            listContainer.innerHTML = arrayData.map(item => {
+                const isReady = item.status === "Uploaded";
+                const d = new Date(item.createdAt || Date.now());
+                return `
+                <div class="modal-list-item">
+                    <div class="req-icon" style="flex-shrink: 0;"><i class="fas fa-cloud-upload-alt"></i></div>
+                    <div class="modal-list-info">
+                        <div class="modal-list-title">${item.dramaName || item.animeName}</div>
+                        <div class="modal-list-meta">Requested on ${d.toLocaleDateString()}</div>
+                    </div>
+                    <div class="modal-list-actions">
+                        <span class="${isReady ? 'req-badge' : 'req-badge pending'}">${isReady ? 'UPLOADED' : 'PENDING'}</span>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        };
+
+        // --- REAL-TIME SYNC LOGIC ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                try {
-                    document.getElementById('edit-email').value = user.email;
-                    currentUserDocRef = doc(db, "users", user.uid);
-                    
-                    // Hook into Real-Time Notifications
-                    setupRealTimeNotifications(user.uid);
+                currentUserDocRef = doc(db, "users", user.uid);
 
-                    const docSnap = await getDoc(currentUserDocRef);
-
+                // 1. Profile Snapshots (My List & Favorites)
+                if(unsubscribeUser) unsubscribeUser();
+                unsubscribeUser = onSnapshot(currentUserDocRef, (docSnap) => {
                     if (docSnap.exists()) {
                         const data = docSnap.data();
                         
+                        // VIP Tiering Adjustments & Profile Creation Visibility
+                        const isPremium = data.isPremium && data.premiumExpiry > Date.now();
+                        const btnVip = document.getElementById('heroVipBtn');
+                        const vipBox = document.getElementById('vip-profile-creation-zone');
+                        
+                        if (isPremium && data.premiumPlan && data.premiumPlan.includes('Crown')) {
+                            btnVip.innerHTML = '<i class="fas fa-crown"></i> Crown VIP';
+                            btnVip.style.color = 'var(--vip-gold)';
+                            if(vipBox) vipBox.style.display = 'block';
+                        } else {
+                            btnVip.innerHTML = '<i class="fas fa-user"></i> Basic Plan';
+                            btnVip.style.color = 'var(--text-muted)';
+                            btnVip.style.border = '1px solid var(--glass-border)';
+                            if(vipBox) vipBox.style.display = 'none';
+                        }
+
                         if(data.profiles && data.profiles.length > 0) {
                             userProfiles = data.profiles;
                         } else {
                             userProfiles = [{
                                 id: 'prof_default',
                                 name: user.displayName || data.username || "User", 
-                                avatar: user.photoURL || data.avatarUrl || `https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png`,
-                                myList: data.myList || JSON.parse(localStorage.getItem('dramakan_mylist')) || []
+                                avatar: data.avatarUrl || "https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png",
+                                myList: data.myList || [],
+                                favorites: data.favorites || []
                             }];
-                            updateDoc(currentUserDocRef, { profiles: userProfiles }).catch(()=>{});
                         }
 
-                        const savedActiveId = localStorage.getItem('Anykan_active_profile_id');
+                        const savedActiveId = localStorage.getItem('dramakan_active_profile_id');
                         if (savedActiveId) {
                             const foundIdx = userProfiles.findIndex(p => p.id === savedActiveId);
                             if (foundIdx > -1) activeProfileIndex = foundIdx;
                         }
 
                         renderProfiles();
-                        refreshProfileData();
-                    }
-
-                    // Requests fetch
-                    const reqSnap = await getDocs(query(collection(db, "requests"), where("userId", "==", user.uid)));
-                    if (!reqSnap.empty) {
-                        const sortedReqs = [];
-                        reqSnap.forEach(r => sortedReqs.push(r.data()));
-                        sortedReqs.sort((a,b) => b.createdAt - a.createdAt);
-                        renderRequestRow('requests-container', sortedReqs);
-                    }
-
-                    // Creator Dashboard Check
-                    creatorDocRef = doc(db, "creators", user.uid);
-                    const creatorSnap = await getDoc(creatorDocRef);
-                    if (creatorSnap.exists()) {
-                        const cData = creatorSnap.data();
                         
-                        if (["Active", "Warning", "Banned"].includes(cData.accountStatus)) {
-                            document.body.classList.add('is-affiliate');
-                            document.getElementById('ui-total-clicks').textContent = cData.totalClicks || 0;
-                            document.getElementById('ui-tracking-link').value = cData.trackingUrl || '';
-                            
-                            const owed = ((cData.unpaidClicks || 0) * 0.05).toFixed(2);
-                            const payoutBtn = document.getElementById('btn-request-payout');
-                            const warningBanner = document.getElementById('creator-warning-banner');
-                            const payoutUiContainer = document.getElementById('payout-ui-container');
-                            const payoutStatusMsg = document.getElementById('payout-status-msg');
-                            const earningsDisplay = document.getElementById('ui-earnings');
+                        const activeList = userProfiles[activeProfileIndex].myList || [];
+                        const activeFavs = userProfiles[activeProfileIndex].favorites || [];
+                        
+                        // Push to cache so popups load instantly without fetching
+                        localStorage.setItem('dramakan_mylist_cache', JSON.stringify(activeList));
+                        localStorage.setItem('dramakan_favorites_cache', JSON.stringify(activeFavs));
 
-                            // Update Progress Bar
-                            document.getElementById('payout-current-val').innerText = owed;
-                            let progressPercent = (owed / 100) * 100;
-                            if(progressPercent > 100) progressPercent = 100;
-                            document.getElementById('payout-progress-bar').style.width = progressPercent + '%';
+                        renderPosterList(activeList, 'mylist-container', 'mylist');
+                        renderPosterList(activeFavs, 'favorites-container', 'favorites');
+                        document.getElementById('stat-completed').textContent = activeList.length;
 
-                            if (cData.accountStatus === "Warning" || cData.policyWarning === true) {
-                                warningBanner.style.display = 'block';
-                                warningBanner.innerHTML = '<i class="fas fa-exclamation-triangle" style="margin-right:8px; font-size:1.2rem;"></i> <strong>Account Restricted:</strong> Suspicious traffic detected. Your earnings are currently on hold pending a manual review. Payouts are disabled.';
-                                earningsDisplay.innerHTML = `<span style="color:#FBBF24;">$${owed} (ON HOLD)</span>`;
-                                payoutUiContainer.style.display = 'none';
-                            } else if (cData.accountStatus === "Banned") {
-                                warningBanner.style.display = 'block';
-                                warningBanner.innerHTML = '<i class="fas fa-ban" style="margin-right:8px; font-size:1.2rem;"></i> <strong>Account Banned:</strong> This account has been permanently suspended for violating anti-fraud policies. All earnings are voided.';
-                                earningsDisplay.innerHTML = `<span style="color:#EF4444;">$0.00 (VOIDED)</span>`;
-                                payoutUiContainer.style.display = 'none';
-                            } else {
-                                earningsDisplay.textContent = "$" + owed;
-                                
-                                if (cData.payoutRequested) {
-                                    payoutUiContainer.style.display = 'none';
-                                    payoutStatusMsg.innerHTML = `<span style="color: #FBBF24;"><i class="fas fa-clock"></i> Payout processing for ${cData.payoutDetails}</span>`;
-                                } else {
-                                    if (owed >= 100) {
-                                        payoutBtn.disabled = false;
-                                        payoutBtn.style.opacity = '1';
-                                        payoutBtn.style.cursor = 'pointer';
-                                        payoutBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Invoice';
-                                    } else {
-                                        payoutBtn.disabled = true;
-                                        payoutBtn.style.opacity = '0.5';
-                                        payoutBtn.style.cursor = 'not-allowed';
-                                        payoutBtn.innerHTML = '<i class="fas fa-lock"></i> Threshold Not Met ($100)';
-                                    }
-                                }
-                            }
-                        }
+                        // Auto-refresh active modals
+                        if(document.getElementById('mylistModal').classList.contains('active')) window.renderMylistModalList(activeList);
+                        if(document.getElementById('favoritesModal').classList.contains('active')) window.renderFavoritesModalList(activeFavs);
                     }
+                });
 
-                } catch (error) { console.error("Data Load Error:", error); }
+                // 2. Watch History Snapshots
+                if(unsubscribeHistory) unsubscribeHistory();
+                unsubscribeHistory = onSnapshot(collection(db, "users", user.uid, "history"), (snapshot) => {
+                    let cloudHistory = {};
+                    snapshot.forEach(doc => {
+                        const histData = doc.data();
+                        if(histData && histData.dramaId) cloudHistory[String(histData.dramaId)] = histData;
+                    });
+                    
+                    localStorage.setItem('dramakan_history', JSON.stringify(cloudHistory));
+                    
+                    const historyArr = Object.values(cloudHistory)
+                        .filter(item => item && item.title)
+                        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                    
+                    renderContinueWatching(historyArr);
+                    if(document.getElementById('historyModal').classList.contains('active')) {
+                        window.renderHistoryModalList(historyArr);
+                    }
+                });
+
+                // 3. Request Snapshots
+                onSnapshot(query(collection(db, "requests"), where("userId", "==", user.uid)), (reqSnap) => {
+                    const sortedReqs = [];
+                    reqSnap.forEach(r => sortedReqs.push(r.data()));
+                    sortedReqs.sort((a,b) => b.createdAt - a.createdAt);
+                    
+                    localStorage.setItem('dramakan_requests_cache', JSON.stringify(sortedReqs));
+                    renderRequests(sortedReqs);
+                    if(document.getElementById('requestsModal').classList.contains('active')) {
+                        window.renderRequestsModalList(sortedReqs);
+                    }
+                });
+
             } else { 
                 window.location.replace('login.html'); 
             }
         });
 
-        // =====================================
-        // ACTIONS & BUTTONS
-        // =====================================
-        
-        // Copy Tracking Link
-        document.getElementById('copy-aff-btn').addEventListener('click', () => {
-            const linkInput = document.getElementById('ui-tracking-link');
-            linkInput.select();
-            document.execCommand('copy');
-            const btn = document.getElementById('copy-aff-btn');
-            btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-            setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Copy Link'; }, 2000);
-        });
-
-        // Request Payout
-        document.getElementById('btn-request-payout').addEventListener('click', async () => {
-            const details = document.getElementById('payout-details').value.trim();
-            if(!details) return alert("Please enter your UPI ID.");
-            
-            const btn = document.getElementById('btn-request-payout');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-            btn.disabled = true;
-
-            try {
-                // Final safety check
-                const snap = await getDoc(creatorDocRef);
-                if (snap.exists()) {
-                    const cData = snap.data();
-                    const owed = ((cData.unpaidClicks || 0) * 0.05);
-                    if (owed < 100) {
-                        alert("Minimum threshold of $100 not met.");
-                        btn.innerHTML = '<i class="fas fa-lock"></i> Threshold Not Met ($100)';
-                        return;
-                    }
-                    if (cData.accountStatus !== "Active") {
-                        alert("Account restricted. Cannot process payout.");
-                        return;
-                    }
-                }
-
-                await updateDoc(creatorDocRef, {
-                    payoutRequested: true,
-                    payoutDetails: details
-                });
+        // --- DOCUMENT LEVEL CARD DELETIONS ---
+        window.removeCard = async (type, identifier) => {
+            if (!auth.currentUser) return;
+            if (type === 'history') {
+                deleteDoc(doc(db, "users", auth.currentUser.uid, "history", String(identifier)));
+            } else if (type === 'mylist' || type === 'favorites') {
+                const targetArray = type === 'mylist' ? 'myList' : 'favorites';
+                const currentList = userProfiles[activeProfileIndex][targetArray] || [];
+                const updatedList = currentList.filter(i => String(i.id) !== String(identifier) && i.link !== identifier);
+                userProfiles[activeProfileIndex][targetArray] = updatedList;
                 
-                document.getElementById('payout-ui-container').style.display = 'none';
-                document.getElementById('payout-status-msg').innerHTML = `<span style="color: #10B981;"><i class="fas fa-check-circle"></i> Invoice Submitted Successfully!</span>`;
-            } catch(e) {
-                alert("Error submitting request.");
-                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Invoice';
-                btn.disabled = false;
+                if (currentUserDocRef) updateDoc(currentUserDocRef, { profiles: userProfiles });
             }
-        });
+        };
 
+        window.clearHistory = async () => {
+            if(!auth.currentUser) return;
+            if(!confirm("Clear entire watch history?")) return;
+            const uid = auth.currentUser.uid;
+            const snap = await getDocs(collection(db, "users", uid, "history"));
+            snap.forEach(d => deleteDoc(doc(db, "users", uid, "history", d.id)));
+        };
+
+        // --- PROFILE TABS: PROFILE SAVE ---
         document.getElementById('btn-save-profile').addEventListener('click', async () => {
-            const newName = document.getElementById('edit-username').value.trim();
             const btn = document.getElementById('btn-save-profile');
+            const newName = document.getElementById('edit-username').value.trim();
             
-            if(!newName) return alert('Profile name cannot be empty.');
-            
+            if(!newName) return;
+            btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-            
+
             try {
-                const avatarToSave = pendingAvatarUrl || userProfiles[activeProfileIndex].avatar;
-                
-                // Only sync the primary active profile to global Auth for external systems
-                if (activeProfileIndex === 0 && avatarToSave.length < 500) {
-                    await updateProfile(auth.currentUser, {
-                        displayName: newName,
-                        photoURL: avatarToSave
-                    });
-                }
-                
+                // Save user meta fields updates 
                 userProfiles[activeProfileIndex].name = newName;
-                userProfiles[activeProfileIndex].avatar = avatarToSave;
+                userProfiles[activeProfileIndex].avatar = temporarySelectedEditAvatar;
                 
                 if(currentUserDocRef) {
-                    await updateDoc(currentUserDocRef, { profiles: userProfiles });
+                    await updateDoc(currentUserDocRef, { 
+                        profiles: userProfiles,
+                        // Update core fallback parameters for backward configurations compatibility
+                        username: userProfiles[0].name,
+                        avatarUrl: userProfiles[0].avatar
+                    });
                 }
-                
-                renderProfiles(); 
-                
-                btn.style.background = '#10b981';
-                btn.style.boxShadow = '0 8px 25px rgba(16,185,129,0.4)';
-                btn.innerHTML = '<i class="fas fa-check"></i> Saved!';
-                setTimeout(() => { 
-                    btn.style.background = ''; 
-                    btn.style.boxShadow = '';
-                    btn.innerHTML = '<i class="fas fa-user-edit"></i> Save Profile'; 
-                }, 3000);
-            } catch (err) {
-                alert(err.message);
-                btn.innerHTML = '<i class="fas fa-user-edit"></i> Save Profile';
+
+                // If updating user authentication profiles fields parameters
+                if(activeProfileIndex === 0) {
+                    await updateProfile(auth.currentUser, {
+                        displayName: newName,
+                        photoURL: temporarySelectedEditAvatar
+                    });
+                }
+
+                closeModal('settingsModal');
+            } catch(e) {
+                console.error(e);
+                alert("Error configuring account updates: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Save Profile';
             }
         });
 
-        document.getElementById('btn-update-pwd').addEventListener('click', async () => {
-            const newPwd = document.getElementById('new-password').value;
-            if(newPwd.length < 6) return alert("Password must be at least 6 characters.");
-            const btn = document.getElementById('btn-update-pwd');
-            
+        // --- PROFILE TABS: SECURITY SAVE (PASSWORD) ---
+        document.getElementById('btn-update-password').addEventListener('click', async () => {
+            const newPassword = document.getElementById('edit-password').value.trim();
+            if(!newPassword || newPassword.length < 6) {
+                alert("Password must be at least 6 characters long.");
+                return;
+            }
+
+            const btn = document.getElementById('btn-update-password');
+            btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+
             try {
-                await updatePassword(auth.currentUser, newPwd);
-                btn.style.background = '#10b981';
-                btn.style.boxShadow = '0 8px 25px rgba(16,185,129,0.4)';
-                btn.innerHTML = '<i class="fas fa-check"></i> Password Updated';
-                document.getElementById('new-password').value = '';
-                setTimeout(() => { 
-                    btn.style.background = ''; 
-                    btn.style.boxShadow = '';
-                    btn.innerHTML = '<i class="fas fa-lock"></i> Update Password'; 
-                }, 3000);
-            } catch (err) {
-                alert(err.message);
-                btn.innerHTML = '<i class="fas fa-lock"></i> Update Password';
+                await updatePassword(auth.currentUser, newPassword);
+                alert("Password updated securely!");
+                document.getElementById('edit-password').value = "";
+                closeModal('settingsModal');
+            } catch(e) {
+                console.error(e);
+                // Graceful error prompt for Firebase re-authentication needs
+                if(e.code === 'auth/requires-recent-login') {
+                    alert("For your security, please sign out and sign back in to change your password.");
+                } else {
+                    alert("Error updating password: " + e.message);
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-key"></i> Update Password';
             }
         });
 
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            signOut(auth).then(()=>window.location.replace('login.html'));
+        // --- CROWN VIP SUB-PROFILE CREATION CONTROL ENGINE ---
+        document.getElementById('btn-add-new-profile').addEventListener('click', async () => {
+            const profileNameInput = document.getElementById('new-profile-name');
+            const name = profileNameInput.value.trim();
+            if(!name) { alert("Please provide a sub-profile identity string."); return; }
+
+            const btn = document.getElementById('btn-add-new-profile');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+
+            const newProfileObj = {
+                id: 'prof_' + Date.now(),
+                name: name,
+                avatar: temporarySelectedCreationAvatar,
+                myList: [],
+                favorites: []
+            };
+
+            try {
+                userProfiles.push(newProfileObj);
+                if (currentUserDocRef) {
+                    await updateDoc(currentUserDocRef, { profiles: userProfiles });
+                    profileNameInput.value = "";
+                    document.getElementById('create-custom-avatar-file').value = "";
+                    renderProfiles(); // Re-sync UI immediately
+                    alert("Crown VIP Sub-profile appended seamlessly!");
+                }
+            } catch(e) {
+                alert("Profile save execution error: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-user-plus"></i> Create Profile';
+            }
         });
+
+        document.getElementById('logout-btn').addEventListener('click', () => signOut(auth).then(()=>window.location.replace('login.html')));
+
     </script>
 </body>
 </html>

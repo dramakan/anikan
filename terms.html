@@ -3,119 +3,435 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms of Service - Anykan</title>
-
+    <title>Terms of Service - AnyKan</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
         :root {
-            --color-background: #100f14;
-            --color-card: #1c1b22;
-            --color-text: #e0e0e0;
-            --color-text-muted: #a0a0a0;
-            --color-primary: #9D4EDD;
-            --font-family: 'Poppins', sans-serif;
+            --primary-purple: #8A2BE2;
+            --accent-red: #E50914;
+            --bg-dark: #08090a;
+            --surface: #121418;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8f9fa;
+            --text-muted: #9ca3af;
         }
 
         body {
-            background-color: var(--color-background);
-            color: var(--color-text);
-            font-family: var(--font-family);
-            line-height: 1.7;
-            padding: 2rem 5%;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 2rem auto;
-            background-color: var(--color-card);
-            padding: 2rem 3rem;
-            border-radius: 10px;
-            border-top: 3px solid var(--color-primary);
+        /* Abstract Background Elements */
+        .bg-element {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+        .bg-1 { width: 40vw; height: 40vw; background: var(--primary-purple); top: -10%; right: -10%; }
+        .bg-2 { width: 30vw; height: 30vw; background: var(--accent-red); bottom: -5%; left: -5%; animation-delay: -5s;}
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-5%, 10%) scale(1.1); }
         }
 
-        h1, h2 {
-            color: #fff;
-            border-bottom: 1px solid var(--color-primary);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1rem;
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(8, 9, 10, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 5%;
+            display: flex;
+            align-items: center;
         }
         
-        h1 {
-            text-align: center;
-            font-size: 2.5rem;
-        }
-        
-        h2 {
-            font-size: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        a {
-            color: var(--color-primary);
+        .back-btn {
+            color: var(--text-main);
             text-decoration: none;
+            font-size: 1.2rem;
+            margin-right: 20px;
+            transition: transform 0.3s;
+        }
+        .back-btn:hover { transform: translateX(-5px); color: var(--primary-purple);}
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .logo span { color: var(--primary-purple); }
+
+        /* Main Layout */
+        .layout-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 5%;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 50px;
         }
 
-        a:hover {
-            text-decoration: underline;
+        /* Sidebar Navigation */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: max-content;
         }
 
-        p, li {
-            color: var(--color-text-muted);
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
         }
 
-        ul {
+        .nav-item { margin-bottom: 10px; }
+        .nav-item:last-child { margin-bottom: 0; }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .nav-link i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .nav-link.active {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), transparent);
+            color: #fff;
+            border-left: 3px solid var(--primary-purple);
+        }
+        .nav-link.active i { color: var(--primary-purple); transform: scale(1.1); }
+
+        /* Content Area */
+        .content-area {
+            padding-bottom: 50px;
+        }
+
+        .page-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            background: linear-gradient(to right, #fff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .last-updated {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content-section {
+            margin-bottom: 60px;
+            scroll-margin-top: 100px;
+            animation: fadeUp 0.6s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .content-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            color: #fff;
+            margin: 0 0 25px 0;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .content-section p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .content-section p strong { color: #fff; }
+
+        .content-section ul {
+            color: var(--text-muted);
+            line-height: 1.8;
             padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .content-section ul li { margin-bottom: 10px; }
+
+        .highlight-box {
+            background: rgba(138, 43, 226, 0.05);
+            border: 1px solid rgba(138, 43, 226, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        .highlight-box h4 {
+            color: #fff;
+            margin: 0 0 10px 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+        }
+        .highlight-box p { margin: 0; font-size: 0.95rem; }
+
+        /* Mobile Adjustments */
+        @media (max-width: 992px) {
+            .layout-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 30px 5%;
+            }
+            .sidebar { display: none; }
+            .page-title { font-size: 2.5rem; }
+            .section-title { font-size: 1.5rem; }
+        }
+        
+        .bottom-nav { display: none; }
+        @media (max-width: 992px) {
+            .bottom-nav {
+                display: flex !important;
+                position: fixed !important;
+                bottom: 15px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                width: 90% !important;
+                max-width: 400px !important;
+                background: rgba(20, 20, 25, 0.45) !important;
+                backdrop-filter: blur(40px) saturate(180%) !important;
+                -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+                border: 1px solid rgba(255, 255, 255, 0.08) !important;
+                border-radius: 50px !important;
+                z-index: 9999 !important;
+                padding: 5px 10px !important;
+                box-shadow: 0 25px 50px rgba(0,0,0,0.5) !important;
+            }
+            .bottom-nav-item {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 6px 0;
+                color: rgba(255, 255, 255, 0.5);
+                transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+                text-decoration: none;
+            }
+            .bottom-nav-item.active { color: #fff; }
+            .bottom-nav-item .fa-solid { font-size: 1.35rem; margin-bottom: 4px; transition: transform 0.4s; }
+            .nav-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.3px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Terms of Service</h1>
-        <p><strong>Effective Date:</strong> October 2, 2025</p>
+    <div class="bg-element bg-1"></div>
+    <div class="bg-element bg-2"></div>
 
-        <h2>1. Agreement to Terms</h2>
-        <p>Welcome to Anykan (the "Site"). By accessing and using our website, you agree to be bound by these Terms of Service ("Terms") and our Privacy Policy. If you do not agree with these terms, please do not use our services.</p>
+    <header class="header">
+        <a href="index.html" class="back-btn" title="Back to Home"><i class="fas fa-arrow-left"></i></a>
+        <a href="index.html" class="logo">Any<span>Kan</span></a>
+    </header>
 
-        <h2>2. Description of Service</h2>
-        <p>Anykan is a search engine for anime content available on the internet. Our service provides users with access to embedded players and links to third-party websites to watch anime online for free.</p>
-
-        <h2>3. Third-Party Content and Copyright Policy</h2>
-        <p>
-            <strong>Anykan does not host, upload, or store any video files or media on its servers.</strong>
-            All content displayed on the Site is provided by unaffiliated third parties and is hosted on their servers. We have no control over the content provided by these third parties and are not responsible for its accuracy, legality, or copyright compliance. Our Site functions solely as an index and database of content found publicly on the internet.
-        </p>
-        <p>
-            We highly respect intellectual property rights. If you are a copyright owner and believe that content accessible through our Site infringes on your copyright, please contact us with a valid DMCA takedown notice. Upon receipt of a valid notice, we will promptly remove the link(s) to the allegedly infringing content from our Site. Please direct all copyright infringement notifications to our legal department at <a href="mailto:Anykanowner@gmail.com">legal@Anykan.com</a>.
-        </p>
-
-        <h2>4. User Conduct and Responsibilities</h2>
-        <p>By using Anykan, you agree to the following:</p>
-        <ul>
-            <li>You will not use the service for any illegal or unauthorized purpose.</li>
-            <li>You will not interfere with the proper working of the Site, including attempting to bypass any security measures.</li>
-            <li>You must be at least 13 years of age or have the permission of a parent or guardian to use this service.</li>
-        </ul>
-
-        <h2>5. Disclaimer of Warranties</h2>
-        <p>The service is provided on an "AS IS" and "AS AVAILABLE" basis. Anykan makes no warranties, express or implied, that the service will be uninterrupted, timely, secure, or error-free. You use the service at your own risk. We do not warrant the legality or quality of the content provided by third parties.</p>
-
-        <h2>6. Limitation of Liability</h2>
-        <p>In no event shall Anykan, its owners, or its affiliates be liable for any direct, indirect, incidental, special, or consequential damages resulting from the use or the inability to use the service or for the cost of procurement of substitute goods and services or resulting from any goods or services purchased or obtained or messages received or transactions entered into through the service or resulting from unauthorized access to or alteration of your transmissions or data, including but not limited to, damages for loss of profits, use, data or other intangible, even if we have been advised of the possibility of such damages.</p>
-
-        <h2>7. Changes to Terms</h2>
-        <p>Anykan reserves the right to modify these Terms at any time. We will notify users of any changes by posting the new Terms on this page. Your continued use of the Site after any such changes constitutes your acceptance of the new Terms.</p>
-
-        <h2>8. Governing Law</h2>
-        <p>These Terms shall be governed by and construed in accordance with the laws of India, without regard to its conflict of law provisions.</p>
+    <main class="layout-container">
         
-        <h2>9. Contact Us</h2>
-        <p>If you have any questions about these Terms, please contact us at <a href="mailto:Anykanowner@gmail.com">contact@Anykan.com</a>.</p>
+        <aside class="sidebar">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#acceptance" class="nav-link active"><i class="fas fa-check-circle"></i> Acceptance of Terms</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#accounts" class="nav-link"><i class="fas fa-user-circle"></i> Accounts & Profiles</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#vip-subscriptions" class="nav-link"><i class="fas fa-crown"></i> VIP Subscriptions & Refunds</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#hosting-dmca" class="nav-link"><i class="fas fa-server"></i> Hosting & DMCA</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#termination" class="nav-link"><i class="fas fa-ban"></i> Termination</a>
+                </li>
+            </ul>
+        </aside>
 
-    </div>
+        <article class="content-area">
+            <h1 class="page-title">Terms of Service</h1>
+            <div class="last-updated"><i class="fas fa-clock"></i> Last Updated: May 2026</div>
 
+            <section id="acceptance" class="content-section">
+                <h2 class="section-title">1. Acceptance of Terms</h2>
+                <p>By accessing and using Anykan ("the Website"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by these terms, please do not use this service.</p>
+                <p>We reserve the right to modify these terms at any time. Your continued use of the website following any changes signifies your acceptance of the new terms.</p>
+            </section>
+
+            <section id="accounts" class="content-section">
+                <h2 class="section-title">2. User Accounts & Profiles</h2>
+                <p>When you create an account with us, you must provide information that is accurate, complete, and current at all times. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account on our service.</p>
+                <p>You are responsible for safeguarding the password that you use to access the service and for any activities or actions under your password. Shared profiles are permitted within the limits of your subscription tier (Elite VIP allows up to 2 profiles; Crown VIP allows up to 4 profiles).</p>
+            </section>
+
+            <section id="vip-subscriptions" class="content-section">
+                <h2 class="section-title">3. VIP Subscriptions & Refunds</h2>
+                <div class="highlight-box">
+                    <h4>Subscription Activation & Policies</h4>
+                    <p>Anykan offers premium VIP tiers to enhance the user experience. By upgrading, you agree to the following conditions:</p>
+                </div>
+                <ul>
+                    <li><strong>Manual Verification:</strong> All payments are processed directly via UPI to avoid third-party gateway fees. VIP access is verified manually and typically activates within 2 to 4 hours of UTR submission.</li>
+                    <li><strong>Strict No-Refund Policy:</strong> Once a VIP subscription is activated on your account, all purchases are final. We do not offer refunds, partial credits, or subscription transfers under any circumstances.</li>
+                    <li><strong>Ad-Block Disclaimer:</strong> Elite VIP guarantees the removal of all website UI ads. Crown VIP additionally employs click-shield technology to suppress popups inside embedded video players. However, because we do not host the video streams directly, we cannot guarantee 100% ad-free playback for external third-party embeds in all scenarios.</li>
+                    <li><strong>Early Adopter Promos:</strong> Promotional VIP statuses (e.g., Pre-June 1st Elite VIP grants) hold zero monetary value, cannot be exchanged, and may be modified or revoked at administrative discretion.</li>
+                </ul>
+            </section>
+
+            <section id="hosting-dmca" class="content-section">
+                <h2 class="section-title">4. Content Hosting & DMCA</h2>
+                <p>Anykan operates strictly as an indexing directory and web scraper. <strong>We do not host, upload, or store any copyright-protected media, videos, or files on our servers.</strong></p>
+                <p>All video content is streamed directly from unaffiliated third-party services (such as Vidsrc, 2embed, etc.). Anykan acts solely as a catalog connecting users to publicly available links on the internet.</p>
+                <p>Because we do not host the files, we cannot delete them. Copyright owners must direct all DMCA takedown requests and infringement claims to the actual third-party file hosts where the media physically resides.</p>
+            </section>
+
+            <section id="termination" class="content-section">
+                <h2 class="section-title">5. Termination</h2>
+                <p>We may terminate or suspend your account and bar access to the Service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever, including but not limited to a breach of the Terms.</p>
+                <p>For Affiliate/Creator accounts: Any detection of fraudulent traffic, botting, or click-manipulation will result in an immediate, permanent ban and the forfeiture of all unpaid earnings.</p>
+            </section>
+
+            <footer style="text-align: center; border-top: 1px solid var(--border); padding-top: 40px; margin-top: 40px;">
+                <p style="font-size: 0.9rem;">Questions? Contact us at <strong style="color: #fff;">privacy@anykan.fun</strong></p>
+                <a href="index.html" style="color: var(--primary-purple); text-decoration: none; font-weight: 700; font-size: 0.9rem;">Back to Dashboard</a>
+            </footer>
+
+        </article>
+    </main>
+
+    <link rel="stylesheet" href="bottom-bar.css"> 
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="Korean.html" class="bottom-nav-item">
+            <i class="fa-solid fa-won-sign"></i>
+            <span class="nav-label">Korean</span>
+        </a>
+        <a href="chinese.html" class="bottom-nav-item">
+            <i class="fa-brands fa-renren"></i>
+            <span class="nav-label">Chinese</span>
+        </a>
+        <a href="japanese.html" class="bottom-nav-item">
+            <i class="fa-solid fa-yen-sign"></i>
+            <span class="nav-label">Japanese</span>
+        </a>
+    </nav>
+
+    <script>
+        // Smooth active state for sidebar links
+        window.addEventListener('scroll', () => {
+            let current = "";
+            const sections = document.querySelectorAll(".content-section");
+            sections.forEach((section) => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute("id");
+                }
+            });
+
+            document.querySelectorAll(".nav-link").forEach((link) => {
+                link.classList.remove("active");
+                if (link.getAttribute("href").includes(current)) {
+                    link.classList.add("active");
+                }
+            });
+        });
+
+        // Add intersection observer for smooth fade-in
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.content-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>

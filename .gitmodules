@@ -1,0 +1,3 @@
+[submodule "Anykan"]
+	path = Anykan
+	url = https://github.com/dramakan/Anykan.git

@@ -3,289 +3,433 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trending Now - Anykan</title>
     
+    <title>Trending Globally - Movies, TV Shows & Anime | Anykan</title>
+    <meta name="title" content="Trending Globally - Movies, TV Shows & Anime | Anykan">
+    <meta name="description" content="Discover what's trending globally right now. Stream the most popular movies, TV shows, anime, and global dramas in HD. Free streaming updated daily on Anykan.">
+    <meta name="keywords" content="trending movies, popular tv shows, trending anime, global entertainment, watch online, Anykan, Anykan.fun, streaming">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://anykan.fun/trending.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anykan.fun/trending.html">
+    <meta property="og:title" content="Trending Globally - Anykan Entertainment Hub">
+    <meta property="og:description" content="Discover what the world is watching. Stream top trending movies, TV shows, and anime right now for free!">
+    <meta property="og:image" content="https://anykan.fun/og-image.jpg">
+    <meta property="og:site_name" content="Anykan">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://anykan.fun/trending.html">
+    <meta name="twitter:title" content="Trending Globally - Anykan Entertainment Hub">
+    <meta name="twitter:description" content="Stream the top trending movies, TV shows, and anime right now. Updated daily!">
+    <meta name="twitter:image" content="https://anykan.fun/og-image.jpg">
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="global.css">
+    
+    <link rel="stylesheet" href="indexstyle.css">
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3854581977852778" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+    <script src="indexscript.js" defer></script>
+    <script src="bottom-bar.js" defer></script>
+    <script src="feedback-popup.js" defer></script>
+    <script src="admin_easter_egg.js" defer></script>
+    <script type="module" src="promo-banner.js"></script>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Anykan">
+    <meta name="theme-color" content="#8A2BE2">
     
     <style>
-        /* Refined Animations & Layout for Trending Page */
-        .page-spacer { height: 110px; }
-        
-        .trending-header {
-            text-align: center;
-            margin-bottom: 40px;
-            animation: fadeInDown 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-        .trending-header h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            background: linear-gradient(135deg, #fff, var(--primary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 10px 30px var(--primary-glow);
-        }
-
-        .ranked-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
-            padding-bottom: 40px;
-        }
-
-        .rank-card {
-            position: relative;
+        /* --- PC HEADER & AnyKan TOGGLE STYLES --- */
+        .site-switcher {
             display: flex;
             align-items: center;
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
-            padding: 15px;
-            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-            overflow: hidden;
-            text-decoration: none;
-            color: inherit;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: slideUp 0.6s forwards;
+            margin-left: 10px;
         }
-
-        .rank-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 15px 35px var(--primary-glow);
-            border-color: var(--primary-color);
-            background: var(--glass-bg-hover);
-            z-index: 10;
-        }
-
-        /* The massive background number */
-        .rank-number {
-            font-size: 7.5rem;
-            font-weight: 800;
-            color: transparent;
-            -webkit-text-stroke: 2px var(--glass-border-light);
-            position: absolute;
-            left: -5px;
-            bottom: -25px;
-            z-index: 0;
-            transition: all 0.5s ease;
-            line-height: 1;
-        }
-
-        .rank-card:hover .rank-number {
-            -webkit-text-stroke: 2px var(--primary-color);
-            color: rgba(157, 78, 221, 0.1);
-            transform: translateX(10px);
-        }
-
-        .rank-poster {
-            width: 100px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 12px;
-            z-index: 1;
-            margin-left: 55px; /* Offset to overlap the number */
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            transition: transform 0.5s ease;
-        }
-
-        .rank-card:hover .rank-poster {
-            transform: scale(1.05) rotate(2deg);
-        }
-
-        .rank-info {
-            z-index: 1;
-            margin-left: 20px;
-            flex-grow: 1;
-        }
-
-        .rank-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .rank-meta {
+        .switcher-track {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.8rem;
-            color: var(--text-muted-color);
-            margin-bottom: 10px;
-        }
-
-        .rank-badge {
-            background: rgba(157, 78, 221, 0.15);
-            color: #d8b4fe;
-            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.75rem;
-            border: 1px solid rgba(157, 78, 221, 0.3);
+            padding: 4px;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
+        }
+        
+        .nav-links .switcher-track .switch-btn {
+            padding: 6px 14px !important;
+            border-radius: 50px !important;
+            font-size: 0.85rem !important;
+            font-weight: 600 !important;
+            color: #a1a1aa !important;
+            text-decoration: none !important;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+            opacity: 1 !important;
+            border: none !important;
+            width: auto !important;
+            background: transparent !important;
+            display: inline-block;
+            text-shadow: none !important;
+        }
+        .nav-links .switcher-track .switch-btn.active {
+            background: linear-gradient(135deg, #8A2BE2 0%, #6a1b9a 100%) !important;
+            color: #fff !important;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4) !important;
+        }
+        .nav-links .switcher-track .switch-btn:not(.active):hover {
+            color: #fff !important;
+            background: rgba(255,255,255,0.08) !important;
         }
 
-        .play-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            display: flex;
+        /* Responsive Page Padding Correction for Title Page View */
+        .trending-page-wrapper {
+            padding-top: 140px;
+        }
+
+        /* Full Grid Layout instead of Carousel View for View-All Mode */
+        .grid-layout-view {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+            gap: 20px 12px !important;
+            padding: 0 4% 40px 4% !important;
+        }
+
+        @media (min-width: 768px) {
+            .grid-layout-view {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+                gap: 25px 20px !important;
+            }
+            .trending-page-wrapper {
+                padding-top: 100px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .site-switcher {
+                margin-top: 10px;
+                width: 100%;
+                margin-left: 0;
+            }
+            .switcher-track {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
+            .nav-links .switcher-track .switch-btn {
+                text-align: center;
+                flex: 1;
+                padding: 10px 15px !important;
+            }
+            .header-right { gap: 10px; }
+        }
+
+        /* --- PREMIUM LIQUID GLASS AD CONTAINERS --- */
+        .premium-ad-container {
+            margin: 30px auto; 
+            width: 95%; 
+            max-width: 1200px;
+            background: rgba(26, 26, 29, 0.45); 
+            border: 1px solid rgba(138, 43, 226, 0.2);
+            border-radius: 16px; 
+            padding: 15px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px);
+            display: flex; 
+            justify-content: center; 
             align-items: center;
-            justify-content: center;
-            color: white;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            box-shadow: 0 4px 15px var(--primary-glow);
+            overflow: hidden; 
+            position: relative;
+            z-index: 1;
         }
-
-        .rank-card:hover .play-circle {
-            opacity: 1;
-            transform: scale(1);
+        .premium-ad-container::before {
+            content: 'ADVERTISEMENT'; 
+            position: absolute; 
+            top: 4px; 
+            left: 15px;
+            font-size: 0.55rem; 
+            color: rgba(255,255,255,0.3); 
+            letter-spacing: 2px;
         }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .top-ad-container { min-height: 120px; }
+        .multiplex-container { 
+            min-height: 350px; 
+            margin-bottom: 80px; 
+            background: transparent; 
+            border: none; 
+            box-shadow: none; 
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
         }
-        @keyframes slideUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 768px) {
-            .trending-header h1 { font-size: 2.2rem; }
-            .ranked-grid { grid-template-columns: 1fr; }
-            .rank-poster { width: 85px; height: 125px; margin-left: 45px; }
-            .rank-number { font-size: 6rem; bottom: -15px; }
+        
+        /* Infinite Scroll Loading Indicator */
+        .infinite-loader {
+            text-align: center;
+            padding: 30px;
+            width: 100%;
+            color: var(--text-muted, #a1a1aa);
+            display: none; /* Hidden by default */
         }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
     <header class="main-header">
-        <div class="container">
-            <div class="header-top-row">
-                <div class="mobile-menu-toggle" id="mobileMenuToggle">
-                    <i class="fas fa-bars"></i>
-                </div>
+        <div class="header-container">
+            <div class="header-left">
                 <a href="index.html" class="logo">Any<span>Kan</span></a>
-                <div class="header-actions-placeholder">
-                    <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Theme">
-                        <i class="fas fa-sun"></i>
-                    </button>
-                </div> 
             </div>
 
-            <div class="search-bar">
-                <i class="fas fa-search"></i>
-                <input id="searchInput" type="text" placeholder="Search movies, shows, anime...">
-                <div id="searchResults" class="search-results"></div>
-            </div>
-
-            <nav class="nav-links" id="navLinks">
+            <nav class="nav-links pc-nav" id="navLinks">
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="trending.html" class="active">Trending</a></li>
-                    <li><a href="community.html">Community</a></li>
+                    <li><a href="community.html">Updates</a></li>
+                    <li><a href="mylist.html">My List</a></li>
+                    <li class="site-switcher">
+                        <div class="switcher-track">
+                            <a href="https://dramakan.site" class="switch-btn">Dramakan</a>
+                            <span class="switch-btn active">Anykan</span>
+                        </div>
+                    </li>
                 </ul>
             </nav>
 
-            <a href="profile.html" class="header-download-btn" id="topAuthBtn">
-                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Anykan" alt="Profile" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.8);"> Profile
-            </a>
+            <div class="header-right" style="display: flex; align-items: center;">
+                <div class="search-bar pc-search-bar">
+                    <i class="fas fa-search"></i>
+                    <input id="searchInput" type="text" placeholder="Search movies, TV shows, anime...">
+                    <a href="filter.html" class="search-filter-link" title="Advanced Filter">
+                        <i class="fas fa-sliders-h"></i>
+                    </a>
+                    <div id="searchResults" class="search-results"></div>
+                </div>
+
+                <a href="subscription.html" id="headerVipBtn" class="vip-header-btn status-basic">
+                    <i class="fas fa-bolt"></i> Upgrade VIP
+                </a>
+                
+                <a href="login.html" class="header-profile-btn" id="topAuthBtn">
+                    <i class="fa-solid fa-user"></i> <span>Login / Sign Up</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="mobile-search-container">
+            <div class="mobile-glass-search">
+                <i class="fas fa-search"></i>
+                <input id="mobileSearchInput" type="text" placeholder="Search movies, shows, anime...">
+                <a href="filter.html" class="search-filter-link"><i class="fas fa-sliders-h"></i></a>
+            </div>
+            <div id="mobileSearchResults" class="search-results mobile-search-results-dropdown"></div>
         </div>
     </header>
 
-    <main class="container">
-        <div class="page-spacer"></div>
-
-        <div class="trending-header">
-            <h1><i class="fas fa-fire" style="color: #ff4757; text-shadow: 0 0 20px rgba(255, 71, 87, 0.5);"></i> Top 10 Trending</h1>
-            <p style="color: var(--text-muted-color);">The most-watched movies, shows, and anime globally right now.</p>
+    <div class="trending-page-wrapper">
+        <div class="premium-ad-container top-ad-container">
+            <ins class="adsbygoogle"
+                style="display:inline-block; width:100%; height:90px;"
+                data-ad-client="ca-pub-3854581977852778"
+                data-ad-slot="3893519291"></ins>
         </div>
 
-        <div class="ranked-grid" id="trending-page-grid">
-            <!-- Items will be injected here via JS to show subtle staggered animations -->
-        </div>
-    </main>
+        <main>
+            <section class="latest-episodes">
+                <div class="container">
+                    <div class="section-glass-box">
+                        <div class="section-header">
+                            <h2 class="section-title"><i class="fas fa-globe" style="color: #9D4EDD; margin-right: 8px;"></i> Trending Globally</h2>
+                            <p style="color: var(--text-muted, #a1a1aa); font-size: 0.9rem; margin-top: 5px;">The most popular Movies, TV Shows, and Anime right now.</p>
+                        </div>
+                        
+                        <div id="trendingGrid" class="drama-grid grid-layout-view">
+                            </div>
+                        
+                        <div id="load-more-trigger" class="infinite-loader">
+                            <i class="fas fa-circle-notch fa-spin" style="font-size: 2rem; color: var(--primary-color, #8A2BE2); margin-bottom: 10px;"></i>
+                            <p>Loading more global trends...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-    <!-- Bottom Nav - Pre-logged in configuration -->
+            <div class="premium-ad-container multiplex-container">
+                <ins class="adsbygoogle"
+                    style="display:block; width:100%;"
+                    data-ad-format="autorelaxed"
+                    data-ad-client="ca-pub-3854581977852778"
+                    data-ad-slot="4689246127"></ins>
+            </div>
+        </main>
+    </div>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <a href="#" class="logo">Any<span>Kan</span></a>
+                <div class="footer-socials">
+                    <a href="contact.html"><i class="fas fa-address-book"></i></a>
+                    <a href="privacy.html"><i class="fas fa-file-alt"></i></a>
+                    <a href="terms.html"><i class="fas fa-file-contract"></i></a>
+                    <a href="disclaimer.html"><i class="fas fa-shield-alt"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">&copy; 2026 Anykan. All rights reserved.</div>
+        </div>
+    </footer>
+
     <nav class="bottom-nav">
         <a href="index.html" class="bottom-nav-item">
             <i class="fa-solid fa-house nav-icon"></i>
             <span class="nav-label">Home</span>
         </a>
-        <a href="community.html" class="bottom-nav-item">
-            <i class="fa-solid fa-users nav-icon"></i>
-            <span class="nav-label">Community</span>
+       <a href="community.html" class="bottom-nav-item">
+            <i class="fa-solid fa-bell nav-icon"></i>
+            <span class="nav-label">Updates</span>
         </a>
-        <a href="trending.html" class="bottom-nav-item active">
-            <i class="fa-solid fa-fire nav-icon"></i>
-            <span class="nav-label">Trending</span>
+        <a href="mylist.html" class="bottom-nav-item">
+            <i class="fa-solid fa-bookmark nav-icon"></i>
+            <span class="nav-label">My List</span>
         </a>
-        <a href="profile.html" class="bottom-nav-item" id="bottomAuthBtn">
-            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Anykan" alt="Profile" class="nav-icon" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-color); margin-bottom: 4px;">
-            <span class="nav-label">Profile</span>
+        <a href="login.html" class="bottom-nav-item" id="bottomAuthBtn">
+            <i class="fa-solid fa-user nav-icon"></i>
         </a>
     </nav>
 
-    <script src="Anykan-script.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const grid = document.getElementById('trending-page-grid');
+        // Infinite Scroll Engine Variables
+        let currentPage = 1;
+        let isFetching = false;
+        let hasMorePages = true;
+        const API_KEY = '014fbdbe962cb38379e09e31d0652459';
+        
+        const grid = document.getElementById('trendingGrid');
+        const loaderTrigger = document.getElementById('load-more-trigger');
+
+        async function fetchTrending(page = 1) {
+            if (isFetching || !hasMorePages) return;
             
-            // Fetch from local storage cache established by your main script
-            const dbData = localStorage.getItem('Anykan_master_db');
-            if (dbData) {
-                const data = JSON.parse(dbData);
+            isFetching = true;
+            loaderTrigger.style.display = 'block';
+
+            // Changed to global trending: "all/week" instead of "tv/week"
+            const url = `https://api.themoviedb.org/3/trending/all/week?api_key=${API_KEY}&page=${page}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
                 
-                // Filter and sort for trending
-                let trendingItems = data.filter(d => d.Trend === "T");
-                trendingItems.sort((a, b) => {
-                    const orderA = a.trendingOrder ? parseInt(a.trendingOrder) : 9999;
-                    const orderB = b.trendingOrder ? parseInt(b.trendingOrder) : 9999;
-                    return orderA - orderB;
-                });
-                
-                // Limit to top 10
-                trendingItems = trendingItems.slice(0, 10);
-                
-                grid.innerHTML = trendingItems.map((media, index) => {
-                    const safeLink = media.link || `watch.html?id=${media.id}`;
-                    // Stagger animation delay
-                    const delay = index * 0.1;
-                    
-                    return `
-                        <a href="${safeLink}" class="rank-card" style="animation-delay: ${delay}s">
-                            <span class="rank-number">${index + 1}</span>
-                            <img src="${media.img}" alt="${media.title}" class="rank-poster" loading="lazy">
-                            <div class="rank-info">
-                                <h3 class="rank-title">${media.title}</h3>
-                                <div class="rank-meta">
-                                    <span><i class="fas fa-star" style="color:#f1c40f;"></i> ${media.score || media.imdb || 'N/A'}</span>
-                                    <span>•</span>
-                                    <span>${media.status}</span>
+                if (data.results && data.results.length > 0) {
+                    const htmlContent = data.results.map(item => {
+                        const poster = item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : 'default-poster.jpg';
+                        const title = item.name || item.title || "Unknown Title";
+                        const rating = item.vote_average ? item.vote_average.toFixed(1) : "NR";
+                        const year = (item.first_air_date || item.release_date || "N/A").substring(0, 4);
+                        
+                        // Parse media type for tag display
+                        let mediaLabel = "Trending";
+                        if(item.media_type === 'movie') mediaLabel = "Movie";
+                        if(item.media_type === 'tv') mediaLabel = "TV Show";
+
+                        return `
+                            <a href="watch.html?id=${item.id}" class="drama-card">
+                                <div class="drama-card-img">
+                                    <img src="${poster}" alt="${title}" loading="lazy" decoding="async" onerror="this.src='default-poster.jpg'">
                                 </div>
-                                <span class="rank-badge">${media.type}</span>
-                            </div>
-                            <div class="play-circle">
-                                <i class="fas fa-play" style="margin-left: 3px;"></i>
-                            </div>
-                        </a>
-                    `;
-                }).join('');
-            } else {
-                grid.innerHTML = '<p style="text-align: center; color: var(--text-muted-color); grid-column: 1/-1;">Connecting to Database Engine...</p>';
+                                <div class="drama-card-info">
+                                    <h3 class="drama-card-title">${title}</h3>
+                                    <div class="drama-card-meta">
+                                        <span>${year}</span> • 
+                                        <span style="color: var(--primary-color, #8A2BE2); font-weight: 500;">${mediaLabel}</span> • 
+                                        <span><i class="fas fa-star" style="color: #fbbf24;"></i> ${rating}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        `;
+                    }).join('');
+
+                    if (page === 1) {
+                        grid.innerHTML = htmlContent;
+                    } else {
+                        grid.insertAdjacentHTML('beforeend', htmlContent);
+                    }
+
+                    // Check if we reached the maximum pages returned by TMDB (usually 500, but capped by total_pages)
+                    if (page >= data.total_pages) {
+                        hasMorePages = false;
+                        loaderTrigger.innerHTML = '<p>You have reached the end of the universe!</p>';
+                    }
+                } else {
+                    if (page === 1) {
+                        grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-muted-color);">No trending items found.</p>';
+                    }
+                    hasMorePages = false;
+                }
+            } catch (err) {
+                console.error("Trending fetch error:", err);
+                if (page === 1) {
+                    grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-muted-color);">Error loading content from TMDB API.</p>';
+                }
+            } finally {
+                isFetching = false;
+                if (!hasMorePages && page > 1) {
+                    loaderTrigger.style.display = 'block'; 
+                } else if (!hasMorePages) {
+                    loaderTrigger.style.display = 'none';
+                }
             }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial Load
+            fetchTrending(currentPage);
+
+            // Intersection Observer setup for Infinite Scrolling
+            const scrollObserver = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && !isFetching && hasMorePages) {
+                    currentPage++;
+                    fetchTrending(currentPage);
+                }
+            }, { 
+                root: null,
+                rootMargin: '400px', // Trigger the load 400px before the element comes into view
+                threshold: 0.1 
+            });
+
+            scrollObserver.observe(loaderTrigger);
+
+            // Dynamic Search Box Syncing (Mobile vs PC)
+            const mSearch = document.getElementById('mobileSearchInput');
+            const mResults = document.getElementById('mobileSearchResults');
+            const pcSearch = document.getElementById('searchInput');
+            const pcResults = document.getElementById('searchResults');
+            
+            if(mSearch && pcSearch) {
+                mSearch.addEventListener('input', (e) => {
+                    pcSearch.value = e.target.value;
+                    pcSearch.dispatchEvent(new Event('input')); 
+                });
+                const searchObserver = new MutationObserver(() => {
+                    mResults.innerHTML = pcResults.innerHTML;
+                    mResults.style.display = pcResults.style.display;
+                });
+                if(pcResults) searchObserver.observe(pcResults, { childList: true, attributes: true, subtree: true });
+            }
+
+            // Fire layout ad calls safely
+            setTimeout(() => {
+                const staticAds = document.querySelectorAll('.adsbygoogle:not([data-adsbygoogle-status="done"])');
+                staticAds.forEach(() => {
+                    try { (adsbygoogle = window.adsbygoogle || []).push({}); } 
+                    catch (e) { console.error("Ad block rendering exception", e); }
+                });
+            }, 800);
         });
     </script>
 </body>

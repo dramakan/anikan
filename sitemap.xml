@@ -1,110 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-   
-   <!-- Core Pages -->
-   <url>
-      <loc>https://anykan.site/</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1.0</priority>
-   </url>
-   
-   <!-- Main Category Pages -->
-   <url>
-      <loc>https://anykan.site/trending.html</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>0.9</priority>
-   </url>
-   <url>
-      <loc>https://anykan.site/hollywood.html</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>0.8</priority>
-   </url>
-   <url>
-      <loc>https://anykan.site/bollywood.html</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>0.8</priority>
-   </url>
-   <url>
-      <loc>https://anykan.site/anime.html</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>0.8</priority>
-   </url>
-   <url>
-      <loc>https://anykan.site/webshows.html</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>0.8</priority>
-   </url>
-   <url>
-      <loc>https://anykan.site/hindidramas.html</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>0.8</priority>
-   </url>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
 
-   <!-- Discovery & Community -->
-   <url>
-      <loc>https://anykan.site/filter.html</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.7</priority>
-   </url>
-   <url>
-      <loc>https://anykan.site/community.html</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>0.7</priority>
-   </url>
 
-   <!-- User Account Pages -->
-   <url>
-      <loc>https://anykan.site/login.html</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.5</priority>
-   </url>
-   <url>
-      <loc>https://anykan.site/profile.html</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.4</priority>
-   </url>
-   <url>
-      <loc>https://anykan.site/mylist.html</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.4</priority>
-   </url>
+<url>
+  <loc>https://anykan.fun/</loc>
+  <lastmod>2025-12-17T06:54:14+00:00</lastmod>
+</url>
 
-   <!-- Legal & Footer Pages -->
-   <url>
-      <loc>https://anykan.site/contact.html</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-   <url>
-      <loc>https://anykan.site/privacy.html</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-   <url>
-      <loc>https://anykan.site/terms.html</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-   <url>
-      <loc>https://anykan.site/disclaimer.html</loc>
-      <lastmod>2026-05-06</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
 
 </urlset>
