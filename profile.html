@@ -389,12 +389,10 @@
         <main class="main-content">
             
             <div class="top-header">
-                <!-- Homepage Link -->
                 <a href="index.html" class="site-logo">Any<span>Kan</span></a>
                 
                 <div style="display:flex; gap: 15px; position: relative; align-items: center;">
                     
-                    <!-- Desktop Explicit Home Button -->
                     <a href="index.html" class="btn-switch" id="home-nav-btn"><i class="fas fa-home"></i> Home</a>
 
                     <div class="header-icon-btn" id="settingsBtn">
@@ -405,15 +403,13 @@
                         <div class="notif-badge-dot" id="globalNotifBadge" style="display:none;">3</div>
                     </div>
 
-                    <!-- Real-time Notifications Feed Dropdown Panel -->
                     <div id="globalNotifDropdown" class="notif-dropdown">
                         <div class="notif-dropdown-header">
                             <h3>Notifications</h3>
                             <button id="clearNotifsBtn" style="background: none; border: none; cursor: pointer;">Clear All</button>
                         </div>
                         <div id="globalNotifList" class="notif-dropdown-list">
-                            <!-- Injected dynamically via anykan-notifier.js -->
-                        </div>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -496,7 +492,6 @@
         </main>
     </div>
 
-    <!-- Match index.html Bottom Bar Precisely -->
     <nav class="bottom-nav">
         <a href="index.html" class="bottom-nav-item">
             <i class="fa-solid fa-house nav-icon"></i>
@@ -516,7 +511,6 @@
         </a>
     </nav>
 
-    <!-- Modals -->
     <div class="full-modal" id="historyModal">
         <button class="close-modal-btn" onclick="closeModal('historyModal')"><i class="fas fa-times"></i></button>
         <div class="modal-content-wrap">
@@ -567,7 +561,6 @@
             <div class="settings-card">
                 <div class="profiles-grid" id="profilesGrid"></div>
                 
-                <!-- Advanced Multi-Profile Creation Panel for Premium VIP Subscriptions -->
                 <div id="vip-profile-creation-zone" style="margin-top: 30px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 20px; display: none;">
                     <h3 style="font-size: 1rem; margin-bottom: 12px; font-weight: 600; color: var(--vip-gold); text-align: center;"><i class="fas fa-plus-circle"></i> Add Crown VIP Sub-Profile</h3>
                     <div class="form-group" style="margin-bottom: 12px;">
@@ -585,7 +578,6 @@
                         </div>
                     </div>
 
-                    <!-- Direct Image File Upload Feature -->
                     <div class="form-group" style="margin-bottom: 15px;">
                         <label style="text-align: center;">Or Upload Custom Image</label>
                         <input type="file" id="create-custom-avatar-file" class="form-input" accept="image/*">
@@ -597,26 +589,22 @@
         </div>
     </div>
 
-    <!-- Improved Settings Modal (Tabs for Profile & Security) -->
     <div class="full-modal" id="settingsModal">
         <button class="close-modal-btn" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button>
         <div class="modal-content-wrap">
             <h2 class="modal-title">Settings</h2>
             <div class="settings-card">
                 
-                <!-- Navigation Tabs -->
                 <div class="settings-tabs">
                     <button class="tab-btn active" onclick="window.switchTab('profile-tab')"><i class="fas fa-user-edit"></i> Profile</button>
                     <button class="tab-btn" onclick="window.switchTab('security-tab')"><i class="fas fa-shield-alt"></i> Security</button>
                 </div>
 
-                <!-- 1. Profile Tab Content -->
                 <div id="profile-tab" class="tab-content active">
                     <div style="display:flex; justify-content:center; margin-bottom: 15px;">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" id="edit-avatar-preview" style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:3px solid var(--primary-color); box-shadow: 0 5px 15px var(--primary-glow);">
                     </div>
 
-                    <!-- Custom Avatar Gallery Selector -->
                     <div class="form-group">
                         <label style="text-align: center;">Choose Preset Avatar</label>
                         <div class="avatar-selection-row" id="edit-profile-avatar-row" style="justify-content: center;">
@@ -628,7 +616,6 @@
                         </div>
                     </div>
 
-                    <!-- Direct Image File Upload Feature -->
                     <div class="form-group" style="margin-top: 15px;">
                         <label style="text-align: center;">Or Upload Custom Image</label>
                         <input type="file" id="edit-custom-avatar-file" class="form-input" accept="image/*">
@@ -642,7 +629,6 @@
                     <button class="btn-primary" id="btn-save-profile"><i class="fas fa-save"></i> Save Profile</button>
                 </div>
 
-                <!-- 2. Security Tab Content -->
                 <div id="security-tab" class="tab-content">
                     <div class="form-group" style="padding-top: 10px;">
                         <label>Update Secure Account Password</label>
@@ -661,7 +647,6 @@
         </div>
     </div>
 
-    <!-- Ensure external scripts run -->
     <script type="module" src="anykan-notifier.js"></script>
 
     <script type="module">
@@ -669,17 +654,25 @@
         import { getAuth, onAuthStateChanged, signOut, updateProfile, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyB7i67_T7fs87BHIY2Pxs6KRAknhXrowIA",
-            authDomain: "dramakan007.firebaseapp.com",
-            projectId: "dramakan007"
+        // Expose Firebase instance so beta.js hooks into it without failing
+        let firebaseInstance = null;
+        window.getFirebase = async () => {
+            if (firebaseInstance) return firebaseInstance;
+            const firebaseConfig = {
+                apiKey: "AIzaSyB7i67_T7fs87BHIY2Pxs6KRAknhXrowIA",
+                authDomain: "dramakan007.firebaseapp.com",
+                projectId: "dramakan007"
+            };
+            const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+            const auth = getAuth(app); 
+            const db = getFirestore(app);
+            firebaseInstance = { app, auth, db };
+            return firebaseInstance;
         };
         
-        const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-        const auth = getAuth(app); 
-        const db = getFirestore(app);
         const tmdbKey = "014fbdbe962cb38379e09e31d0652459";
 
+        let auth, db;
         let currentUserDocRef = null; 
         let userProfiles = [];
         let activeProfileIndex = 0; 
@@ -715,10 +708,7 @@
         window.openModal = (id) => document.getElementById(id).classList.add('active');
         window.closeModal = (id) => document.getElementById(id).classList.remove('active');
         
-        // Manual Toggle Trigger for settings icon button
-        document.getElementById('settingsBtn').addEventListener('click', () => {
-            openModal('settingsModal');
-        });
+        document.getElementById('settingsBtn').addEventListener('click', () => openModal('settingsModal'));
 
         // Custom Avatar Interactive Choice Updates
         window.selectEditAvatar = (imgElement) => {
@@ -726,17 +716,17 @@
             imgElement.classList.add('selected-choice');
             temporarySelectedEditAvatar = imgElement.src;
             document.getElementById('edit-avatar-preview').src = imgElement.src;
-            document.getElementById('edit-custom-avatar-file').value = ""; // Clear file input if preset chosen
+            document.getElementById('edit-custom-avatar-file').value = ""; 
         };
 
         window.selectCreationAvatar = (imgElement) => {
             document.querySelectorAll('#new-profile-avatar-row .selectable-avatar-option').forEach(el => el.classList.remove('selected-choice'));
             imgElement.classList.add('selected-choice');
             temporarySelectedCreationAvatar = imgElement.src;
-            document.getElementById('create-custom-avatar-file').value = ""; // Clear file input if preset chosen
+            document.getElementById('create-custom-avatar-file').value = ""; 
         };
 
-        // File Upload Processing (Compress to Base64 to bypass Firestore 1MB limits safely)
+        // File Upload Processing
         function processImageUpload(file, previewImgElementId, isEdit) {
             if (!file) return;
             const reader = new FileReader();
@@ -744,29 +734,18 @@
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 250;
-                    const MAX_HEIGHT = 250;
-                    let width = img.width;
-                    let height = img.height;
+                    const MAX_WIDTH = 250; const MAX_HEIGHT = 250;
+                    let width = img.width; let height = img.height;
 
                     if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
+                        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
                     } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
+                        if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
                     }
 
-                    canvas.width = width;
-                    canvas.height = height;
+                    canvas.width = width; canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
-
-                    // Compress to JPEG Base64
                     const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
 
                     if (isEdit) {
@@ -783,17 +762,12 @@
             reader.readAsDataURL(file);
         }
 
-        // Attach File Input Listeners
         document.getElementById('edit-custom-avatar-file').addEventListener('change', function(e) {
-            if(e.target.files && e.target.files[0]) {
-                processImageUpload(e.target.files[0], 'edit-avatar-preview', true);
-            }
+            if(e.target.files && e.target.files[0]) processImageUpload(e.target.files[0], 'edit-avatar-preview', true);
         });
 
         document.getElementById('create-custom-avatar-file').addEventListener('change', function(e) {
-            if(e.target.files && e.target.files[0]) {
-                processImageUpload(e.target.files[0], null, false);
-            }
+            if(e.target.files && e.target.files[0]) processImageUpload(e.target.files[0], null, false);
         });
 
         // --- POPUP LOGIC (Strictly Local Storage Powered) ---
@@ -848,7 +822,6 @@
             document.getElementById('edit-avatar-preview').src = activeProf.avatar;
             temporarySelectedEditAvatar = activeProf.avatar;
 
-            // Highlight choice item in settings
             let presetFound = false;
             document.querySelectorAll('#edit-profile-avatar-row .selectable-avatar-option').forEach(el => {
                 if (el.src === activeProf.avatar) {
@@ -859,7 +832,7 @@
                 }
             });
             
-            document.getElementById('edit-custom-avatar-file').value = ""; // Always reset the file input visually
+            document.getElementById('edit-custom-avatar-file').value = ""; 
         }
 
         window.switchProfile = (idx) => {
@@ -877,7 +850,6 @@
             closeModal('profilesModal');
         };
 
-        // DYNAMIC TMDB ASYNC CONTINUE WATCHING RENDERER 
         async function renderContinueWatching(cloudHistoryArr = null) {
             try {
                 let historyArr = cloudHistoryArr;
@@ -1122,107 +1094,115 @@
         };
 
         // --- REAL-TIME SYNC LOGIC ---
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUserDocRef = doc(db, "users", user.uid);
+        // Runs exactly when the user opens the profile, hooking up persistent listeners
+        async function initProfileSync() {
+            const fb = await window.getFirebase();
+            auth = fb.auth;
+            db = fb.db;
 
-                // 1. Profile Snapshots (My List & Favorites)
-                if(unsubscribeUser) unsubscribeUser();
-                unsubscribeUser = onSnapshot(currentUserDocRef, (docSnap) => {
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        
-                        // VIP Tiering Adjustments & Profile Creation Visibility
-                        const isPremium = data.isPremium && data.premiumExpiry > Date.now();
-                        const btnVip = document.getElementById('heroVipBtn');
-                        const vipBox = document.getElementById('vip-profile-creation-zone');
-                        
-                        if (isPremium && data.premiumPlan && data.premiumPlan.includes('Crown')) {
-                            btnVip.innerHTML = '<i class="fas fa-crown"></i> Crown VIP';
-                            btnVip.style.color = 'var(--vip-gold)';
-                            if(vipBox) vipBox.style.display = 'block';
-                        } else {
-                            btnVip.innerHTML = '<i class="fas fa-user"></i> Basic Plan';
-                            btnVip.style.color = 'var(--text-muted)';
-                            btnVip.style.border = '1px solid var(--glass-border)';
-                            if(vipBox) vipBox.style.display = 'none';
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    currentUserDocRef = doc(db, "users", user.uid);
+
+                    // 1. Profile Snapshots (My List & Favorites) -> Constant Local Storage Warm-Up
+                    if(unsubscribeUser) unsubscribeUser();
+                    unsubscribeUser = onSnapshot(currentUserDocRef, (docSnap) => {
+                        if (docSnap.exists()) {
+                            const data = docSnap.data();
+                            
+                            const isPremium = data.isPremium && data.premiumExpiry > Date.now();
+                            const btnVip = document.getElementById('heroVipBtn');
+                            const vipBox = document.getElementById('vip-profile-creation-zone');
+                            
+                            if (isPremium && data.premiumPlan && data.premiumPlan.includes('Crown')) {
+                                btnVip.innerHTML = '<i class="fas fa-crown"></i> Crown VIP';
+                                btnVip.style.color = 'var(--vip-gold)';
+                                if(vipBox) vipBox.style.display = 'block';
+                            } else {
+                                btnVip.innerHTML = '<i class="fas fa-user"></i> Basic Plan';
+                                btnVip.style.color = 'var(--text-muted)';
+                                btnVip.style.border = '1px solid var(--glass-border)';
+                                if(vipBox) vipBox.style.display = 'none';
+                            }
+
+                            if(data.profiles && data.profiles.length > 0) {
+                                userProfiles = data.profiles;
+                            } else {
+                                userProfiles = [{
+                                    id: 'prof_default',
+                                    name: user.displayName || data.username || "User", 
+                                    avatar: data.avatarUrl || "https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png",
+                                    myList: data.myList || [],
+                                    favorites: data.favorites || []
+                                }];
+                            }
+
+                            const savedActiveId = localStorage.getItem('dramakan_active_profile_id');
+                            if (savedActiveId) {
+                                const foundIdx = userProfiles.findIndex(p => p.id === savedActiveId);
+                                if (foundIdx > -1) activeProfileIndex = foundIdx;
+                            }
+
+                            renderProfiles();
+                            
+                            const activeList = userProfiles[activeProfileIndex].myList || [];
+                            const activeFavs = userProfiles[activeProfileIndex].favorites || [];
+                            
+                            // Always push to cache so popups load instantly 
+                            localStorage.setItem('dramakan_mylist_cache', JSON.stringify(activeList));
+                            localStorage.setItem('dramakan_favorites_cache', JSON.stringify(activeFavs));
+
+                            renderPosterList(activeList, 'mylist-container', 'mylist');
+                            renderPosterList(activeFavs, 'favorites-container', 'favorites');
+                            document.getElementById('stat-completed').textContent = activeList.length;
+
+                            if(document.getElementById('mylistModal').classList.contains('active')) window.renderMylistModalList(activeList);
+                            if(document.getElementById('favoritesModal').classList.contains('active')) window.renderFavoritesModalList(activeFavs);
                         }
-
-                        if(data.profiles && data.profiles.length > 0) {
-                            userProfiles = data.profiles;
-                        } else {
-                            userProfiles = [{
-                                id: 'prof_default',
-                                name: user.displayName || data.username || "User", 
-                                avatar: data.avatarUrl || "https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png",
-                                myList: data.myList || [],
-                                favorites: data.favorites || []
-                            }];
-                        }
-
-                        const savedActiveId = localStorage.getItem('dramakan_active_profile_id');
-                        if (savedActiveId) {
-                            const foundIdx = userProfiles.findIndex(p => p.id === savedActiveId);
-                            if (foundIdx > -1) activeProfileIndex = foundIdx;
-                        }
-
-                        renderProfiles();
-                        
-                        const activeList = userProfiles[activeProfileIndex].myList || [];
-                        const activeFavs = userProfiles[activeProfileIndex].favorites || [];
-                        
-                        // Push to cache so popups load instantly without fetching
-                        localStorage.setItem('dramakan_mylist_cache', JSON.stringify(activeList));
-                        localStorage.setItem('dramakan_favorites_cache', JSON.stringify(activeFavs));
-
-                        renderPosterList(activeList, 'mylist-container', 'mylist');
-                        renderPosterList(activeFavs, 'favorites-container', 'favorites');
-                        document.getElementById('stat-completed').textContent = activeList.length;
-
-                        // Auto-refresh active modals
-                        if(document.getElementById('mylistModal').classList.contains('active')) window.renderMylistModalList(activeList);
-                        if(document.getElementById('favoritesModal').classList.contains('active')) window.renderFavoritesModalList(activeFavs);
-                    }
-                });
-
-                // 2. Watch History Snapshots
-                if(unsubscribeHistory) unsubscribeHistory();
-                unsubscribeHistory = onSnapshot(collection(db, "users", user.uid, "history"), (snapshot) => {
-                    let cloudHistory = {};
-                    snapshot.forEach(doc => {
-                        const histData = doc.data();
-                        if(histData && histData.dramaId) cloudHistory[String(histData.dramaId)] = histData;
                     });
-                    
-                    localStorage.setItem('dramakan_history', JSON.stringify(cloudHistory));
-                    
-                    const historyArr = Object.values(cloudHistory)
-                        .filter(item => item && item.title)
-                        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                    
-                    renderContinueWatching(historyArr);
-                    if(document.getElementById('historyModal').classList.contains('active')) {
-                        window.renderHistoryModalList(historyArr);
-                    }
-                });
 
-                // 3. Request Snapshots
-                onSnapshot(query(collection(db, "requests"), where("userId", "==", user.uid)), (reqSnap) => {
-                    const sortedReqs = [];
-                    reqSnap.forEach(r => sortedReqs.push(r.data()));
-                    sortedReqs.sort((a,b) => b.createdAt - a.createdAt);
-                    
-                    localStorage.setItem('dramakan_requests_cache', JSON.stringify(sortedReqs));
-                    renderRequests(sortedReqs);
-                    if(document.getElementById('requestsModal').classList.contains('active')) {
-                        window.renderRequestsModalList(sortedReqs);
-                    }
-                });
+                    // 2. Watch History Snapshots -> Constant Local Storage Warm-Up
+                    if(unsubscribeHistory) unsubscribeHistory();
+                    unsubscribeHistory = onSnapshot(collection(db, "users", user.uid, "history"), (snapshot) => {
+                        let cloudHistory = {};
+                        snapshot.forEach(doc => {
+                            const histData = doc.data();
+                            if(histData && histData.dramaId) cloudHistory[String(histData.dramaId)] = histData;
+                        });
+                        
+                        localStorage.setItem('dramakan_history', JSON.stringify(cloudHistory));
+                        
+                        const historyArr = Object.values(cloudHistory)
+                            .filter(item => item && item.title)
+                            .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                        
+                        renderContinueWatching(historyArr);
+                        if(document.getElementById('historyModal').classList.contains('active')) {
+                            window.renderHistoryModalList(historyArr);
+                        }
+                    });
 
-            } else { 
-                window.location.replace('login.html'); 
-            }
-        });
+                    // 3. Request Snapshots -> Constant Local Storage Warm-Up
+                    onSnapshot(query(collection(db, "requests"), where("userId", "==", user.uid)), (reqSnap) => {
+                        const sortedReqs = [];
+                        reqSnap.forEach(r => sortedReqs.push(r.data()));
+                        sortedReqs.sort((a,b) => b.createdAt - a.createdAt);
+                        
+                        localStorage.setItem('dramakan_requests_cache', JSON.stringify(sortedReqs));
+                        renderRequests(sortedReqs);
+                        if(document.getElementById('requestsModal').classList.contains('active')) {
+                            window.renderRequestsModalList(sortedReqs);
+                        }
+                    });
+
+                } else { 
+                    window.location.replace('login.html'); 
+                }
+            });
+        }
+        
+        // Execute sync immediately
+        initProfileSync();
 
         // --- DOCUMENT LEVEL CARD DELETIONS ---
         window.removeCard = async (type, identifier) => {
@@ -1257,20 +1237,17 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
             try {
-                // Save user meta fields updates 
                 userProfiles[activeProfileIndex].name = newName;
                 userProfiles[activeProfileIndex].avatar = temporarySelectedEditAvatar;
                 
                 if(currentUserDocRef) {
                     await updateDoc(currentUserDocRef, { 
                         profiles: userProfiles,
-                        // Update core fallback parameters for backward configurations compatibility
                         username: userProfiles[0].name,
                         avatarUrl: userProfiles[0].avatar
                     });
                 }
 
-                // If updating user authentication profiles fields parameters
                 if(activeProfileIndex === 0) {
                     await updateProfile(auth.currentUser, {
                         displayName: newName,
@@ -1307,7 +1284,6 @@
                 closeModal('settingsModal');
             } catch(e) {
                 console.error(e);
-                // Graceful error prompt for Firebase re-authentication needs
                 if(e.code === 'auth/requires-recent-login') {
                     alert("For your security, please sign out and sign back in to change your password.");
                 } else {
@@ -1343,7 +1319,7 @@
                     await updateDoc(currentUserDocRef, { profiles: userProfiles });
                     profileNameInput.value = "";
                     document.getElementById('create-custom-avatar-file').value = "";
-                    renderProfiles(); // Re-sync UI immediately
+                    renderProfiles(); 
                     alert("Crown VIP Sub-profile appended seamlessly!");
                 }
             } catch(e) {
@@ -1357,5 +1333,8 @@
         document.getElementById('logout-btn').addEventListener('click', () => signOut(auth).then(()=>window.location.replace('login.html')));
 
     </script>
+
+    <script type="module" src="beta.js"></script>
+
 </body>
 </html>

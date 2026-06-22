@@ -7,7 +7,7 @@
     const isHomePage = path === '/' || path.endsWith('index.html') || path === '';
     const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-    // 1. INJECT CUTE & MATURE GLASSMORPHISM CSS
+    // 1. INJECT CUTE & MATURE GLASSMORPHISM CSS WITH MOBILE FIXES
     const betaStyles = document.createElement('style');
     betaStyles.innerHTML = `
         /* --- GLOBAL BUG FAB (Cute Animated Button) --- */
@@ -18,234 +18,202 @@
             font-size: 1.4rem; display: flex; align-items: center; justify-content: center;
             cursor: pointer; z-index: 9990; box-shadow: 0 10px 25px rgba(138, 43, 226, 0.5);
             transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            font-family: 'Poppins', sans-serif;
-            animation: bounceIn 1s cubic-bezier(0.28, 0.84, 0.42, 1);
         }
-        .anykan-bug-fab:hover { 
-            transform: translateY(-5px) scale(1.05); 
-            box-shadow: 0 15px 35px rgba(138, 43, 226, 0.7); 
-        }
-        @media (max-width: 992px) { 
-            .anykan-bug-fab { bottom: 85px; left: 15px; width: 50px; height: 50px; font-size: 1.2rem; } 
+        .anykan-bug-fab:hover {
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 15px 30px rgba(138, 43, 226, 0.7);
         }
 
-        /* --- FULL SCREEN OVERLAY --- */
-        .anykan-overlay {
+        /* --- WELCOME OVERLAY / MODAL MOBILE FIXES --- */
+        #anykanWelcomeOverlay {
             position: fixed; inset: 0; background: rgba(5, 5, 7, 0.85);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            z-index: 10000; display: flex; align-items: center; justify-content: center;
-            padding: 20px; opacity: 1; transition: opacity 0.4s ease;
-            font-family: 'Poppins', sans-serif;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 100000; padding: 20px; box-sizing: border-box;
+            transition: opacity 0.5s ease;
         }
-        .anykan-overlay.hidden { opacity: 0; pointer-events: none; }
-
-        /* --- WELCOME PERMISSION CARD --- */
+        #anykanWelcomeOverlay.hidden {
+            opacity: 0; pointer-events: none;
+        }
+        
         .anykan-welcome-card {
-            background: rgba(20, 20, 28, 0.95); border: 1px solid rgba(138, 43, 226, 0.4);
-            border-radius: 24px; width: 100%; max-width: 500px; padding: 40px 30px;
-            position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.8), inset 0 0 80px rgba(138, 43, 226, 0.1);
-            transform: translateY(0) scale(1); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(20, 20, 28, 0.75);
+            border: 1px solid rgba(138, 43, 226, 0.25);
+            border-radius: 24px;
+            padding: 35px 25px;
+            max-width: 480px;
+            width: 100%;
             text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(138, 43, 226, 0.15);
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            box-sizing: border-box;
+            
+            /* CRITICAL MOBILE RESILIENCE FIXES */
+            max-height: 90vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            
+            /* Smooth custom scrollbar tracking for inside the modal card */
+            scrollbar-width: thin;
+            scrollbar-color: #8A2BE2 rgba(255,255,255,0.05);
         }
-        .anykan-overlay.hidden .anykan-welcome-card { transform: translateY(30px) scale(0.95); }
-
-        .anykan-emoji-header { font-size: 3.5rem; margin-bottom: 15px; line-height: 1; text-shadow: 0 10px 20px rgba(138, 43, 226, 0.4); }
-        .anykan-welcome-title { font-size: 1.6rem; font-weight: 700; color: #fff; margin: 0 0 15px 0; }
-        .anykan-welcome-text { font-size: 0.95rem; color: #D1D5DB; margin: 0 0 20px 0; line-height: 1.6; }
         
-        .anykan-permission-box {
-            background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 16px; padding: 15px; margin-bottom: 25px; text-align: left;
+        .anykan-welcome-card::-webkit-scrollbar {
+            width: 6px;
         }
-        .anykan-permission-box p { margin: 0; font-size: 0.85rem; color: #A7F3D0; line-height: 1.5; }
-        .anykan-permission-box i { color: #10B981; margin-right: 5px; }
-
-        .anykan-agree-btn {
-            width: 100%; background: linear-gradient(135deg, #8A2BE2 0%, #6a1b9a 100%); border: none; padding: 14px;
-            border-radius: 14px; color: #fff; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.3s;
+        .anykan-welcome-card::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
         }
-        .anykan-agree-btn:hover { box-shadow: 0 8px 25px rgba(138, 43, 226, 0.5); transform: translateY(-2px); }
+        .anykan-welcome-card::-webkit-scrollbar-thumb {
+            background: #8A2BE2;
+            border-radius: 10px;
+        }
 
-        /* --- CUTE BUG REPORT CARD --- */
+        .anykan-welcome-title {
+            font-size: 1.8rem; font-weight: 700; margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff 30%, #d8b4fe 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .anykan-welcome-desc {
+            font-size: 0.95rem; color: rgba(255, 255, 255, 0.75);
+            line-height: 1.6; margin-bottom: 25px;
+        }
+        
+        #anykanAgreeBtn {
+            background: linear-gradient(135deg, #8A2BE2 0%, #7b2cbf 100%);
+            color: #fff; border: none; padding: 14px 35px; font-size: 1rem;
+            font-weight: 600; border-radius: 12px; cursor: pointer;
+            transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(138, 43, 226, 0.3);
+            width: 100%; margin-top: auto; flex-shrink: 0;
+        }
+        #anykanAgreeBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(138, 43, 226, 0.5);
+        }
+
+        /* --- BETA REPORT OVERLAY STYLES --- */
+        #anykanReportOverlay {
+            position: fixed; inset: 0; background: rgba(5, 5, 7, 0.8);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 100010; padding: 20px; box-sizing: border-box;
+            transition: opacity 0.4s ease;
+        }
+        #anykanReportOverlay.hidden { opacity: 0; pointer-events: none; }
+        
         .anykan-report-card {
-            background: rgba(20, 20, 28, 0.95); border: 1px solid rgba(255, 71, 87, 0.4);
-            border-radius: 24px; width: 100%; max-width: 450px; padding: 35px 30px;
-            position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.8), inset 0 0 80px rgba(255, 71, 87, 0.1);
-            transform: translateY(0) scale(1); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(20, 20, 28, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px; padding: 30px; max-width: 500px; width: 100%;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6); color: #fff;
+            font-family: 'Poppins', sans-serif; box-sizing: border-box;
+            position: relative; max-height: 90vh; overflow-y: auto;
         }
-        .anykan-overlay.hidden .anykan-report-card { transform: translateY(30px) scale(0.95); }
-
-        .anykan-close-btn {
-            position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem;
-            color: #9CA3AF; cursor: pointer; transition: 0.3s;
+        .anykan-report-close {
+            position: absolute; top: 20px; right: 20px; background: none;
+            border: none; color: rgba(255,255,255,0.4); font-size: 1.2rem;
+            cursor: pointer; transition: color 0.2s;
         }
-        .anykan-close-btn:hover { color: #fff; transform: rotate(90deg); }
-
-        .anykan-report-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-        .anykan-report-icon { font-size: 2.5rem; text-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); }
-        .anykan-report-titles h3 { margin: 0 0 5px 0; color: #fff; font-size: 1.3rem; }
-        .anykan-report-titles p { margin: 0; color: #9CA3AF; font-size: 0.85rem; }
-
-        .anykan-textarea {
-            width: 100%; height: 100px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px; padding: 15px; color: #fff; font-family: inherit; font-size: 0.9rem; 
-            resize: none; outline: none; margin-bottom: 15px; transition: 0.3s; box-sizing: border-box;
-        }
-        .anykan-textarea:focus { border-color: #ff4757; background: rgba(0,0,0,0.5); box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
-
-        .anykan-send-btn {
-            width: 100%; background: #ff4757; border: none; padding: 14px;
-            border-radius: 14px; color: #fff; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.3s;
-        }
-        .anykan-send-btn:hover { box-shadow: 0 8px 25px rgba(255, 71, 87, 0.4); transform: translateY(-2px); }
-        .anykan-send-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
-
-        .anykan-status { margin-top: 15px; font-size: 0.85rem; text-align: center; display: none; font-weight: 500;}
+        .anykan-report-close:hover { color: #fff; }
+        .anykan-report-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .anykan-report-desc { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-bottom: 20px; line-height: 1.5; }
         
-        @keyframes bounceIn {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); opacity: 1; }
+        .anykan-textarea {
+            width: 100%; height: 120px; background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+            color: #fff; padding: 12px; font-size: 0.9rem; resize: none;
+            box-sizing: border-box; transition: all 0.3s; font-family: inherit;
         }
+        .anykan-textarea:focus {
+            outline: none; border-color: #8A2BE2; background: rgba(138, 43, 226, 0.05);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.15);
+        }
+        
+        #btn-submit-report {
+            background: #8A2BE2; color: #fff; border: none; padding: 12px 25px;
+            font-size: 0.95rem; font-weight: 500; border-radius: 10px;
+            cursor: pointer; width: 100%; margin-top: 15px; transition: all 0.2s;
+        }
+        #btn-submit-report:hover { background: #9d4edd; }
+        #btn-submit-report:disabled { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); cursor: not-allowed; }
+        
+        #report-status-msg { font-size: 0.85rem; text-align: center; margin-top: 12px; display: none; }
     `;
     document.head.appendChild(betaStyles);
 
-    // 2. INJECT HTML INTO DOM
-    const betaContainer = document.createElement('div');
-    
-    // Base HTML that goes on ALL pages
-    let htmlContent = `
-        <button id="anykanBugBtn" class="anykan-bug-fab" title="Report a Bug">
+    // 2. INJECT HTML WORKSPACE (Welcome Popup + Bug Reporting Form)
+    const betaHTML = document.createElement('div');
+    betaHTML.innerHTML = `
+        <button class="anykan-bug-fab" id="anykanBugFab" title="Report Platform Issue">
             <i class="fas fa-bug"></i>
         </button>
 
-        <div id="anykanReportOverlay" class="anykan-overlay hidden">
-            <div class="anykan-report-card">
-                <button class="anykan-close-btn" id="anykanCloseReport">&times;</button>
-                
-                <div class="anykan-report-header">
-                    <div class="anykan-report-icon">🐛</div>
-                    <div class="anykan-report-titles">
-                        <h3>Spotted a Bug?</h3>
-                        <p>Help us squash it! Tell us what's broken.</p>
-                    </div>
+        <div id="anykanWelcomeOverlay" class="hidden">
+            <div class="anykan-welcome-card">
+                <div class="anykan-welcome-title">Welcome to Anykan Beta</div>
+                <div class="anykan-welcome-desc">
+                    Thank you for joining our testing phase! You have premium access to watch your favorite Movies, TV Shows, Anime, and Asian Dramas. Help us perfect the system by submitting layout bugs or functional issues directly via the floating action button.
                 </div>
+                <button id="anykanAgreeBtn">Let Me In 🚀</button>
+            </div>
+        </div>
 
-                <textarea id="anykanFeedbackInput" class="anykan-textarea" placeholder="E.g., Episode 4 of this show is playing the wrong video..."></textarea>
-                <button id="anykanSubmitBtn" class="anykan-send-btn">Send Report 🛠️</button>
-                <div id="anykanStatus" class="anykan-status"></div>
+        <div id="anykanReportOverlay" class="hidden">
+            <div class="anykan-report-card">
+                <button class="anykan-report-close" id="anykanCloseReportBtn"><i class="fas fa-times"></i></button>
+                <div class="anykan-report-title"><i class="fas fa-tools" style="color:#8A2BE2;"></i> Beta Diagnostic Form</div>
+                <div class="anykan-report-desc">Encountered an obstacle? Broadcast details straight to our technical management interface layer instantly.</div>
+                <textarea class="anykan-textarea" id="anykanReportFeedback" placeholder="Describe the behavior or glitch clearly..."></textarea>
+                <button id="btn-submit-report">Send Report 🛠️</button>
+                <div id="report-status-msg"></div>
             </div>
         </div>
     `;
+    document.body.appendChild(betaHTML);
 
-    // Only append the Welcome Popup if the user is on the Homepage
-    if (isHomePage) {
-        htmlContent += `
-            <div id="anykanWelcomeOverlay" class="anykan-overlay hidden">
-                <div class="anykan-welcome-card">
-                    <div class="anykan-emoji-header">🍿✨</div>
-                    <h2 class="anykan-welcome-title">Welcome to Anykan!</h2>
-                    <p class="anykan-welcome-text">
-                        We're thrilled to have you here! <br><br>
-                        <strong style="color: #fff;">Worried about your history? Don't be! 😌</strong><br>
-                        Simply log in with your Dramakan account, and you can continue watching exactly where you left off. We've magically synced your watchlists, history, and VIP status into this one place.
-                    </p>
-                    
-                    <div class="anykan-permission-box">
-                        <p><i class="fas fa-user-shield"></i> <strong>Testing Permission:</strong> Please explore the site and share your feedback! We <strong>DO NOT</strong> collect any personal data. We only collect the bug reports you send us to help improve the site.</p>
-                    </div>
-                    
-                    <p style="font-size: 0.85rem; color: #9CA3AF; margin-bottom: 20px;">If you see any irregular shows or mismatched details, just click the cute bug button on the bottom left!</p>
-                    
-                    <button id="anykanAgreeBtn" class="anykan-agree-btn">I'm in! Let's Explore 🚀</button>
-                </div>
-            </div>
-        `;
-    }
-
-    betaContainer.innerHTML = htmlContent;
-    document.body.appendChild(betaContainer);
-
-    // 3. JAVASCRIPT LOGIC
-
+    // 3. CORE UI INTERACTION ENGINE LOGIC
+    const bugFab = document.getElementById("anykanBugFab");
     const reportOverlay = document.getElementById("anykanReportOverlay");
-    const closeReportBtn = document.getElementById("anykanCloseReport");
-    const bugBtn = document.getElementById("anykanBugBtn");
-    
-    const submitBtn = document.getElementById("anykanSubmitBtn");
-    const statusMsg = document.getElementById("anykanStatus");
-    const input = document.getElementById("anykanFeedbackInput");
+    const closeReportBtn = document.getElementById("anykanCloseReportBtn");
+    const submitBtn = document.getElementById("btn-submit-report");
+    const feedbackInput = document.getElementById("anykanReportFeedback");
+    const statusMsg = document.getElementById("report-status-msg");
 
-    const closeReport = () => {
-        reportOverlay.classList.add("hidden");
-        setTimeout(() => { statusMsg.style.display = "none"; input.value = ""; }, 400); 
-    };
+    const openReport = () => { reportOverlay.classList.remove("hidden"); feedbackInput.focus(); };
+    const closeReport = () => { reportOverlay.classList.add("hidden"); feedbackInput.value = ""; statusMsg.style.display = "none"; };
 
-    bugBtn.addEventListener("click", () => reportOverlay.classList.remove("hidden"));
+    bugFab.addEventListener("click", openReport);
     closeReportBtn.addEventListener("click", closeReport);
     reportOverlay.addEventListener("click", (e) => { if (e.target === reportOverlay) closeReport(); });
 
-    // --- PRE-LOAD FIREBASE SECURELY ---
-    let auth, db, fsAddDoc, fsCollection, fsServerTimestamp;
-    
-    try {
-        const [appModule, authModule, fsModule] = await Promise.all([
-            import("https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"),
-            import("https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"),
-            import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js")
-        ]);
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyB7i67_T7fs87BHIY2Pxs6KRAknhXrowIA",
-            authDomain: "dramakan007.firebaseapp.com",
-            projectId: "dramakan007"
-        };
-
-        const app = !appModule.getApps().length ? appModule.initializeApp(firebaseConfig) : appModule.getApp();
-        auth = authModule.getAuth(app);
-        db = fsModule.getFirestore(app);
-        
-        fsAddDoc = fsModule.addDoc;
-        fsCollection = fsModule.collection;
-        fsServerTimestamp = fsModule.serverTimestamp;
-    } catch (e) {
-        console.error("Firebase module failed to load in Beta Engine", e);
-    }
-
-    // --- SUBMISSION LOGIC ---
+    // --- Firebase Reporting Transaction Module Integration ---
     submitBtn.addEventListener("click", async () => {
-        const feedback = input.value.trim();
-        if (!feedback) {
-            input.style.borderColor = "#ff4757";
-            setTimeout(() => input.style.borderColor = "rgba(255,255,255,0.1)", 1000);
-            return;
-        }
+        const feedback = feedbackInput.value.trim();
+        if (!feedback) return;
 
-        // Verify Firebase loaded correctly
-        if (!auth || !db) {
-            statusMsg.style.display = "block";
-            statusMsg.style.color = "#ef4444";
-            statusMsg.innerHTML = "<i class='fas fa-exclamation-circle'></i> System offline. Please refresh the page.";
-            return;
-        }
-
-        // Must be logged in to bypass Firestore security rules
-        const user = auth.currentUser;
-        if (!user) {
-            statusMsg.style.display = "block";
-            statusMsg.style.color = "#ef4444";
-            statusMsg.innerHTML = "<i class='fas fa-exclamation-circle'></i> Please log in to send a report.";
-            return;
-        }
-
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Squashing...';
+        submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Dispatching...';
         submitBtn.disabled = true;
 
         try {
-            await fsAddDoc(fsCollection(db, "reports"), {
-                userId: user.uid,
-                userEmail: user.email || "No email",
-                username: user.displayName || "User",
+            // Lazy load dependencies explicitly safely
+            const auth = window.auth;
+            const db = window.db;
+            const firestoreModule = window.firestoreModule;
+
+            if (!auth || !db || !firestoreModule) {
+                throw new Error("Core environment configuration files missing.");
+            }
+
+            const user = auth.currentUser;
+
+            await firestoreModule.addDoc(firestoreModule.collection(db, "reports"), {
+                userId: user ? user.uid : "Anonymous",
+                userEmail: user ? (user.email || "No email") : "Anonymous",
+                username: user ? (user.displayName || "User") : "Beta Tester",
                 dramaId: "Global",
                 dramaName: "Anykan Beta Platform",
                 season: 0,
@@ -253,14 +221,14 @@
                 issue: "Beta Phase Bug Report",
                 details: feedback,
                 server: "N/A",
-                timestamp: fsServerTimestamp(),
+                timestamp: firestoreModule.serverTimestamp(),
                 status: "Pending"
             });
 
             statusMsg.style.display = "block";
             statusMsg.style.color = "#10b981";
             statusMsg.innerHTML = "<i class='fas fa-check-circle'></i> Got it! Thanks for helping us improve.";
-            input.value = "";
+            feedbackInput.value = "";
             
             setTimeout(() => { 
                 closeReport(); 
@@ -272,7 +240,6 @@
             console.error("Beta Report Error:", err);
             statusMsg.style.display = "block";
             statusMsg.style.color = "#ef4444";
-            // Shows exact Firebase error so you know if it's a rule block
             statusMsg.innerHTML = `<i class='fas fa-exclamation-circle'></i> Error: ${err.message}`;
             submitBtn.innerHTML = "Send Report 🛠️";
             submitBtn.disabled = false;
@@ -287,7 +254,7 @@
         const todayStr = new Date().toDateString();
         const lastAgreed = localStorage.getItem("anykan_beta_agreed_date");
         
-        // If testing on localhost, OR if they haven't agreed today, show the popup
+        // Show modal if testing on local setup environment or if verification hasn't been done today
         if (isLocalhost || lastAgreed !== todayStr) {
             setTimeout(() => {
                 welcomeOverlay.classList.remove("hidden");
@@ -299,5 +266,4 @@
             welcomeOverlay.classList.add("hidden");
         });
     }
-
 })();

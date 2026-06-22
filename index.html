@@ -37,8 +37,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
     <script src="bottom-bar.js" defer></script>
-    <script type="module" src="beta.js"></script>
-    <script src="feedback-popup.js" defer></script>
     <script src="admin_easter_egg.js" defer></script>
     <script type="module" src="promo-banner.js"></script>
     
@@ -193,7 +191,6 @@
             border-color: var(--primary-color, #8A2BE2); box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4); 
         }
         
-        /* Grid specifically to prevent wasted space */
         .schedule-list { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); 
@@ -233,87 +230,24 @@
 
         /* --- MOBILE RESPONSIVE TWEAKS & BOTTOM BAR --- */
         @media (max-width: 992px) {
-            .site-switcher {
-                margin-top: 10px;
-                width: 100%;
-                margin-left: 0;
-            }
-            .switcher-track {
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-            }
-            .nav-links .switcher-track .switch-btn {
-                text-align: center;
-                flex: 1;
-                padding: 10px 15px !important;
-            }
+            .site-switcher { margin-top: 10px; width: 100%; margin-left: 0; }
+            .switcher-track { width: 100%; display: flex; justify-content: space-between; }
+            .nav-links .switcher-track .switch-btn { text-align: center; flex: 1; padding: 10px 15px !important; }
             .header-right { gap: 10px; }
-
             .cw-landscape-card { width: 260px; min-width: 260px; }
 
-            .hero-content h1,
-            .hero-content .series-badge,
-            .hero-content .hero-meta-tags,
-            .hero-vignette,
-            .hero-depth-shadow {
-                display: none !important;
-            }
-
-            .hero-card {
-                display: flex !important;
-                flex-direction: column !important;
-                height: 90% !important;
-                padding: 0 !important;
-                overflow: hidden !important;
-                border-radius: 12px !important;
-            }
-            .hero-image-wrapper {
-                position: relative !important;
-                height: 85.5% !important; 
-                width: 100% !important;
-                display: block !important;
-            }
-            .hero-image {
-                height: auto !important;
-                width: 100% !important;
-                object-fit: cover !important;
-                display: block !important;
-            }
-            .hero-content {
-                position: relative !important;
-                width: 100% !important;
-                padding: 0 !important;
-                background: transparent !important;
-                bottom: auto !important;
-                left: auto !important;
-            }
+            .hero-content h1, .hero-content .series-badge, .hero-content .hero-meta-tags, .hero-vignette, .hero-depth-shadow { display: none !important; }
+            .hero-card { display: flex !important; flex-direction: column !important; height: 90% !important; padding: 0 !important; overflow: hidden !important; border-radius: 12px !important; }
+            .hero-image-wrapper { position: relative !important; height: 85.5% !important; width: 100% !important; display: block !important; }
+            .hero-image { height: auto !important; width: 100% !important; object-fit: cover !important; display: block !important; }
+            .hero-content { position: relative !important; width: 100% !important; padding: 0 !important; background: transparent !important; bottom: auto !important; left: auto !important; }
             .hero-actions {
-                position: relative !important;
-                display: flex !important;
-                justify-content: center !important;
-                gap: 15px !important;
-                width: 100% !important;
-                margin: 0 !important;
-                padding: 10px 15px 10px 10px !important;
-                background: rgba(0, 0, 0, 0);
-                backdrop-filter: blur(85px) saturate(250%) !important;
-                -webkit-backdrop-filter: blur(85px) saturate(250%) !important;
-                border-top: none !important;
-                z-index: 10 !important;
-                box-sizing: border-box !important;
+                position: relative !important; display: flex !important; justify-content: center !important; gap: 15px !important; width: 100% !important; margin: 0 !important; padding: 10px 15px 10px 10px !important;
+                background: rgba(0, 0, 0, 0); backdrop-filter: blur(85px) saturate(250%) !important; -webkit-backdrop-filter: blur(85px) saturate(250%) !important; border-top: none !important; z-index: 10 !important; box-sizing: border-box !important;
             }
-            .hero-actions .btn-n {
-                flex: 1 !important;
-                justify-content: center !important;
-                padding: 12px 0 !important;
-            }
-            .dk-slider-dots {
-                bottom: 30px !important; 
-                z-index: 20 !important;
-            }
+            .hero-actions .btn-n { flex: 1 !important; justify-content: center !important; padding: 12px 0 !important; }
+            .dk-slider-dots { bottom: 30px !important; z-index: 20 !important; }
             
-            /* Responsive Grid Fallback for Mobile Schedule */
             .schedule-list { grid-template-columns: 1fr; }
             .schedule-item { padding: 12px; gap: 12px;}
             .schedule-item img { width: 75px; height: 110px; }
@@ -322,21 +256,10 @@
             .schedule-play-icon { width: 36px; height: 36px; font-size: 1.1rem; }
 
             .bottom-nav {
-                display: flex !important; 
-                position: fixed !important; 
-                bottom: 15px !important; 
-                left: 50% !important; 
-                transform: translateX(-50%) !important;
-                width: 90% !important; 
-                max-width: 400px !important; 
-                background: rgba(20, 20, 25, 0.65) !important; 
-                backdrop-filter: blur(40px) saturate(180%) !important;
-                -webkit-backdrop-filter: blur(40px) saturate(180%) !important; 
-                border: 1px solid rgba(255, 255, 255, 0.08) !important; 
-                border-radius: 50px !important;
-                z-index: 999999 !important; 
-                padding: 5px 10px !important; 
-                box-shadow: 0 25px 50px rgba(0,0,0,0.5) !important;
+                display: flex !important; position: fixed !important; bottom: 15px !important; left: 50% !important; transform: translateX(-50%) !important;
+                width: 90% !important; max-width: 400px !important; background: rgba(20, 20, 25, 0.65) !important; backdrop-filter: blur(40px) saturate(180%) !important;
+                -webkit-backdrop-filter: blur(40px) saturate(180%) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; border-radius: 50px !important;
+                z-index: 999999 !important; padding: 5px 10px !important; box-shadow: 0 25px 50px rgba(0,0,0,0.5) !important;
             }
             .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 0; color: rgba(255, 255, 255, 0.5); text-decoration: none; transition: all 0.4s ease; }
             .bottom-nav-item.active { color: #fff; }
@@ -535,36 +458,6 @@
                 </div>
             </div>
         </section>
-
-        <button id="dramaRequestBtn" class="drama-fab">
-            <span class="fab-text">Didn't find your show?</span>
-        </button>
-
-        <div id="dramaModal" class="drama-modal-overlay">
-            <div class="drama-modal-card">
-                <button class="drama-modal-close" id="closeDramaModal">&times;</button>
-                
-                <div class="drama-section-highlight">
-                    <h4>Can't find what you're looking for?</h4>
-                    <p>Request it and we'll add it for you!</p>
-                </div>
-                
-                <div class="drama-section-main">
-                    <form id="dramaRequestForm">
-                        <input type="text" id="dramaName" placeholder="Enter Movie/Show/Anime Name..." required class="drama-input">
-                        <p class="drama-timer-text">Your request will be available <strong>the same day</strong> or within <strong>48 hours</strong>. We will notify you directly in your profile.</p>
-                        <button type="submit" class="drama-submit-btn" id="submitBtn">Send Request</button>
-                    </form>
-                   
-                    <div id="statusMessage" style="margin-top: 10px; font-size: 0.8rem; display: none;"></div>
-                </div>
-                
-                <div class="drama-modal-footer">
-                    <p style="font-size: 0.8rem; margin-bottom: 10px; opacity: 0.7;">Having issues with a broken link? Text us:</p>
-                    <a href="https://t.me/iamashish6700" target="_blank" class="drama-tg-link">On Telegram</a>
-                </div>
-            </div>
-        </div> 
     </main>
 
     <footer class="main-footer">
@@ -605,7 +498,6 @@
         (function initUI() {
             const injectedStyles = document.createElement('style');
             injectedStyles.innerHTML = `
-                /* CSS pointer-events fix to allow Filter link to be clickable */
                 #searchInput { padding: 10px 40px 10px 40px !important; }
                 .search-bar i.fa-search { pointer-events: none; z-index: 2; }
                 .search-filter-link { pointer-events: auto; z-index: 2; cursor: pointer; }
@@ -651,6 +543,7 @@
 
         let firebaseInstance = null;
         let unsubscribeHistory = null; 
+        let unsubscribeUser = null;
 
         async function getFirebase() {
             if (firebaseInstance) return firebaseInstance;
@@ -663,6 +556,8 @@
             const auth = authModule.getAuth(app);
             const db = firestoreModule.getFirestore(app);
             firebaseInstance = { app, auth, db, appModule, authModule, firestoreModule };
+            // Hook beta.js to this exact instance so it doesn't fail
+            window.getFirebase = async () => firebaseInstance; 
             return firebaseInstance;
         }
 
@@ -697,7 +592,6 @@
             grid.innerHTML = htmlContent;
         }
 
-        // --- NEW CLOUD-FIRST CONTINUE WATCHING RENDERER WITH DYNAMIC TMDB BACKDROP FETCH ---
         async function renderContinueWatching(cloudHistoryArr = null) {
             try {
                 let historyArr = cloudHistoryArr;
@@ -732,17 +626,6 @@
                                             }
                                         }
                                     }
-                                    
-                                    if (!imgUrl && item.title) {
-                                        const searchRes = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbKey}&query=${encodeURIComponent(item.title)}`);
-                                        if (searchRes.ok) {
-                                            const searchData = await searchRes.json();
-                                            if (searchData.results && searchData.results.length > 0 && searchData.results[0].backdrop_path) {
-                                                imgUrl = `https://image.tmdb.org/t/p/w780${searchData.results[0].backdrop_path}`;
-                                            }
-                                        }
-                                    }
-                                    
                                     if (imgUrl) {
                                         item.backdrop_path = imgUrl.replace('https://image.tmdb.org/t/p/w780', '');
                                         let localHistory = JSON.parse(localStorage.getItem('dramakan_history')) || {};
@@ -751,9 +634,8 @@
                                             localStorage.setItem('dramakan_history', JSON.stringify(localHistory));
                                         }
                                     }
-                                } catch(err) { console.warn("Backdrop fetch failed", err); }
+                                } catch(err) {}
                             }
-                            
                             item.finalImgUrl = imgUrl || item.img;
                             return item;
                         }));
@@ -1008,7 +890,6 @@
                     if (el) gridObserver.observe(el);
                 });
 
-                // Call the Universal Schedule setup
                 initSchedule();
 
             } catch (err) { console.error("Database connection exception", err); }
@@ -1032,7 +913,6 @@
                 const displayDateStr = targetDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
                 try {
-                    // Fetch any TV show airing on this day globally
                     const res = await fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${tmdbKey}&air_date.gte=${dateStr}&air_date.lte=${dateStr}&sort_by=popularity.desc`);
                     if (res.ok) {
                         const data = await res.json();
@@ -1100,7 +980,6 @@
                         }).join('');
                     }
                 } catch (e) {
-                    console.error("Schedule fetch error", e);
                     listContainer.innerHTML = `<div class="empty-state">Failed to load schedule.</div>`;
                 }
             }
@@ -1121,6 +1000,7 @@
                 loadScheduleForDay(currentDay);
             }
         }
+        
         const bindDynamicSearch = (inputId, resultsId) => {
             const searchInput = document.getElementById(inputId);
             const searchResults = document.getElementById(resultsId);
@@ -1137,7 +1017,6 @@
                             const searchRes = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbKey}&query=${encodeURIComponent(queryStr)}`);
                             if (searchRes.ok) {
                                 const searchData = await searchRes.json();
-                                // Removed the genre 16 filter so Anime shows up
                                 const resultsMapped = (searchData.results || [])
                                     .filter(i => (i.media_type === 'tv' || i.media_type === 'movie'))
                                     .slice(0, 8);
@@ -1153,7 +1032,7 @@
                                 }).join('');
                                 searchResults.style.display = 'block';
                             }
-                        } catch (e) { console.error("Search API crash", e); }
+                        } catch (e) { }
                     }, 300); 
                 });
             }
@@ -1216,46 +1095,69 @@
             }
         }
 
+        // =========================================================================
+        // FULL REAL-TIME CROSS-DOMAIN SYNC VIA FIRESTORE ONSNAPSHOT
+        // =========================================================================
         async function initAuthSync() {
             try {
                 const { auth, db, firestoreModule, authModule } = await getFirebase();
-                const { doc, getDoc, collection, onSnapshot } = firestoreModule;
+                const { doc, onSnapshot, collection } = firestoreModule;
                 const { onAuthStateChanged } = authModule;
 
                 onAuthStateChanged(auth, async (user) => {
                     const headerVipBtn = document.getElementById('headerVipBtn');
                     
                     if (user) {
-                        const docSnap = await getDoc(doc(db, "users", user.uid));
-                        let userProfiles = [];
-                        let legacyAvatar = `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(user.displayName || user.email || "User")}`;
-                        
-                        if (docSnap.exists()) {
-                            const data = docSnap.data();
-                            if (data.avatarUrl) legacyAvatar = data.avatarUrl;
-                            userProfiles = data.profiles && data.profiles.length > 0 ? data.profiles : [{ id: 'prof_default', name: data.username || "User", avatar: legacyAvatar }];
-                            
-                            const now = Date.now();
-                            let activePlan = "Basic";
-                            if (data.isPremium && data.premiumExpiry > now) {
-                                activePlan = data.premiumPlan || "";
-                            }
-                            if (headerVipBtn) {
-                                if (activePlan.includes('Crown')) {
-                                    headerVipBtn.style.display = 'none';
-                                } else {
-                                    headerVipBtn.style.display = 'inline-flex';
+                        // 1. REAL-TIME USER PROFILE & MY LIST SYNC
+                        if(unsubscribeUser) unsubscribeUser();
+                        unsubscribeUser = onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+                            if (docSnap.exists()) {
+                                const data = docSnap.data();
+                                let legacyAvatar = `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(user.displayName || user.email || "User")}`;
+                                if (data.avatarUrl) legacyAvatar = data.avatarUrl;
+                                
+                                let userProfiles = data.profiles && data.profiles.length > 0 ? data.profiles : [{ id: 'prof_default', name: data.username || "User", avatar: legacyAvatar }];
+                                
+                                // Push Real-Time 'My List' to UI immediately
+                                let activeId = localStorage.getItem('dramakan_active_profile_id');
+                                let pIdx = userProfiles.findIndex(p => p.id === activeId);
+                                if(pIdx === -1) pIdx = 0;
+                                
+                                let cloudMyList = userProfiles[pIdx].myList || data.myList || [];
+                                localStorage.setItem('dramakan_mylist', JSON.stringify(cloudMyList));
+                                
+                                // Update 'In List' buttons in Real-Time
+                                document.querySelectorAll('.btn-mylist').forEach(btn => {
+                                    const rawId = btn.id.replace('hero-list-btn-', '');
+                                    const inList = cloudMyList.some(item => String(item.id) === String(rawId));
+                                    btn.classList.toggle('active', inList);
+                                    btn.innerHTML = inList ? `<i class="fas fa-check"></i> <span>In List</span>` : `<i class="fas fa-plus"></i> <span>My List</span>`;
+                                });
+
+                                // Update VIP Badge
+                                const now = Date.now();
+                                let activePlan = "Basic";
+                                if (data.isPremium && data.premiumExpiry > now) {
+                                    activePlan = data.premiumPlan || "";
+                                }
+                                if (headerVipBtn) {
+                                    headerVipBtn.style.display = activePlan.includes('Crown') ? 'none' : 'inline-flex';
+                                }
+
+                                if (localStorage.getItem('dramakan_profile_prompt_date') !== new Date().toDateString() && userProfiles.length > 0) {
+                                    createProfileSwitcher(userProfiles);
+                                } else { 
+                                    updateHeaderAvatar(userProfiles); 
                                 }
                             }
-                        }
+                        });
 
-                        if (localStorage.getItem('dramakan_profile_prompt_date') !== new Date().toDateString() && userProfiles.length > 0) {
-                            createProfileSwitcher(userProfiles);
-                        } else { updateHeaderAvatar(userProfiles); }
+                        window.addEventListener('profileSelected', () => { 
+                            const activeId = localStorage.getItem('dramakan_active_profile_id');
+                            // Profile switcher triggers a re-eval of header avatar
+                        });
 
-                        window.addEventListener('profileSelected', () => { updateHeaderAvatar(userProfiles); });
-
-                        // --- REAL-TIME CLOUD HISTORY SYNC ---
+                        // 2. REAL-TIME CLOUD HISTORY SYNC (Side-by-Side Sync)
                         const historyRef = collection(db, "users", user.uid, "history");
                         if(unsubscribeHistory) unsubscribeHistory(); 
                         
@@ -1279,76 +1181,19 @@
                         });
 
                     } else {
+                        // User is logged out
                         if (headerVipBtn) headerVipBtn.style.display = 'inline-flex';
-                        if (unsubscribeHistory) {
-                            unsubscribeHistory();
-                            unsubscribeHistory = null;
-                        }
+                        if (unsubscribeHistory) { unsubscribeHistory(); unsubscribeHistory = null; }
+                        if (unsubscribeUser) { unsubscribeUser(); unsubscribeUser = null; }
                         renderContinueWatching();
                     }
                 });
             } catch (e) { console.warn("Authentication configuration sync failed", e); }
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const modal = document.getElementById("dramaModal");
-            const openBtn = document.getElementById("dramaRequestBtn");
-            const closeBtn = document.getElementById("closeDramaModal");
-            const form = document.getElementById("dramaRequestForm");
-
-            if(openBtn && modal) {
-                openBtn.onclick = async () => {
-                    const { auth } = await getFirebase();
-                    if (!auth.currentUser) {
-                        alert("Please log in to request a movie or show. Redirecting to Login panel...");
-                        window.location.href = "login.html";
-                    } else { modal.style.display = "flex"; }
-                };
-                closeBtn.onclick = () => modal.style.display = "none";
-                window.onclick = (e) => { if(e.target === modal) modal.style.display = "none"; }
-            }
-
-            if(form) {
-                form.onsubmit = async (e) => {
-                    e.preventDefault();
-                    const submitBtn = document.getElementById("submitBtn");
-                    const status = document.getElementById("statusMessage");
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-                    submitBtn.disabled = true;
-
-                    try {
-                        const { auth, db, firestoreModule } = await getFirebase();
-                        const { collection, addDoc } = firestoreModule;
-                        const user = auth.currentUser;
-                        
-                        if (!user) throw new Error("Session expired. Authenticate to proceed.");
-                        
-                        const dramaName = document.getElementById("dramaName").value.trim();
-                        await addDoc(collection(db, "requests"), {
-                            userId: user.uid,
-                            userEmail: user.email || "Anonymous profile", 
-                            dramaName: dramaName,
-                            status: "Pending",
-                            notified: false, 
-                            createdAt: Date.now()
-                        });
-
-                        status.style.display = "block";
-                        status.style.color = "#10b981";
-                        status.innerHTML = "<i class='fas fa-check-circle'></i> Dispatched safely to Dashboard! Track progress on profile page.";
-                        form.reset();
-                        setTimeout(() => { modal.style.display = "none"; status.style.display = "none"; }, 2000);
-
-                    } catch (err) {
-                        status.style.display = "block";
-                        status.style.color = "#ef4444";
-                        status.innerHTML = "<i class='fas fa-exclamation-circle'></i> Error: " + err.message;
-                    } finally {
-                        submitBtn.innerText = "Send Request";
-                        submitBtn.disabled = false;
-                    }
-                };
-            }
+        // --- GUEST MULTI-TAB SYNC (Same Domain Only) ---
+        window.addEventListener('storage', (e) => {
+            if(e.key === 'dramakan_history') { renderContinueWatching(); }
         });
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1368,5 +1213,8 @@
             }
         });
     </script>
+
+    <script type="module" src="beta.js"></script>
+
 </body>
 </html>
