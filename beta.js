@@ -23,6 +23,11 @@
             transform: scale(1.1) translateY(-3px);
             box-shadow: 0 15px 30px rgba(138, 43, 226, 0.7);
         }
+        
+        /* MOBILE FIX: Lifted the button to 115px so it safely clears the bottom navigation bar */
+        @media (max-width: 992px) { 
+            .anykan-bug-fab { bottom: 115px; left: 15px; width: 50px; height: 50px; font-size: 1.2rem; } 
+        }
 
         /* --- WELCOME OVERLAY / MODAL MOBILE FIXES --- */
         #anykanWelcomeOverlay {
