@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" id="html-root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="seo-title">Watch KoruVox Exclusive</title>
+
+    <meta id="seo-theme-color" name="theme-color" content="#FF5722">
+
+    <!-- 🆕 CRITICAL FIX: hls.js Engine for .m3u8 Playback Streaming Support -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+    <!-- Fluid Player for VAST/VPAID Ads -->
+    <link rel="stylesheet" href="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.css" type="text/css"/>
+    <script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        :root {
+            --koruvox-color: #FF5722; 
+            --anykan-color: #8A2BE2;
+            --gradient-brand: linear-gradient(135deg, var(--koruvox-color) 0%, var(--anykan-color) 100%);
+            
+            --bg-base: #08080a; 
+            --bg-panel: #14151A;
+            --primary: #FF5722; 
+            --primary-rich: #E64A19;
+            --primary-glow: rgba(255, 87, 34, 0.4); 
+            --glass-bg: rgba(20, 20, 25, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08); 
+            --glass-blur: blur(20px);
+            --text-main: #F8F8F8;
+            --text-muted: #a1a1aa;
+            --danger: #ff4757;
+        }
+
+        body { 
+            background-color: var(--bg-base); 
+            color: var(--text-main); 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; padding: 0; 
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- AMBILIGHT BACKDROP --- */
+        .ambilight-glow-backdrop {
+            position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+            width: 100vw; height: 100vh; z-index: -2; opacity: 0.2;
+            filter: blur(80px) saturate(220%); object-fit: cover;
+            pointer-events: none; transition: 0.8s ease-in-out;
+        }
+
+        /* --- LAYOUT GRID --- */
+        .container { max-width: 1500px; margin: 0 auto; padding: 20px 4%; position: relative; z-index: 1; }
+        .breadcrumbs { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; }
+        .breadcrumbs span { color: var(--text-main); font-weight: 500; }
+        
+        .watch-grid { display: grid; grid-template-columns: 1fr 360px; gap: 30px; align-items: start; }
+        .main-column { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+        .sidebar-column { display: flex; flex-direction: column; gap: 20px; }
+
+        /* --- HEADER & BRANDING --- */
+        .main-header {
+            background: rgba(11, 12, 16, 0.85); backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 4%; position: sticky; top: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between;
+        }
+        .brand-combo { display: flex; align-items: center; gap: 15px; }
+        .brand-combo img { height: 35px; object-fit: contain; }
+        .brand-combo .divider { width: 1px; height: 20px; background: var(--glass-border); }
+        .brand-combo .logo-text { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.5px; text-decoration: none; color: #fff;}
+        .brand-combo .logo-text span { background: var(--gradient-brand); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .title-header-wrapper { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px;}
+        .title-left h1 { font-size: 2.5rem; font-weight: 700; margin: 0 0 10px 0; line-height: 1.2; }
+        .meta-tags { font-size: 0.9rem; color: var(--text-muted); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .meta-tags span::after { content: '•'; margin-left: 10px; color: rgba(255,255,255,0.2); }
+        .meta-tags span:last-child::after { content: ''; }
+        
+        .action-btn { 
+            background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--glass-border); 
+            padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; 
+            display: inline-flex; align-items: center; gap: 8px; font-weight: 500; font-size: 0.9rem;
+        }
+        .action-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); }
+        .btn-primary { background: var(--gradient-brand); border: none; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px var(--primary-glow); }
+
+        /* --- VIDEO PLAYER CONTAINER --- */
+        .video-player-container {
+            position: relative; background: #000; border-radius: 16px; overflow: hidden;
+            aspect-ratio: 16/9; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.6); border: 1px solid var(--glass-border);
+        }
+        
+        /* Fluid Player Overrides */
+        .fluid_video_wrapper { width: 100% !important; height: 100% !important; }
+
+        /* --- SIDEBAR: EPISODES --- */
+        .sidebar-widget { background: var(--bg-panel); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; }
+        .sidebar-title { font-size: 1rem; font-weight: 600; color: #fff; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 1px; }
+        .episodes-timeline { display: flex; flex-direction: column; gap: 10px; max-height: 500px; overflow-y: auto; padding-right: 5px; }
+        .episodes-timeline::-webkit-scrollbar { width: 4px; }
+        .episodes-timeline::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+        
+        .ep-timeline-item { display: flex; align-items: center; gap: 15px; cursor: pointer; padding: 10px; border-radius: 8px; transition: 0.3s; }
+        .ep-timeline-item:hover { background: rgba(255,255,255,0.03); }
+        .ep-timeline-item.active { background: rgba(255, 87, 34, 0.1); border: 1px solid rgba(255, 87, 34, 0.3); }
+        
+        .ep-icon { width: 30px; height: 30px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center; color: transparent; font-size: 0.8rem; transition: 0.3s; }
+        .ep-timeline-item.active .ep-icon { background: var(--primary); border-color: var(--primary); color: #fff; box-shadow: 0 0 10px var(--primary-glow); }
+        .ep-info-text { flex: 1; }
+        .ep-info-text h4 { margin: 0; font-size: 0.9rem; color: #fff; font-weight: 500; }
+        
+        /* --- ABOUT THIS TITLE --- */
+        .about-drama { background: var(--bg-panel); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; display: flex; gap: 20px; }
+        .about-poster { width: 140px; border-radius: 12px; object-fit: cover; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .about-info h3 { margin: 0 0 10px 0; font-size: 1rem; color: #fff; text-transform: uppercase; }
+        .about-info p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin: 0 0 15px 0; }
+        
+        @media (max-width: 1024px) {
+            .watch-grid { display: flex; flex-direction: column; }
+            .main-column, .sidebar-column { display: contents; }
+            .video-player-container { order: 1; }
+            .sidebar-widget.episodes-widget { order: 2; width: 100%; }
+            .about-drama { order: 3; flex-direction: column; width: 100%; }
+            .about-poster { width: 100%; aspect-ratio: 16/9; }
+        }
+    </style>
+</head>
+<body>
+
+    <img id="ambilight-bg" class="ambilight-glow-backdrop" src="" alt="">
+
+    <header class="main-header" id="mainHeader">
+        <div class="brand-combo">
+            <img src="klogo.png" alt="KoruVox" onerror="this.src='https://via.placeholder.com/100x35/000000/FFFFFF?text=KORUVOX'">
+            <div class="divider"></div>
+            <a href="koruvox.html" class="logo-text">Any<span>Kan</span></a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumbs">
+            Home > KoruVox Exclusives > <span id="bread-title">Loading...</span> > <span id="bread-ep">Episode 1</span>
+        </div>
+
+        <div class="title-header-wrapper" style="margin-bottom: 20px;">
+            <div class="title-left">
+                <h1 id="ui-title">Loading Content...</h1>
+                <div class="meta-tags">
+                    <span id="ui-type">Exclusive</span>
+                    <span id="ui-status"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="watch-grid">
+            <div class="main-column">
+                
+                <!-- CUSTOM VAST/VPAID VIDEO PLAYER WRAPPER -->
+                <div class="video-player-container" id="video-wrapper">
+                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+                        <i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i> Connecting to media server...
+                    </div>
+                </div>
+
+                <div class="about-drama">
+                    <img id="ui-poster" src="" alt="Poster" class="about-poster">
+                    <div class="about-info">
+                        <h3>ABOUT THIS EXCLUSIVE</h3>
+                        <p id="synopsis-text">Loading synopsis...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-column">
+                <div class="sidebar-widget episodes-widget">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 class="sidebar-title" style="margin: 0;">Episodes</h3>
+                        <select id="season-selector" style="display: none; background: rgba(255,255,255,0.05); color: #fff; padding: 5px 10px; border: 1px solid var(--glass-border); border-radius: 8px; outline: none;"></select>
+                    </div>
+                    
+                    <div class="episodes-timeline" id="episodes-list-container">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB7i67_T7fs87BHIY2Pxs6KRAknhXrowIA",
+            authDomain: "dramakan007.firebaseapp.com",
+            projectId: "dramakan007"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const tmdbKey = "014fbdbe962cb38379e09e31d0652459";
+        let activeData = null;
+        let activeTmdbId = null;
+        let fluidPlayerInstance = null;
+        
+        window.currentSeason = 1;
+        window.currentEpisode = 1;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const contentId = urlParams.get('id');
+
+            if (!contentId) { window.location.replace('koruvox.html'); return; }
+
+            try {
+                const docSnap = await getDoc(doc(db, "koruvox_content", contentId));
+                
+                if (docSnap.exists()) {
+                    activeData = docSnap.data();
+                    activeTmdbId = activeData.tmdbId || contentId;
+                    
+                    if (!activeData.episodeLinks) { activeData.episodeLinks = []; }
+
+                    // Populate basic UI elements
+                    document.getElementById('ui-title').textContent = activeData.title;
+                    document.getElementById('bread-title').textContent = activeData.title;
+                    document.getElementById('synopsis-text').textContent = activeData.synopsis;
+                    document.getElementById('ui-type').textContent = activeData.type;
+                    document.getElementById('ui-status').textContent = activeData.status;
+                    document.getElementById('ui-poster').src = activeData.img;
+                    document.getElementById('ambilight-bg').src = activeData.img;
+
+                    await fetchTMDBExtraData();
+
+                    // 🆕 DYNAMIC FIX: Find all unique seasons uploaded in database
+                    const uniqueSeasons = [...new Set(activeData.episodeLinks.map(ep => ep.s))].sort((a, b) => a - b);
+                    
+                    // 🆕 DYNAMIC FIX: If season 1 doesn't exist, default on-load tracking to first available season
+                    if (uniqueSeasons.length > 0 && !uniqueSeasons.includes(window.currentSeason)) {
+                        window.currentSeason = uniqueSeasons[0];
+                    }
+
+                    setupSeasonsDropdown(uniqueSeasons);
+
+                    await window.renderEpisodeGrid(window.currentSeason);
+
+                    // Find and boot the first episode of our assigned active season
+                    const firstEp = activeData.episodeLinks.find(ep => ep.s === window.currentSeason);
+                    if (firstEp) {
+                        window.loadEpisode(window.currentSeason, firstEp.e);
+                    } else {
+                        document.getElementById('video-wrapper').innerHTML = '<div style="color:var(--text-muted); text-align:center; padding: 50px;">No video sources uploaded yet.</div>';
+                    }
+
+                } else {
+                    document.getElementById('ui-title').textContent = "Content Not Found";
+                    alert("This exclusive content is missing or has been removed.");
+                }
+            } catch (err) {
+                console.error("Database Error:", err);
+            }
+        });
+
+        async function fetchTMDBExtraData() {
+            try {
+                let res = await fetch(`https://api.themoviedb.org/3/tv/${activeTmdbId}?api_key=${tmdbKey}`);
+                let data = await res.json();
+                
+                if (data.success === false) {
+                    res = await fetch(`https://api.themoviedb.org/3/movie/${activeTmdbId}?api_key=${tmdbKey}`);
+                    data = await res.json();
+                    activeData.isMovie = true;
+                } else {
+                    activeData.isMovie = false;
+                }
+
+                if (data.backdrop_path) {
+                    activeData.backdrop_path = `https://image.tmdb.org/t/p/w1280${data.backdrop_path}`;
+                    document.getElementById('ambilight-bg').src = activeData.backdrop_path;
+                }
+            } catch (e) { console.warn("TMDB fetch failed", e); }
+        }
+
+        function setupSeasonsDropdown(uniqueSeasons) {
+            const seasonSelector = document.getElementById('season-selector');
+            
+            // Show menu container if there's actually a variety of seasons
+            if (uniqueSeasons.length > 1) {
+                seasonSelector.style.display = 'block';
+                seasonSelector.innerHTML = uniqueSeasons.map(s => `<option value="${s}">Season ${s}</option>`).join('');
+                seasonSelector.value = window.currentSeason;
+                
+                seasonSelector.addEventListener('change', (e) => {
+                    window.currentSeason = parseInt(e.target.value);
+                    window.renderEpisodeGrid(window.currentSeason);
+                    
+                    const firstEpOfSeason = activeData.episodeLinks.find(ep => ep.s === window.currentSeason);
+                    if(firstEpOfSeason) {
+                        window.loadEpisode(window.currentSeason, firstEpOfSeason.e);
+                    }
+                });
+            }
+        }
+
+        window.renderEpisodeGrid = async function(seasonNum) {
+            const grid = document.getElementById('episodes-list-container');
+            let buttonsHtml = '';
+            
+            let seasonLinks = activeData.episodeLinks.filter(ep => ep.s === seasonNum);
+            
+            if (seasonLinks.length === 0) {
+                grid.innerHTML = '<p style="color:var(--text-muted); padding: 10px; font-size: 0.9rem;">No episodes uploaded for this season.</p>';
+                return;
+            }
+
+            seasonLinks.sort((a, b) => a.e - b.e);
+
+            seasonLinks.forEach(ep => {
+                const epTitle = activeData.isMovie ? 'Full Movie' : `Episode ${ep.e}`;
+                buttonsHtml += `
+                    <div class="ep-timeline-item" data-ep="${ep.e}" onclick="loadEpisode(${ep.s}, ${ep.e})">
+                        <div class="ep-icon"><i class="fas fa-play"></i></div>
+                        <div class="ep-info-text">
+                            <h4>${epTitle}</h4>
+                        </div>
+                    </div>`;
+            });
+
+            grid.innerHTML = buttonsHtml;
+            updateActiveButton();
+        }
+
+        function updateActiveButton() {
+            document.querySelectorAll('.ep-timeline-item').forEach((item) => {
+                const isMatch = parseInt(item.dataset.ep) === window.currentEpisode;
+                item.classList.toggle('active', isMatch);
+            });
+        }
+
+        window.loadEpisode = function(season, ep) {
+            window.currentSeason = parseInt(season);
+            window.currentEpisode = parseInt(ep);
+            
+            document.getElementById('bread-ep').textContent = activeData.isMovie ? 'Full Movie' : `Episode ${ep}`;
+            updateActiveButton();
+
+            const epData = activeData.episodeLinks.find(item => item.s === window.currentSeason && item.e === window.currentEpisode);
+            
+            if (!epData || !epData.url) {
+                document.getElementById('video-wrapper').innerHTML = '<div style="color:var(--danger); text-align:center; padding: 50px;">Video source link missing.</div>';
+                return;
+            }
+
+            setupCustomPlayer(epData.url);
+        }
+
+        function setupCustomPlayer(videoUrl) {
+            const videoWrapper = document.getElementById('video-wrapper');
+            
+            if (fluidPlayerInstance) { fluidPlayerInstance.destroy(); }
+
+            // Rebuild container element markup dynamically
+            videoWrapper.innerHTML = `
+                <video id="koruvox-player" controls style="width: 100%; height: 100%;" playsinline>
+                    <source src="${videoUrl}" type="application/x-mpegURL" id="video-source" />
+                </video>
+            `;
+
+            // Initialize configuration block
+            fluidPlayerInstance = fluidPlayer('koruvox-player', {
+                layoutControls: {
+                    primaryColor: "#FF5722", 
+                    fillToContainer: true,
+                    posterImage: activeData.backdrop_path || activeData.img
+                },
+                vastOptions: {
+                    adList: [
+                        {
+                            roll: 'preRoll',
+                            vastTag: 'https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_ad_samples&sz=640x480&cust_params=sample_ct%3Dlinear&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator=',
+                            adText: 'Advertisement will end in %d seconds'
+                        }
+                    ]
+                }
+            });
+        }
+    </script>
+</body>
+</html>
