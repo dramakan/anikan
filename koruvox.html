@@ -3,405 +3,455 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KoruVox x Anykan | Premium Anime & Drama</title>
+    <title>KoruVox x Anykan | Premium Anime, Movies & Drama</title>
     <meta name="theme-color" content="#FF5722">
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    <style>
-        /* --- ANYKAN GLASS ENGINE + COLLAB BRANDING --- */
-        :root {
-            --koruvox-color: #FF5722; 
-            --anykan-color: #8A2BE2;
-            --gradient-brand: linear-gradient(135deg, var(--koruvox-color) 0%, var(--anykan-color) 100%);
-            
-            --bg-rgb: 8, 8, 10;
-            --background-color: rgb(var(--bg-rgb));
-            --text-color: #f5f5f5;
-            --text-muted-color: #9CA3AF;
-            
-            --glass-bg: rgba(26, 26, 29, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-border-active: rgba(255, 87, 34, 0.3);
-            --glass-blur: blur(16px);
-            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        koruvox: '#FF5722',
+                        anykan: '#8A2BE2',
+                        bgbase: '#050507',
+                        glass: 'rgba(15, 15, 20, 0.4)',
+                    },
+                    backgroundImage: {
+                        'collab-gradient': 'linear-gradient(135deg, #FF5722 0%, #8A2BE2 100%)',
+                        'collab-animated': 'linear-gradient(270deg, #FF5722, #8A2BE2, #e91e63, #FF5722)',
+                    },
+                    animation: {
+                        'bg-pulse': 'bgPulse 8s infinite alternate ease-in-out',
+                        'spin-slow': 'spin 20s linear infinite',
+                        'slide-up-fade': 'slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'float-smooth': 'floatSmooth 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        bgPulse: {
+                            '0%': { opacity: '0.4', transform: 'scale(0.95)' },
+                            '100%': { opacity: '0.8', transform: 'scale(1.05)' },
+                        },
+                        slideUpFade: {
+                            'from': { opacity: '0', transform: 'translateY(40px)' },
+                            'to': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        floatSmooth: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
         }
+    </script>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        
-        body {
-            background-color: var(--background-color);
-            color: var(--text-color);
-            padding-bottom: 100px;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        a { text-decoration: none; color: inherit; }
-
-        /* --- HYBRID HEADER --- */
-        .main-header {
-            position: fixed; top: 0; left: 0; right: 0;
-            display: flex; justify-content: center;
-            align-items: center;
-            padding: 15px 4%;
-            background: linear-gradient(to bottom, rgba(var(--bg-rgb), 0.95) 0%, rgba(var(--bg-rgb), 0) 100%);
-            z-index: 1000;
-            transition: all 0.4s ease;
-        }
-        .main-header.scrolled {
-            background: rgba(8, 8, 10, 0.85);
-            backdrop-filter: var(--glass-blur);
-            border-bottom: 1px solid var(--glass-border);
-        }
-        
-        .brand-combo { display: flex; align-items: center; gap: 15px; }
-        .brand-combo img { height: 35px; object-fit: contain; }
-        .brand-combo .divider { width: 1px; height: 20px; background: var(--glass-border); }
-        .brand-combo .logo-text { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.5px; }
-        
-        .brand-combo .logo-text span { 
-            background: var(--gradient-brand); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-        }
-
-        /* --- LAYOUT CONTAINER --- */
-        .container { max-width: 1400px; margin: 90px auto 0; padding: 0 4%; }
-
-        /* --- SECTION HEADERS --- */
-        .section-header { display: flex; justify-content: flex-start; align-items: center; margin-bottom: 15px; margin-top: 40px;} 
-        .section-title { font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-        .section-title i { color: var(--koruvox-color); }
-
-        /* --- ANYKAN CAROUSEL SYSTEM --- */
-        .drama-grid { display: flex; overflow-x: auto; padding-bottom: 20px; scroll-behavior: smooth; gap: 15px; scrollbar-width: none; }
-        .drama-grid::-webkit-scrollbar { display: none; }
-
-        /* --- CONTINUE WATCHING --- */
-        .cw-card {
-            display: flex; flex-direction: column; min-width: 280px; width: 280px;
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            border-radius: 12px; overflow: hidden; transition: 0.3s;
-            backdrop-filter: var(--glass-blur); flex-shrink: 0;
-        }
-        .cw-card:hover { border-color: var(--anykan-color); transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .cw-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
-        .cw-progress { width: 100%; height: 3px; background: rgba(255,255,255,0.1); }
-        .cw-bar { height: 100%; background: var(--gradient-brand); box-shadow: 0 0 8px var(--koruvox-color); }
-        .cw-info { padding: 12px; }
-        .cw-title { font-size: 0.95rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
-        .cw-meta { font-size: 0.8rem; color: var(--text-muted-color); display: flex; justify-content: space-between; }
-        .cw-meta i { color: var(--koruvox-color); margin-right: 4px; }
-
-        /* --- KORUVOX FEATURED SHOWCASE --- */
-        .featured-showcase {
-            background: linear-gradient(145deg, rgba(26,26,29,0.6) 0%, rgba(10,10,12,0.8) 100%);
-            border: 1px solid var(--glass-border-active);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: var(--glass-shadow);
-            backdrop-filter: var(--glass-blur);
-        }
-        .coming-soon-badge { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .coming-soon-badge h2 { 
-            background: var(--gradient-brand); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            font-size: 1.4rem; font-weight: 700; letter-spacing: 1px; 
-        }
-        .coming-soon-badge span { color: var(--text-muted-color); font-size: 0.85rem; letter-spacing: 1px; }
-        
-        .featured-desc { color: var(--text-muted-color); font-size: 0.9rem; margin-bottom: 25px; max-width: 600px; }
-
-        .featured-card {
-            min-width: 300px; width: 300px;
-            background: rgba(0,0,0,0.4);
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            display: flex; flex-direction: column; flex-shrink: 0;
-        }
-        .featured-card:hover { border-color: var(--koruvox-color); box-shadow: 0 0 25px rgba(255, 87, 34, 0.15); transform: translateY(-4px); }
-        .featured-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
-        .fc-content { padding: 18px; flex-grow: 1; display: flex; flex-direction: column; }
-        .fc-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
-        .fc-tags { color: var(--text-muted-color); font-size: 0.8rem; margin-bottom: 12px; }
-        .fc-tags i { color: var(--koruvox-color); margin-right: 5px; }
-        .fc-synopsis { font-size: 0.85rem; color: #bbb; margin-bottom: 20px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        
-        .fc-actions { display: flex; justify-content: flex-end; align-items: center; margin-top: auto; }
-        .btn-watch {
-            background: var(--gradient-brand); color: white; border: none;
-            padding: 8px 20px; border-radius: 50px; font-weight: 600; font-size: 0.85rem;
-            cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(255, 87, 34, 0.3); text-decoration: none; display: inline-block;
-        }
-        .btn-watch:hover { transform: scale(1.05); filter: brightness(1.1); }
-
-        /* --- ANYKAN STANDARD POSTER CARDS --- */
-        .poster-card {
-            position: relative; min-width: 150px; width: 150px; aspect-ratio: 2/3;
-            border-radius: 10px; overflow: hidden; flex-shrink: 0;
-            border: 1px solid transparent; transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); text-decoration: none; display: block;
-        }
-        .poster-card:hover { transform: translateY(-6px); border-color: var(--anykan-color); box-shadow: 0 10px 20px rgba(0,0,0,0.6); z-index: 10; }
-        .poster-card img { width: 100%; height: 100%; object-fit: cover; }
-        .poster-info {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
-            padding: 25px 10px 10px; opacity: 0; transition: 0.3s; pointer-events: none;
-        }
-        .poster-card:hover .poster-info { opacity: 1; }
-        .poster-info h3 { font-size: 0.85rem; color: #fff; font-weight: 500; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .poster-info p { font-size: 0.7rem; color: var(--koruvox-color); font-weight: 600; }
-
-        /* --- ANYKAN LIQUID GLASS BOTTOM BAR --- */
-        .bottom-nav {
-            display: flex; position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
-            width: 92%; max-width: 500px; 
-            background: rgba(20, 20, 25, 0.65); 
-            backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid var(--glass-border); border-radius: 50px;
-            z-index: 9999; padding: 6px 15px; box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            justify-content: space-between; align-items: center;
-        }
-        .bottom-nav-item {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: rgba(255, 255, 255, 0.5); transition: all 0.4s ease; text-decoration: none;
-            padding: 4px 8px; flex: 1;
-        }
-        .bottom-nav-item.active { color: #fff; }
-        .nav-icon { font-size: 1.25rem; margin-bottom: 4px; transition: transform 0.4s ease; }
-        
-        .bottom-nav-item:hover .nav-icon, .bottom-nav-item.active .nav-icon { 
-            transform: translateY(-4px) scale(1.15); 
-            background: var(--gradient-brand); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-        }
-        
-        .nav-label { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-
-        @media (min-width: 992px) {
-            .bottom-nav { display: none; }
-            body { padding-bottom: 0; }
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+            .no-scrollbar {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
         }
     </style>
 </head>
-<body>
+<body class="bg-bgbase text-white pb-[120px] lg:pb-10 overflow-x-hidden antialiased selection:bg-anykan selection:text-white">
 
-    <header class="main-header" id="mainHeader">
-        <div class="brand-combo">
-            <img src="klogo.png" alt="KoruVox" onerror="this.src='https://via.placeholder.com/100x35/000000/FFFFFF?text=KORUVOX'">
-            <div class="divider"></div>
-            <a href="koruvox.html" class="logo-text">Any<span>Kan</span></a>
+    <!-- REFINED ULTRA-SMOOTH AMBIENT BACKGROUND -->
+    <div class="fixed inset-0 z-[-1] bg-bgbase pointer-events-none">
+        <div class="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-[radial-gradient(circle,rgba(255,87,34,0.08)_0%,rgba(5,5,7,0)_70%)] animate-bg-pulse"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[70%] h-[70%] bg-[radial-gradient(circle,rgba(138,43,226,0.08)_0%,rgba(5,5,7,0)_70%)] animate-bg-pulse" style="animation-delay: -4s;"></div>
+        <div class="absolute inset-0 opacity-[0.02] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMSIvPjwvc3ZnPg==')] mix-blend-overlay"></div>
+    </div>
+
+    <!-- HEADER (CLEANED - NO GLOW, NO HOVER) -->
+    <header class="fixed top-0 left-0 right-0 flex justify-center items-center py-4 px-4 sm:px-[4%] bg-transparent z-[1000] transition-all duration-500 ease-in-out" id="mainHeader">
+        <div class="flex items-center gap-4 relative">
+            <img src="klogo.png" alt="KoruVox" class="h-[32px] sm:h-[38px] object-contain" onerror="this.src='https://via.placeholder.com/100x35/000000/FFFFFF?text=KORUVOX'">
+            <div class="w-[2px] h-[24px] bg-white/20 rounded-sm"></div>
+            <a href="koruvox.html" class="text-xl sm:text-2xl font-extrabold tracking-tight relative">
+                Any<span class="text-transparent bg-clip-text bg-gradient-to-r from-koruvox to-anykan">Kan</span>
+            </a>
         </div>
     </header>
 
-    <main class="container">
+    <main class="max-w-[1400px] mx-auto mt-[100px] px-4 sm:px-[4%]">
         
-        <div class="section-header">
-            <h2 class="section-title">KoruVox Exclusives</h2>
-        </div>
-        <div class="drama-grid" id="exclusive-grid">
-            <p style="color:var(--text-muted-color); padding: 20px;"><i class="fas fa-spinner fa-spin"></i> Syncing network...</p>
+        <!-- EXCLUSIVES HEADER -->
+        <div class="flex items-center mb-6 mt-[40px] relative">
+            <h2 class="text-xl sm:text-2xl font-black flex items-center gap-3 tracking-wide uppercase">
+                <i class="fas fa-crown text-transparent bg-clip-text bg-collab-gradient text-2xl drop-shadow-[0_0_10px_rgba(255,87,34,0.3)]"></i> 
+                KoruVox Exclusives
+            </h2>
         </div>
 
-        <div class="featured-showcase" id="featured-showcase" style="display: none;">
-            <div class="coming-soon-badge">
-                <h2><i class="fas fa-fire" style="color: var(--koruvox-color);"></i> COMING SOON</h2>
-                <span>· UPCOMING RELEASES</span>
-            </div>
-            <p class="featured-desc">Don't miss the next big hits — stay tuned for new arrivals and exclusive content curated just for you.</p>
+        <!-- PC ONLY FILTERS (Hidden on Mobile) -->
+        <div class="hidden lg:flex gap-3 mb-8 overflow-x-auto pb-2 no-scrollbar" id="content-filters">
+            <button class="filter-btn active group relative overflow-hidden bg-white/5 border border-white/10 text-gray-400 px-6 py-2.5 rounded-full font-semibold text-sm whitespace-nowrap transition-all duration-400 hover:border-white/30 hover:text-white" data-filter="all">
+                <div class="absolute inset-0 bg-collab-gradient opacity-0 transition-opacity duration-400 -z-10"></div>
+                All Content
+            </button>
+            <button class="filter-btn group relative overflow-hidden bg-white/5 border border-white/10 text-gray-400 px-6 py-2.5 rounded-full font-semibold text-sm whitespace-nowrap transition-all duration-400 hover:border-white/30 hover:text-white" data-filter="anime">
+                <div class="absolute inset-0 bg-collab-gradient opacity-0 transition-opacity duration-400 -z-10"></div>
+                Anime
+            </button>
+            <button class="filter-btn group relative overflow-hidden bg-white/5 border border-white/10 text-gray-400 px-6 py-2.5 rounded-full font-semibold text-sm whitespace-nowrap transition-all duration-400 hover:border-white/30 hover:text-white" data-filter="series">
+                <div class="absolute inset-0 bg-collab-gradient opacity-0 transition-opacity duration-400 -z-10"></div>
+                Series & Dramas
+            </button>
+            <button class="filter-btn group relative overflow-hidden bg-white/5 border border-white/10 text-gray-400 px-6 py-2.5 rounded-full font-semibold text-sm whitespace-nowrap transition-all duration-400 hover:border-white/30 hover:text-white" data-filter="movie">
+                <div class="absolute inset-0 bg-collab-gradient opacity-0 transition-opacity duration-400 -z-10"></div>
+                Movies
+            </button>
+        </div>
+
+        <!-- EXCLUSIVES GRID -->
+        <div class="flex overflow-x-auto py-5 pb-12 scroll-smooth gap-6 no-scrollbar" id="exclusive-grid">
+            <p class="text-gray-400 p-5"><i class="fas fa-spinner fa-spin mr-2"></i> Syncing network...</p>
+        </div>
+
+        <!-- UPCOMING / COMING SOON SECTION -->
+        <div class="relative overflow-hidden bg-[#0d0d12]/80 border border-white/5 rounded-[32px] p-6 sm:p-10 mb-16 shadow-2xl backdrop-blur-xl group hover:border-white/10 transition-colors duration-500" id="featured-showcase" style="display: none;">
+            <div class="absolute -top-[50%] -left-[50%] w-[200%] h-[200%] bg-[radial-gradient(circle,rgba(138,43,226,0.05)_0%,transparent_50%)] pointer-events-none animate-spin-slow"></div>
             
-            <div class="drama-grid" id="featured-carousel">
-                </div>
+            <div class="flex items-center gap-4 mb-4 relative z-10">
+                <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-anykan via-pink-500 to-koruvox text-2xl sm:text-3xl font-black tracking-wide m-0">COMING SOON</h2>
+                <span class="text-gray-500 text-xs sm:text-sm font-bold tracking-[0.2em] uppercase">· Upcoming Releases</span>
+            </div>
+            <p class="text-gray-400 text-sm sm:text-base mb-8 max-w-2xl leading-relaxed relative z-10">Don't miss the next big hits — stay tuned for new arrivals and exclusive content curated just for you.</p>
+            
+            <div class="flex overflow-x-auto py-4 gap-6 no-scrollbar relative z-10" id="featured-carousel">
+                <!-- Content injected via JS -->
+            </div>
         </div>
 
-        <div id="continue-watching-section" style="display: none;">
-            <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-history"></i> Watch History</h2>
+        <!-- CONTINUE WATCHING -->
+        <div id="continue-watching-section" style="display: none;" class="mb-16">
+            <div class="flex items-center mb-6 relative">
+                <h2 class="text-xl sm:text-2xl font-black flex items-center gap-3 tracking-wide uppercase">
+                    <i class="fas fa-history text-transparent bg-clip-text bg-collab-gradient"></i> 
+                    Watch History
+                </h2>
             </div>
-            <div class="drama-grid" id="history-grid">
-                </div>
+            <div class="flex overflow-x-auto py-5 pb-10 gap-6 no-scrollbar" id="history-grid">
+                <!-- Injected via Local Storage Script -->
+            </div>
         </div>
+
+        <!-- ========================================== -->
+        <!-- ABOUT THE COLLABORATION BENTO -->
+        <!-- ========================================== -->
+        <section class="mb-20 mt-10 relative z-10 animate-slide-up-fade" id="about-collab" style="animation-delay: 0.4s;">
+            <!-- Header -->
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center justify-center gap-2 mb-4">
+                    <i class="fas fa-sparkles text-anykan text-sm"></i>
+                    <span class="text-transparent bg-clip-text bg-collab-gradient text-xs sm:text-sm font-bold tracking-[0.25em] uppercase">First AnyKan Exclusive Announcement</span>
+                    <i class="fas fa-sparkles text-koruvox text-sm"></i>
+                </div>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-black mb-4 leading-tight uppercase tracking-tight">
+                    A New Collaboration.<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-koruvox via-pink-500 to-anykan">A New Era of Entertainment.</span>
+                </h2>
+            </div>
+
+            <!-- Bento Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+                
+                <!-- Card 1: AnyKan (Purple Theme) -->
+                <div class="group relative bg-[#0d0d12]/60 backdrop-blur-md border border-white/5 rounded-[32px] p-8 overflow-hidden hover:border-anykan/40 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.01] hover:shadow-[0_20px_40px_rgba(138,43,226,0.15)] flex flex-col justify-between h-full">
+                    <div class="absolute -top-20 -right-20 w-48 h-48 bg-anykan/20 blur-[60px] rounded-full group-hover:bg-anykan/30 transition-all duration-700"></div>
+                    <div class="relative z-10">
+                        <div class="h-14 w-14 rounded-2xl bg-gradient-to-br from-anykan/20 to-transparent flex items-center justify-center mb-6 border border-anykan/30 text-anykan shadow-[0_0_15px_rgba(138,43,226,0.2)] animate-float-smooth">
+                            <i class="fas fa-play text-2xl ml-1"></i>
+                        </div>
+                        <h3 class="text-2xl font-black mb-3 text-white tracking-wide">AnyKan</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed font-medium">Your all-in-one destination for endless entertainment. Watch anything, from anywhere, with global access built exclusively for you.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: KoruVox (Orange Theme) -->
+                <div class="group relative bg-[#0d0d12]/60 backdrop-blur-md border border-white/5 rounded-[32px] p-8 overflow-hidden hover:border-koruvox/40 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.01] hover:shadow-[0_20px_40px_rgba(255,87,34,0.15)] flex flex-col justify-between h-full">
+                    <div class="absolute -bottom-20 -left-20 w-48 h-48 bg-koruvox/15 blur-[60px] rounded-full group-hover:bg-koruvox/30 transition-all duration-700"></div>
+                    <div class="relative z-10">
+                        <div class="h-14 w-14 rounded-2xl bg-gradient-to-br from-koruvox/20 to-transparent flex items-center justify-center mb-6 border border-koruvox/30 text-koruvox shadow-[0_0_15px_rgba(255,87,34,0.2)] animate-float-smooth" style="animation-delay: 1s;">
+                            <i class="fas fa-microphone-alt text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-black mb-3 text-white tracking-wide">KoruVox</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed font-medium">Bringing you the best high-quality Hindi dubs for anime, web series & movies. Faithful to the original story and feels, exclusively for Indian fans.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: The Vision -->
+                <div class="md:col-span-2 lg:col-span-1 group relative bg-[#0d0d12] border border-white/5 rounded-[32px] p-8 overflow-hidden hover:border-white/20 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.01] hover:shadow-[0_20px_40px_rgba(255,255,255,0.05)] flex flex-col justify-between h-full">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-3 mb-8">
+                            <div class="h-10 w-10 rounded-full bg-anykan flex items-center justify-center font-black text-white shadow-lg">A</div>
+                            <i class="fas fa-times text-gray-600 text-xs"></i>
+                            <div class="h-10 w-10 rounded-full bg-koruvox flex items-center justify-center font-black text-white shadow-lg">K</div>
+                        </div>
+                        <h3 class="text-xl sm:text-2xl font-black mb-3 text-white">This is just the beginning.</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed font-medium">More Hindi dubbed anime, movies, and web series are already in the works as AnyKan and KoruVox join forces to bring content closer to audiences.</p>
+                    </div>
+                    
+                    <div class="mt-8 flex items-center gap-3 text-[10px] sm:text-xs uppercase tracking-widest text-gray-500 font-bold relative z-10">
+                        <span class="w-10 h-[2px] bg-gradient-to-r from-anykan to-koruvox rounded-full"></span> The Future
+                    </div>
+                </div>
+            </div>
+        </section>
 
     </main>
 
-    <nav class="bottom-nav">
-        <a href="index.html" class="bottom-nav-item active">
-            <i class="fa-solid fa-house nav-icon"></i>
-            <span class="nav-label">Home</span>
-        </a>
-       <a href="community.html" class="bottom-nav-item">
-            <i class="fa-solid fa-bell nav-icon"></i>
-            <span class="nav-label">Updates</span>
-        </a>
-        <a href="mylist.html" class="bottom-nav-item">
-            <i class="fa-solid fa-bookmark nav-icon"></i>
-            <span class="nav-label">My List</span>
-        </a>
-        <a href="login.html" class="bottom-nav-item" id="bottomAuthBtn">
-            <i class="fa-solid fa-user nav-icon"></i>
-            <span class="nav-label">Profile</span>
-        </a>
+    <!-- MOBILE BOTTOM NAV (Updated to Horizontal Filter Pills) -->
+    <nav class="flex lg:hidden fixed bottom-5 left-0 right-0 w-full px-4 z-[9999] pointer-events-none">
+        <div class="bg-[#0a0a0f]/90 backdrop-blur-2xl border border-white/10 rounded-full w-full py-2 px-2.5 shadow-2xl flex items-center gap-2 overflow-x-auto no-scrollbar pointer-events-auto">
+            
+            <a href="index.html" class="shrink-0 flex items-center gap-2 bg-white/5 border border-white/10 text-gray-400 px-5 py-2.5 rounded-full font-semibold text-sm transition-all hover:text-white hover:border-white/30">
+                <i class="fa-solid fa-house"></i> Home
+            </a>
+            
+            <!-- Mobile Filters -->
+            <button class="filter-btn active shrink-0 relative overflow-hidden bg-white/5 border border-white/10 text-gray-400 px-5 py-2.5 rounded-full font-semibold text-sm transition-all hover:text-white hover:border-white/30" data-filter="all">
+                <div class="absolute inset-0 bg-collab-gradient opacity-0 transition-opacity duration-400 -z-10"></div>
+                All Content
+            </button>
+            <button class="filter-btn shrink-0 relative overflow-hidden bg-white/5 border border-white/10 text-gray-400 px-5 py-2.5 rounded-full font-semibold text-sm transition-all hover:text-white hover:border-white/30" data-filter="anime">
+                <div class="absolute inset-0 bg-collab-gradient opacity-0 transition-opacity duration-400 -z-10"></div>
+                Anime
+            </button>
+            <button class="filter-btn shrink-0 relative overflow-hidden bg-white/5 border border-white/10 text-gray-400 px-5 py-2.5 rounded-full font-semibold text-sm transition-all hover:text-white hover:border-white/30" data-filter="series">
+                <div class="absolute inset-0 bg-collab-gradient opacity-0 transition-opacity duration-400 -z-10"></div>
+                Series & Dramas
+            </button>
+            <button class="filter-btn shrink-0 relative overflow-hidden bg-white/5 border border-white/10 text-gray-400 px-5 py-2.5 rounded-full font-semibold text-sm transition-all hover:text-white hover:border-white/30" data-filter="movie">
+                <div class="absolute inset-0 bg-collab-gradient opacity-0 transition-opacity duration-400 -z-10"></div>
+                Movies
+            </button>
+
+        </div>
     </nav>
 
+    <!-- LOGIC SCRIPT -->
     <script type="module">
-        // 1. Firebase Initialization
         const firebaseConfig = {
             apiKey: "AIzaSyB7i67_T7fs87BHIY2Pxs6KRAknhXrowIA",
             authDomain: "dramakan007.firebaseapp.com",
             projectId: "dramakan007"
         };
 
-        let db, auth;
+        let db;
+        let allKoruContent = []; 
 
         async function initFirebase() {
             try {
-                const [appModule, authModule, firestoreModule] = await Promise.all([
+                const [appModule, firestoreModule] = await Promise.all([
                     import("https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"),
-                    import("https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"),
                     import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js")
                 ]);
                 const app = !appModule.getApps().length ? appModule.initializeApp(firebaseConfig) : appModule.getApp();
-                auth = authModule.getAuth(app);
                 db = firestoreModule.getFirestore(app);
 
-                // Setup Auth Listener for History Sync
-                authModule.onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        syncWatchHistory(user.uid, firestoreModule);
-                    } else {
-                        document.getElementById('continue-watching-section').style.display = 'none';
-                    }
-                });
-
-                // Fetch Live DB Content Once Connected
                 fetchCuratedContent(firestoreModule);
 
             } catch (err) {
                 console.error("Firebase init failed:", err);
-                document.getElementById('exclusive-grid').innerHTML = '<p style="color:var(--danger); padding: 20px;">Database connection failed.</p>';
+                document.getElementById('exclusive-grid').innerHTML = '<p class="text-red-500 p-5">Database connection failed.</p>';
             }
         }
 
-        // 2. Sync History from Subcollection
-        function syncWatchHistory(uid, firestoreModule) {
-            const { collection, onSnapshot } = firestoreModule;
-            const historyRef = collection(db, "users", uid, "history");
+        function loadLocalHistory() {
+            const historyGrid = document.getElementById('history-grid');
+            const historySection = document.getElementById('continue-watching-section');
             
-            onSnapshot(historyRef, (snapshot) => {
-                const historyGrid = document.getElementById('history-grid');
-                let historyHtml = '';
-                let hasHistory = false;
-
-                snapshot.forEach(doc => {
-                    hasHistory = true;
-                    const data = doc.data();
-                    const progress = data.progress || Math.floor(Math.random() * 50 + 20); 
-                    
-                    historyHtml += `
-                        <a href="koruwatch.html?id=${doc.id}" class="cw-card">
-                            <img src="${data.imgUrl || 'https://via.placeholder.com/300x170?text=No+Image'}" class="cw-img" alt="${data.title}">
-                            <div class="cw-progress">
-                                <div class="cw-bar" style="width: ${progress}%;"></div>
-                            </div>
-                            <div class="cw-info">
-                                <h4 class="cw-title">${data.title}</h4>
-                                <div class="cw-meta">
-                                    <span><i class="fas fa-play"></i> S${data.season || 1} · Ep ${data.episode || 1}</span>
-                                    <span>${data.timeLeft ? data.timeLeft + 'm left' : ''}</span>
-                                </div>
-                            </div>
-                        </a>
-                    `;
-                });
-
-                if (hasHistory) {
-                    historyGrid.innerHTML = historyHtml;
-                    document.getElementById('continue-watching-section').style.display = 'block';
-                }
-            });
-        }
-
-        // 3. Live DB Fetch from KoruVox Admin
-        async function fetchCuratedContent(firestoreModule) {
-            const { collection, getDocs } = firestoreModule;
             try {
-                // We fetch all records and filter in JS to prevent you from getting Firebase Indexing Errors
-                const snap = await getDocs(collection(db, "koruvox_content"));
+                const histRaw = localStorage.getItem('dramakan_history');
+                if (!histRaw) return;
                 
-                let allItems = [];
-                snap.forEach(doc => {
-                    allItems.push({ id: doc.id, ...doc.data() });
+                const histObj = JSON.parse(histRaw);
+                const histArray = Object.values(histObj)
+                                        .sort((a, b) => b.timestamp - a.timestamp)
+                                        .slice(0, 10);
+                
+                if (histArray.length === 0) return;
+
+                let historyHtml = '';
+                histArray.forEach((data, index) => {
+                    if (data.link && data.link.includes('koruwatch.html')) {
+                        const progress = Math.floor(Math.random() * 50 + 20); 
+                        const animDelay = index * 0.1;
+                        
+                        historyHtml += `
+                            <a href="${data.link}" class="group flex flex-col min-w-[280px] w-[280px] bg-[#0d0d12] border border-white/5 rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:border-white/20 hover:shadow-[0_15px_30px_rgba(0,0,0,0.5)] shrink-0 relative opacity-0 animate-slide-up-fade" style="animation-delay: ${animDelay}s">
+                                <div class="overflow-hidden aspect-video">
+                                    <img src="${data.backdrop_path || data.img || 'https://via.placeholder.com/300x168?text=No+Image'}" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 group-hover:brightness-90" alt="${data.title}">
+                                </div>
+                                <div class="w-full h-1 bg-black/50 relative z-20">
+                                    <div class="h-full bg-collab-gradient shadow-[0_0_10px_#FF5722] relative" style="width: ${progress}%;">
+                                        <div class="absolute right-0 -top-0.5 w-2 h-2 bg-white rounded-full shadow-[0_0_10px_#fff]"></div>
+                                    </div>
+                                </div>
+                                <div class="p-4 relative z-20 bg-[#0d0d12]">
+                                    <h4 class="text-sm sm:text-base font-bold whitespace-nowrap overflow-hidden text-ellipsis mb-1 text-white">${data.title}</h4>
+                                    <div class="text-xs text-gray-400 flex justify-between font-medium">
+                                        <span><i class="fas fa-play text-koruvox mr-1.5"></i> S${data.season || 1} · Ep ${data.episode || 1}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        `;
+                    }
                 });
 
-                // Sort by newest first
-                allItems.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-
-                const exclusives = allItems.filter(item => item.status === "Exclusive");
-                const upcoming = allItems.filter(item => item.status === "Upcoming");
-
-                // --- Render Exclusives ---
-                const exclusiveGrid = document.getElementById('exclusive-grid');
-                if (exclusives.length > 0) {
-                    exclusiveGrid.innerHTML = exclusives.map(item => `
-                        <a href="koruwatch.html?id=${item.id}" class="poster-card">
-                            <img src="${item.img}" loading="lazy" alt="${item.title}" onerror="this.src='https://via.placeholder.com/150x225?text=No+Image'">
-                            <div class="poster-info">
-                                <h3>${item.title}</h3>
-                                <p>${item.type}</p>
-                            </div>
-                        </a>
-                    `).join('');
-                } else {
-                    exclusiveGrid.innerHTML = '<p style="color:var(--text-muted-color); padding: 20px;">Stay tuned! More exclusives are being deployed.</p>';
-                }
-
-                // --- Render Upcoming ---
-                const carousel = document.getElementById('featured-carousel');
-                if (upcoming.length > 0) {
-                    document.getElementById('featured-showcase').style.display = 'block';
-                    carousel.innerHTML = upcoming.map(item => `
-                        <div class="featured-card">
-                            <img src="${item.img}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/300x168?text=No+Image'">
-                            <div class="fc-content">
-                                <h3 class="fc-title">${item.title}</h3>
-                                <div class="fc-tags"><i class="fas fa-tag"></i> ${item.type}</div>
-                                <p class="fc-synopsis">${item.synopsis}</p>
-                                <div class="fc-actions">
-                                    <a href="koruwatch.html?id=${item.id}" class="btn-watch">WATCH PREVIEW</a>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
-                } else {
-                    document.getElementById('featured-showcase').style.display = 'none';
+                if (historyHtml !== '') {
+                    historyGrid.innerHTML = historyHtml;
+                    historySection.style.display = 'block';
                 }
 
             } catch (e) {
-                console.error("Firebase Database Load Error:", e);
-                document.getElementById('exclusive-grid').innerHTML = '<p style="color:var(--danger); padding: 20px;">Failed to load server data. Check permissions.</p>';
+                console.warn("Could not load local history", e);
             }
         }
 
-        // --- UI Interactions ---
+        async function fetchCuratedContent(firestoreModule) {
+            const { collection, getDocs } = firestoreModule;
+            try {
+                const snap = await getDocs(collection(db, "koruvox_content"));
+                
+                allKoruContent = [];
+                snap.forEach(doc => {
+                    allKoruContent.push({ id: doc.id, ...doc.data() });
+                });
+
+                allKoruContent.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+                renderExclusives('all');
+                renderUpcoming();
+
+            } catch (e) {
+                console.error("Firebase Database Load Error:", e);
+                document.getElementById('exclusive-grid').innerHTML = '<p class="text-red-500 p-5">Failed to load server data. Check permissions.</p>';
+            }
+        }
+
+        function renderExclusives(filterType) {
+            const exclusiveGrid = document.getElementById('exclusive-grid');
+            let filtered = allKoruContent.filter(item => item.status === "Exclusive");
+
+            if (filterType === 'anime') {
+                filtered = filtered.filter(item => item.type && item.type.toLowerCase().includes('anime'));
+            } else if (filterType === 'movie') {
+                filtered = filtered.filter(item => item.type && item.type.toLowerCase().includes('movie'));
+            } else if (filterType === 'series') {
+                filtered = filtered.filter(item => item.type && !item.type.toLowerCase().includes('movie') && !item.type.toLowerCase().includes('anime'));
+            }
+
+            if (filtered.length > 0) {
+                exclusiveGrid.innerHTML = filtered.map((item, index) => {
+                    const animDelay = index * 0.1;
+                    return `
+                    <a href="koruwatch.html?id=${item.id}" class="group relative min-w-[280px] w-[280px] aspect-video rounded-[16px] shrink-0 block overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_20px_40px_rgba(255,87,34,0.2)] bg-[#0d0d12] border border-white/5 hover:border-koruvox/60 opacity-0 animate-slide-up-fade" style="animation-delay: ${animDelay}s;">
+                        <img src="${item.img}" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 group-hover:brightness-110" loading="lazy" alt="${item.title}" onerror="this.src='https://via.placeholder.com/300x168?text=No+Image'">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent p-4 flex flex-col justify-end opacity-0 transition-all duration-400 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0">
+                            <h3 class="text-sm text-white font-bold mb-1 truncate drop-shadow-md">${item.title}</h3>
+                            <p class="text-[10px] text-anykan font-bold uppercase tracking-wider">${item.type}</p>
+                        </div>
+                    </a>
+                `}).join('');
+            } else {
+                exclusiveGrid.innerHTML = '<p class="text-gray-400 p-5 w-full text-center">No content found for this category.</p>';
+            }
+        }
+
+        function renderUpcoming() {
+            const upcoming = allKoruContent.filter(item => item.status === "Upcoming");
+            const carousel = document.getElementById('featured-carousel');
+            
+            if (upcoming.length > 0) {
+                document.getElementById('featured-showcase').style.display = 'block';
+                carousel.innerHTML = upcoming.map((item, index) => {
+                    const animDelay = index * 0.1;
+                    return `
+                    <div class="group flex flex-col min-w-[320px] w-[320px] bg-[#0d0d12] border border-white/5 rounded-[20px] overflow-hidden shrink-0 relative z-10 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_20px_40px_rgba(138,43,226,0.15)] hover:border-anykan/50 opacity-0 animate-slide-up-fade" style="animation-delay: ${animDelay}s;">
+                        <div class="overflow-hidden aspect-video relative">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#0d0d12] to-transparent z-10"></div>
+                            <img src="${item.img}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="${item.title}" onerror="this.src='https://via.placeholder.com/300x168?text=No+Image'">
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col bg-[#0d0d12] relative z-20 -mt-6">
+                            <h3 class="text-lg font-black mb-2 text-white">${item.title}</h3>
+                            <div class="text-xs text-anykan font-bold uppercase mb-4 tracking-wider"><i class="fas fa-tag text-koruvox mr-1.5"></i> ${item.type}</div>
+                            <p class="text-sm text-gray-400 mb-6 line-clamp-3 leading-relaxed font-medium">${item.synopsis}</p>
+                            <div class="flex justify-end mt-auto">
+                                <a href="koruwatch.html?id=${item.id}" class="inline-block bg-white/5 border border-white/10 text-white py-2 px-6 rounded-full font-bold text-sm tracking-wide transition-all duration-300 hover:bg-collab-gradient hover:border-transparent hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(255,87,34,0.3)]">PREVIEW</a>
+                            </div>
+                        </div>
+                    </div>
+                `}).join('');
+            } else {
+                document.getElementById('featured-showcase').style.display = 'none';
+            }
+        }
+
+        // Updated Syncing Filter Logic
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const target = e.currentTarget;
+                const filterVal = target.getAttribute('data-filter');
+
+                // Reset all buttons
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('text-white', 'border-transparent');
+                    b.classList.add('text-gray-400', 'border-white/10');
+                    b.querySelector('div').classList.remove('opacity-100');
+                    b.querySelector('div').classList.add('opacity-0');
+                });
+                
+                // Activate matching buttons on both PC and Mobile views
+                document.querySelectorAll(`.filter-btn[data-filter="${filterVal}"]`).forEach(activeBtn => {
+                    activeBtn.classList.remove('text-gray-400', 'border-white/10');
+                    activeBtn.classList.add('text-white', 'border-transparent');
+                    activeBtn.querySelector('div').classList.remove('opacity-0');
+                    activeBtn.querySelector('div').classList.add('opacity-100');
+                });
+                
+                renderExclusives(filterVal);
+            });
+        });
+
         window.addEventListener('scroll', () => {
             const header = document.getElementById('mainHeader');
             if (window.scrollY > 20) {
-                header.classList.add('scrolled');
+                header.classList.add('bg-[#050507]/80', 'backdrop-blur-xl', 'border-b', 'border-white/5', 'shadow-[0_10px_30px_rgba(0,0,0,0.5)]');
+                header.classList.remove('bg-transparent');
             } else {
-                header.classList.remove('scrolled');
+                header.classList.remove('bg-[#050507]/80', 'backdrop-blur-xl', 'border-b', 'border-white/5', 'shadow-[0_10px_30px_rgba(0,0,0,0.5)]');
+                header.classList.add('bg-transparent');
             }
         });
 
-        // Start App
+        document.addEventListener('DOMContentLoaded', () => {
+            // Apply Initial Clean Active Styles
+            document.querySelectorAll('.filter-btn.active').forEach(activeBtn => {
+                activeBtn.classList.remove('text-gray-400', 'border-white/10');
+                activeBtn.classList.add('text-white', 'border-transparent');
+                activeBtn.querySelector('div').classList.remove('opacity-0');
+                activeBtn.querySelector('div').classList.add('opacity-100');
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             initFirebase();
+            loadLocalHistory();
         });
     </script>
 </body>
