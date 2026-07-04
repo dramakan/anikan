@@ -6,7 +6,7 @@
     <title>Drama Details - Anykan</title>
 
     <meta id="seo-description" name="description" content="Watch your favorite dramas on Anykan.">
-    <meta id="seo-keywords" name="keywords" content="Anykan, kdrama, watch drama online">
+    <meta id="seo-keywords" name="keywords" content="Anykan, kdrama, watch content online">
     
     <meta id="og-title" property="og:title" content="Drama Details - Anykan">
     <meta id="og-description" property="og:description" content="Watch your favorite dramas on Anykan.">
@@ -88,8 +88,8 @@
         }
         .poster-wrapper img { width: 100%; display: block; object-fit: cover; aspect-ratio: 2/3; }
 
-        .drama-info { animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .drama-info h1 { font-size: 3.5rem; line-height: 1.1; margin: 0 0 10px 0; font-weight: 800; }
+        .content-info { animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .content-info h1 { font-size: 3.5rem; line-height: 1.1; margin: 0 0 10px 0; font-weight: 800; }
         
         .meta-tags { display: flex; gap: 12px; flex-wrap: wrap; color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; align-items: center;}
         .tag-pill { background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); padding: 4px 12px; border-radius: 50px; color: #fff; font-size: 0.85rem;}
@@ -224,8 +224,8 @@
 
             .poster-wrapper { width: 100%; max-width: 104px; margin: 0; border-radius: 10px; grid-column: 1 / 2; grid-row: 1 / 2; min-width: 0; }
 
-            /* Unbox drama-info so its children can sit directly in the hero grid */
-            .drama-info { display: contents; }
+            /* Unbox content-info so its children can sit directly in the hero grid */
+            .content-info { display: contents; }
 
             .hero-title-meta {
                 grid-column: 2 / 3; grid-row: 1 / 2;
@@ -237,7 +237,7 @@
                 animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             }
 
-            .drama-info h1 { font-size: 1.35rem; line-height: 1.2; margin-bottom: 6px; font-weight: 700; overflow-wrap: break-word; word-break: break-word; }
+            .content-info h1 { font-size: 1.35rem; line-height: 1.2; margin-bottom: 6px; font-weight: 700; overflow-wrap: break-word; word-break: break-word; }
             .meta-tags { gap: 6px; row-gap: 6px; margin-bottom: 0; }
             .tag-pill { padding: 3px 9px; font-size: 0.7rem; }
             #ui-status { font-size: 0.8rem; }
@@ -302,7 +302,7 @@
         @media (max-width: 380px) {
             .hero-content { grid-template-columns: 84px 1fr; gap: 12px 14px; }
             .poster-wrapper { max-width: 84px; }
-            .drama-info h1 { font-size: 1.15rem; }
+            .content-info h1 { font-size: 1.15rem; }
             .cast-card { flex: 0 0 84px; }
             .cast-card img { width: 84px; height: 126px; }
         }
@@ -339,7 +339,7 @@
                 <img id="ui-poster" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Poster">
             </div>
             
-            <div class="drama-info">
+            <div class="content-info">
                 <div class="hero-title-meta">
                     <h1 id="ui-title">Loading Details...</h1>
                     <div class="meta-tags">
@@ -351,7 +351,7 @@
                 </div>
                 
                 <div class="hero-synopsis-actions">
-                    <p class="synopsis" id="ui-synopsis">Brewing magic to fetch drama details...</p>
+                    <p class="synopsis" id="ui-synopsis">Brewing magic to fetch content details...</p>
 
                     <div class="actions-row">
                         <a href="#" id="btn-watch-now" class="btn-watch">
@@ -425,7 +425,7 @@
                             <i class="fas fa-star" data-val="5"></i>
                         </div>
                     </div>
-                    <textarea id="review-text" class="review-input" placeholder="What did you think of this drama?"></textarea>
+                    <textarea id="review-text" class="review-input" placeholder="What did you think of this content?"></textarea>
                     <div style="text-align: right;">
                         <button id="btn-submit-review" class="btn-submit-review">Post Review</button>
                     </div>
@@ -576,7 +576,7 @@
             }
 
             if (!res) {
-                document.getElementById('ui-synopsis').textContent = "Failed to load drama details.";
+                document.getElementById('ui-synopsis').textContent = "Failed to load content details.";
                 return;
             }
 
@@ -586,7 +586,7 @@
                 updateSEO();
                 initReviews();
             } catch (err) {
-                document.getElementById('ui-synopsis').textContent = "Failed to load drama details.";
+                document.getElementById('ui-synopsis').textContent = "Failed to load content details.";
             }
         }
 
@@ -688,7 +688,7 @@
 
             // Generate Automated Keywords Contextually
             const genreList = activeData.genres?.map(g => g.name.toLowerCase()) || [];
-            const nativeKeywords = ['Anykan', 'watch drama online', typeLabel.toLowerCase(), title.toLowerCase()];
+            const nativeKeywords = ['Anykan', 'watch content online', typeLabel.toLowerCase(), title.toLowerCase()];
             const integratedKeywords = [...nativeKeywords, ...genreList, `${title} stream`, `watch ${title} free`].join(', ');
 
             document.title = `${title} - Drama Details | Anykan`;
@@ -824,7 +824,7 @@
                 const reviewList = document.getElementById('user-reviews-list');
                 reviewList.innerHTML = '';
                 if (snapshot.empty) {
-                    reviewList.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">No reviews yet. Be the first to review this drama!</p>';
+                    reviewList.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">No reviews yet. Be the first to review this content!</p>';
                     return;
                 }
                 snapshot.forEach((docSnap) => {
