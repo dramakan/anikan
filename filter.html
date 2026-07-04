@@ -495,7 +495,7 @@
                     if (mediaType === 'tv' && item.genre_ids && item.genre_ids.includes(16) && item.original_language === 'ja') mediaLabel = 'Anime';
 
                     html += `
-                        <a href="watch.html?id=${item.id}" class="drama-card" style="transition-delay: ${delay}s">
+                        <a href="details.html?id=${item.id}" class="drama-card" style="transition-delay: ${delay}s">
                             <img src="${poster}" alt="${title}" loading="lazy">
                             <div class="card-meta-top"><i class="fas fa-star"></i> ${rating}</div>
                             <div class="card-overlay">

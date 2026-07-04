@@ -910,7 +910,7 @@
                 if (inListIdx > -1) {
                     profileMyList.splice(inListIdx, 1);
                 } else {
-                    profileMyList.push({ id: String(dramaId), title: activeData.title, img: activeData.img, link: `watch.html?id=${dramaId}`, timestamp: Date.now() });
+                    profileMyList.push({ id: String(dramaId), title: activeData.title, img: activeData.img, link: `details.html?id=${dramaId}`, timestamp: Date.now() });
                 }
                 
                 updateWatchlistUI();
@@ -938,7 +938,7 @@
                 if (inFavIdx > -1) {
                     profileFavorites.splice(inFavIdx, 1);
                 } else {
-                    profileFavorites.push({ id: String(dramaId), title: activeData.title, img: activeData.img, link: `watch.html?id=${dramaId}`, timestamp: Date.now() });
+                    profileFavorites.push({ id: String(dramaId), title: activeData.title, img: activeData.img, link: `details.html?id=${dramaId}`, timestamp: Date.now() });
                 }
                 
                 updateFavoriteUI();
@@ -1162,7 +1162,7 @@
                 historyObj[dramaId] = {
                     title: activeData.title,
                     img: activeData.img,
-                    link: `watch.html?id=${dramaId}`,
+                    link: `details.html?id=${dramaId}`,
                     timestamp: Date.now(),
                     season: targetSeason,
                     episode: targetEp,
@@ -1194,7 +1194,7 @@
                             dramaId: String(dramaId),
                             title: activeData.title,
                             img: activeData.img,
-                            link: `watch.html?id=${dramaId}`,
+                            link: `details.html?id=${dramaId}`,
                             season: targetSeason,
                             episode: targetEp,
                             timestamp: Date.now()
@@ -1456,7 +1456,7 @@
                 const rating = rec.vote_average ? rec.vote_average.toFixed(1) : 'N/A';
                 
                 return `
-                <a href="watch.html?id=${rec.id}" class="rec-card">
+                <a href="details.html?id=${rec.id}" class="rec-card">
                     <img src="${poster}" alt="Poster" onerror="this.src='default-poster.jpg'">
                     <div class="rec-info">
                         <h4>${title}</h4>

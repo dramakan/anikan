@@ -487,7 +487,7 @@
                             </div>
                             <div class="cms-group full-width"><label>Header Phrase</label><input type="text" id="notif-title" class="admin-input" placeholder="e.g., System Update 2.0" required></div>
                             <div class="cms-group full-width"><label>Payload Message</label><textarea id="notif-message" class="admin-input" rows="4" placeholder="Enter transmission data..." required></textarea></div>
-                            <div class="cms-group full-width"><label>Redirect URI (Optional)</label><input type="text" id="notif-link" class="admin-input" placeholder="e.g., watch.html?id=target_id"></div>
+                            <div class="cms-group full-width"><label>Redirect URI (Optional)</label><input type="text" id="notif-link" class="admin-input" placeholder="e.g., details.html?id=target_id"></div>
 
                             <div style="grid-column: 1 / -1; margin-top: 15px;">
                                 <button type="submit" id="btn-broadcast" class="btn-primary"><i class="fas fa-satellite-dish"></i> Execute Broadcast</button>
@@ -619,7 +619,7 @@
                         <td><span class="status-badge status-neutral">${data.type}</span></td>
                         <td><span style="color: var(--text-muted); font-family: monospace; font-size: 1.05rem;">${data.totalEps}</span></td>
                         <td class="action-buttons-cell">
-                            <button class="icon-btn copy" onclick="copyDramaLink('watch.html?id=${id}')" title="Copy Link"><i class="fas fa-link"></i></button>
+                            <button class="icon-btn copy" onclick="copyDramaLink('details.html?id=${id}')" title="Copy Link"><i class="fas fa-link"></i></button>
                             <button class="icon-btn edit" onclick="startEditDrama('${id}')" title="Edit Metadata"><i class="fas fa-pen"></i></button>
                             <button class="icon-btn delete" onclick="deleteDrama('${id}')" title="Purge Record"><i class="fas fa-trash"></i></button>
                         </td>
@@ -820,7 +820,7 @@
                 const dramaData = { 
                     title: document.getElementById('cms-title').value.trim(), 
                     img: document.getElementById('cms-img').value.trim(), 
-                    link: `watch.html?id=${targetRef.id}`, 
+                    link: `details.html?id=${targetRef.id}`, 
                     synopsis: document.getElementById('cms-synopsis').value.trim(), 
                     imdbId: imdbIdToCheck, 
                     tmdbId: tmdbIdToSave,
@@ -897,7 +897,7 @@
         }
         
        window.markRequestUploaded = async function(id) {
-            const dramaLink = prompt("Target URI for fulfillment (e.g., watch.html?id=target_id):");
+            const dramaLink = prompt("Target URI for fulfillment (e.g., details.html?id=target_id):");
             if (dramaLink === null) return; 
             await updateDoc(doc(db, "requests", id), { status: "Uploaded", notified: false, link: dramaLink });
             loadRequests();
