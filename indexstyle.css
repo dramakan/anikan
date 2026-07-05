@@ -993,3 +993,107 @@ img { max-width: 100%; height: auto; display: block; }
     border-radius: 4px;
     z-index: 10;
 }
+/* --- KORUVOX COLLAB UI STYLES --- */
+.koruvox-floating-btn {
+    position: fixed;
+    bottom: 85px; /* Sits perfectly above your mobile bottom-nav */
+    right: 20px;
+    background: linear-gradient(135deg, #8A2BE2 0%, #6a1b9a 100%);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 10px 18px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    z-index: 99990; /* Sits under mobile nav overlays but above content */
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.5);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.koruvox-floating-btn:hover { transform: translateY(-5px) scale(1.05); }
+
+/* Live Pulse Indicator */
+.koruvox-pulse {
+    width: 10px; height: 10px;
+    background-color: #ff0055;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7);
+    animation: pulse-red 2s infinite;
+}
+@keyframes pulse-red {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 0, 85, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); }
+}
+
+.koruvox-text { color: #fff; font-weight: 600; font-size: 0.9rem; letter-spacing: 0.5px; }
+
+/* Modal Background Overlay */
+.koruvox-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(5, 5, 7, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 9999999;
+    display: flex; justify-content: center; align-items: center;
+    opacity: 1; transition: opacity 0.4s ease;
+}
+.koruvox-modal-overlay.hidden { opacity: 0; pointer-events: none; }
+
+/* Modal Box - Matches your Glassmorphism */
+.koruvox-modal-content {
+    background: rgba(20, 20, 28, 0.95);
+    border: 1px solid rgba(138, 43, 226, 0.4);
+    border-radius: 20px;
+    width: 90%; max-width: 420px;
+    padding: 30px; position: relative;
+    transform: translateY(0) scale(1);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(138,43,226,0.1);
+    text-align: center;
+}
+.koruvox-modal-overlay.hidden .koruvox-modal-content { transform: translateY(50px) scale(0.9); }
+
+/* Close Button */
+.koruvox-close {
+    position: absolute; top: 15px; right: 15px;
+    background: rgba(255,255,255,0.1); border: none; border-radius: 50%;
+    width: 32px; height: 32px; color: #fff; cursor: pointer; transition: background 0.3s;
+}
+.koruvox-close:hover { background: rgba(255,255,255,0.2); }
+
+/* Internal Typography & Elements */
+.koruvox-badges { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; }
+.badge-anykan, .badge-koruvox { padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; }
+.badge-anykan { background: rgba(138,43,226,0.15); color: #8A2BE2; border: 1px solid rgba(138,43,226,0.3); }
+.badge-koruvox { background: rgba(255,0,85,0.15); color: #ff0055; border: 1px solid rgba(255,0,85,0.3); }
+.koruvox-modal-header h2 { font-size: 1.8rem; color: #fff; margin: 0 0 15px 0; font-weight: 700; }
+.highlight-live { color: #ff0055; text-shadow: 0 0 10px rgba(255,0,85,0.4); }
+.koruvox-modal-body p { color: #9CA3AF; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; }
+
+/* Promo Box */
+.koruvox-feature-box {
+    background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.1);
+    padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 15px;
+    text-align: left; margin-bottom: 25px;
+}
+.koruvox-feature-box i { color: #8A2BE2; font-size: 1.5rem; }
+.koruvox-feature-box span { color: #E5E7EB; font-size: 0.85rem; font-weight: 500; }
+
+/* Call to Action Button */
+.koruvox-action-btn {
+    display: block; width: 100%; padding: 14px; box-sizing: border-box;
+    background: linear-gradient(135deg, #8A2BE2 0%, #6a1b9a 100%);
+    color: #fff; text-decoration: none; border-radius: 12px;
+    font-weight: 600; font-size: 1.1rem; transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+}
+.koruvox-action-btn:hover {
+    transform: translateY(-2px); box-shadow: 0 6px 20px rgba(138, 43, 226, 0.6); color: #fff;
+}
+
+/* PC Placement Adjustments */
+@media (min-width: 993px) {
+    .koruvox-floating-btn { bottom: 30px; right: 30px; padding: 12px 24px; }
+    .koruvox-text { font-size: 1rem; }
+}

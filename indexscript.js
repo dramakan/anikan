@@ -814,3 +814,39 @@ async function initAuthSync() {
 }
 
 initAuthSync();
+// =========================================================================
+// KORUVOX COLLAB POPUP LOGIC
+// =========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const collabBtn = document.getElementById('koruvox-collab-btn');
+    const collabModal = document.getElementById('koruvox-collab-modal');
+    const closeCollabBtn = document.getElementById('koruvox-close-btn');
+
+    if (collabBtn && collabModal && closeCollabBtn) {
+        
+        // 1. Open modal when the floating button is clicked
+        collabBtn.addEventListener('click', () => {
+            collabModal.classList.remove('hidden');
+        });
+
+        // 2. Close modal when the "X" is clicked
+        closeCollabBtn.addEventListener('click', () => {
+            collabModal.classList.add('hidden');
+        });
+
+        // 3. Close modal if the user clicks outside of the modal box
+        collabModal.addEventListener('click', (e) => {
+            if (e.target === collabModal) {
+                collabModal.classList.add('hidden');
+            }
+        });
+        
+        // 4. (Optional UX) Auto-trigger the popup once per browser session
+        if (!sessionStorage.getItem('koruvox_collab_seen')) {
+            setTimeout(() => {
+                collabModal.classList.remove('hidden');
+                sessionStorage.setItem('koruvox_collab_seen', 'true');
+            }, 1500); // Pops up 1.5 seconds after page load
+        }
+    }
+});
