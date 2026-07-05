@@ -1215,7 +1215,8 @@
     </script>
 
     <script type="module" src="beta.js"></script>
-    <div id="koruvox-collab-btn" class="koruvox-floating-btn">
+    <!-- KORUVOX COLLAB UI -->
+<div id="koruvox-collab-btn" class="koruvox-floating-btn">
     <div class="koruvox-pulse"></div>
     <span class="koruvox-text">Koruvox Collab</span>
 </div>
@@ -1245,6 +1246,45 @@
         </div>
     </div>
 </div>
+
+<!-- KORUVOX LOGIC -->
+<script>
+    // Runs immediately after the HTML elements above are loaded
+    (function initKoruvoxPopup() {
+        const collabBtn = document.getElementById('koruvox-collab-btn');
+        const collabModal = document.getElementById('koruvox-collab-modal');
+        const closeCollabBtn = document.getElementById('koruvox-close-btn');
+
+        if (collabBtn && collabModal && closeCollabBtn) {
+            
+            // 1. Open modal when floating button is clicked
+            collabBtn.addEventListener('click', () => {
+                collabModal.classList.remove('hidden');
+            });
+
+            // 2. Close modal when the "X" is clicked
+            closeCollabBtn.addEventListener('click', () => {
+                collabModal.classList.add('hidden');
+            });
+
+            // 3. Close modal if the user clicks the dark overlay background
+            collabModal.addEventListener('click', (e) => {
+                if (e.target === collabModal) {
+                    collabModal.classList.add('hidden');
+                }
+            });
+            
+            // 4. Auto-trigger the popup once per browser session
+            if (!sessionStorage.getItem('koruvox_collab_seen')) {
+                setTimeout(() => {
+                    collabModal.classList.remove('hidden');
+                    sessionStorage.setItem('koruvox_collab_seen', 'true');
+                }, 1500);
+            }
+        }
+    })();
+</script>
+<!-- END KORUVOX COLLAB UI -->
 
 </body>
 </html>
