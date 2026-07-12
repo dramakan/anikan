@@ -705,7 +705,7 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching...';
 
             const omdbKey = "7739fdec"; 
-            const tmdbKey = "014fbdbe962cb38379e09e31d0652459";
+            const tmdbKey = "hidden_by_proxy";
 
             try {
                 // 1. Fetch Text Data from OMDb
@@ -744,7 +744,7 @@
 
                 // 2. Fetch TMDB Data
                 if (tmdbKey !== "YOUR_TMDB_API_KEY") {
-                    const findRes = await fetch(`https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`);
+                    const findRes = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`);
                     const findData = await findRes.json();
                     
                     let mediaType = '';
@@ -761,15 +761,15 @@
                     if (tmdbId) {
                         document.getElementById('cms-tmdb-id').value = tmdbId;
 
-                        const credRes = await fetch(`https://api.themoviedb.org/3/${mediaType}/${tmdbId}/credits?api_key=${tmdbKey}`);
+                        const credRes = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/${mediaType}/${tmdbId}/credits?api_key=${tmdbKey}`);
                         const credData = await credRes.json();
                         if (credData.cast && credData.cast.length > 0) {
-                            if (credData.cast[0]?.profile_path) document.getElementById('cms-actor1-img').value = `https://image.tmdb.org/t/p/w500${credData.cast[0].profile_path}`;
-                            if (credData.cast[1]?.profile_path) document.getElementById('cms-actor2-img').value = `https://image.tmdb.org/t/p/w500${credData.cast[1].profile_path}`;
+                            if (credData.cast[0]?.profile_path) document.getElementById('cms-actor1-img').value = `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w500${credData.cast[0].profile_path}`;
+                            if (credData.cast[1]?.profile_path) document.getElementById('cms-actor2-img').value = `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w500${credData.cast[1].profile_path}`;
                         }
 
                         if (mediaType === 'tv') {
-                            const detailRes = await fetch(`https://api.themoviedb.org/3/tv/${tmdbId}?api_key=${tmdbKey}`);
+                            const detailRes = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/tv/${tmdbId}?api_key=${tmdbKey}`);
                             const detailData = await detailRes.json();
                             if (detailData.seasons) {
                                 const seasonCounts = detailData.seasons

@@ -595,15 +595,15 @@
     let updateFavoriteUI = () => {};
 
     const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a1a1aa'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/></svg>";
-    const tmdbKey = "014fbdbe962cb38379e09e31d0652459";
+    const tmdbKey = "hidden_by_proxy";
 
     // --- AUTOMATIC TMDB GENERATOR FUNCTION ---
     async function autoGenerateFromTMDB(idStr) {
         let mediaType = 'tv';
-        let res = await fetch(`https://api.themoviedb.org/3/tv/${idStr}?api_key=${tmdbKey}&append_to_response=external_ids,credits`);
+        let res = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/tv/${idStr}?api_key=${tmdbKey}&append_to_response=external_ids,credits`);
         
         if (!res.ok) {
-            res = await fetch(`https://api.themoviedb.org/3/movie/${idStr}?api_key=${tmdbKey}&append_to_response=external_ids,credits`);
+            res = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/movie/${idStr}?api_key=${tmdbKey}&append_to_response=external_ids,credits`);
             mediaType = 'movie';
             if (!res.ok) return null; 
         }
@@ -633,7 +633,7 @@
             id: String(idStr),
             title: data.name || data.title || "Unknown",
             synopsis: data.overview || "No synopsis available.",
-            img: data.poster_path ? `https://image.tmdb.org/t/p/w500${data.poster_path}` : "default-poster.jpg",
+            img: data.poster_path ? `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w500${data.poster_path}` : "default-poster.jpg",
             backdrop_path: data.backdrop_path || "",
             imdbId: data.external_ids?.imdb_id || "",
             tmdbId: String(idStr),
@@ -662,7 +662,7 @@
             const fallbackInitial = encodeURIComponent(actor.name.charAt(0));
             const fallbackColor = "14151a";
             const imgUrl = actor.profile_path 
-                ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` 
+                ? `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w185${actor.profile_path}` 
                 : `https://via.placeholder.com/185x278/${fallbackColor}/8A2BE2?text=${fallbackInitial}`;
             
             return `
@@ -839,20 +839,20 @@
                 const isMovie = activeData.type?.toLowerCase().includes('movie') ? 'movie' : 'tv';
                 
                 if (!activeData.backdrop_path && activeTmdbId) {
-                    const detailRes = await fetch(`https://api.themoviedb.org/3/${isMovie}/${activeTmdbId}?api_key=${tmdbKey}`);
+                    const detailRes = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/${isMovie}/${activeTmdbId}?api_key=${tmdbKey}`);
                     if (detailRes.ok) {
                         const detailData = await detailRes.json();
                         if (detailData.backdrop_path) activeData.backdrop_path = detailData.backdrop_path;
                     }
                 }
 
-                const simRes = await fetch(`https://api.themoviedb.org/3/${isMovie}/${activeTmdbId}/similar?api_key=${tmdbKey}&page=1`);
+                const simRes = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/${isMovie}/${activeTmdbId}/similar?api_key=${tmdbKey}&page=1`);
                 if (simRes.ok) {
                     const simData = await simRes.json();
                     activeData.similar = simData.results || [];
                 }
                 
-                const castRes = await fetch(`https://api.themoviedb.org/3/${isMovie}/${activeTmdbId}/credits?api_key=${tmdbKey}`);
+                const castRes = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/${isMovie}/${activeTmdbId}/credits?api_key=${tmdbKey}`);
                 if (castRes.ok) {
                     const castData = await castRes.json();
                     activeData.fullCast = castData.cast || [];
@@ -870,7 +870,7 @@
             document.getElementById('ui-title').textContent = activeData.title;
             
             document.getElementById('ui-poster').src = activeData.img;
-            const backdropUrl = activeData.backdrop_path ? `https://image.tmdb.org/t/p/w780${activeData.backdrop_path}` : activeData.img;
+            const backdropUrl = activeData.backdrop_path ? `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w780${activeData.backdrop_path}` : activeData.img;
             const mobilePosterSource = document.getElementById('ui-poster-mobile');
             if(mobilePosterSource) mobilePosterSource.srcset = backdropUrl;
 
@@ -893,7 +893,7 @@
             document.getElementById('ui-genre-tags').innerHTML = tagsHTML;
 
             if (activeData.backdrop_path) {
-                document.getElementById('ambilight-bg').src = `https://image.tmdb.org/t/p/w780${activeData.backdrop_path}`;
+                document.getElementById('ambilight-bg').src = `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w780${activeData.backdrop_path}`;
             } else {
                 document.getElementById('ambilight-bg').src = activeData.img;
             }
@@ -1010,7 +1010,7 @@
                 
                 if (!isMovieType && activeTmdbId) {
                     try {
-                        const seasonRes = await fetch(`https://api.themoviedb.org/3/tv/${activeTmdbId}/season/${window.currentSeason}?api_key=${tmdbKey}`);
+                        const seasonRes = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/tv/${activeTmdbId}/season/${window.currentSeason}?api_key=${tmdbKey}`);
                         if (seasonRes.ok) {
                             const seasonDetails = await seasonRes.json();
                             if (seasonDetails.episodes) {
@@ -1100,7 +1100,7 @@
                     if (!isMovie && activeTmdbId && targetEp > 1) {
                         try {
                             const prevEpNum = targetEp - 1;
-                            const prevRes = await fetch(`https://api.themoviedb.org/3/tv/${activeTmdbId}/season/${targetSeason}/episode/${prevEpNum}?api_key=${tmdbKey}`);
+                            const prevRes = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/tv/${activeTmdbId}/season/${targetSeason}/episode/${prevEpNum}?api_key=${tmdbKey}`);
                             if (prevRes.ok) {
                                 const prevData = await prevRes.json();
                                 if (prevData.overview) {
@@ -1116,7 +1116,7 @@
                 // --- EPISODE X-RAY SYNC FACTORY ---
                 if (!isMovie && activeTmdbId) {
                     try {
-                        const epRes = await fetch(`https://api.themoviedb.org/3/tv/${activeTmdbId}/season/${targetSeason}/episode/${targetEp}?api_key=${tmdbKey}`);
+                        const epRes = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/tv/${activeTmdbId}/season/${targetSeason}/episode/${targetEp}?api_key=${tmdbKey}`);
                         if (epRes.ok) {
                             const epData = await epRes.json();
                             
@@ -1131,7 +1131,7 @@
                             }
 
                             if (epData.still_path) {
-                                document.getElementById('ambilight-bg').src = `https://image.tmdb.org/t/p/w780${epData.still_path}`;
+                                document.getElementById('ambilight-bg').src = `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w780${epData.still_path}`;
                             }
                         }
                     } catch (xrayErr) {
@@ -1450,7 +1450,7 @@
         if (similarItems && similarItems.length > 0) {
             const resultsArray = similarItems.slice(0, 4);
             recsContainer.innerHTML = resultsArray.map(rec => {
-                let poster = rec.poster_path ? `https://image.tmdb.org/t/p/w200${rec.poster_path}` : 'default-poster.jpg';
+                let poster = rec.poster_path ? `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w200${rec.poster_path}` : 'default-poster.jpg';
                 const title = rec.name || rec.title || "Unknown";
                 const year = (rec.first_air_date || rec.release_date || "N/A").substring(0, 4);
                 const rating = rec.vote_average ? rec.vote_average.toFixed(1) : 'N/A';

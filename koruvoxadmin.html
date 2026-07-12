@@ -265,7 +265,7 @@
         let editingDramaId = null;
         
         // TMDB API KEY FOR AUTOFILL
-        const TMDB_API_KEY = "014fbdbe962cb38379e09e31d0652459";
+        const TMDB_API_KEY = "hidden_by_proxy";
 
         // AUTHENTICATION LOGIC
         onAuthStateChanged(auth, (user) => {
@@ -353,7 +353,7 @@
                 let finalTmdbId = idInput;
 
                 if (isImdb) {
-                    const res = await fetch(`https://api.themoviedb.org/3/find/${idInput}?api_key=${TMDB_API_KEY}&external_source=imdb_id`);
+                    const res = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/find/${idInput}?api_key=${TMDB_API_KEY}&external_source=imdb_id`);
                     const json = await res.json();
                     data = json.tv_results[0] || json.movie_results[0];
                     if (data) {
@@ -361,10 +361,10 @@
                         document.getElementById('cms-tmdb').value = finalTmdbId; 
                     }
                 } else {
-                    const res = await fetch(`https://api.themoviedb.org/3/tv/${idInput}?api_key=${TMDB_API_KEY}`);
+                    const res = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/tv/${idInput}?api_key=${TMDB_API_KEY}`);
                     data = await res.json();
                     if (data.success === false) {
-                        const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${idInput}?api_key=${TMDB_API_KEY}`);
+                        const movieRes = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/movie/${idInput}?api_key=${TMDB_API_KEY}`);
                         data = await movieRes.json();
                     }
                 }
@@ -375,7 +375,7 @@
                 document.getElementById('cms-synopsis').value = data.overview || '';
                 
                 if (data.poster_path) {
-                    document.getElementById('cms-img').value = `https://image.tmdb.org/t/p/original${data.poster_path}`;
+                    document.getElementById('cms-img').value = `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/original${data.poster_path}`;
                 }
 
             } catch (error) {

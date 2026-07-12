@@ -1693,7 +1693,7 @@ const db = getFirestore(app);
 const IG_DOC_REF = doc(db, "ig_page_config", "current");
 
 const OMDB_KEY  = "7739fdec";
-const TMDB_KEY  = "014fbdbe962cb38379e09e31d0652459";
+const TMDB_KEY  = "hidden_by_proxy";
 
 let currentFetchedDrama = null; // holds API result for deploy
 
@@ -1982,7 +1982,7 @@ async function searchDrama() {
 
         // Try to get a higher-res poster & dramaId from TMDB
         try {
-            const findRes  = await fetch(`https://api.themoviedb.org/3/find/${data.imdbID}?api_key=${TMDB_KEY}&external_source=imdb_id`);
+            const findRes  = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/find/${data.imdbID}?api_key=${TMDB_KEY}&external_source=imdb_id`);
             const findData = await findRes.json();
 
             const tvResult    = findData.tv_results?.[0];
@@ -1990,7 +1990,7 @@ async function searchDrama() {
             const item = tvResult || movieResult;
 
             if (item && item.poster_path) {
-                currentFetchedDrama.img = `https://image.tmdb.org/t/p/w500${item.poster_path}`;
+                currentFetchedDrama.img = `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w500${item.poster_path}`;
             }
         } catch(e) { console.warn("TMDB fetch skipped or failed."); }
 

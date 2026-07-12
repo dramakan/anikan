@@ -204,7 +204,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const tmdbKey = "014fbdbe962cb38379e09e31d0652459";
+        const tmdbKey = "hidden_by_proxy";
         let activeData = null;
         let activeTmdbId = null;
         let fluidPlayerInstance = null;
@@ -269,11 +269,11 @@
 
         async function fetchTMDBExtraData() {
             try {
-                let res = await fetch(`https://api.themoviedb.org/3/tv/${activeTmdbId}?api_key=${tmdbKey}`);
+                let res = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/tv/${activeTmdbId}?api_key=${tmdbKey}`);
                 let data = await res.json();
                 
                 if (data.success === false) {
-                    res = await fetch(`https://api.themoviedb.org/3/movie/${activeTmdbId}?api_key=${tmdbKey}`);
+                    res = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/movie/${activeTmdbId}?api_key=${tmdbKey}`);
                     data = await res.json();
                     activeData.isMovie = true;
                 } else {
@@ -281,7 +281,7 @@
                 }
 
                 if (data.backdrop_path) {
-                    activeData.backdrop_path = `https://image.tmdb.org/t/p/w1280${data.backdrop_path}`;
+                    activeData.backdrop_path = `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w1280${data.backdrop_path}`;
                     document.getElementById('ambilight-bg').src = activeData.backdrop_path;
                 }
             } catch (e) { console.warn("TMDB fetch failed", e); }

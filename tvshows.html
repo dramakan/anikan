@@ -307,7 +307,7 @@
         let currentPage = 1;
         let isFetching = false;
         let hasMorePages = true;
-        const API_KEY = '014fbdbe962cb38379e09e31d0652459';
+        const API_KEY = 'hidden_by_proxy';
         
         const grid = document.getElementById('tvGrid');
         const loaderTrigger = document.getElementById('load-more-trigger');
@@ -319,7 +319,7 @@
             loaderTrigger.style.display = 'block';
 
             // Targeted endpoint for discovering popular TV Shows (excluding genre 16 - Animation/Anime)
-            const url = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&sort_by=popularity.desc&without_genres=16&page=${page}`;
+            const url = `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/discover/tv?api_key=${API_KEY}&sort_by=popularity.desc&without_genres=16&page=${page}`;
 
             try {
                 const response = await fetch(url);
@@ -327,7 +327,7 @@
                 
                 if (data.results && data.results.length > 0) {
                     const htmlContent = data.results.map(item => {
-                        const poster = item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : 'default-poster.jpg';
+                        const poster = item.poster_path ? `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w500${item.poster_path}` : 'default-poster.jpg';
                         // TV Shows use 'name' instead of 'title'
                         const title = item.name || item.original_name || "Unknown Title";
                         const rating = item.vote_average ? item.vote_average.toFixed(1) : "NR";

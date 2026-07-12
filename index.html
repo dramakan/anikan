@@ -561,7 +561,7 @@
             return firebaseInstance;
         }
 
-        const tmdbKey = "014fbdbe962cb38379e09e31d0652459";
+        const tmdbKey = "hidden_by_proxy";
         let fuse;
 
         function populateGrid(elementId, items) {
@@ -611,23 +611,23 @@
                         cwSection.style.display = 'block';
 
                         const updatedItems = await Promise.all(historyArr.map(async (item) => {
-                            let imgUrl = item.backdrop_path ? `https://image.tmdb.org/t/p/w780${item.backdrop_path}` : (item.backdrop || item.bgImg);
+                            let imgUrl = item.backdrop_path ? `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w780${item.backdrop_path}` : (item.backdrop || item.bgImg);
                             
                             if (!imgUrl) {
                                 try {
                                     if (item.id) {
-                                        let tmdbRes = await fetch(`https://api.themoviedb.org/3/tv/${item.id}?api_key=${tmdbKey}`);
-                                        if (!tmdbRes.ok) tmdbRes = await fetch(`https://api.themoviedb.org/3/movie/${item.id}?api_key=${tmdbKey}`);
+                                        let tmdbRes = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/tv/${item.id}?api_key=${tmdbKey}`);
+                                        if (!tmdbRes.ok) tmdbRes = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/movie/${item.id}?api_key=${tmdbKey}`);
                                         
                                         if (tmdbRes.ok) {
                                             const tmdbData = await tmdbRes.json();
                                             if (tmdbData.backdrop_path) {
-                                                imgUrl = `https://image.tmdb.org/t/p/w780${tmdbData.backdrop_path}`;
+                                                imgUrl = `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w780${tmdbData.backdrop_path}`;
                                             }
                                         }
                                     }
                                     if (imgUrl) {
-                                        item.backdrop_path = imgUrl.replace('https://image.tmdb.org/t/p/w780', '');
+                                        item.backdrop_path = imgUrl.replace('https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w780', '');
                                         let localHistory = JSON.parse(localStorage.getItem('dramakan_history')) || {};
                                         if(localHistory[item.id]) {
                                             localHistory[item.id].backdrop_path = item.backdrop_path;
@@ -671,9 +671,9 @@
             try {
                 // Fetch globally trending Movie, TV, and Anime
                 const [movieRes, tvRes, animeRes] = await Promise.all([
-                    fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=${tmdbKey}`),
-                    fetch(`https://api.themoviedb.org/3/trending/tv/week?api_key=${tmdbKey}`),
-                    fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${tmdbKey}&with_genres=16&sort_by=popularity.desc`)
+                    fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/trending/movie/week?api_key=${tmdbKey}`),
+                    fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/trending/tv/week?api_key=${tmdbKey}`),
+                    fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/discover/tv?api_key=${tmdbKey}&with_genres=16&sort_by=popularity.desc`)
                 ]);
 
                 const movieData = await movieRes.json();
@@ -697,8 +697,8 @@
 
                 bannerItems.forEach((item, index) => {
                     const d = item.data;
-                    const bgImg = `https://image.tmdb.org/t/p/original${d.backdrop_path || d.poster_path}`;
-                    const mobileImg = `https://image.tmdb.org/t/p/w780${d.poster_path || d.backdrop_path}`;
+                    const bgImg = `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/original${d.backdrop_path || d.poster_path}`;
+                    const mobileImg = `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w780${d.poster_path || d.backdrop_path}`;
                     const titleText = d.name || d.title || "Featured Title";
                     const releaseYear = (d.first_air_date || d.release_date || "2026").substring(0, 4);
                     
@@ -837,14 +837,14 @@
                 startSlideShow();
 
                 // Fetch Universal Trending
-                const trendRes = await fetch(`https://api.themoviedb.org/3/trending/all/week?api_key=${tmdbKey}`);
+                const trendRes = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/trending/all/week?api_key=${tmdbKey}`);
                 if (trendRes.ok) {
                     const dataTrend = await trendRes.json();
                     const items = (dataTrend.results || [])
                         .slice(0, 15).map(i => ({
                         id: String(i.id),
                         title: i.name || i.title,
-                        img: i.poster_path ? `https://image.tmdb.org/t/p/w500${i.poster_path}` : 'default-poster.jpg',
+                        img: i.poster_path ? `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w500${i.poster_path}` : 'default-poster.jpg',
                         link: `details.html?id=${i.id}`,
                         type: i.media_type === 'movie' ? 'Movie' : 'TV Show'
                     }));
@@ -854,10 +854,10 @@
 
                 // Grid Configurations for All Mediums
                 const gridConfigs = [
-                    { id: 'movie-grid', url: `https://api.themoviedb.org/3/trending/movie/week?api_key=${tmdbKey}`, label: "Movie" },
-                    { id: 'tv-grid', url: `https://api.themoviedb.org/3/trending/tv/week?api_key=${tmdbKey}&without_genres=16`, label: "TV Show" },
-                    { id: 'anime-grid', url: `https://api.themoviedb.org/3/discover/tv?api_key=${tmdbKey}&with_genres=16&with_original_language=ja&sort_by=popularity.desc`, label: "Anime" },
-                    { id: 'asian-grid', url: `https://api.themoviedb.org/3/discover/tv?api_key=${tmdbKey}&with_original_language=ko|zh|ja|th&sort_by=popularity.desc&without_genres=16`, label: "Asian Drama" }
+                    { id: 'movie-grid', url: `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/trending/movie/week?api_key=${tmdbKey}`, label: "Movie" },
+                    { id: 'tv-grid', url: `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/trending/tv/week?api_key=${tmdbKey}&without_genres=16`, label: "TV Show" },
+                    { id: 'anime-grid', url: `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/discover/tv?api_key=${tmdbKey}&with_genres=16&with_original_language=ja&sort_by=popularity.desc`, label: "Anime" },
+                    { id: 'asian-grid', url: `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/discover/tv?api_key=${tmdbKey}&with_original_language=ko|zh|ja|th&sort_by=popularity.desc&without_genres=16`, label: "Asian Drama" }
                 ];
 
                 const gridObserver = new IntersectionObserver((entries, observer) => {
@@ -872,7 +872,7 @@
                                         const cleanMapped = (resData.results || []).slice(0, 15).map(i => ({
                                             id: String(i.id),
                                             title: i.name || i.title,
-                                            img: i.poster_path ? `https://image.tmdb.org/t/p/w500${i.poster_path}` : 'default-poster.jpg',
+                                            img: i.poster_path ? `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w500${i.poster_path}` : 'default-poster.jpg',
                                             link: `details.html?id=${i.id}`,
                                             type: config.label
                                         }));
@@ -913,7 +913,7 @@
                 const displayDateStr = targetDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
                 try {
-                    const res = await fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${tmdbKey}&air_date.gte=${dateStr}&air_date.lte=${dateStr}&sort_by=popularity.desc`);
+                    const res = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/discover/tv?api_key=${tmdbKey}&air_date.gte=${dateStr}&air_date.lte=${dateStr}&sort_by=popularity.desc`);
                     if (res.ok) {
                         const data = await res.json();
                         let items = data.results || [];
@@ -926,7 +926,7 @@
 
                         const detailedItems = await Promise.all(items.map(async (item) => {
                             try {
-                                const detailRes = await fetch(`https://api.themoviedb.org/3/tv/${item.id}?api_key=${tmdbKey}`);
+                                const detailRes = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/tv/${item.id}?api_key=${tmdbKey}`);
                                 if(detailRes.ok) {
                                     const detailData = await detailRes.json();
                                     
@@ -951,7 +951,7 @@
                         }));
 
                         listContainer.innerHTML = detailedItems.map(item => {
-                            const imgUrl = item.poster_path ? `https://image.tmdb.org/t/p/w200${item.poster_path}` : 'default-poster.jpg';
+                            const imgUrl = item.poster_path ? `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w200${item.poster_path}` : 'default-poster.jpg';
                             const title = item.name || item.original_name;
                             const lang = item.original_language.toUpperCase();
                             const sNum = item.season !== undefined ? item.season : 1;
@@ -1014,7 +1014,7 @@
                         if (queryStr.length < 1) { searchResults.style.display = 'none'; return; }
                         
                         try {
-                            const searchRes = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbKey}&query=${encodeURIComponent(queryStr)}`);
+                            const searchRes = await fetch(`https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/3/search/multi?api_key=${tmdbKey}&query=${encodeURIComponent(queryStr)}`);
                             if (searchRes.ok) {
                                 const searchData = await searchRes.json();
                                 const resultsMapped = (searchData.results || [])
@@ -1023,7 +1023,7 @@
                                 
                                 searchResults.innerHTML = resultsMapped.map(item => {
                                     const title = item.name || item.title;
-                                    const poster = item.poster_path ? `https://image.tmdb.org/t/p/w92${item.poster_path}` : 'default-poster.jpg';
+                                    const poster = item.poster_path ? `https://dramakan-tmdb-proxy.zabaazcreations.workers.dev/image/t/p/w92${item.poster_path}` : 'default-poster.jpg';
                                     return `
                                     <a href="details.html?id=${item.id}" class="search-result-item">
                                         <img src="${poster}" width="45" height="60" loading="lazy" decoding="async">
